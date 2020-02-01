@@ -1,0 +1,9 @@
+---
+
+version: 3
+
+services:
+
+  fileserver-local:
+    image: myownradio/fileserver-local
+
