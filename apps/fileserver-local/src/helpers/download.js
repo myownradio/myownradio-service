@@ -1,9 +1,8 @@
-const { exists, stat, createReadStream } = require("fs");
+const { stat, createReadStream } = require("fs");
 const { promisify } = require("util");
 const { basename } = require("path");
 const { getType } = require('mime');
 
-const existsAsync = promisify(exists);
 const statAsync = promisify(stat);
 
 const RANGE_REGEXP = /^bytes=([0-9]+)-$/;
@@ -51,13 +50,7 @@ function sendData(ctx, filepath, startRange) {
 }
 
 module.exports = async function download(ctx, filepath) {
-  if (!(await existsAsync(filepath))) {
-    ctx.throw(404);
-  }
-
   const startRange = getStartRange(ctx);
-
   await sendHeaders(filepath, startRange, ctx);
-
   sendData(ctx, filepath, startRange);
 };

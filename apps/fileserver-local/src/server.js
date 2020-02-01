@@ -2,19 +2,24 @@ const Application = require("koa");
 const Router = require("koa-router");
 const body = require("koa-body");
 
-const readToken = require('./middleware/readToken');
-const verifyTokenAction = require('./middleware/verifyTokenAction');
+const readToken = require("./middleware/readToken");
+const verifyTokenAction = require("./middleware/verifyTokenAction");
 
-const get = require('./routes/get');
+const get = require("./routes/get");
+const post = require("./routes/post");
 
 const app = new Application();
-const router = new Router();
 
-app.use(readToken);
+const rootRouter = new Router();
+const secureRouter = new Router();
 
-app.use(body({ multipart: true }));
-app.use(router.routes(), router.allowedMethods());
+rootRouter.all("/", ctx => (ctx.body = "OK"));
+
+secureRouter.use(readToken);
+secureRouter.get("*", verifyTokenAction("read"), get);
+secureRouter.post("*", verifyTokenAction("write"), body({ multipart: true }), post);
+
+app.use(rootRouter.routes(), rootRouter.allowedMethods());
+app.use(secureRouter.routes(), secureRouter.allowedMethods());
 
 app.listen(8080);
-
-router.get('*', verifyTokenAction('read'), get);
