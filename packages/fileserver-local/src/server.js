@@ -8,6 +8,8 @@ const verifyTokenAction = require("./middleware/verifyTokenAction");
 const get = require("./routes/get");
 const post = require("./routes/post");
 
+const config = require('./config');
+
 const app = new Application();
 
 const rootRouter = new Router();
@@ -22,4 +24,9 @@ secureRouter.post("*", verifyTokenAction("write"), body({ multipart: true }), po
 app.use(rootRouter.routes(), rootRouter.allowedMethods());
 app.use(secureRouter.routes(), secureRouter.allowedMethods());
 
-app.listen(8080);
+const port = process.env.PORT || 8080;
+
+app.listen(port, () => {
+  console.log(`Content Directory: ${config.contentDir}`);
+  console.log(`Listening Port: ${port}`);
+});
