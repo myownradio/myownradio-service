@@ -1,0 +1,24 @@
+{
+  "name": "@myownradio/fileserver-local",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "npm src/server.js",
+    "dev": "nodemon src/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "private": true,
+  "dependencies": {
+    "rc": "~1.2.8",
+    "parse-strings-in-object": "~2.0.0",
+    "koa-body": "~4.1.1",
+    "koa-router": "~8.0.6",
+    "koa": "~2.11.0",
+    "@myownradio/shared-tools": "~1.0.0",
+    "jsonwebtoken": "~8.5.1",
+    "@sentry/node": "5.11.2",
+    "mime": "~2.4.4"
+  },
+  "devDependencies": {
+    "nodemon": "~2.0.2"
+  }
+}

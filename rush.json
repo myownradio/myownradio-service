@@ -374,5 +374,14 @@
     //   "projectFolder": "tools/my-toolchain",
     //   "reviewCategory": "tools"
     // }
+    {
+      "packageName": "@myownradio/fileserver-local",
+      "projectFolder": "apps/fileserver-local",
+    },
+
+    {
+      "packageName": "@myownradio/shared-tools",
+      "projectFolder": "tools/shared-tools",
+    }
   ]
 }
