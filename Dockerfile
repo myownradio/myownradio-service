@@ -27,7 +27,6 @@ RUN apt-get update && \
 WORKDIR /usr/app
 
 COPY package.json yarn.lock ./
-
 COPY packages/ packages/
 
 RUN yarn install --non-interactive --pure-lockfile
