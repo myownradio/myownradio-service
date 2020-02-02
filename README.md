@@ -1,12 +1,14 @@
-# fileserver
-Auth: ```JWT Token```
+### Requirements
 
-Methods:
+* docker
+* docker-compose
 
-```GET /``` Check service availability.
+### Install
+```shell
+make install
+```
 
-```GET /foo/bar/baz``` Download file from fileserver.
-
-```POST /foo/bar/baz``` Upload file to fileserver (should be specified `source` field)
-
-```DELETE /foo/bar/baz``` Delete file from fileserver.
+### Start
+```shell
+make start
+```
