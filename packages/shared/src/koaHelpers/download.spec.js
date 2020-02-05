@@ -5,12 +5,7 @@ test("Should download entire file", async () => {
   const filepath = `${__dirname}/../../tests/__fixtures__/testfile.txt`;
 
   const ctx = {
-    get: jest.fn().mockImplementation(name => {
-      if (name === "range") {
-        return "bytes=0-";
-      }
-      return null;
-    }),
+    get: jest.fn().mockReturnValue(null),
     set: jest.fn(),
     body: null,
     status: null
