@@ -32,7 +32,7 @@ async function sendHeaders(filepath, startRange, ctx) {
     ctx.set("accept-ranges", "bytes");
     ctx.set(
       "content-range",
-      "bytes " + startRange + "-" + (fileStat.size - 1) + "/" + fileStat.size
+      `bytes ${  startRange  }-${  fileStat.size - 1  }/${  fileStat.size}`
     );
     ctx.status = 206;
   }

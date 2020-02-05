@@ -9,5 +9,8 @@
   "workspaces": [
     "packages/fileserver-local",
     "packages/shared"
-  ]
+  ],
+  "devDependencies": {
+    "eslint-plugin-jest": "^23.6.0"
+  }
 }

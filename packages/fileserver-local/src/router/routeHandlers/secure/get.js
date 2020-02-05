@@ -1,7 +1,7 @@
 const { exists } = require("fs");
 const { promisify } = require("util");
 const path = require("path");
-const download = require("../../../helpers/download");
+const { koaHelpers } = require("@myownradio/shared");
 
 const existsAsync = promisify(exists);
 
@@ -13,6 +13,6 @@ module.exports = function createGetHandler(config) {
       ctx.throw(404);
     }
 
-    await download(ctx, filepath);
+    await koaHelpers.download(ctx, filepath);
   };
 };
