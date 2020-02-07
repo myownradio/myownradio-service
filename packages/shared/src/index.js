@@ -1,3 +1,5 @@
-import koaHelpers from './koaHelpers';
+const koaHelpers = require('./koaHelpers');
+const fsHelpers = require('./fsHelpers');
+const assert = require('./assert');
 
-module.exports = { koaHelpers };
+module.exports = { koaHelpers, fsHelpers, assert };

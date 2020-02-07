@@ -1,12 +1,24 @@
-const { stat, createReadStream } = require("fs");
-const { promisify } = require("util");
-const { basename } = require("path");
-const { getType } = require('mime');
+/**
+ * @typedef {{
+ *    get: Function,
+ *    set: Function,
+ *    body: ReadStream,
+ *    status: number
+ * }} KoaContext
+ */
 
-const statAsync = promisify(stat);
+const fs = require("fs");
+const path = require("path");
+const mime = require("mime");
 
 const RANGE_REGEXP = /^bytes=([0-9]+)-$/;
 
+/**
+ * Retrieves range start from KoaContext.
+ *
+ * @param {KoaContext} ctx
+ * @returns {number}
+ */
 function getStartRange(ctx) {
   const range = ctx.get("range");
 
@@ -20,37 +32,60 @@ function getStartRange(ctx) {
   return startRange;
 }
 
-async function sendHeaders(filepath, startRange, ctx) {
-  const fileStat = await statAsync(filepath);
-
+/**
+ * Sends headers to KoaContext.
+ *
+ * @param {KoaContext} ctx
+ * @param {string} filepath
+ * @param {number} fileSize
+ * @param {number} startRange
+ * @returns {void}
+ */
+function sendHeaders(ctx, filepath, fileSize, startRange) {
   if (startRange === 0) {
-    ctx.set("x-transfer-length", fileStat.size);
-    ctx.set("content-length", fileStat.size);
+    ctx.set("x-transfer-length", fileSize);
+    ctx.set("content-length", fileSize);
     ctx.status = 200;
   } else {
-    ctx.set("x-transfer-length", fileStat.size);
+    ctx.set("x-transfer-length", fileSize);
     ctx.set("accept-ranges", "bytes");
     ctx.set(
       "content-range",
-      `bytes ${  startRange  }-${  fileStat.size - 1  }/${  fileStat.size}`
+      `bytes ${startRange}-${fileSize - 1}/${fileSize}`
     );
     ctx.status = 206;
   }
 
-  const filename = basename(filepath);
+  const filename = path.basename(filepath);
 
-  ctx.set('content-type', getType(filepath));
+  ctx.set("content-type", mime.getType(filepath));
   ctx.set("content-disposition", `attachment; filename=${filename}`);
 }
 
+/**
+ *
+ * @param {KoaContext} ctx
+ * @param {string} filepath
+ * @param {number} startRange
+ * @return {void}
+ */
 function sendData(ctx, filepath, startRange) {
-  ctx.body = createReadStream(filepath, {
+  ctx.body = fs.createReadStream(filepath, {
     start: startRange
   });
 }
 
+/**
+ * Sends local file to KoaContext with support of range requests.
+ *
+ * @param {KoaContext} ctx
+ * @param {string} filepath
+ * @returns {Promise<void>}
+ */
 module.exports = async function download(ctx, filepath) {
   const startRange = getStartRange(ctx);
-  await sendHeaders(filepath, startRange, ctx);
+  const fileStat = await fs.promises.stat(filepath);
+
+  sendHeaders(ctx, filepath, fileStat.size, startRange);
   sendData(ctx, filepath, startRange);
 };
