@@ -1,21 +1,16 @@
-const { join, dirname } = require("path");
-const { exists, mkdir, rename } = require("fs");
-const { promisify } = require("util");
+const path = require("path");
+const fs = require("fs");
 
-const existsAsync = promisify(exists);
-const mkdirAsync = promisify(mkdir);
-const renameAsync = promisify(rename);
+const { fileExists } = require("@myownradio/shared").fsHelpers;
 
 module.exports = function createGetHandler(config) {
   return async ctx => {
-    const filepath = join(config.contentDir, ctx.request.path);
+    const filepath = path.join(config.ROOT_FOLDER, ctx.request.path);
 
-    const fileDirName = dirname(filepath);
+    const fileDirName = path.dirname(filepath);
 
-    const exists = await existsAsync(fileDirName);
-
-    if (!exists) {
-      await mkdirAsync(fileDirName, { recursive: true });
+    if (!(await fileExists(fileDirName))) {
+      await fs.promises.mkdir(fileDirName, { recursive: true });
     }
 
     if (!ctx.request.files.source) {
@@ -24,7 +19,7 @@ module.exports = function createGetHandler(config) {
 
     const { source } = ctx.request.files;
 
-    await renameAsync(source.path, filepath);
+    await fs.promises.rename(source.path, filepath);
 
     ctx.status = 200;
   };

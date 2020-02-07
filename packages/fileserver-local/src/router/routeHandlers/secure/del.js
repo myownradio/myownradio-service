@@ -1,19 +1,17 @@
-const { exists, unlink } = require("fs");
-const { promisify } = require("util");
+const fs = require("fs");
 const path = require("path");
 
-const existsAsync = promisify(exists);
-const unlinkAsync = promisify(unlink);
+const { fileExists } = require("@myownradio/shared").fsHelpers;
 
 module.exports = function createDeleteHandler(config) {
   return async ctx => {
-    const filepath = path.join(config.contentDir, ctx.request.path);
+    const filepath = path.join(config.ROOT_FOLDER, ctx.request.path);
 
-    if (!(await existsAsync(filepath))) {
+    if (!(await fileExists(filepath))) {
       ctx.throw(404);
     }
 
-    await unlinkAsync(filepath);
+    await fs.promises.unlink(filepath);
 
     ctx.status = 200;
   };

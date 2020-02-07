@@ -1,4 +1,4 @@
-module.exports = function createIndexHandler(config) {
+module.exports = function createIndexHandler() {
   return ctx => {
     ctx.body = "OK";
   };
