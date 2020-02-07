@@ -2,4 +2,7 @@ install:
 	yarn install
 
 start:
-	npm --prefix packages/fileserver-local start
+	yarn start
+
+dev:
+	yarn dev

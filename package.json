@@ -1,6 +1,11 @@
 {
   "name": "@myownradio/myownradio-service",
   "version": "1.0.0",
+  "scripts": {
+    "dev:fileserver-local": "env-cmd -f ./env/fileserver-local.env -- yarn --cwd packages/fileserver-local run dev",
+    "start:fileserver-local": "env-cmd -f ./env/fileserver-local.env -- yarn --cwd packages/fileserver-local start",
+    "dev": "concurrently -n w: npm:dev:*"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/pldin601/myownradio-service.git"
@@ -11,6 +16,10 @@
     "packages/shared"
   ],
   "devDependencies": {
+    "env-cmd": "^10.0.1",
     "eslint-plugin-jest": "^23.6.0"
+  },
+  "dependencies": {
+    "concurrently": "^5.1.0"
   }
 }
