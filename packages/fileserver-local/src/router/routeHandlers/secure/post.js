@@ -13,7 +13,7 @@ module.exports = function createGetHandler(config) {
       await fs.promises.mkdir(fileDirName, { recursive: true });
     }
 
-    if (!ctx.request.files.source) {
+    if (!(ctx.request.files || {}).source) {
       ctx.throw(400, "No file uploaded");
     }
 

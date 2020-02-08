@@ -7,7 +7,7 @@ const getMediaFileMetadata = require("../utils/getMediaFileMetadata");
 
 module.exports = function createUploadHandler(config) {
   return async ctx => {
-    if (!(ctx.request.files || []).source) {
+    if (!(ctx.request.files || {}).source) {
       ctx.throw(400, "No file uploaded");
     }
 
