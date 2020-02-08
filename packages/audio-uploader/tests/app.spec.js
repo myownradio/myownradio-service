@@ -31,11 +31,20 @@ test("Should upload audio file and return file information", async () => {
       genre: "Sine Genre",
       bitrate: 242824,
       duration: 1.07475,
-      format: "MP2/3 (MPEG audio layer 2/3)"
+      format: "MP2/3 (MPEG audio layer 2/3)",
+      path: "d/0/d021bc63dd8f6dee822baa1b2a69b4e9a4d97a7c"
     });
 });
 
-test.only("Should return file on try to download file that exists", async () => {
+
+test("Should fail if no file attached", async () => {
+  await request(app.callback())
+    .post("/upload")
+    .set("Authorization", `Bearer ${authenticationToken}`)
+    .expect(400);
+});
+
+test("Should return file on try to download file that exists", async () => {
   await request(app.callback())
     .get("/d/0/d021bc63dd8f6dee822baa1b2a69b4e9a4d97a7c.mp3")
     .expect('content-type', /audio/)
