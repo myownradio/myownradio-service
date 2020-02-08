@@ -13,7 +13,7 @@ beforeEach(() => {
   });
 });
 
-test("Should upload audio file and return file information", async () => {
+test("POST /upload - upload new audio file", async () => {
   const filepath = `${__dirname}/__fixtures__/sine.mp3`;
 
   await request(app.callback())
@@ -37,21 +37,21 @@ test("Should upload audio file and return file information", async () => {
 });
 
 
-test("Should fail if no file attached", async () => {
+test("POST /upload - should fail if no file attached", async () => {
   await request(app.callback())
     .post("/upload")
     .set("Authorization", `Bearer ${authenticationToken}`)
     .expect(400);
 });
 
-test("Should return file on try to download file that exists", async () => {
+test("GET /d/0/d021bc63dd8f6dee822baa1b2a69b4e9a4d97a7c.mp3 - should get file contents", async () => {
   await request(app.callback())
     .get("/d/0/d021bc63dd8f6dee822baa1b2a69b4e9a4d97a7c.mp3")
     .expect('content-type', /audio/)
     .expect(200);
 });
 
-test("Should throw 404 on try to download file that does not exist", async () => {
+test("GET /a/a/aa21bc63dd8f6dee822baa1b2a69b4e9a4d97a7c.mp3 - should return 404", async () => {
   await request(app.callback())
     .get("/a/a/aa21bc63dd8f6dee822baa1b2a69b4e9a4d97a7c.mp3")
     .expect(404);
