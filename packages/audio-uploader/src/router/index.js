@@ -8,7 +8,7 @@ const createGetHandler = require("./get");
 module.exports = function createRouter(config) {
   const router = new Router();
 
-  router.get("*", createGetHandler());
+  router.get("*", createGetHandler(config));
 
   router.post(
     "/upload",

@@ -11,7 +11,7 @@ test('Should get metadata from mp3 audio file', async () => {
     artist: 'Sine Artist',
     title: 'Sine Title',
     album: 'Sine Album',
-    genre: 'Sine Genre'
+    genre: 'Sine Genre',
   });
 });
 
