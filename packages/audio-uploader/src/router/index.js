@@ -13,7 +13,10 @@ module.exports = function createRouter(config) {
   router.post(
     "/upload",
     jwtMiddleware({ secret: config.AUDIO_UPLOADER_TOKEN_SECRET }),
-    body({ multipart: true }),
+    body({
+      multipart: true,
+      formidable: { hash: "sha1", uploadDir: config.AUDIO_UPLOADER_TEMP_DIR }
+    }),
     createUploadHandler(config)
   );
 
