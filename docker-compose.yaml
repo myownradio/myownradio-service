@@ -1,0 +1,18 @@
+version: "3.5"
+
+services:
+  database:
+    image: postgres:12
+    volumes:
+      - database:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: myownradio
+      POSTGRES_PASSWORD: myownradio
+      POSTGRES_DB: myownradio
+    ports:
+      - 15432:5432
+
+volumes:
+  database:
+    name: database
+    driver: local

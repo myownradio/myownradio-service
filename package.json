@@ -21,6 +21,8 @@
     "eslint-plugin-jest": "^23.6.0"
   },
   "dependencies": {
-    "concurrently": "^5.1.0"
+    "concurrently": "^5.1.0",
+    "knex": "^0.20.9",
+    "pg": "^7.18.1"
   }
 }
