@@ -8,6 +8,9 @@ start:
 dev:
 	yarn dev
 
+migrate:
+	yarn migrate
+
 start-services:
 	docker-compose up -d
 

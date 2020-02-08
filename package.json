@@ -6,7 +6,8 @@
     "start:fileserver-local": "env-cmd -f ./env/fileserver-local.env -- yarn --cwd packages/fileserver-local start",
     "dev:audio-uploader": "env-cmd -f ./env/audio-uploader.env -- yarn --cwd packages/audio-uploader run dev",
     "start:audio-uploader": "env-cmd -f ./env/audio-uploader.env -- yarn --cwd packages/audio-uploader start",
-    "dev": "concurrently -n w: npm:dev:*"
+    "dev": "concurrently -n w: npm:dev:*",
+    "migrate": "knex migrate:latest"
   },
   "repository": {
     "type": "git",
