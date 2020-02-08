@@ -6,6 +6,8 @@
     "start:fileserver-local": "env-cmd -f ./env/fileserver-local.env -- yarn --cwd packages/fileserver-local start",
     "dev:audio-uploader": "env-cmd -f ./env/audio-uploader.env -- yarn --cwd packages/audio-uploader run dev",
     "start:audio-uploader": "env-cmd -f ./env/audio-uploader.env -- yarn --cwd packages/audio-uploader start",
+    "dev:auth-server": "env-cmd -f ./env/auth-server.env -- yarn --cwd packages/auth-server run dev",
+    "start:auth-server": "env-cmd -f ./env/auth-server.env -- yarn --cwd packages/auth-server start",
     "dev": "concurrently -n w: npm:dev:*",
     "migrate": "knex migrate:latest"
   },
@@ -18,12 +20,18 @@
     "packages/*"
   ],
   "devDependencies": {
-    "env-cmd": "^10.0.1",
-    "eslint-plugin-jest": "^23.6.0"
-  },
-  "dependencies": {
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-config-prettier": "^6.10.0",
+    "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-prettier": "^3.1.2",
     "concurrently": "^5.1.0",
     "knex": "^0.20.9",
-    "pg": "^7.18.1"
+    "pg": "^7.18.1",
+    "prettier": "^1.19.1",
+    "env-cmd": "^10.0.1",
+    "eslint": "^6.8.0",
+    "eslint-plugin-jest": "^23.7.0"
+  },
+  "dependencies": {
   }
 }
