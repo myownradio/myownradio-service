@@ -1,11 +1,19 @@
 const { assert } = require("@myownradio/shared");
 
-const { ROOT_FOLDER, TOKEN_SECRET, PORT } = process.env;
+const {
+  AUDIO_UPLOADER_ROOT_FOLDER,
+  AUDIO_UPLOADER_TOKEN_SECRET,
+  PORT
+} = process.env;
 
-const config = { ROOT_FOLDER, TOKEN_SECRET, PORT };
+const config = {
+  AUDIO_UPLOADER_ROOT_FOLDER,
+  AUDIO_UPLOADER_TOKEN_SECRET,
+  PORT
+};
 
-assert(typeof config.PORT === 'string');
-assert(typeof config.ROOT_FOLDER === 'string');
-assert(typeof config.TOKEN_SECRET === 'string');
+assert(typeof config.PORT === "string");
+assert(typeof config.AUDIO_UPLOADER_ROOT_FOLDER === "string");
+assert(typeof config.AUDIO_UPLOADER_TOKEN_SECRET === "string");
 
 module.exports = config;
