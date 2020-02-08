@@ -10,6 +10,12 @@ test('Should get metadata from mp3 audio file', async () => {
     format: 'MP2/3 (MPEG audio layer 2/3)',
     artist: 'Sine Artist',
     title: 'Sine Title',
+    album: 'Sine Album',
     genre: 'Sine Genre'
   });
+});
+
+test('Should file if file does not exist', async () => {
+  const filepath = `/path/that/does/not/exist.mp3`;
+  await expect(getMediaFileMetadata(filepath)).rejects.toThrowError(Error);
 });

@@ -8,6 +8,7 @@ const fluent = require("fluent-ffmpeg");
  *  format: string
  *  artist: string
  *  title: string
+ *  album: string
  *  genre: string
  * }} Metadata
  */
@@ -32,6 +33,7 @@ module.exports = function getMediaFileMetadata(filepath) {
             format: metadata.format.format_long_name,
             artist: metadata.format.tags.artist,
             title: metadata.format.tags.title,
+            album: metadata.format.tags.album,
             genre: metadata.format.tags.genre
           });
         }
