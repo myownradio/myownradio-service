@@ -5,6 +5,9 @@ const createApp = require("../src/app");
 const migrationsDir = `${__dirname}/../../../migrations`;
 const seedsDir = `${__dirname}/../../../seeds`;
 
+const accessToken =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjEsImlhdCI6MTUxNjIzOTAyMn0.Fknsf_nSFNdqS9JkFJABEEtMVffv9zR1_nrI2mAVx60";
+
 const config = {
   AUTH_SERVER_TOKEN_SECRET: "secret",
   AUTH_SERVER_DATABASE_URL: ":memory:",
@@ -166,4 +169,28 @@ test("POST /refreshToken - should fail if refresh token is expired", async () =>
     .post("/refreshToken")
     .send({ refresh_token: "dcb76e25b2079ee652d28f732f6679c441291d2e" })
     .expect(401, "Refresh token isn't valid");
+});
+
+// eslint-disable-next-line jest/expect-expect
+test("GET /me - should get authorized user details", async () => {
+  await request
+    .get("/me")
+    .set("Authorization", `Bearer ${accessToken}`)
+    .expect(200, {
+      id: 1,
+      email: "foo@bar.baz"
+    });
+});
+
+// eslint-disable-next-line jest/expect-expect
+test("GET /me - should fail if unauthorized", async () => {
+  await request.get("/me").expect(401);
+});
+
+// eslint-disable-next-line jest/expect-expect
+test("GET /me - should fail if authorization is wrong", async () => {
+  await request
+    .get("/me")
+    .set("Authorization", `Bearer Wrong`)
+    .expect(401);
 });
