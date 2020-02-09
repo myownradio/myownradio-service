@@ -2,6 +2,12 @@ const generateTokenForUser = require("../utils/generateTokenForUser");
 const hasUpdatedRows = require("../utils/hasUpdatedRows");
 const createAccessToken = require("../utils/createAccessToken");
 
+function calculateExpirationThreshold(config) {
+  const thresholdMillis =
+    new Date().getTime() - config.AUTH_SERVER_REFRESH_TOKEN_LIFETIME * 1000;
+  return new Date(thresholdMillis).toISOString();
+}
+
 module.exports = function createRefreshTokenRouteHandler(
   config,
   knexConnection
@@ -17,17 +23,19 @@ module.exports = function createRefreshTokenRouteHandler(
     const now = new Date().toISOString();
 
     const newAccessToken = await knexConnection.transaction(async trx => {
+      const threshold = calculateExpirationThreshold(config);
+
       const updatedRows = await trx("refresh_tokens")
         .update({ refresh_token: newRefreshToken, updated_at: now })
+        .where("updated_at", ">", threshold)
         .where({ refresh_token: oldRefreshToken })
         .returning("*");
 
       if (!hasUpdatedRows(updatedRows)) {
-        ctx.throw(401);
+        ctx.throw(401, "Refresh token isn't valid");
       }
 
       const updatedRow = await trx("refresh_tokens")
-        .select("user_id")
         .where({ refresh_token: newRefreshToken })
         .first();
 

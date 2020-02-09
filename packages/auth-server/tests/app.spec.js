@@ -10,6 +10,7 @@ const config = {
   AUTH_SERVER_DATABASE_URL: ":memory:",
   AUTH_SERVER_DATABASE_CLIENT: "sqlite3",
   AUTH_SERVER_ACCESS_TOKEN_LIFETIME: 30,
+  AUTH_SERVER_REFRESH_TOKEN_LIFETIME: 2592000,
   PORT: 8080
 };
 
@@ -149,10 +150,20 @@ test("POST /refreshToken - should fail if refresh token isn't valid", async () =
   await request
     .post("/refreshToken")
     .send({ refresh_token: "invalid token" })
-    .expect(401);
+    .expect(401, "Refresh token isn't valid");
 });
 
 // eslint-disable-next-line jest/expect-expect
 test("POST /refreshToken - should fail if refresh token isn't specified", async () => {
-  await request.post("/refreshToken").expect(400);
+  await request
+    .post("/refreshToken")
+    .expect(400, "Refresh token should be specified");
+});
+
+// eslint-disable-next-line jest/expect-expect
+test("POST /refreshToken - should fail if refresh token is expired", async () => {
+  await request
+    .post("/refreshToken")
+    .send({ refresh_token: "dcb76e25b2079ee652d28f732f6679c441291d2e" })
+    .expect(401, "Refresh token isn't valid");
 });
