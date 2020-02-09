@@ -111,3 +111,23 @@ test("POST /login - should respond with authorization data", async () => {
     updated_at: expect.any(String)
   });
 });
+
+// eslint-disable-next-line jest/expect-expect
+test("POST /login - should fail if email or password not specified", async () => {
+  await request
+    .post("/login")
+    .expect(400, 'Both "email" and "password" parameters should be specified');
+});
+
+// eslint-disable-next-line jest/expect-expect
+test("POST /login - should fail if email or password aren't correct", async () => {
+  await request
+    .post("/login")
+    .send({ email: "foo@bar.baz", password: "wrong" })
+    .expect(401);
+
+  await request
+    .post("/login")
+    .send({ email: "foo2@bar.baz", password: "wrong" })
+    .expect(401);
+});
