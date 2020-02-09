@@ -11,7 +11,8 @@
     "dev:overlay-proxy": "env-cmd -f ./env/overlay-proxy.env -- yarn --cwd packages/overlay-proxy run dev",
     "start:overlay-proxy": "env-cmd -f ./env/overlay-proxy.env -- yarn --cwd packages/overlay-proxy start",
     "dev": "concurrently -n w: npm:dev:*",
-    "migrate": "knex migrate:latest"
+    "migrate": "knex migrate:latest",
+    "format": "prettier --write packages/**/*.{js,jsx}"
   },
   "repository": {
     "type": "git",

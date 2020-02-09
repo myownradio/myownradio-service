@@ -2,7 +2,7 @@ const path = require("path");
 
 /**
  * Converts hash to path with sub directories.
- * 
+ *
  * @param {string} hash
  * @return {string}
  */

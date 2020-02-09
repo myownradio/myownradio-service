@@ -49,10 +49,7 @@ function sendHeaders(ctx, filepath, fileSize, startRange) {
   } else {
     ctx.set("x-transfer-length", fileSize);
     ctx.set("accept-ranges", "bytes");
-    ctx.set(
-      "content-range",
-      `bytes ${startRange}-${fileSize - 1}/${fileSize}`
-    );
+    ctx.set("content-range", `bytes ${startRange}-${fileSize - 1}/${fileSize}`);
     ctx.status = 206;
   }
 

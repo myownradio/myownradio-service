@@ -36,7 +36,6 @@ test("POST /upload - upload new audio file", async () => {
     });
 });
 
-
 test("POST /upload - should fail if no file attached", async () => {
   await request(app.callback())
     .post("/upload")
@@ -47,7 +46,14 @@ test("POST /upload - should fail if no file attached", async () => {
 test("GET /d/0/d021bc63dd8f6dee822baa1b2a69b4e9a4d97a7c.mp3 - should get file contents", async () => {
   await request(app.callback())
     .get("/d/0/d021bc63dd8f6dee822baa1b2a69b4e9a4d97a7c.mp3")
-    .expect('content-type', /audio/)
+    .expect("content-type", /audio/)
+    .expect(200);
+});
+
+test("HEAD /d/0/d021bc63dd8f6dee822baa1b2a69b4e9a4d97a7c.mp3 - should get headers", async () => {
+  await request(app.callback())
+    .head("/d/0/d021bc63dd8f6dee822baa1b2a69b4e9a4d97a7c.mp3")
+    .expect("content-type", /audio/)
     .expect(200);
 });
 
