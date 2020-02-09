@@ -1,9 +1,13 @@
 const crypto = require("crypto");
 
-module.exports = function generateTokenForUser(userId) {
-  return crypto
-    .createHash("sha1")
-    .update(String(userId))
-    .update(String(Date.now()))
-    .digest("hex");
+module.exports = function generateTokenForUser() {
+  return new Promise((resolve, reject) => {
+    crypto.randomBytes(48, (err, buffer) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+      resolve(buffer.toString("hex"));
+    });
+  });
 };

@@ -128,6 +128,31 @@ test("POST /login - should fail if email or password aren't correct", async () =
 
   await request
     .post("/login")
-    .send({ email: "foo2@bar.baz", password: "wrong" })
+    .send({ email: "wrong@bar.baz", password: "wrong" })
     .expect(401);
+});
+
+test("POST /refreshToken - should update refresh token and create new access token", async () => {
+  const response = await request
+    .post("/refreshToken")
+    .send({ refresh_token: "8e6112346a91d135e3cb8bbad7f5363eae2108ff" });
+
+  expect(response.status).toBe(200);
+  expect(response.body).toEqual({
+    refresh_token: expect.any(String),
+    access_token: expect.any(String)
+  });
+});
+
+// eslint-disable-next-line jest/expect-expect
+test("POST /refreshToken - should fail if refresh token isn't valid", async () => {
+  await request
+    .post("/refreshToken")
+    .send({ refresh_token: "invalid token" })
+    .expect(401);
+});
+
+// eslint-disable-next-line jest/expect-expect
+test("POST /refreshToken - should fail if refresh token isn't specified", async () => {
+  await request.post("/refreshToken").expect(400);
 });

@@ -27,7 +27,7 @@ module.exports = function createIndexRouteHandler(config, knexConnection) {
       ctx.throw(401);
     }
 
-    const refreshToken = generateTokenForUser(user.id);
+    const refreshToken = await generateTokenForUser();
     const now = new Date().toISOString();
 
     await knexConnection("refresh_tokens").insert({
@@ -39,7 +39,8 @@ module.exports = function createIndexRouteHandler(config, knexConnection) {
 
     const accessToken = await createAccessToken(
       config.AUTH_SERVER_TOKEN_SECRET,
-      config.AUTH_SERVER_ACCESS_TOKEN_LIFETIME
+      config.AUTH_SERVER_ACCESS_TOKEN_LIFETIME,
+      user.id,
     );
 
     ctx.body = {
