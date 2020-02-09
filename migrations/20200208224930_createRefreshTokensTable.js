@@ -3,11 +3,10 @@ exports.up = function up(knex) {
     table.increments();
     table
       .integer("user_id")
-      .nullable()
-      .references("users.id");
-
-    table.string("issuer").notNullable();
+      .references("users.id")
+      .notNullable();
     table.string("refresh_token").notNullable();
+    table.timestamps();
 
     table.unique(["refresh_token"]);
   });

@@ -25,7 +25,7 @@ module.exports = function createSignupRouteHandler(config, knexConnection) {
       ctx.status = 200;
     } catch (e) {
       if (e.message.match(/constraint/)) {
-        ctx.body = "User with given email already exists";
+        ctx.body = "Given email already used by someone else";
       } else {
         ctx.body = e.message;
       }
