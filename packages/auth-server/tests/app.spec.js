@@ -3,6 +3,7 @@ const supertest = require("supertest");
 const createApp = require("../src/app");
 
 const migrationsDir = `${__dirname}/../../../migrations`;
+const seedsDir = `${__dirname}/../../../seeds`;
 
 const config = {
   AUTH_SERVER_TOKEN_SECRET: "secret",
@@ -22,6 +23,10 @@ beforeEach(async () => {
 
   await knexConnection.migrate.latest({
     directory: migrationsDir
+  });
+
+  await knexConnection.seed.run({
+    directory: seedsDir
   });
 
   request = supertest(createApp(config, knexConnection).callback());
@@ -64,10 +69,21 @@ test("POST /signup - should create user", async () => {
     .first();
 
   expect(createdUser).toEqual({
-    id: 1,
+    id: expect.any(Number),
     email: "someone@mail.com",
     password: expect.any(String),
     created_at: expect.any(String),
     updated_at: expect.any(String)
   });
+});
+
+// eslint-disable-next-line jest/expect-expect
+test("POST /signup - should fail if email already used by someone else", async () => {
+  await request
+    .post("/signup")
+    .send({
+      email: "foo@bar.baz",
+      password: "123"
+    })
+    .expect(400, "Given email already used by someone else");
 });
