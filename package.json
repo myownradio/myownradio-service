@@ -8,6 +8,8 @@
     "start:audio-uploader": "env-cmd -f ./env/audio-uploader.env -- yarn --cwd packages/audio-uploader start",
     "dev:auth-server": "env-cmd -f ./env/auth-server.env -- yarn --cwd packages/auth-server run dev",
     "start:auth-server": "env-cmd -f ./env/auth-server.env -- yarn --cwd packages/auth-server start",
+    "dev:overlay-proxy": "env-cmd -f ./env/overlay-proxy.env -- yarn --cwd packages/overlay-proxy run dev",
+    "start:overlay-proxy": "env-cmd -f ./env/overlay-proxy.env -- yarn --cwd packages/overlay-proxy start",
     "dev": "concurrently -n w: npm:dev:*",
     "migrate": "knex migrate:latest"
   },
@@ -32,6 +34,5 @@
     "eslint": "^6.8.0",
     "eslint-plugin-jest": "^23.7.0"
   },
-  "dependencies": {
-  }
+  "dependencies": {}
 }

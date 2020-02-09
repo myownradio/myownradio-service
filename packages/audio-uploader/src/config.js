@@ -4,7 +4,7 @@ const { assert } = require("@myownradio/shared");
 const {
   AUDIO_UPLOADER_ROOT_FOLDER,
   AUDIO_UPLOADER_TOKEN_SECRET,
-  AUDIO_UPLOADER_TEMP_DIR = os.tmpDir(),
+  AUDIO_UPLOADER_TEMP_DIR = os.tmpdir(),
   PORT
 } = process.env;
 
