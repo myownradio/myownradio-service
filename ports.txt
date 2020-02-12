@@ -1,0 +1,9 @@
+Used ports in development environment
+=====================================
+
+12000   fileserver-local http
+12001   audio-uploader http
+12002   auth-server http
+12003   overlay-proxy http
+12004   email-sender http
+
