@@ -1,4 +1,5 @@
 include make-terraform.mk
+include docker.mk
 
 install:
 	yarn install

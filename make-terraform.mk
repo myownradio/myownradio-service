@@ -8,3 +8,6 @@ terraform-plan:
 
 terraform-apply:
 	terraform apply $(TERRAFORM_DIR)
+
+terraform-show:
+	terraform show $(TERRAFORM_DIR)

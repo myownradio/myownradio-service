@@ -63,4 +63,5 @@ common/temp/
 **/.rush/temp/
 
 .idea
-.terraform
+/.terraform
+terraform.tfstate.backup
