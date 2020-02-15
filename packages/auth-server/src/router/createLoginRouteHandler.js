@@ -1,4 +1,5 @@
 const bcrypt = require("bcryptjs");
+const errorConstants = require("@myownradio/independent/constants/error");
 const createAccessToken = require("../utils/createAccessToken");
 const generateTokenForUser = require("../utils/generateTokenForUser");
 
@@ -7,10 +8,7 @@ module.exports = function createIndexRouteHandler(config, knexConnection) {
     const { email, password } = ctx.request.body;
 
     if (!email || !password) {
-      ctx.throw(
-        400,
-        'Both "email" and "password" parameters should be specified'
-      );
+      ctx.throw(400, errorConstants.EMAIL_AND_PASSWORD_REQUIRED);
     }
 
     const user = await knexConnection("users")
@@ -18,13 +16,13 @@ module.exports = function createIndexRouteHandler(config, knexConnection) {
       .first();
 
     if (!user) {
-      ctx.throw(401);
+      ctx.throw(401, errorConstants.WRONG_EMAIL_OR_PASSWORD);
     }
 
     const passwordsAreEqual = await bcrypt.compare(password, user.password);
 
     if (!passwordsAreEqual) {
-      ctx.throw(401);
+      ctx.throw(401, errorConstants.WRONG_EMAIL_OR_PASSWORD);
     }
 
     const refreshToken = await generateTokenForUser();

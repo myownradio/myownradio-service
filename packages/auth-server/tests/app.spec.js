@@ -1,5 +1,6 @@
 const knex = require("knex");
 const supertest = require("supertest");
+const errorConstants = require("@myownradio/independent/constants/error");
 const createApp = require("../src/app");
 
 const migrationsDir = `${__dirname}/../../../migrations`;
@@ -125,7 +126,7 @@ describe("/login", () => {
       .post("/login")
       .expect(
         400,
-        'Both "email" and "password" parameters should be specified'
+        errorConstants.EMAIL_AND_PASSWORD_REQUIRED
       );
   });
 
@@ -134,12 +135,12 @@ describe("/login", () => {
     await request
       .post("/login")
       .send({ email: "foo@bar.baz", password: "wrong" })
-      .expect(401);
+      .expect(401, errorConstants.WRONG_EMAIL_OR_PASSWORD);
 
     await request
       .post("/login")
       .send({ email: "wrong@bar.baz", password: "wrong" })
-      .expect(401);
+      .expect(401, errorConstants.WRONG_EMAIL_OR_PASSWORD);
   });
 });
 

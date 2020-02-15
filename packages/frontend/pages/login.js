@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -15,13 +15,16 @@ import Container from "@material-ui/core/Container";
 import { NoSsr } from "@material-ui/core";
 import Head from "next/head";
 import favicon from "../images/favicon.png";
+import createAuthServerApi from "../api/createAuthServerApi";
+
+const authServerApi = createAuthServerApi(process.env.AUTH_SERVER_ENDPOINT);
 
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {"Copyright © "}
       <Link color="inherit" href="https://myownradio.biz/">
-        Myownradio Service
+        Myownradio
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}
@@ -52,6 +55,32 @@ const useStyles = makeStyles(theme => ({
 export default function LoginPage() {
   const classes = useStyles();
 
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleEmailChange = useCallback(event => {
+    setEmail(event.target.value);
+  }, []);
+
+  const handlePasswordChange = useCallback(event => {
+    setPassword(event.target.value);
+  }, []);
+
+  const handleSignInClick = useCallback(
+    event => {
+      event.preventDefault();
+      authServerApi.login(email, password).then(
+        ok => {
+          console.log(ok);
+        },
+        err => {
+          console.error(err);
+        }
+      );
+    },
+    [email, password]
+  );
+
   return (
     <>
       <Head>
@@ -72,6 +101,8 @@ export default function LoginPage() {
             </Typography>
             <form className={classes.form} noValidate>
               <TextField
+                value={email}
+                onChange={handleEmailChange}
                 variant="outlined"
                 margin="normal"
                 required
@@ -83,6 +114,8 @@ export default function LoginPage() {
                 autoFocus
               />
               <TextField
+                value={password}
+                onChange={handlePasswordChange}
                 variant="outlined"
                 margin="normal"
                 required
@@ -98,6 +131,7 @@ export default function LoginPage() {
                 label="Remember me"
               />
               <Button
+                onClick={handleSignInClick}
                 type="submit"
                 fullWidth
                 variant="contained"
