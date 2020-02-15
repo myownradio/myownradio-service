@@ -1,3 +1,5 @@
+include make-terraform.mk
+
 install:
 	yarn install
 	docker-compose pull

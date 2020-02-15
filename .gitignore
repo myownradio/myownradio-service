@@ -63,3 +63,4 @@ common/temp/
 **/.rush/temp/
 
 .idea
+.terraform
