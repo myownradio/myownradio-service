@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@myownradio/shared": "1.0.0",
+    "@myownradio/independent": "1.0.0",
     "axios": "^0.19.2"
   }
 }
