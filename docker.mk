@@ -1,7 +1,7 @@
 SERVICE := CHANGE_ME
 IMAGE_NAME := myownradio/$(SERVICE)
 IMAGE_TAG := latest
-IMAGE_REPOSITORY := $(shell terraform output $(SERVICE)_repository_url)
+IMAGE_REPOSITORY := $(shell cd terraform && terraform output $(SERVICE)_repository_url)
 
 docker-aws-login:
 	$(aws ecr get-login --no-include-email --region eu-central-1)
