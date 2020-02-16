@@ -6,6 +6,7 @@ const {
   AUTH_SERVER_DATABASE_CLIENT,
   AUTH_SERVER_ACCESS_TOKEN_LIFETIME,
   AUTH_SERVER_REFRESH_TOKEN_LIFETIME,
+  AUTH_SERVER_ALLOWED_ORIGIN,
   PORT
 } = process.env;
 
@@ -15,6 +16,7 @@ const config = {
   AUTH_SERVER_DATABASE_CLIENT,
   AUTH_SERVER_ACCESS_TOKEN_LIFETIME,
   AUTH_SERVER_REFRESH_TOKEN_LIFETIME,
+  AUTH_SERVER_ALLOWED_ORIGIN,
   PORT
 };
 
@@ -24,5 +26,6 @@ assert(typeof config.AUTH_SERVER_DATABASE_URL === "string");
 assert(typeof config.AUTH_SERVER_DATABASE_CLIENT === "string");
 assert(typeof config.AUTH_SERVER_ACCESS_TOKEN_LIFETIME === "string");
 assert(typeof config.AUTH_SERVER_REFRESH_TOKEN_LIFETIME === "string");
+assert(typeof config.AUTH_SERVER_ALLOWED_ORIGIN === "string");
 
 module.exports = config;

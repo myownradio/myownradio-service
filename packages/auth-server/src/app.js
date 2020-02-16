@@ -6,7 +6,9 @@ module.exports = function createApp(config, knexConnection) {
   const app = new Application();
   const router = createRouter(config, knexConnection);
 
-  app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
+  app.use(
+    cors({ credentials: true, origin: config.AUTH_SERVER_ALLOWED_ORIGIN })
+  );
 
   app.use(router.routes());
   app.use(router.allowedMethods());
