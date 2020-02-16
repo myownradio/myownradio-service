@@ -1,3 +1,4 @@
+const errorConstants = require("@myownradio/independent/constants/error");
 const bcrypt = require("bcryptjs");
 
 module.exports = function createSignupRouteHandler(config, knexConnection) {
@@ -5,10 +6,7 @@ module.exports = function createSignupRouteHandler(config, knexConnection) {
     const { email, password } = ctx.request.body;
 
     if (!email || !password) {
-      ctx.throw(
-        400,
-        'Both "email" and "password" parameters should be specified'
-      );
+      ctx.throw(400, errorConstants.EMAIL_AND_PASSWORD_REQUIRED);
     }
 
     const passwordHash = await bcrypt.hash(password, 10);
@@ -25,11 +23,11 @@ module.exports = function createSignupRouteHandler(config, knexConnection) {
       ctx.status = 200;
     } catch (e) {
       if (e.message.match(/constraint/)) {
-        ctx.body = "Given email already used by someone else";
+        ctx.body = errorConstants.EMAIL_ALREADY_IN_USE;
+        ctx.status = 400;
       } else {
-        ctx.body = e.message;
+        throw e;
       }
-      ctx.status = 400;
     }
   };
 };

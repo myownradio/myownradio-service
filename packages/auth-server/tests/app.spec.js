@@ -46,20 +46,19 @@ test("GET / - should respond with OK", async () => {
 describe("/signup", () => {
   // eslint-disable-next-line jest/expect-expect
   test("POST /signup - should fail when body has no email or password", async () => {
-    const responseMessage =
-      'Both "email" and "password" parameters should be specified';
-
-    await request.post("/signup").expect(400, responseMessage);
+    await request
+      .post("/signup")
+      .expect(400, errorConstants.EMAIL_AND_PASSWORD_REQUIRED);
 
     await request
       .post("/signup")
       .send({ email: "someone@mail.com" })
-      .expect(400, responseMessage);
+      .expect(400, errorConstants.EMAIL_AND_PASSWORD_REQUIRED);
 
     await request
       .post("/signup")
       .send({ password: "somepassword" })
-      .expect(400, responseMessage);
+      .expect(400, errorConstants.EMAIL_AND_PASSWORD_REQUIRED);
   });
 
   test("POST /signup - should create user", async () => {
@@ -89,7 +88,7 @@ describe("/signup", () => {
         email: "foo@bar.baz",
         password: "123"
       })
-      .expect(400, "Given email already used by someone else");
+      .expect(400, errorConstants.EMAIL_ALREADY_IN_USE);
   });
 });
 
