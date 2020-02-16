@@ -124,10 +124,7 @@ describe("/login", () => {
   test("POST /login - should fail if email or password not specified", async () => {
     await request
       .post("/login")
-      .expect(
-        400,
-        errorConstants.EMAIL_AND_PASSWORD_REQUIRED
-      );
+      .expect(400, errorConstants.EMAIL_AND_PASSWORD_REQUIRED);
   });
 
   // eslint-disable-next-line jest/expect-expect
@@ -157,19 +154,31 @@ describe("/refreshToken", () => {
     });
   });
 
+  test("POST /refreshToken - refresh token should be used only once", async () => {
+    await request
+      .post("/refreshToken")
+      .send({ refresh_token: "8e6112346a91d135e3cb8bbad7f5363eae2108ff" })
+      .expect(200);
+
+    await request
+      .post("/refreshToken")
+      .send({ refresh_token: "8e6112346a91d135e3cb8bbad7f5363eae2108ff" })
+      .expect(401);
+  });
+
   // eslint-disable-next-line jest/expect-expect
   test("POST /refreshToken - should fail if refresh token isn't valid", async () => {
     await request
       .post("/refreshToken")
       .send({ refresh_token: "invalid token" })
-      .expect(401, "Refresh token isn't valid");
+      .expect(401, errorConstants.INVALID_REFRESH_TOKEN);
   });
 
   // eslint-disable-next-line jest/expect-expect
   test("POST /refreshToken - should fail if refresh token isn't specified", async () => {
     await request
       .post("/refreshToken")
-      .expect(400, "Refresh token should be specified");
+      .expect(400, errorConstants.REFRESH_TOKEN_REQUIRED);
   });
 
   // eslint-disable-next-line jest/expect-expect
@@ -177,7 +186,7 @@ describe("/refreshToken", () => {
     await request
       .post("/refreshToken")
       .send({ refresh_token: "dcb76e25b2079ee652d28f732f6679c441291d2e" })
-      .expect(401, "Refresh token isn't valid");
+      .expect(401, errorConstants.INVALID_REFRESH_TOKEN);
   });
 });
 

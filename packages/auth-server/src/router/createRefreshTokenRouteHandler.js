@@ -1,3 +1,4 @@
+const errorConstants = require("@myownradio/independent/constants/error");
 const generateTokenForUser = require("../utils/generateTokenForUser");
 const hasUpdatedRows = require("../utils/hasUpdatedRows");
 const createAccessToken = require("../utils/createAccessToken");
@@ -16,7 +17,7 @@ module.exports = function createRefreshTokenRouteHandler(
     const { refresh_token: oldRefreshToken } = ctx.request.body;
 
     if (!oldRefreshToken) {
-      ctx.throw(400, "Refresh token should be specified");
+      ctx.throw(400, errorConstants.REFRESH_TOKEN_REQUIRED);
     }
 
     const newRefreshToken = await generateTokenForUser();
@@ -32,7 +33,7 @@ module.exports = function createRefreshTokenRouteHandler(
         .returning("*");
 
       if (!hasUpdatedRows(updatedRows)) {
-        ctx.throw(401, "Refresh token isn't valid");
+        ctx.throw(401, errorConstants.INVALID_REFRESH_TOKEN);
       }
 
       const updatedRow = await trx("refresh_tokens")
