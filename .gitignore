@@ -62,6 +62,7 @@ jspm_packages/
 common/temp/
 **/.rush/temp/
 
-.idea
-/.terraform
+.idea/
+.terraform/
 terraform.tfstate.backup
+terraform.tfvars
