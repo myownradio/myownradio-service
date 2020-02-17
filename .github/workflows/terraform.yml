@@ -3,7 +3,7 @@ name: 'Perform Terraform Actions'
 on: [push]
 
 jobs:
-  terraform-validate:
+  terraform_validate:
     name: 'Terraform Validate'
     runs-on: ubuntu-latest
     env:
@@ -43,10 +43,11 @@ jobs:
         with:
           name: tf-init
           path: terraform/.terraform
-  terraform-apply:
-    if: github.ref == 'refs/heads/master'
+  terraform_apply:
     name: 'Terraform Apply'
+    needs: terraform_validate
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
