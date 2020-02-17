@@ -1,6 +1,6 @@
 name: 'Perform Terraform Actions'
-on:
-  - push
+
+on: [push]
 
 jobs:
   terraform-validate:
@@ -38,6 +38,11 @@ jobs:
           tf_actions_version: 0.12.20
           tf_actions_subcommand: 'plan'
           tf_actions_working_dir: 'terraform'
+      - name: 'Save artifacts'
+        uses: actions/upload-artifact@v1
+        with:
+          name: tf-init
+          path: terraform/.terraform
   terraform-apply:
     if: github.ref == 'refs/heads/master'
     name: 'Terraform Apply'
@@ -50,6 +55,10 @@ jobs:
     steps:
       - name: 'Checkout'
         uses: actions/checkout@master
+      - name: 'Load artifacts'
+        uses: actions/download-artifact@v1
+        with:
+          name: tf-init
       - name: 'Terraform Apply'
         uses: hashicorp/terraform-github-actions@master
         with:
