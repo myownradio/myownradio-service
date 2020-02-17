@@ -9,5 +9,5 @@ provider "digitalocean" {
 }
 
 resource "digitalocean_floating_ip" "mor_service1" {
-  region              = local.digitalocean_region
+  region = local.digitalocean_region
 }
