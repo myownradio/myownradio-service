@@ -15,7 +15,7 @@ jobs:
         with:
           tf_actions_version: 0.12.13
           tf_actions_subcommand: 'fmt'
-          tf_actions_working_dir: '.terraform'
+          tf_actions_working_dir: 'terraform'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: 'Terraform Init'
@@ -23,7 +23,7 @@ jobs:
         with:
           tf_actions_version: 0.12.13
           tf_actions_subcommand: 'init'
-          tf_actions_working_dir: '.terraform'
+          tf_actions_working_dir: 'terraform'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: 'Terraform Validate'
@@ -31,6 +31,6 @@ jobs:
         with:
           tf_actions_version: 0.12.13
           tf_actions_subcommand: 'validate'
-          tf_actions_working_dir: '.terraform'
+          tf_actions_working_dir: 'terraform'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
