@@ -38,6 +38,12 @@ jobs:
           tf_actions_version: 0.12.20
           tf_actions_subcommand: 'plan'
           tf_actions_working_dir: 'terraform'
+      - name: 'Terraform Taint'
+        uses: hashicorp/terraform-github-actions@master
+        with:
+          tf_actions_version: 0.12.20
+          tf_actions_subcommand: 'taint'
+          tf_actions_working_dir: 'terraform'
   terraform_apply:
     name: 'Terraform Apply'
     needs: terraform_validate
