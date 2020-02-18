@@ -1,0 +1,29 @@
+{
+  "name": "@myownradio/audio-uploader",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "private": true,
+  "dependencies": {
+    "@myownradio/shared": "1.0.0",
+    "@myownradio/independent": "1.0.0",
+    "@sentry/node": "5.11.2",
+    "ffprobe-static": "^3.0.0",
+    "fluent-ffmpeg": "^2.1.2",
+    "idx": "^2.5.6",
+    "jsonwebtoken": "~8.5.1",
+    "koa": "~2.11.0",
+    "koa-body": "~4.1.1",
+    "koa-jwt": "^3.6.0",
+    "koa-router": "~8.0.6"
+  },
+  "devDependencies": {
+    "jest": "^25.1.0",
+    "nodemon": "~2.0.2",
+    "supertest": "^4.0.2",
+    "yarn": "^1.21.1"
+  }
+}
