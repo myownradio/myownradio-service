@@ -1,9 +1,0 @@
-{
-  "name": "@myownradio/shared",
-  "version": "1.0.0",
-  "main": "src/index.js",
-  "private": true,
-  "dependencies": {
-    "mime": "^2.4.4"
-  }
-}

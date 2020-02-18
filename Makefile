@@ -1,20 +1,2 @@
-include docker.mk
-
-install:
-	yarn install
-	docker-compose pull
-
-start:
-	yarn start
-
-dev:
-	yarn dev
-
-migrate:
-	yarn migrate
-
-start-services:
-	docker-compose up -d
-
-stop-services:
-	docker-compose stop
+install-deployer-ssh-key:
+	(cd terraform && terraform output deployer_private_key) > ~/.ssh/deployer_private_key
