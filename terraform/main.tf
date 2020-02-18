@@ -3,6 +3,11 @@ resource "tls_private_key" "ssh" {
   rsa_bits  = 4096
 }
 
+resource "github_user_ssh_key" "mor-digitalocean" {
+  title = "mor-digitalocean"
+  key   = tls_private_key.ssh.public_key_openssh
+}
+
 resource "digitalocean_ssh_key" "mor-digitalocean" {
   name       = "mor-digitalocean"
   public_key = tls_private_key.ssh.public_key_openssh
