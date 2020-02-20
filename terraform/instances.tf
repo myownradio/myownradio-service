@@ -32,7 +32,13 @@ resource "digitalocean_droplet" "mor_master" {
       "docker swarm init --advertise-addr=${self.ipv4_address_private}",
       "mkdir -p /root/swarm",
       "docker swarm join-token manager > /root/swarm/master-token",
-      "docker swarm join-token worker > /root/swarm/worker-token"
+      "docker swarm join-token worker > /root/swarm/worker-token",
+      "useradd -m -s /bin/bash deployer",
+      "usermod -a -G docker deployer",
+      "mkdir -p /home/deployer/.ssh && chown -R deployer:deployer /home/deployer",
+      "cp /root/.ssh/authorized_keys /home/deployer/.ssh/authorized_keys",
+      "chown deployer /home/deployer/.ssh/authorized_keys",
+      "chmod 0644 /home/deployer/.ssh/authorized_keys"
     ]
   }
 }
