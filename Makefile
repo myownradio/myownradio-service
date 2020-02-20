@@ -12,3 +12,9 @@ authorize-on-master:
 
 add-docker-context:
 	docker context create --docker host=ssh://deployer@$(MASTER_IP_ADDRESS) mor-master
+
+docker-aws-login:
+	aws ecr get-login --no-include-email --region eu-central-1 | bash
+
+docker-aws-login-remote:
+	aws ecr get-login --no-include-email --region eu-central-1 | ssh deployer@$(MASTER_IP_ADDRESS) bash

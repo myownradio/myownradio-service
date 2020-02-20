@@ -10,6 +10,10 @@ COPY --chown=1000 packages/frontend packages/frontend
 COPY --chown=1000 packages/independent packages/independent
 COPY --chown=1000 package.json yarn.lock ./
 
+WORKDIR /usr/app/packages/frontend
+
 RUN yarn install
+
+RUN yarn build
 
 CMD yarn start

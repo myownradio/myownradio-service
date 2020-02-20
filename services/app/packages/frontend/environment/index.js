@@ -1,3 +1,4 @@
 const development = require("./development");
+const production = require("./production");
 
-module.exports = { development };
+module.exports = { development, production };
