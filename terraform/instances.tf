@@ -24,21 +24,37 @@ resource "digitalocean_droplet" "mor_master" {
 
   provisioner "remote-exec" {
     inline = [
+      // Initialize and install dependencies
       "apt-get update",
-      "apt-get install -y apt-transport-https ca-certificates curl software-properties-common",
+      "apt-get install -y apt-transport-https ca-certificates curl software-properties-common awscli",
+
+      // Install docker-ce
       "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -",
       "add-apt-repository \"deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable\"",
       "apt-get install -y docker-ce",
+
+      // Initialize docker swarm cluster
       "docker swarm init --advertise-addr=${self.ipv4_address_private}",
-      "mkdir -p /root/swarm",
-      "docker swarm join-token manager > /root/swarm/master-token",
-      "docker swarm join-token worker > /root/swarm/worker-token",
-      "useradd -m -s /bin/bash deployer",
-      "usermod -a -G docker deployer",
-      "mkdir -p /home/deployer/.ssh && chown -R deployer:deployer /home/deployer",
+
+      // Create deployer user
+      "useradd -m -s /bin/bash deployer && usermod -a -G docker deployer",
+
+      // Copy keys from root to deployer
+      "mkdir -p /home/deployer/.ssh",
       "cp /root/.ssh/authorized_keys /home/deployer/.ssh/authorized_keys",
-      "chown deployer /home/deployer/.ssh/authorized_keys",
-      "chmod 0644 /home/deployer/.ssh/authorized_keys"
+      "chown -R deployer:deployer /home/deployer/.ssh",
+      "chmod 0644 /home/deployer/.ssh/authorized_keys",
+    ]
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      // Configure ECR credentials
+      "mkdir /home/deployer/.aws",
+      "echo [default] > /home/deployer/.aws/credentials",
+      "echo aws_access_key_id=${aws_iam_access_key.deployer_ro.id} >> /home/deployer/.aws/credentials",
+      "echo aws_secret_access_key=${aws_iam_access_key.deployer_ro.secret} >> /home/deployer/.aws/credentials",
+      "chown -R deployer:deployer /home/deployer/.aws"
     ]
   }
 }
