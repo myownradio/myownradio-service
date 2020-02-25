@@ -1,25 +1,21 @@
-resource "digitalocean_ssh_key" "deployer_key" {
-  name       = "mor_deployer_key"
-  public_key = tls_private_key.deployer_key.public_key_openssh
-}
-
-resource "digitalocean_droplet" "mor_master" {
+resource "digitalocean_droplet" "master" {
   image  = "ubuntu-18-04-x64"
-  name   = "mor-master"
+  name   = var.node_name
   size   = "s-1vcpu-1gb"
   region = "fra1"
-  ssh_keys = [
-    digitalocean_ssh_key.deployer_key.fingerprint
-  ]
 
   private_networking = true
   monitoring         = true
+
+  ssh_keys = [
+    var.ssh_key_fingerprint
+  ]
 
   connection {
     host        = self.ipv4_address
     user        = "root"
     type        = "ssh"
-    private_key = tls_private_key.deployer_key.private_key_pem
+    private_key = var.ssh_private_key
   }
 
   provisioner "remote-exec" {
@@ -52,18 +48,23 @@ resource "digitalocean_droplet" "mor_master" {
       // Configure ECR credentials
       "mkdir /home/deployer/.aws",
       "echo [default] > /home/deployer/.aws/credentials",
-      "echo aws_access_key_id=${aws_iam_access_key.deployer_ro.id} >> /home/deployer/.aws/credentials",
-      "echo aws_secret_access_key=${aws_iam_access_key.deployer_ro.secret} >> /home/deployer/.aws/credentials",
+      "echo aws_access_key_id=${var.aws_access_key_id} >> /home/deployer/.aws/credentials",
+      "echo aws_secret_access_key=${var.aws_secret_access_key} >> /home/deployer/.aws/credentials",
       "chown -R deployer:deployer /home/deployer/.aws"
     ]
   }
 }
 
-resource "digitalocean_floating_ip" "mor_master" {
+
+resource "digitalocean_floating_ip" "master" {
   region     = "fra1"
-  droplet_id = digitalocean_droplet.mor_master.id
+  droplet_id = digitalocean_droplet.master.id
 }
 
-output "mor_master_ip_address" {
-  value = digitalocean_floating_ip.mor_master.ip_address
+
+resource "cloudflare_record" "a_record" {
+  name = var.dns_a_record_name
+  zone_id = var.dns_zone_id
+  type = "A"
+  value = digitalocean_floating_ip.master.ip_address
 }
