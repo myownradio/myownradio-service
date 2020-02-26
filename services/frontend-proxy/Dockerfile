@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM ubuntu:19.04
 
 MAINTAINER Roman Lakhtadyr <roman.lakhtadyr@gmail.com>
 
@@ -16,7 +16,6 @@ RUN echo '\
 upstream frontend {\n\
     server frontend:3000;\n\
 }\n\
-\n\
 server {\n\
     listen       8080;\n\
     server_name  localhost default;\n\
@@ -34,6 +33,9 @@ server {\n\
 }\n\
 ' > /etc/nginx/sites-available/default
 
-CMD ["/usr/sbin/nginx -g \"daemon off; error_log /dev/stderr;\""]
+CMD ["nginx", "-g", "daemon off; error_log /dev/stderr;"]
 
 EXPOSE 8080
+
+HEALTHCHECK --interval=5s --timeout=3s \
+  CMD curl -f http://localhost:8080/ || exit 1
