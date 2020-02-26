@@ -1,5 +1,7 @@
 MASTER_IP_ADDRESS = $(shell cd terraform && terraform output mor_master_ip_address)
 
+include docker.mk
+
 install-deployer-private-key:
 	(cd terraform && \
 		(terraform output deployer_private_key > ~/.ssh/deployer_key) && \

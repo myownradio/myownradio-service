@@ -2,8 +2,10 @@ FROM ubuntu:19.04
 
 MAINTAINER Roman Lakhtadyr <roman.lakhtadyr@gmail.com>
 
+ARG FRONTEND_SERVER="frontend:3000"
+ARG MAX_UPLOAD_FILESIZE=256
+
 ENV DEBIAN_FRONTEND         noninteractive
-ENV MAX_UPLOAD_FILESIZE     256
 
 # Install container dependencies
 RUN apt-get update && \
@@ -14,7 +16,7 @@ RUN apt-get update && \
 # nginx
 RUN echo '\
 upstream frontend {\n\
-    server frontend:3000;\n\
+    server '${FRONTEND_SERVER}';\n\
 }\n\
 server {\n\
     listen       8080;\n\
