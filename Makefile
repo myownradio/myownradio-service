@@ -20,3 +20,4 @@ docker-aws-login:
 
 docker-aws-login-remote:
 	aws ecr get-login --no-include-email --region eu-central-1 | ssh deployer@$(MASTER_IP_ADDRESS) bash
+
