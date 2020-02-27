@@ -1,5 +1,7 @@
 MASTER_IP_ADDRESS = $(shell cd terraform && terraform output mor_master_ip_address)
 
+include docker.mk
+
 install-deployer-private-key:
 	(cd terraform && \
 		(terraform output deployer_private_key > ~/.ssh/deployer_key) && \
@@ -18,3 +20,4 @@ docker-aws-login:
 
 docker-aws-login-remote:
 	aws ecr get-login --no-include-email --region eu-central-1 | ssh deployer@$(MASTER_IP_ADDRESS) bash
+

@@ -1,12 +1,11 @@
-FROM ubuntu:18.04
+FROM ubuntu:19.04
 
 MAINTAINER Roman Lakhtadyr <roman.lakhtadyr@gmail.com>
 
-
-ARG SERVICE_NAME
+ARG SERVICE
 ARG NODE_VERSION=12
 
-ENV SERVICE_NAME=$SERVICE_NAME
+ENV SERVICE=$SERVICE
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Install container dependencies
@@ -27,8 +26,10 @@ RUN apt-get update && \
 WORKDIR /usr/app
 
 COPY package.json yarn.lock ./
-COPY packages/ packages/
+COPY packages/shared packages/shared/
+COPY packages/independent packages/independent/
+COPY packages/$SERVICE/ packages/$SERVICE/
 
 RUN yarn install --non-interactive --pure-lockfile
 
-CMD npm --prefix packages/${SERVICE_NAME} start
+CMD npm --prefix packages/${SERVICE} start
