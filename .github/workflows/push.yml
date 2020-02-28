@@ -86,6 +86,7 @@ jobs:
       TF_VAR_cloudflare_token: ${{ secrets.CLOUDFLARE_TOKEN }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
+      - uses: chrislennon/action-aws-cli@v1.1
       - name: 'Checkout'
         uses: actions/checkout@master
       - name: 'Terraform Init'
@@ -97,6 +98,4 @@ jobs:
       - name: 'Docker Build'
         run: make build-all
       - name: 'Docker Push'
-        uses: chrislennon/action-aws-cli@v1.1
         run: make docker-aws-login push-all
-
