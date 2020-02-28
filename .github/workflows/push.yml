@@ -99,7 +99,7 @@ jobs:
       - name: 'Docker Push'
         uses: actions/aws/cli@master
         with:
-          - args: make docker-aws-login push-all
-          - secrets:
+          args: make docker-aws-login push-all
+          secrets:
             - AWS_ACCESS_KEY_ID
             - AWS_SECRET_ACCESS_KEY
