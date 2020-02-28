@@ -1,8 +1,8 @@
-name: 'Perform Terraform Actions'
+name: 'Build and Apply Everything'
 
 on:
   push:
-    branches: [ master, chore ]
+    branches: [ master ]
 
 jobs:
   terraform_validate:
