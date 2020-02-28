@@ -1,6 +1,8 @@
-name: 'Perform Terraform Actions'
+name: 'Build and Apply Everything'
 
-on: [push]
+on:
+  push:
+    branches: [ master ]
 
 jobs:
   terraform_validate:
@@ -49,11 +51,11 @@ jobs:
     name: 'Terraform Apply'
     needs: terraform_validate
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master'
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       TF_VAR_do_token: ${{ secrets.DO_TOKEN }}
+      TF_VAR_cloudflare_token: ${{ secrets.CLOUDFLARE_TOKEN }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: 'Checkout'
@@ -73,3 +75,27 @@ jobs:
           tf_actions_working_dir: 'terraform'
       - name: 'Test Output'
         run: echo ${{ steps.terraform.outputs.tf_actions_plan_output }}
+  build_images:
+    name: 'Build And Push Docker Images'
+    needs: terraform_apply
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Terraform Init'
+        uses: hashicorp/terraform-github-actions@master
+        with:
+          tf_actions_version: 0.12.20
+          tf_actions_subcommand: 'init'
+          tf_actions_working_dir: 'terraform'
+      - name: Login to ECR
+        id: ecr
+        uses: elgohr/ecr-login-action@master
+        with:
+          access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          region: ${{ secrets.AWS_REGION }}
+      - name: 'Checkout'
+        uses: actions/checkout@master
+      - name: 'Docker Build'
+        run: make build-all
+      - name: 'Docker Push'
+        run: make push-all
