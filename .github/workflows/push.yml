@@ -80,6 +80,12 @@ jobs:
     needs: terraform_apply
     runs-on: ubuntu-latest
     steps:
+      - name: 'Terraform Init'
+        uses: hashicorp/terraform-github-actions@master
+        with:
+          tf_actions_version: 0.12.20
+          tf_actions_subcommand: 'init'
+          tf_actions_working_dir: 'terraform'
       - name: Login to ECR
         id: ecr
         uses: elgohr/ecr-login-action@master
