@@ -2,7 +2,7 @@ name: 'Build and Apply Everything'
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, chore ]
 
 jobs:
   terraform_validate:
@@ -82,7 +82,7 @@ jobs:
     steps:
       - name: 'Terraform Init'
         run: 'terraform init'
-        working_directory: 'terraform'
+        working-directory: 'terraform'
       - name: Login to ECR
         uses: elgohr/ecr-login-action@master
         with:
