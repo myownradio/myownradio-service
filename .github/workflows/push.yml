@@ -81,13 +81,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 'Terraform Init'
-        uses: hashicorp/terraform-github-actions@master
-        with:
-          tf_actions_version: 0.12.20
-          tf_actions_subcommand: 'init'
-          tf_actions_working_dir: 'terraform'
+        run: '(cd terraform && terraform init)'
       - name: Login to ECR
-        id: ecr
         uses: elgohr/ecr-login-action@master
         with:
           access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
