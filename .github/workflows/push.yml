@@ -81,7 +81,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 'Terraform Init'
-        run: '(cd terraform && terraform init)'
+        run: 'terraform init'
+        working_directory: 'terraform'
       - name: Login to ECR
         uses: elgohr/ecr-login-action@master
         with:
