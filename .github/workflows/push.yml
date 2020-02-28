@@ -76,7 +76,7 @@ jobs:
       - name: 'Test Output'
         run: echo ${{ steps.terraform.outputs.tf_actions_plan_output }}
   build_images:
-    name: 'Build Docker Images'
+    name: 'Build And Push Docker Images'
     needs: terraform_apply
     runs-on: ubuntu-latest
     steps:
@@ -84,3 +84,11 @@ jobs:
         uses: actions/checkout@master
       - name: 'Docker Build'
         run: make build-all
+      - name: Login to ECR
+        id: ecr
+        uses: elgohr/ecr-login-action@master
+        with:
+          access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      - name: 'Docker Push'
+        run: make push-all
