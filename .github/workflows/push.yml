@@ -2,11 +2,11 @@ name: 'Apply Everything'
 
 on:
   push:
-    branches: [ master, chore ]
+    branches: [ master ]
 
 jobs:
   terraform:
-    name: 'Terraform'
+    name: Terraform
     runs-on: ubuntu-latest
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -15,39 +15,39 @@ jobs:
       TF_VAR_cloudflare_token: ${{ secrets.CLOUDFLARE_TOKEN }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
-      - name: 'Checkout'
+      - name: Checkout
         uses: actions/checkout@master
-      - name: 'Terraform Format'
+      - name: Terraform Format
         uses: hashicorp/terraform-github-actions@master
         with:
           tf_actions_version: 0.12.20
           tf_actions_subcommand: 'fmt'
           tf_actions_working_dir: 'terraform'
-      - name: Terraform Init
+      - name: 'Terraform: Init'
         uses: hashicorp/terraform-github-actions@master
         with:
           tf_actions_version: 0.12.20
           tf_actions_subcommand: 'init'
           tf_actions_working_dir: 'terraform'
-      - name: 'Terraform Validate'
+      - name: 'Terraform: Validate'
         uses: hashicorp/terraform-github-actions@master
         with:
           tf_actions_version: 0.12.20
           tf_actions_subcommand: 'validate'
           tf_actions_working_dir: 'terraform'
-      - name: 'Terraform Plan'
+      - name: 'Terraform: Plan'
         uses: hashicorp/terraform-github-actions@master
         with:
           tf_actions_version: 0.12.20
           tf_actions_subcommand: 'plan'
           tf_actions_working_dir: 'terraform'
-      - name: 'Terraform Taint'
+      - name: 'Terraform: Taint'
         uses: hashicorp/terraform-github-actions@master
         with:
           tf_actions_version: 0.12.20
           tf_actions_subcommand: 'taint'
           tf_actions_working_dir: 'terraform'
-      - name: 'Terraform Apply'
+      - name: 'Terraform: Apply'
         id: 'terraform'
         uses: hashicorp/terraform-github-actions@master
         with:
