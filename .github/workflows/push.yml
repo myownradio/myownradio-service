@@ -23,7 +23,7 @@ jobs:
           tf_actions_version: 0.12.20
           tf_actions_subcommand: 'fmt'
           tf_actions_working_dir: 'terraform'
-      - name: 'Terraform Init'
+      - name: Terraform Init
         uses: hashicorp/terraform-github-actions@master
         with:
           tf_actions_version: 0.12.20
@@ -54,8 +54,13 @@ jobs:
           tf_actions_version: 0.12.20
           tf_actions_subcommand: 'apply'
           tf_actions_working_dir: 'terraform'
+      - name: Upload terraform artifacts
+        uses: actions/upload-artifact@v1
+        with:
+          name: tf
+          path: terraform/.terraform
   build_and_push:
-    name: 'Build And Push Docker Images'
+    name: 'Build Images'
     needs: terraform
     runs-on: ubuntu-latest
     env:
@@ -68,12 +73,10 @@ jobs:
       - uses: chrislennon/action-aws-cli@v1.1
       - name: 'Checkout'
         uses: actions/checkout@master
-      - name: 'Terraform Init'
-        uses: hashicorp/terraform-github-actions@master
+      - name: Download terraform artifacts
+        uses: actions/download-artifact@v1
         with:
-          tf_actions_version: 0.12.20
-          tf_actions_subcommand: 'init'
-          tf_actions_working_dir: 'terraform'
+          name: tf
       - name: 'Docker Build'
         run: make build-all
       - name: 'Docker Push'
