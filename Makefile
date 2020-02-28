@@ -2,6 +2,7 @@ MASTER_IP_ADDRESS = $(shell cd terraform && terraform output mor_master_ip_addre
 
 include terraform.mk
 include docker.mk
+include deploy.mk
 
 install-deployer-private-key:
 	(cd terraform && \
