@@ -80,15 +80,18 @@ jobs:
     needs: terraform_apply
     runs-on: ubuntu-latest
     steps:
-      - name: 'Terraform Init'
-        run: 'terraform init'
-        working-directory: 'terraform'
       - name: Login to ECR
         uses: elgohr/ecr-login-action@master
         with:
           access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
           secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           region: ${{ secrets.AWS_REGION }}
+      - name: 'Terraform Init'
+        uses: hashicorp/terraform-github-actions@master
+        with:
+          tf_actions_version: 0.12.20
+          tf_actions_subcommand: 'init'
+          tf_actions_working_dir: 'terraform'
       - name: 'Checkout'
         uses: actions/checkout@master
       - name: 'Docker Build'
