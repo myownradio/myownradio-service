@@ -1,6 +1,8 @@
 name: 'Perform Terraform Actions'
 
-on: [push]
+on:
+  push:
+    branches: [ master, chore ]
 
 jobs:
   terraform_validate:
@@ -49,7 +51,6 @@ jobs:
     name: 'Terraform Apply'
     needs: terraform_validate
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master'
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -73,3 +74,12 @@ jobs:
           tf_actions_working_dir: 'terraform'
       - name: 'Test Output'
         run: echo ${{ steps.terraform.outputs.tf_actions_plan_output }}
+  build_images:
+    name: 'Build Docker Images'
+    needs: terraform_apply
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@master
+      - name: 'Docker Build'
+        run: make build-all
