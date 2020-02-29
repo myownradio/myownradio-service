@@ -52,7 +52,7 @@ jobs:
         id: infra
         uses: gr2m/get-json-paths-action@v1.x
         with:
-          json: ${{ steps.out.outputs.tf_actions_output }}
+          json: ${{ steps.terraform_output.outputs.tf_actions_output }}
           ssh_private_key: 'deployer_private_key.value'
           ssh_public_key: 'deployer_public_key.value'
           ip_address: 'mor_master_ip_address.value'
