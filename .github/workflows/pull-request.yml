@@ -66,9 +66,9 @@ jobs:
           TF_OUTPUT: ${{ steps.out.outputs.tf_actions_output }}
       - name: Exp
         run: |
-          mkdir -p $HOME/.ssh
           echo $SSH_PRIVATE_KEY > $HOME/.ssh/id_rsa
           echo $SSH_PUBLIC_KEY > $HOME/.ssh/id_rsa.pub
           chmod 600 $HOME/.ssh/id_rsa
           chmod 666 $HOME/.ssh/id_rsa.pub
+          ssh-keygen -R $PRODUCTION_IP
           docker --host ssh://deployer@$PRODUCTION_IP service ls
