@@ -57,9 +57,10 @@ jobs:
           ssh_public_key: 'deployer_public_key.value'
           ip_address: 'mor_master_ip_address.value'
       - name: Deploy to Swarm
-        uses: sagebind/docker-swarm-deploy-action@v2
-        with:
-          remote_host: ssh://deployer@${{ steps.infra.outputs.ip_address }}
+        run: |
+          echo "${ssh_private_key}" > deploy_key.pem"
+          ssh -v -i deploy_key.pem deployer@${ip_address} uptime
+        env:
           ssh_private_key: ${{ steps.infra.outputs.ssh_private_key }}
           ssh_public_key: ${{ steps.infra.outputs.ssh_public_key }}
-          args: service ls
+          ip_address: ${{ steps.infra.outputs.ip_address }}
