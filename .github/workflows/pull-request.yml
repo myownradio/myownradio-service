@@ -50,12 +50,9 @@ jobs:
           tf_actions_working_dir: 'terraform'
       - name: Values
         id: values
-        uses: gr2m/get-json-paths-action@v1.x
-        with:
-          json: ${{ steps.out.outputs.tf_actions_output }}
-          ssh_private_key: "deployer_private_key.value"
-          ssh_public_key: "deployer_public_key.value"
+        run: |
+          apt-get install jq
+          PRIVATE_KEY=$(echo ${{ steps.out.outputs.tf_actions_output }} | jq -r '.deployer_private_key.value')
+          PUBLIC_KEY=$(echo ${{ steps.out.outputs.tf_actions_output }} | jq -r '.deployer_public_key.value')
       - name: Test
-        run: echo $json_var
-        env:
-          json_var: ${{ steps.values.outputs.ssh_private_key }}
+        run: echo $PUBLIC_KEY
