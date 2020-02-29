@@ -61,5 +61,5 @@ jobs:
         with:
           remote_host: ssh://deployer@${{ steps.infra.outputs.ip_address }}
           ssh_private_key: ${{ steps.infra.outputs.ssh_private_key }}
-#          ssh_public_key: ${{ steps.infra.outputs.ssh_public_key }}
+          ssh_public_key: ${{ steps.infra.outputs.ssh_public_key }}
           args: service ls
