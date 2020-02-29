@@ -53,10 +53,21 @@ jobs:
           SSH_PRIVATE_KEY=$(echo $TF_OUTPUT | jq -r '.deployer_private_key.value')
           SSH_PUBLIC_KEY=$(echo $TF_OUTPUT | jq -r '.deployer_public_key.value')
 
+          PRODUCTION_IP=$(echo $TF_OUTPUT | jq -r '.mor_master_ip_address.value')
+
           echo ::add-mask::"${SSH_PRIVATE_KEY}"
           echo ::add-mask::"${SSH_PUBLIC_KEY}"
 
           echo ::set-env name=SSH_PUBLIC_KEY::"${SSH_PUBLIC_KEY}"
           echo ::set-env name=SSH_PRIVATE_KEY::"${SSH_PRIVATE_KEY}"
+
+          echo ::set-env name=PRODUCTION_IP::"${PRODUCTION_IP}"
         env:
           TF_OUTPUT: ${{ steps.out.outputs.tf_actions_output }}
+      - name: Deploy to swarm
+        uses: sagebind/docker-swarm-deploy-action@v2
+        with:
+          remote_host: ssh://deployer@${{ env.PRODUCTION_IP }}
+          ssh_private_key: ${{ env.SSH_PRIVATE_KEY }}
+          ssh_public_key: ${{ env.SSH_PUBLIC_KEY }}
+          args: service ls
