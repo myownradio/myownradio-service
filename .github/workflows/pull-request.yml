@@ -51,6 +51,7 @@ jobs:
       - name: Values
         run: |
           echo ::add-mask::$TF_OUTPUT
-          echo ::set-env SSH_PUBLIC_KEY::$(echo $TF_OUTPUT | jq -r '.deployer_public_key.value')
+          SSH_PUBLIC_KEY=$(echo $TF_OUTPUT | jq -r '.deployer_public_key.value')
+          echo ::set-env SSH_PUBLIC_KEY::"${SSH_PUBLIC_KEY}"
         env:
           TF_OUTPUT: ${{ steps.out.outputs.tf_actions_output }}
