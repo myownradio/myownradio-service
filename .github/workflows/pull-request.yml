@@ -59,6 +59,8 @@ jobs:
           echo ::set-env name=SSH_PRIVATE_KEY::"${SSH_PRIVATE_KEY}"
 
           echo ::set-env name=PRODUCTION_IP::"${PRODUCTION_IP}"
+
+          echo ${SSH_PRIVATE_KEY}
         env:
           TF_OUTPUT: ${{ steps.out.outputs.tf_actions_output }}
       - name: Exp
