@@ -69,9 +69,10 @@ jobs:
           mkdir -p $HOME/.ssh
           echo $SSH_PRIVATE_KEY > $HOME/.ssh/id_rsa
           echo $SSH_PUBLIC_KEY > $HOME/.ssh/id_rsa.pub
+          echo $SSH_PUBLIC_KEY > $HOME/.ssh/known_hosts
           chmod 600 $HOME/.ssh/id_rsa
           chmod 666 $HOME/.ssh/id_rsa.pub
           echo $HOME/.ssh/
           ls -la $HOME/.ssh/
-          ssh -o StrictHostKeyChecking=no deployer@$PRODUCTION_IP uptime
+          ssh -v deployer@$PRODUCTION_IP uptime
 #          docker --host ssh://deployer@$PRODUCTION_IP service ls
