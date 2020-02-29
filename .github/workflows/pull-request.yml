@@ -63,7 +63,7 @@ jobs:
           remote_host: ssh://deployer@${{ steps.infra.outputs.ip_address }}
           ssh_private_key: ${{ steps.infra.outputs.ssh_private_key }}
           ssh_public_key: ${{ steps.infra.outputs.ssh_public_key }}
-          args: stack deploy --with-registry-auth --compose-file deployment/docker-swarm/production.yml
+          args: stack deploy --with-registry-auth --compose-file docker-compose.prod.yml mor
         env:
           FRONTEND_IMAGE_URL: ${{ steps.infra.outputs.frontend_image }}
           IMAGE_TAG: ${{ github.sha }}
