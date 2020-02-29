@@ -69,4 +69,4 @@ jobs:
           mkdir -p $HOME/.ssh
           echo $SSH_PRIVATE_KEY > $HOME/.ssh/id_rsa
           chmod 600 $HOME/.ssh/id_rsa
-          docker --host "ssh://deployer@$PRODUCTION_IP" service ls
+          docker --host ssh://deployer@$PRODUCTION_IP service ls
