@@ -49,9 +49,7 @@ jobs:
           tf_actions_subcommand: 'output'
           tf_actions_working_dir: 'terraform'
       - name: Values
-        id: values
+        run: echo $SSH_PUBLIC_KEY
         env:
           SSH_PRIVATE_KEY: ${{ steps.out.outputs.tf_actions_output }}
           SSH_PUBLIC_KEY: ${{ steps.out.outputs.tf_actions_output }}
-      - name: Test
-        run: echo $SSH_PUBLIC_KEY
