@@ -51,7 +51,7 @@ jobs:
       - name: Values
         id: values
         run: |
-          apt-get install jq
+          sudo apt-get install jq
           PRIVATE_KEY=$(echo ${{ steps.out.outputs.tf_actions_output }} | jq -r '.deployer_private_key.value')
           PUBLIC_KEY=$(echo ${{ steps.out.outputs.tf_actions_output }} | jq -r '.deployer_public_key.value')
       - name: Test
