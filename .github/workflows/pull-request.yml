@@ -64,10 +64,9 @@ jobs:
           echo ::set-env name=PRODUCTION_IP::"${PRODUCTION_IP}"
         env:
           TF_OUTPUT: ${{ steps.out.outputs.tf_actions_output }}
-      - name: Deploy to swarm
-        uses: sagebind/docker-swarm-deploy-action@v2
-        with:
-          remote_host: ssh://deployer@${{ env.PRODUCTION_IP }}
-          ssh_private_key: ${{ env.SSH_PRIVATE_KEY }}
-          ssh_public_key: ${{ env.SSH_PUBLIC_KEY }}
-          args: service ls
+      - name: Exp
+        run: |
+          mkdir -p $HOME/.ssh
+          echo $SSH_PRIVATE_KEY > $HOME/.ssh/id_rsa
+          chmod 600 $HOME/.ssh/id_rsa
+          docker --host "ssh://deployer@$PRODUCTION_IP" service ls
