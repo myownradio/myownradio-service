@@ -83,3 +83,41 @@ jobs:
     steps:
       - name: 'Checkout'
         uses: actions/checkout@master
+      - name: Download terraform artifacts
+        uses: actions/download-artifact@v1
+        with:
+          name: tf
+          path: terraform/.terraform
+      - name: 'Terraform: Output'
+        id: terraform_output
+        uses: hashicorp/terraform-github-actions@master
+        with:
+          tf_actions_version: 0.12.20
+          tf_actions_subcommand: 'output'
+          tf_actions_working_dir: 'terraform'
+      - name: Parse Output
+        id: infra
+        uses: gr2m/get-json-paths-action@v1.x
+        with:
+          json: ${{ steps.terraform_output.outputs.tf_actions_output }}
+          ssh_private_key: 'deployer_private_key.value'
+          ssh_public_key: 'deployer_public_key.value'
+          ip_address: 'mor_master_ip_address.value'
+          frontend_image: 'frontend_image_url.value'
+      - name: ECR login on Production
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ steps.infra.outputs.ip_address }}
+          username: deployer
+          key: ${{ steps.infra.outputs.ssh_private_key }}
+          script: aws ecr get-login --no-include-email --region eu-central-1 | bash
+      - name: Deploy stack to Production
+        uses: pldin601/docker-swarm-deploy-action@master
+        with:
+          remote_host: ssh://deployer@${{ steps.infra.outputs.ip_address }}
+          ssh_private_key: ${{ steps.infra.outputs.ssh_private_key }}
+          ssh_public_key: ${{ steps.infra.outputs.ssh_public_key }}
+          args: stack deploy --with-registry-auth --compose-file docker-compose.prod.yml mor
+        env:
+          FRONTEND_IMAGE_URL: ${{ steps.infra.outputs.frontend_image }}
+          IMAGE_TAG: ${{ github.sha }}
