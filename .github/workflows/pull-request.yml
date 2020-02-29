@@ -51,7 +51,7 @@ jobs:
       - name: Values
         id: values
         run: |
-          PRIVATE_KEY=${{ steps.out.outputs.tf_actions_output }}
-          PUBLIC_KEY=${{ steps.out.outputs.tf_actions_output }}
+          PRIVATE_KEY=${ steps.out.outputs.tf_actions_output }
+          PUBLIC_KEY=${ steps.out.outputs.tf_actions_output }
       - name: Test
         run: echo $PUBLIC_KEY
