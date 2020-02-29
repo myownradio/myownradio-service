@@ -69,6 +69,7 @@ jobs:
           mkdir -p $HOME/.ssh
           printf '%s' "$SSH_PRIVATE_KEY" > $HOME/.ssh/deployer.pem
           chmod 600 $HOME/.ssh/deployer.pem
+          cat $HOME/.ssh/deployer.pem
           ssh -o StrictHostKeyChecking=no -v -i $HOME/.ssh/deployer.pem deployer@$PRODUCTION_IP uptime
 
 #          docker --host ssh://deployer@$PRODUCTION_IP service ls
