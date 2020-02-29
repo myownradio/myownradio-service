@@ -48,7 +48,14 @@ jobs:
           tf_actions_version: 0.12.20
           tf_actions_subcommand: 'output'
           tf_actions_working_dir: 'terraform'
+      - name: Values
+        id: values
+        uses: gr2m/get-json-paths-action@v1.x
+        with:
+          json: ${{ steps.out.outputs.tf_actions_output }}
+          ssh_private_key: "deployer_private_key.value"
+          ssh_public_key: "deployer_public_key.value"
       - name: Test
         run: echo $json_var
         env:
-          json_var: ${{ steps.out.outputs.tf_actions_output }}
+          json_var: ${{ steps.values.outputs.ssh_private_key }}
