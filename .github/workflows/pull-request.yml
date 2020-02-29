@@ -50,4 +50,6 @@ jobs:
           tf_actions_working_dir: 'terraform'
       - name: Values
         run: |
-          FOO_BAR=$(echo ${{ steps.out.outputs.tf_actions_output }} | jq -r '.deployer_public_key.value')
+          FOO_BAR=$(echo $TF_OUTPUT | jq -r '.deployer_public_key.value')
+        env:
+          TF_OUTPUT: ${{ steps.out.outputs.tf_actions_output }}
