@@ -55,9 +55,6 @@ jobs:
 
           PRODUCTION_IP=$(echo $TF_OUTPUT | jq -r '.mor_master_ip_address.value')
 
-          echo ::add-mask::"${SSH_PRIVATE_KEY}"
-          echo ::add-mask::"${SSH_PUBLIC_KEY}"
-
           echo ::set-env name=SSH_PUBLIC_KEY::"${SSH_PUBLIC_KEY}"
           echo ::set-env name=SSH_PRIVATE_KEY::"${SSH_PRIVATE_KEY}"
 
