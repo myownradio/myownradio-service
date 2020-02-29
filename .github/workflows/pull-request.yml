@@ -67,11 +67,9 @@ jobs:
       - name: Exp
         run: |
           mkdir -p $HOME/.ssh
-          printf '%s' "$SSH_PRIVATE_KEY" > $HOME/.ssh/id_rsa
-          printf '%s' "$SSH_PUBLIC_KEY" > $HOME/.ssh/id_rsa.pub
-          chmod 600 $HOME/.ssh/id_rsa
-          chmod 666 $HOME/.ssh/id_rsa.pub
-          ssh -o StrictHostKeyChecking=no -v deployer@$PRODUCTION_IP uptime
+          printf '%s' "$SSH_PRIVATE_KEY" > $HOME/.ssh/deployer.pem
+          chmod 600 $HOME/.ssh/deployer.pem
+          ssh -o StrictHostKeyChecking=no -v -i $HOME/.ssh/deployer.pem deployer@$PRODUCTION_IP uptime
 
 #          docker --host ssh://deployer@$PRODUCTION_IP service ls
 #          printf '%s %s\n' "$PRODUCTION_IP" "$SSH_PUBLIC_KEY" >> $HOME/.ssh/known_hosts
