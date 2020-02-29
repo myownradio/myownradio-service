@@ -51,4 +51,4 @@ jobs:
       - name: Test
         run: echo $json_var
         env:
-          json_var: ${{ steps.out.output.tf_actions_output }}
+          json_var: ${{ steps.out.outputs.tf_actions_output }}
