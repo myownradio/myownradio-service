@@ -71,8 +71,6 @@ jobs:
           printf '%s' "$SSH_PUBLIC_KEY" > $HOME/.ssh/id_rsa.pub
           chmod 600 $HOME/.ssh/id_rsa
           chmod 666 $HOME/.ssh/id_rsa.pub
-          cat $HOME/.ssh/known_hosts
-          ls -la $HOME/.ssh/
           ssh -o StrictHostKeyChecking=no -v deployer@$PRODUCTION_IP uptime
 
 #          docker --host ssh://deployer@$PRODUCTION_IP service ls
