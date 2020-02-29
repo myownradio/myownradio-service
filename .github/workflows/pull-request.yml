@@ -36,13 +36,19 @@ jobs:
           tf_actions_subcommand: 'validate'
           tf_actions_working_dir: 'terraform'
       - name: 'Terraform: Plan'
-        id: plan
         uses: hashicorp/terraform-github-actions@master
         with:
           tf_actions_version: 0.12.20
           tf_actions_subcommand: 'plan'
           tf_actions_working_dir: 'terraform'
+      - name: 'Terraform: Output'
+        id: out
+        uses: hashicorp/terraform-github-actions@master
+        with:
+          tf_actions_version: 0.12.20
+          tf_actions_subcommand: 'output'
+          tf_actions_working_dir: 'terraform'
       - name: Test
         run: echo $json_var
         env:
-          json_var: ${{ steps.plan.output.tf_actions_output }}
+          json_var: ${{ steps.out.output.tf_actions_output }}
