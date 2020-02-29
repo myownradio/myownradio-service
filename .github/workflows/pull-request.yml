@@ -50,6 +50,6 @@ jobs:
           tf_actions_working_dir: 'terraform'
       - name: Values
         run: |
-          FOO_BAR=$(echo ::add-mask::$TF_OUTPUT | jq -r '.deployer_public_key.value')
+          SSH_PUBLIC_KEY=$(echo $TF_OUTPUT | jq -r '.deployer_public_key.value')
         env:
-          TF_OUTPUT: ${{ steps.out.outputs.tf_actions_output }}
+          TF_OUTPUT: ::add-mask::${{ steps.out.outputs.tf_actions_output }}
