@@ -43,4 +43,6 @@ jobs:
           tf_actions_subcommand: 'plan'
           tf_actions_working_dir: 'terraform'
       - name: Test
-        run: 'echo ${{ steps.plan.output }}'
+        run: echo $json_var
+        env:
+          json_var: ${{ steps.plan.output }}
