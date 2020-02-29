@@ -2,6 +2,6 @@ version: "3.5"
 
 services:
   frontend:
-    image: ${FRONTEND_REPOSITORY_URL}
+    image: ${FRONTEND_IMAGE_URL}:${IMAGE_TAG}
     ports:
       - 80:3000
