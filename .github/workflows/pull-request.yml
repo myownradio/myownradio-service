@@ -42,35 +42,24 @@ jobs:
           tf_actions_subcommand: 'plan'
           tf_actions_working_dir: 'terraform'
       - name: 'Terraform: Output'
-        id: out
+        id: terraform_output
         uses: hashicorp/terraform-github-actions@master
         with:
           tf_actions_version: 0.12.20
           tf_actions_subcommand: 'output'
           tf_actions_working_dir: 'terraform'
-      - name: Values
-        run: |
-          SSH_PRIVATE_KEY=$(echo $TF_OUTPUT | jq -r '.deployer_private_key.value')
-          SSH_PUBLIC_KEY=$(echo $TF_OUTPUT | jq -r '.deployer_public_key.value')
-
-          PRODUCTION_IP=$(echo $TF_OUTPUT | jq -r '.mor_master_ip_address.value')
-
-          echo ::set-env name=SSH_PUBLIC_KEY::"${SSH_PUBLIC_KEY}"
-          echo ::set-env name=SSH_PRIVATE_KEY::"${SSH_PRIVATE_KEY}"
-
-          echo ::set-env name=PRODUCTION_IP::"${PRODUCTION_IP}"
-
-          echo ${SSH_PRIVATE_KEY}
-        env:
-          TF_OUTPUT: ${{ steps.out.outputs.tf_actions_output }}
-      - name: Exp
-        run: |
-          echo "$SSH_PRIVATE_KEY"
-#          mkdir -p $HOME/.ssh
-#          printf '%s' "$SSH_PRIVATE_KEY" > $HOME/.ssh/deployer.pem
-#          chmod 600 $HOME/.ssh/deployer.pem
-#          cat $HOME/.ssh/deployer.pem
-#          ssh -o StrictHostKeyChecking=no -v -i $HOME/.ssh/deployer.pem deployer@$PRODUCTION_IP uptime
-
-#          docker --host ssh://deployer@$PRODUCTION_IP service ls
-#          printf '%s %s\n' "$PRODUCTION_IP" "$SSH_PUBLIC_KEY" >> $HOME/.ssh/known_hosts
+      - name: Parse Output
+        id: infra
+        uses: gr2m/get-json-paths-action@v1.x
+        with:
+          json: ${{ steps.out.outputs.tf_actions_output }}
+          ssh_private_key: 'deployer_private_key.value'
+          ssh_public_key: 'deployer_public_key.value'
+          ip_address: 'mor_master_ip_address.value'
+      - name: Deploy to Swarm
+        uses: sagebind/docker-swarm-deploy-action@v2
+        with:
+          remote_host: ssh://deployer@${{ steps.infra.outputs.ip_address }}
+          ssh_private_key: ${{ steps.infra.outputs.ssh_private_key }}
+          ssh_public_key: ${{ steps.infra.outputs.ssh_public_key }}
+          args: service ls
