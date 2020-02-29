@@ -81,6 +81,7 @@ jobs:
       TF_VAR_cloudflare_token: ${{ secrets.CLOUDFLARE_TOKEN }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
+      - uses: chrislennon/action-aws-cli@v1.1
       - name: 'Checkout'
         uses: actions/checkout@master
       - name: Download terraform artifacts
@@ -104,13 +105,8 @@ jobs:
           ssh_public_key: 'deployer_public_key.value'
           ip_address: 'mor_master_ip_address.value'
           frontend_image: 'frontend_image_url.value'
-      - name: ECR login on Production
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ steps.infra.outputs.ip_address }}
-          username: deployer
-          key: ${{ steps.infra.outputs.ssh_private_key }}
-          script: aws ecr get-login --no-include-email --region eu-central-1 | bash
+      - name: 'ECR login again...'
+        run: make docker-aws-login
       - name: Deploy stack to Production
         uses: pldin601/docker-swarm-deploy-action@master
         with:
