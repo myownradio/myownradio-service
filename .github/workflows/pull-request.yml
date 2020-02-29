@@ -58,7 +58,7 @@ jobs:
           ip_address: 'mor_master_ip_address.value'
       - name: Deploy to Swarm
         run: |
-          echo $ssh_private_key > deploy_key.pem"
+          echo $ssh_private_key > deploy_key.pem
           ssh -v -i deploy_key.pem deployer@$ip_address uptime
         env:
           ssh_private_key: ${{ steps.infra.outputs.ssh_private_key }}
