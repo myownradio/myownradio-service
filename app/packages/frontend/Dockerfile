@@ -12,7 +12,7 @@ COPY --chown=1000 package.json yarn.lock ./
 
 WORKDIR /usr/app/packages/frontend
 
-RUN yarn install
+RUN yarn install --non-interactive --pure-lockfile
 
 RUN yarn build
 

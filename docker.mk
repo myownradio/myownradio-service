@@ -9,7 +9,7 @@ build-service:
 	docker build -t $(LOCAL_PREFIX)$(SERVICE) ./services/$(SERVICE)
 
 build-app:
-	docker build -t $(LOCAL_PREFIX)$(SERVICE) --build-arg SERVICE=$(SERVICE) app/
+	docker build -t $(LOCAL_PREFIX)$(SERVICE) --file app/packages/$(SERVICE)/Dockerfile app/
 
 build-services:
 	@$(foreach SERVICE,$(SERVICES),make SERVICE=$(SERVICE) build-service)
