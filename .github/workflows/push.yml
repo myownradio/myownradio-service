@@ -13,7 +13,7 @@ jobs:
         uses: actions/checkout@master
       - name: Linter
         run: |
-          sudo apt-get install terraform
+          snap install terraform
           make run-linter
       - name: Tests
         run: make run-tests
