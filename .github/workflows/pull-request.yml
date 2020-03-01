@@ -45,8 +45,17 @@ jobs:
           tf_actions_subcommand: 'validate'
           tf_actions_working_dir: 'terraform'
       - name: 'Terraform: Plan'
+        id: plan
         uses: hashicorp/terraform-github-actions@master
         with:
           tf_actions_version: 0.12.20
           tf_actions_subcommand: 'plan'
           tf_actions_working_dir: 'terraform'
+      - name: Comment PR
+        uses: unsplash/comment-on-pr@master
+        with:
+          msg: |
+            Terraform Plan Output:
+            ```
+            ${{ steps.plan.outputs.tf_actions_plan_output }}
+            ```
