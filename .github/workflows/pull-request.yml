@@ -1,11 +1,26 @@
-name: 'Check Everything'
+name: 'Check'
 
 on:
   pull_request:
     branches: [ master ]
 
 jobs:
+  init:
+    name: Run linter and tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+      - name: Setup
+        run: |
+          sudo snap install terraform
+          make setup-services
+      - name: Linter
+        run: make run-linter
+      - name: Tests
+        run: make run-tests
   terraform:
+    needs: init
     name: Terraform
     runs-on: ubuntu-latest
     env:
@@ -17,12 +32,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@master
-      - name: 'Terraform: Format'
-        uses: hashicorp/terraform-github-actions@master
-        with:
-          tf_actions_version: 0.12.20
-          tf_actions_subcommand: 'fmt'
-          tf_actions_working_dir: 'terraform'
       - name: 'Terraform: Init'
         uses: hashicorp/terraform-github-actions@master
         with:
