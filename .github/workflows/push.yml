@@ -126,7 +126,7 @@ jobs:
           FRONTEND_IMAGE_URL: ${{ steps.parsed_output.outputs.frontend_image }}
           FRONTEND_PROXY_IMAGE_URL: ${{ steps.parsed_output.outputs.frontend_proxy_image }}
           IMAGE_TAG: ${{ github.sha }}
-      - name: Create commit comment
+      - name: Add comment to commit
         uses: peter-evans/commit-comment@v1.0.1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
