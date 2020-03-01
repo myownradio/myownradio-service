@@ -1,10 +1,20 @@
 version: "3.5"
 
 services:
+
+  http-to-https:
+    image: realkinetic/http-to-https:latest
+    ports:
+      - 80:80
+    deploy:
+      replicas: 1
+      update_config:
+        order: start-first
+        failure_action: rollback
+
   frontend-proxy:
     image: ${FRONTEND_PROXY_IMAGE_URL}:${IMAGE_TAG}
     ports:
-      - 80:80
       - 443:443
     depends_on:
       - frontend
