@@ -39,7 +39,6 @@ services:
       POSTGRES_USER: mor
       POSTGRES_PASSWORD: mor
       POSTGRES_DB: mor
-
     ports:
       - 5432:5432
     volumes:
