@@ -12,7 +12,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@master
       - name: Linter
-        run: make run-linter
+        run: |
+          sudo apt-get install terraform
+          make run-linter
       - name: Tests
         run: make run-tests
   build:
