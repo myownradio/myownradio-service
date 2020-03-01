@@ -31,3 +31,24 @@ services:
       update_config:
         order: start-first
         failure_action: rollback
+
+  # Backing Services
+  postgres:
+    image: postgres:12
+    environment:
+      POSTGRES_USER: mor
+      POSTGRES_PASSWORD: mor
+      POSTGRES_DB: mor
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    deploy:
+      replicas: 1
+      update_config:
+        order: stop-first
+
+volumes:
+
+  postgres:
+    driver: local
