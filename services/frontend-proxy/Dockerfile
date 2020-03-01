@@ -19,11 +19,13 @@ upstream frontend {\n\
     server '${FRONTEND_SERVER}';\n\
 }\n\
 server {\n\
-    listen       8080;\n\
-    server_name  localhost default;\n\
-    root         /usr/app/public;\n\
-    access_log   /dev/stderr combined;\n\
-    client_max_body_size '${MAX_UPLOAD_FILESIZE}'M;\n\
+    listen                  80;\n\
+    listen                  443 ssl;\n\
+    ssl_certificate         /etc/ssl/myownradio.biz.crt;\n\
+    ssl_certificate_key     /etc/ssl/myownradio.biz.key;\n\
+    server_name             localhost default;\n\
+    access_log              /dev/stderr combined;\n\
+    client_max_body_size    '${MAX_UPLOAD_FILESIZE}'M;\n\
     location / {\n\
         proxy_pass         http://frontend;\n\
         proxy_redirect     off;\n\
@@ -35,9 +37,12 @@ server {\n\
 }\n\
 ' > /etc/nginx/sites-available/default
 
+COPY certs/* /etc/ssl/
+
 CMD ["nginx", "-g", "daemon off; error_log /dev/stderr;"]
 
-EXPOSE 8080
+EXPOSE 80
+EXPOSE 443
 
 HEALTHCHECK --interval=5s --timeout=3s \
   CMD curl -f http://localhost:8080/ || exit 1
