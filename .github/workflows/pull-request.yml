@@ -55,7 +55,8 @@ jobs:
         uses: unsplash/comment-on-pr@master
         with:
           msg: |
-            Terraform Plan Output:
+            Terraform plan has changes: ${{ steps.plan.outputs.tf_actions_plan_has_changes }}
+
             ```
             ${{ steps.plan.outputs.tf_actions_plan_output }}
             ```
