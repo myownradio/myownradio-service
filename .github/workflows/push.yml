@@ -1,11 +1,35 @@
-name: 'Apply Everything'
+name: 'Deploy'
 
 on:
   push:
     branches: [ master, ecr ]
 
 jobs:
+  init:
+    name: Run linter and tests
+      uses: hashicorp/terraform-github-actions@master
+    runs-on: ubuntu-latest
+    steps:
+      - uses: hashicorp/terraform-github-actions@master
+      - name: Checkout
+        uses: actions/checkout@master
+      - name: Lint
+        run: make run-linter
+      - name: Tests
+        run: make run-tests
+  build:
+    needs: init
+    name: Build images
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+      - name: Build service images
+        run: make build-all-services
+      - name: Build application images
+        run: make build-all-apps
   terraform:
+    needs: init
     name: Terraform
     runs-on: ubuntu-latest
     env:
@@ -17,19 +41,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@master
-      - name: 'Terraform: Format'
-        uses: hashicorp/terraform-github-actions@master
-        with:
-          tf_actions_version: 0.12.20
-          tf_actions_subcommand: 'fmt'
-          tf_actions_working_dir: 'terraform'
-      - name: 'Terraform: Init'
+      - name: Terraform Init
         uses: hashicorp/terraform-github-actions@master
         with:
           tf_actions_version: 0.12.20
           tf_actions_subcommand: 'init'
           tf_actions_working_dir: 'terraform'
-      - name: 'Terraform: Apply'
+      - name: Terraform Apply
         id: 'terraform'
         uses: hashicorp/terraform-github-actions@master
         with:
@@ -41,32 +59,9 @@ jobs:
         with:
           name: tf
           path: terraform/.terraform
-  build_and_push:
-    name: 'Build Images'
-    needs: terraform
-    runs-on: self-hosted
-    env:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      TF_VAR_do_token: ${{ secrets.DO_TOKEN }}
-      TF_VAR_cloudflare_token: ${{ secrets.CLOUDFLARE_TOKEN }}
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    steps:
-      - uses: chrislennon/action-aws-cli@v1.1
-      - name: 'Checkout'
-        uses: actions/checkout@master
-      - name: Download terraform artifacts
-        uses: actions/download-artifact@v1
-        with:
-          name: tf
-          path: terraform/.terraform
-      - name: 'Docker Build'
-        run: make build-all
-      - name: 'Docker Push'
-        run: make docker-aws-login push-all
-  deploy:
-    name: 'Deploy to Production'
-    needs: build_and_push
+  push:
+    name: Push images
+    needs: [ build, terraform ]
     runs-on: ubuntu-latest
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -76,22 +71,45 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: chrislennon/action-aws-cli@v1.1
-      - name: 'Checkout'
+      - name: Checkout
         uses: actions/checkout@master
       - name: Download terraform artifacts
         uses: actions/download-artifact@v1
         with:
           name: tf
           path: terraform/.terraform
-      - name: 'Terraform: Output'
+      - name: Authenticate Docker on AWS
+        run: aws ecr get-login --no-include-email --region eu-central-1 | sh
+      - name: Push images
+        run: make push-all
+  deploy:
+    name: Deploy to Production
+    needs: push
+    runs-on: ubuntu-latest
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      TF_VAR_do_token: ${{ secrets.DO_TOKEN }}
+      TF_VAR_cloudflare_token: ${{ secrets.CLOUDFLARE_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: chrislennon/action-aws-cli@v1.1
+      - name: Checkout
+        uses: actions/checkout@master
+      - name: Download terraform artifacts
+        uses: actions/download-artifact@v1
+        with:
+          name: tf
+          path: terraform/.terraform
+      - name: Gather terraform output
         id: terraform_output
         uses: hashicorp/terraform-github-actions@master
         with:
           tf_actions_version: 0.12.20
           tf_actions_subcommand: 'output'
           tf_actions_working_dir: 'terraform'
-      - name: Parse Output
-        id: infra
+      - name: Parse terraform output
+        id: parse_output
         uses: gr2m/get-json-paths-action@v1.x
         with:
           json: ${{ steps.terraform_output.outputs.tf_actions_output }}
@@ -102,12 +120,12 @@ jobs:
       - name: Deploy stack to Production
         uses: pldin601/docker-swarm-deploy-action@master
         with:
-          remote_host: ssh://deployer@${{ steps.infra.outputs.ip_address }}
-          ssh_private_key: ${{ steps.infra.outputs.ssh_private_key }}
-          ssh_public_key: ${{ steps.infra.outputs.ssh_public_key }}
+          remote_host: ssh://deployer@${{ steps.parse_output.outputs.ip_address }}
+          ssh_private_key: ${{ steps.parse_output.outputs.ssh_private_key }}
+          ssh_public_key: ${{ steps.parse_output.outputs.ssh_public_key }}
           aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           args: stack deploy --with-registry-auth --compose-file docker-compose.prod.yml mor
         env:
-          FRONTEND_IMAGE_URL: ${{ steps.infra.outputs.frontend_image }}
+          FRONTEND_IMAGE_URL: ${{ steps.parse_output.outputs.frontend_image }}
           IMAGE_TAG: ${{ github.sha }}

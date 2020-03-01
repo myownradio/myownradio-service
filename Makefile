@@ -15,12 +15,12 @@ setup-services:
 
 
 # Application Section
-test:
+run-tests:
 	(cd app && yarn test)
 
-lint:
+run-linter:
 	(cd app && yarn lint)
-
+	(cd terraform && terraform fmt -check)
 
 # Terraform Section
 terraform-apply:
