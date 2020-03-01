@@ -18,6 +18,8 @@ RUN echo '\
 upstream frontend {\n\
     server '${FRONTEND_SERVER}';\n\
 }\n\
+resolver 127.0.0.11 valid=1s;\n\
+resolver_timeout 5s;\n\
 server {\n\
     listen                  80;\n\
     listen                  443 ssl;\n\
