@@ -1,25 +1,49 @@
-MASTER_IP_ADDRESS = $(shell cd terraform && terraform output mor_master_ip_address)
+LOCAL_PREFIX := myownradio/
+IMAGE_URL = $(shell cd terraform && terraform output $(SERVICE)_image_url)
+GIT_COMMIT = $(shell git log -n 1 --pretty=format:'%H')
 
-include terraform.mk
-include docker.mk
+APPS := frontend
+SERVICES := frontend-proxy
 
-install-deployer-private-key:
-	(cd terraform && \
-		(terraform output deployer_private_key > ~/.ssh/deployer_key) && \
-		(terraform output deployer_public_key > ~/.ssh/deployer_key.pub) \
-	)
-	chmod 0600 ~/.ssh/deployer_key ~/.ssh/deployer_key.pub
+setup: setup-terraform setup-services
 
-authorize-on-master:
-	cat ~/.ssh/id_rsa.pub | ssh -i ~/.ssh/deployer_key deployer@$(MASTER_IP_ADDRESS) "cat >> ~/.ssh/authorized_keys"
+setup-terraform:
+	(cd terraform && terraform init)
 
-add-docker-context:
-	docker context create --docker host=ssh://deployer@$(MASTER_IP_ADDRESS) mor-master
+setup-services:
+	(cd app && yarn install)
 
-docker-aws-login:
-	aws ecr get-login --no-include-email --region eu-central-1 | bash
 
-docker-aws-login-remote:
-	aws ecr get-login --no-include-email --region eu-central-1 | ssh deployer@$(MASTER_IP_ADDRESS) bash
+# Terraform Section
+terraform-apply:
+	(cd terraform && terraform apply)
 
-apply: terraform-apply docker-build-all docker-push-all
+terraform-plan:
+	(cd terraform && terraform plan)
+
+
+# Docker Section
+build-service:
+	docker build -t $(LOCAL_PREFIX)$(SERVICE) ./services/$(SERVICE)
+
+build-app:
+	docker build -t $(LOCAL_PREFIX)$(SERVICE) --file app/packages/$(SERVICE)/Dockerfile app/
+
+build-all-services:
+	@$(foreach SERVICE,$(SERVICES),make SERVICE=$(SERVICE) build-service)
+
+build-all-apps:
+	@$(foreach APP,$(APPS),make SERVICE=$(APP) build-app)
+
+build-all: build-all-services build-all-apps
+
+push:
+	docker tag $(LOCAL_PREFIX)$(SERVICE) $(IMAGE_URL):$(GIT_COMMIT)
+	docker tag $(LOCAL_PREFIX)$(SERVICE) $(IMAGE_URL):latest
+	docker push $(IMAGE_URL):$(GIT_COMMIT)
+	docker push $(IMAGE_URL):latest
+
+push-all:
+	@$(foreach SERVICE,$(SERVICES),make SERVICE=$(SERVICE) push)
+	@$(foreach APP,$(APPS),make SERVICE=$(APP) push)
+
