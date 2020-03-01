@@ -50,7 +50,3 @@ jobs:
           tf_actions_version: 0.12.20
           tf_actions_subcommand: 'plan'
           tf_actions_working_dir: 'terraform'
-      - name: Add comment to PR
-        uses: unsplash/comment-on-pr@master
-        with:
-          msg: "Wszystko poszło dobrze!"
