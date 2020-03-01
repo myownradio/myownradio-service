@@ -9,7 +9,10 @@ ENV DEBIAN_FRONTEND         noninteractive
 
 # Install container dependencies
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends --no-install-suggests nginx && \
+    apt-get install -y --no-install-recommends --no-install-suggests \
+        nginx \
+        ca-certificates \
+        curl && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -36,6 +39,9 @@ server {\n\
         proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;\n\
         proxy_set_header   X-Forwarded-Host $server_name;\n\
     }\n\
+    location /healthcheck {\n\
+        return 200;\n\
+    }\n\
 }\n\
 ' > /etc/nginx/sites-available/default
 
@@ -46,5 +52,8 @@ CMD ["nginx", "-g", "daemon off; error_log /dev/stderr;"]
 EXPOSE 80
 EXPOSE 443
 
-HEALTHCHECK --interval=5s --timeout=3s \
-  CMD curl -f http://localhost:8080/ || exit 1
+HEALTHCHECK --interval=5s --timeout=30s \
+    CMD curl -skS https://127.0.0.1/healthcheck || exit 1
+
+HEALTHCHECK --interval=5s --timeout=30s \
+    CMD curl -sS http://127.0.0.1/healthcheck || exit 1
