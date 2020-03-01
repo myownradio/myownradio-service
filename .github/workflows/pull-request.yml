@@ -7,7 +7,6 @@ on:
 jobs:
   init:
     name: Run linter and tests
-      uses: hashicorp/terraform-github-actions@master
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
