@@ -2,7 +2,7 @@ name: 'Apply Everything'
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, ecr ]
 
 jobs:
   terraform:
