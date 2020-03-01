@@ -11,10 +11,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@master
-      - name: Linter
+      - name: Setup
         run: |
           sudo snap install terraform
-          make run-linter
+          make setup-services
+      - name: Linter
+        run: make run-linter
       - name: Tests
         run: make run-tests
   build:
