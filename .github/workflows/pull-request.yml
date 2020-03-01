@@ -13,8 +13,10 @@ jobs:
       - uses: hashicorp/terraform-github-actions@master
       - name: Checkout
         uses: actions/checkout@master
-      - name: Lint
-        run: make run-linter
+      - name: Linter
+        run: |
+          sudo apt-get install terraform
+          make run-linter
       - name: Tests
         run: make run-tests
   terraform:
