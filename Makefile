@@ -14,6 +14,14 @@ setup-services:
 	(cd app && yarn install)
 
 
+# Application Section
+test:
+	(cd app && yarn test)
+
+lint:
+	(cd app && yarn lint)
+
+
 # Terraform Section
 terraform-apply:
 	(cd terraform && terraform apply)
