@@ -1,6 +1,7 @@
 LOCAL_PREFIX := myownradio/
 IMAGE_URL = $(shell cd terraform && terraform output $(SERVICE)_image_url)
 GIT_COMMIT = $(shell git log -n 1 --pretty=format:'%H')
+PULL_LATEST = no
 
 APPS := frontend
 SERVICES := frontend-proxy
@@ -32,9 +33,15 @@ terraform-plan:
 
 # Docker Section
 build-service:
+ifeq ($(PULL_LATEST), yes)
+	make SERVICE=$(SERVICE) pull-latest
+endif
 	docker build -t $(LOCAL_PREFIX)$(SERVICE) ./services/$(SERVICE)
 
 build-app:
+ifeq ($(PULL_LATEST), yes)
+	make SERVICE=$(SERVICE) pull-latest
+endif
 	docker build -t $(LOCAL_PREFIX)$(SERVICE) --file app/packages/$(SERVICE)/Dockerfile app/
 
 build-all-services:
@@ -55,3 +62,6 @@ push-all:
 	@$(foreach SERVICE,$(SERVICES),make SERVICE=$(SERVICE) push)
 	@$(foreach APP,$(APPS),make SERVICE=$(APP) push)
 
+pull-latest:
+	docker pull $(IMAGE_URL):latest
+	docker tag $(IMAGE_URL):latest $(LOCAL_PREFIX)$(SERVICE)

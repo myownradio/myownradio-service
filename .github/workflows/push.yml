@@ -2,7 +2,7 @@ name: 'Deploy'
 
 on:
   push:
-    branches: [ master, ecr ]
+    branches: [ master ]
 
 jobs:
   init:
@@ -68,12 +68,12 @@ jobs:
         with:
           name: tf
           path: terraform/.terraform
+      - name: Authenticate Docker on AWS
+        run: aws ecr get-login --no-include-email --region eu-central-1 | sh
       - name: Build service images
         run: make build-all-services
       - name: Build application images
         run: make build-all-apps
-      - name: Authenticate Docker on AWS
-        run: aws ecr get-login --no-include-email --region eu-central-1 | sh
       - name: Push images
         run: make push-all
   deploy:
