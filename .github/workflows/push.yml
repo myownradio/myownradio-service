@@ -103,7 +103,7 @@ jobs:
           tf_actions_subcommand: 'output'
           tf_actions_working_dir: 'terraform'
       - name: Parse terraform output
-        id: parse_output
+        id: parsed_output
         uses: gr2m/get-json-paths-action@v1.x
         with:
           json: ${{ steps.terraform_output.outputs.tf_actions_output }}
@@ -112,16 +112,27 @@ jobs:
           ip_address: 'mor_master_ip_address.value'
           frontend_image: 'frontend_image_url.value'
           frontend_proxy_image: 'frontend-proxy_image_url.value'
+          url: 'url.value'
       - name: Deploy stack to Production
         uses: pldin601/docker-swarm-deploy-action@master
         with:
-          remote_host: ssh://deployer@${{ steps.parse_output.outputs.ip_address }}
-          ssh_private_key: ${{ steps.parse_output.outputs.ssh_private_key }}
-          ssh_public_key: ${{ steps.parse_output.outputs.ssh_public_key }}
+          remote_host: ssh://deployer@${{ steps.parsed_output.outputs.ip_address }}
+          ssh_private_key: ${{ steps.parsed_output.outputs.ssh_private_key }}
+          ssh_public_key: ${{ steps.parsed_output.outputs.ssh_public_key }}
           aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           args: stack deploy --with-registry-auth --compose-file docker-compose.prod.yml mor
         env:
-          FRONTEND_IMAGE_URL: ${{ steps.parse_output.outputs.frontend_image }}
-          FRONTEND_PROXY_IMAGE_URL: ${{ steps.parse_output.outputs.frontend_proxy_image }}
+          FRONTEND_IMAGE_URL: ${{ steps.parsed_output.outputs.frontend_image }}
+          FRONTEND_PROXY_IMAGE_URL: ${{ steps.parsed_output.outputs.frontend_proxy_image }}
           IMAGE_TAG: ${{ github.sha }}
+      - name: Create commit comment
+        uses: peter-evans/commit-comment@v1.0.1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          body: |
+            Successfully deployed to servers:
+            - ${{ steps.parsed_output.outputs.ip_address }}
+
+            URL:
+            - ${{ steps.parsed_output.outputs.url }}
