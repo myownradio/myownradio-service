@@ -10,6 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: hashicorp/terraform-github-actions@master
+        with:
+          tf_actions_version: 0.12.20
       - name: Checkout
         uses: actions/checkout@master
       - name: Lint
