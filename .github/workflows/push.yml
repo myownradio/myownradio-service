@@ -117,7 +117,7 @@ jobs:
       - name: Authenticate Remote Docker on AWS
         uses: appleboy/ssh-action@master
         with:
-          host: {{ steps.parsed_output.outputs.ip_address }}
+          host: ${{ steps.parsed_output.outputs.ip_address }}
           username: deployer
           key: ${{ steps.parsed_output.outputs.ssh_private_key }}
           script: aws ecr get-login --region eu-central-1 --no-include-email | sh
