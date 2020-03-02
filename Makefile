@@ -42,7 +42,7 @@ build-app:
 	docker build -t $(LOCAL_PREFIX)$(SERVICE) --file app/packages/$(SERVICE)/Dockerfile app/
 
 build-all-services:
-	@$(foreach SERVICE,$(SERVICES),$(MAKE) SERVICE=$(SERVICE) build-service && ) true
+	$(foreach SERVICE,$(SERVICES),$(MAKE) SERVICE=$(SERVICE) build-service && ) true
 
 build-all-apps:
 	$(foreach APP,$(APPS),$(MAKE) SERVICE=$(APP) build-app && ) true
@@ -58,5 +58,5 @@ endif
 	docker push $(IMAGE_URL):latest
 
 push-all:
-	@$(foreach SERVICE,$(SERVICES),make SERVICE=$(SERVICE) push)
-	@$(foreach APP,$(APPS),make SERVICE=$(APP) push)
+	$(foreach SERVICE,$(SERVICES),$(MAKE) SERVICE=$(SERVICE) push && ) true
+	$(foreach APP,$(APPS),$(MAKE) SERVICE=$(APP) push && ) true
