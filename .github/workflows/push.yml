@@ -114,6 +114,13 @@ jobs:
           frontend_proxy_image: 'frontend-proxy_image_url.value'
           migration_image: 'migration_image_url.value'
           url: 'url.value'
+      - name: Authenticate Remote Docker on AWS
+        uses: appleboy/ssh-action@master
+        with:
+          host: {{ steps.parsed_output.outputs.ip_address }}
+          username: deployer
+          key: ${{ steps.parsed_output.outputs.ssh_private_key }}
+          script: aws ecr get-login --region eu-central-1 --no-include-email | sh
       - name: Deploy stack to Production
         uses: pldin601/docker-swarm-deploy-action@master
         with:
