@@ -1,0 +1,12 @@
+{
+  "name": "@myownradio/migration",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "migrate": "knex migrate:latest",
+    "rollback": "knex migrate:rollback"
+  },
+  "dependencies": {
+    "knex": "^0.20.10"
+  }
+}
