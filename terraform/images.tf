@@ -13,3 +13,11 @@ resource "aws_ecr_repository" "frontend_proxy" {
 output "frontend-proxy_image_url" {
   value = aws_ecr_repository.frontend_proxy.repository_url
 }
+
+resource "aws_ecr_repository" "migration" {
+  name = "myownradio/migration"
+}
+
+output "migration_image_url" {
+  value = aws_ecr_repository.migration.repository_url
+}
