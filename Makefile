@@ -3,8 +3,9 @@ IMAGE_URL = $(shell cd terraform && terraform output $(SERVICE)_image_url)
 GIT_COMMIT = $(shell git log -n 1 --pretty=format:'%H')
 PULL_LATEST = no
 
-APPS := frontend
+APPS := frontend migration
 SERVICES := frontend-proxy
+LATEST_TAG_ONLY := migration
 
 setup: setup-terraform setup-services
 
@@ -33,15 +34,9 @@ terraform-plan:
 
 # Docker Section
 build-service:
-ifeq ($(PULL_LATEST), yes)
-	make SERVICE=$(SERVICE) pull-latest
-endif
 	docker build -t $(LOCAL_PREFIX)$(SERVICE) ./services/$(SERVICE)
 
 build-app:
-ifeq ($(PULL_LATEST), yes)
-	make SERVICE=$(SERVICE) pull-latest
-endif
 	docker build -t $(LOCAL_PREFIX)$(SERVICE) --file app/packages/$(SERVICE)/Dockerfile app/
 
 build-all-services:
@@ -53,15 +48,11 @@ build-all-apps:
 build-all: build-all-services build-all-apps
 
 push:
+ifneq ($(filter $(SERVICE),$(LATEST_TAG_ONLY)),)
 	docker tag $(LOCAL_PREFIX)$(SERVICE) $(IMAGE_URL):$(GIT_COMMIT)
-	docker tag $(LOCAL_PREFIX)$(SERVICE) $(IMAGE_URL):latest
 	docker push $(IMAGE_URL):$(GIT_COMMIT)
-	docker push $(IMAGE_URL):latest
+endif
 
 push-all:
 	@$(foreach SERVICE,$(SERVICES),make SERVICE=$(SERVICE) push)
 	@$(foreach APP,$(APPS),make SERVICE=$(APP) push)
-
-pull-latest:
-	docker pull $(IMAGE_URL):latest
-	docker tag $(IMAGE_URL):latest $(LOCAL_PREFIX)$(SERVICE)

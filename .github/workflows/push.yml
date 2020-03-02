@@ -112,6 +112,7 @@ jobs:
           ip_address: 'mor_master_ip_address.value'
           frontend_image: 'frontend_image_url.value'
           frontend_proxy_image: 'frontend-proxy_image_url.value'
+          migration_image: 'migration_image_url.value'
           url: 'url.value'
       - name: Deploy stack to Production
         uses: pldin601/docker-swarm-deploy-action@master
@@ -125,6 +126,7 @@ jobs:
         env:
           FRONTEND_IMAGE_URL: ${{ steps.parsed_output.outputs.frontend_image }}
           FRONTEND_PROXY_IMAGE_URL: ${{ steps.parsed_output.outputs.frontend_proxy_image }}
+          MIGRATION_IMAGE_URL: ${{ steps.parsed_output.outputs.migration_image }}
           IMAGE_TAG: ${{ github.sha }}
       - name: Add comment to commit
         uses: peter-evans/commit-comment@v1.0.1

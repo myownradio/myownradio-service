@@ -32,6 +32,18 @@ services:
         order: start-first
         failure_action: rollback
 
+  # Migration
+  migration:
+    image: ${MIGRATION_IMAGE_URL}:latest}
+    environment:
+      MIGRATION_DATABASE_URL: postgres://mor:mor@postgres:5432/mor
+    deploy:
+      replicas: 1
+      update_config:
+        order: stop-first
+      restart_policy:
+        condition: on-failure
+
   # Backing Services
   postgres:
     image: postgres:12
