@@ -33,15 +33,9 @@ terraform-plan:
 
 # Docker Section
 build-service:
-ifeq ($(PULL_LATEST), yes)
-	make SERVICE=$(SERVICE) pull-latest
-endif
 	docker build -t $(LOCAL_PREFIX)$(SERVICE) ./services/$(SERVICE)
 
 build-app:
-ifeq ($(PULL_LATEST), yes)
-	make SERVICE=$(SERVICE) pull-latest
-endif
 	docker build -t $(LOCAL_PREFIX)$(SERVICE) --file app/packages/$(SERVICE)/Dockerfile app/
 
 build-all-services:
@@ -61,7 +55,3 @@ push:
 push-all:
 	@$(foreach SERVICE,$(SERVICES),make SERVICE=$(SERVICE) push)
 	@$(foreach APP,$(APPS),make SERVICE=$(APP) push)
-
-pull-latest:
-	docker pull $(IMAGE_URL):latest
-	docker tag $(IMAGE_URL):latest $(LOCAL_PREFIX)$(SERVICE)
