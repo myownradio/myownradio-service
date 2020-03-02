@@ -34,16 +34,18 @@ terraform-plan:
 
 # Docker Section
 build-service:
+	@echo "Building image for service: $(SERVICE)..."
 	docker build -t $(LOCAL_PREFIX)$(SERVICE) ./services/$(SERVICE)
 
 build-app:
+	@echo "Building image for application service: $(SERVICE)..."
 	docker build -t $(LOCAL_PREFIX)$(SERVICE) --file app/packages/$(SERVICE)/Dockerfile app/
 
 build-all-services:
-	@$(foreach SERVICE,$(SERVICES),make SERVICE=$(SERVICE) build-service)
+	@$(foreach SERVICE,$(SERVICES),$(MAKE) SERVICE=$(SERVICE) build-service && ) true
 
 build-all-apps:
-	@$(foreach APP,$(APPS),make SERVICE=$(APP) build-app)
+	$(foreach APP,$(APPS),$(MAKE) SERVICE=$(APP) build-app && ) true
 
 build-all: build-all-services build-all-apps
 
@@ -52,6 +54,8 @@ ifneq ($(filter $(SERVICE),$(LATEST_TAG_ONLY)),)
 	docker tag $(LOCAL_PREFIX)$(SERVICE) $(IMAGE_URL):$(GIT_COMMIT)
 	docker push $(IMAGE_URL):$(GIT_COMMIT)
 endif
+	docker tag $(LOCAL_PREFIX)$(SERVICE) $(IMAGE_URL):latest
+	docker push $(IMAGE_URL):latest
 
 push-all:
 	@$(foreach SERVICE,$(SERVICES),make SERVICE=$(SERVICE) push)
