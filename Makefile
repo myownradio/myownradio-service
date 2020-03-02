@@ -3,7 +3,7 @@ IMAGE_URL = $(shell cd terraform && terraform output $(SERVICE)_image_url)
 GIT_COMMIT = $(shell git log -n 1 --pretty=format:'%H')
 PULL_LATEST = no
 
-APPS := frontend
+APPS := frontend migration
 SERVICES := frontend-proxy
 
 setup: setup-terraform setup-services
