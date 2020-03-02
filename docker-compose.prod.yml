@@ -34,7 +34,7 @@ services:
 
   # Migration
   migration:
-    image: ${MIGRATION_IMAGE_URL}:latest}
+    image: ${MIGRATION_IMAGE_URL}:latest
     environment:
       MIGRATION_DATABASE_URL: postgres://mor:mor@postgres:5432/mor
     deploy:
