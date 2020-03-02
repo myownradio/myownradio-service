@@ -5,6 +5,7 @@ PULL_LATEST = no
 
 APPS := frontend migration
 SERVICES := frontend-proxy
+LATEST_TAG_ONLY := migration
 
 setup: setup-terraform setup-services
 
@@ -47,10 +48,12 @@ build-all-apps:
 build-all: build-all-services build-all-apps
 
 push:
+ifneq ($(filter $(SERVICE),$(LATEST_TAG_ONLY)),)
 	docker tag $(LOCAL_PREFIX)$(SERVICE) $(IMAGE_URL):$(GIT_COMMIT)
-	docker tag $(LOCAL_PREFIX)$(SERVICE) $(IMAGE_URL):latest
 	docker push $(IMAGE_URL):$(GIT_COMMIT)
-	docker push $(IMAGE_URL):latest
+else
+    $(info $(ENV_PARAM) does not exist in $(PARAMS))
+endif
 
 push-all:
 	@$(foreach SERVICE,$(SERVICES),make SERVICE=$(SERVICE) push)
