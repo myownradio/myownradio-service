@@ -51,8 +51,6 @@ push:
 ifneq ($(filter $(SERVICE),$(LATEST_TAG_ONLY)),)
 	docker tag $(LOCAL_PREFIX)$(SERVICE) $(IMAGE_URL):$(GIT_COMMIT)
 	docker push $(IMAGE_URL):$(GIT_COMMIT)
-else
-    $(info $(ENV_PARAM) does not exist in $(PARAMS))
 endif
 
 push-all:
