@@ -52,12 +52,3 @@ jobs:
           tf_actions_subcommand: 'plan'
           tf_actions_working_dir: 'terraform'
           tf_actions_comment: true
-      - name: Comment PR
-        uses: unsplash/comment-on-pr@master
-        with:
-          msg: |
-            Terraform plan has changes: ${{ steps.plan.outputs.tf_actions_plan_has_changes }}
-
-            ```
-            ${{ steps.plan.outputs.tf_actions_plan_output }}
-            ```
