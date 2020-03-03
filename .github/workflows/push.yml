@@ -113,6 +113,7 @@ jobs:
           frontend_image: 'frontend_image_url.value'
           frontend_proxy_image: 'frontend-proxy_image_url.value'
           migration_image: 'migration_image_url.value'
+          auth_server_image: 'auth_server_image_url.value'
           url: 'url.value'
       - name: Authenticate Remote Docker on AWS
         uses: appleboy/ssh-action@master
@@ -134,6 +135,7 @@ jobs:
           FRONTEND_IMAGE_URL: ${{ steps.parsed_output.outputs.frontend_image }}
           FRONTEND_PROXY_IMAGE_URL: ${{ steps.parsed_output.outputs.frontend_proxy_image }}
           MIGRATION_IMAGE_URL: ${{ steps.parsed_output.outputs.migration_image }}
+          AUTH_SERVER_IMAGE_URL: ${{ steps.parsed_output.outputs.auth_server_image }}
           IMAGE_TAG: ${{ github.sha }}
       - name: Add comment to commit
         uses: peter-evans/commit-comment@v1.0.1

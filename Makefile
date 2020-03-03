@@ -3,7 +3,7 @@ IMAGE_URL = $(shell cd terraform && terraform output $(SERVICE)_image_url)
 GIT_COMMIT = $(shell git log -n 1 --pretty=format:'%H')
 PULL_LATEST = no
 
-APPS := frontend migration
+APPS := frontend migration auth-server
 SERVICES := frontend-proxy
 LATEST_TAG_ONLY := migration
 
@@ -39,7 +39,7 @@ build-service:
 
 build-app:
 	@echo "Building image for application service: $(SERVICE)..."
-	docker build -t $(LOCAL_PREFIX)$(SERVICE) --file app/packages/$(SERVICE)/Dockerfile app/
+	docker build -t $(LOCAL_PREFIX)$(SERVICE) --file app/services/$(SERVICE)/Dockerfile app/
 
 build-all-services:
 	$(foreach SERVICE,$(SERVICES),$(MAKE) SERVICE=$(SERVICE) build-service && ) true
