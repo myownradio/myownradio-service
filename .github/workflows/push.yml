@@ -113,7 +113,7 @@ jobs:
           frontend_image: 'frontend_image_url.value'
           frontend_proxy_image: 'frontend-proxy_image_url.value'
           migration_image: 'migration_image_url.value'
-          auth_server_image: 'auth_server_image_url.value'
+          auth_server_image: 'auth-server_image_url.value'
           url: 'url.value'
       - name: Authenticate Remote Docker on AWS
         uses: appleboy/ssh-action@master
