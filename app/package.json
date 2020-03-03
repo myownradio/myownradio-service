@@ -2,21 +2,21 @@
   "name": "@myownradio/myownradio-service",
   "version": "1.0.0",
   "scripts": {
-    "dev:fileserver-local": "env-cmd -f env/fileserver-local.env -- yarn --cwd packages/fileserver-local run dev",
-    "start:fileserver-local": "env-cmd -f env/fileserver-local.env -- yarn --cwd packages/fileserver-local start",
-    "dev:audio-uploader": "env-cmd -f env/audio-uploader.env -- yarn --cwd packages/audio-uploader run dev",
-    "start:audio-uploader": "env-cmd -f env/audio-uploader.env -- yarn --cwd packages/audio-uploader start",
-    "dev:auth-server": "env-cmd -f env/auth-server.env -- yarn --cwd packages/auth-server run dev",
-    "start:auth-server": "env-cmd -f env/auth-server.env -- yarn --cwd packages/auth-server start",
-    "dev:overlay-proxy": "env-cmd -f env/overlay-proxy.env -- yarn --cwd packages/overlay-proxy run dev",
-    "start:overlay-proxy": "env-cmd -f env/overlay-proxy.env -- yarn --cwd packages/overlay-proxy start",
-    "dev:frontend": "yarn --cwd packages/frontend run dev",
-    "start:frontend": "yarn --cwd packages/frontend start",
+    "dev:fileserver-local": "env-cmd -f env/fileserver-local.env -- yarn --cwd services/fileserver-local run dev",
+    "start:fileserver-local": "env-cmd -f env/fileserver-local.env -- yarn --cwd services/fileserver-local start",
+    "dev:audio-uploader": "env-cmd -f env/audio-uploader.env -- yarn --cwd services/audio-uploader run dev",
+    "start:audio-uploader": "env-cmd -f env/audio-uploader.env -- yarn --cwd services/audio-uploader start",
+    "dev:auth-server": "env-cmd -f env/auth-server.env -- yarn --cwd services/auth-server run dev",
+    "start:auth-server": "env-cmd -f env/auth-server.env -- yarn --cwd services/auth-server start",
+    "dev:overlay-proxy": "env-cmd -f env/overlay-proxy.env -- yarn --cwd services/overlay-proxy run dev",
+    "start:overlay-proxy": "env-cmd -f env/overlay-proxy.env -- yarn --cwd services/overlay-proxy start",
+    "dev:frontend": "yarn --cwd services/frontend run dev",
+    "start:frontend": "yarn --cwd services/frontend start",
     "dev": "concurrently -n w: npm:dev:*",
     "migrate": "knex migrate:latest",
-    "format": "prettier --write packages/**/*.{js,jsx}",
+    "format": "prettier --write services/**/*.{js,jsx}",
     "test": "jest",
-    "lint": "eslint packages/**/*.{js,jsx}"
+    "lint": "eslint services/**/*.{js,jsx}"
   },
   "repository": {
     "type": "git",
@@ -24,7 +24,8 @@
   },
   "private": true,
   "workspaces": [
-    "packages/*"
+    "services/*",
+    "libs/*"
   ],
   "devDependencies": {
     "concurrently": "^5.1.0",
