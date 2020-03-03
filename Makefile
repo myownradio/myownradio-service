@@ -50,7 +50,7 @@ build-all-apps:
 build-all: build-all-services build-all-apps
 
 push:
-ifneq ($(filter $(SERVICE),$(LATEST_TAG_ONLY)),)
+ifeq ($(filter $(SERVICE),$(LATEST_TAG_ONLY)),)
 	docker tag $(LOCAL_PREFIX)$(SERVICE) $(IMAGE_URL):$(GIT_COMMIT)
 	docker push $(IMAGE_URL):$(GIT_COMMIT)
 endif
