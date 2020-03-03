@@ -21,3 +21,11 @@ resource "aws_ecr_repository" "migration" {
 output "migration_image_url" {
   value = aws_ecr_repository.migration.repository_url
 }
+
+resource "aws_ecr_repository" "auth-server" {
+  name = "myownradio/auth-server"
+}
+
+output "auth-server_image_url" {
+  value = aws_ecr_repository.auth-server.repository_url
+}
