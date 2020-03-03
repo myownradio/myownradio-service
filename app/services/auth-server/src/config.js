@@ -7,7 +7,7 @@ const {
   AUTH_SERVER_ACCESS_TOKEN_LIFETIME,
   AUTH_SERVER_REFRESH_TOKEN_LIFETIME,
   AUTH_SERVER_ALLOWED_ORIGIN,
-  PORT
+  PORT = String(8080)
 } = process.env;
 
 const config = {

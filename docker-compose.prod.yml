@@ -32,6 +32,22 @@ services:
         order: start-first
         failure_action: rollback
 
+  auth-server:
+    image: ${AUTH_SERVER_IMAGE_URL}:${IMAGE_TAG}
+    environment:
+      AUTH_SERVER_TOKEN_SECRET: me9IQW0atAzzE5nYKC6EiibAareI0to1
+      AUTH_SERVER_DATABASE_URL: postgres://mor:mor@postgres:5432/mor
+      AUTH_SERVER_DATABASE_CLIENT: postgresql
+      AUTH_SERVER_ACCESS_TOKEN_LIFETIME: 60
+      AUTH_SERVER_REFRESH_TOKEN_LIFETIME: 3600
+      AUTH_SERVER_ALLOWED_ORIGIN: https://new.myownradio.biz
+    deploy:
+      replicas: 1
+      update_config:
+        order: start-first
+      restart_policy:
+        condition: on-failure
+
   # Migration
   migration:
     image: ${MIGRATION_IMAGE_URL}:latest
