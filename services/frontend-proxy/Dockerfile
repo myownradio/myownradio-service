@@ -45,10 +45,11 @@ server {\n\
         proxy_set_header   X-Forwarded-Host $server_name;\n\
     }\n\
     location /healthcheck {\n\
+        add_header Content-Type text/plain;\n\
         allow 127.0.0.1;\n\
         deny all;\n\
         access_log off;\n\
-        return 200 "healthy\n";\n\
+        return 200 "healthy";\n\
     }\n\
 }\n\
 ' > /etc/nginx/sites-available/default
