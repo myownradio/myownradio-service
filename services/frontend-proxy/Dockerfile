@@ -2,7 +2,6 @@ FROM ubuntu:19.04
 
 MAINTAINER Roman Lakhtadyr <roman.lakhtadyr@gmail.com>
 
-ARG FRONTEND_SERVER="frontend:3000"
 ARG MAX_UPLOAD_FILESIZE=256
 
 ENV DEBIAN_FRONTEND         noninteractive
@@ -18,9 +17,6 @@ RUN apt-get update && \
 
 # nginx
 RUN echo '\
-upstream frontend {\n\
-    server '${FRONTEND_SERVER}';\n\
-}\n\
 resolver 127.0.0.11 valid=1s;\n\
 resolver_timeout 5s;\n\
 server {\n\
@@ -32,7 +28,16 @@ server {\n\
     access_log              /dev/stderr combined;\n\
     client_max_body_size    '${MAX_UPLOAD_FILESIZE}'M;\n\
     location / {\n\
-        proxy_pass         http://frontend;\n\
+        proxy_pass         http://frontend:3000;\n\
+        proxy_redirect     off;\n\
+        proxy_set_header   Host $host;\n\
+        proxy_set_header   X-Real-IP $remote_addr;\n\
+        proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;\n\
+        proxy_set_header   X-Forwarded-Host $server_name;\n\
+    }\n\
+    location /api/auth {\n\
+        rewrite            ^/api/auth/(.*) /$1 break;\n\
+        proxy_pass         http://auth-server:8080;\n\
         proxy_redirect     off;\n\
         proxy_set_header   Host $host;\n\
         proxy_set_header   X-Real-IP $remote_addr;\n\
