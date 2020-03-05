@@ -54,6 +54,8 @@ services:
       FILESERVER_LOCAL_ROOT_FOLDER: /usr/content
       FILESERVER_LOCAL_TOKEN_SECRET: me9IQW0atAzzE5nYKC6EiibAareI0to1
       PORT: 8080
+    volumes:
+      - fileserver-local:/usr/content
     deploy:
       replicas: 1
       update_config:
@@ -92,4 +94,7 @@ services:
 volumes:
 
   postgres:
+    driver: local
+
+  fileserver-local:
     driver: local
