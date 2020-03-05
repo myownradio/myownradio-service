@@ -29,3 +29,11 @@ resource "aws_ecr_repository" "auth-server" {
 output "auth-server_image_url" {
   value = aws_ecr_repository.auth-server.repository_url
 }
+
+resource "aws_ecr_repository" "fileserver-local" {
+  name = "myownradio/fileserver-local"
+}
+
+output "fileserver-local_image_url" {
+  value = aws_ecr_repository.fileserver-local.repository_url
+}
