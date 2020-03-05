@@ -20,4 +20,4 @@ COPY --chown=1000 libs/ libs/
 
 RUN yarn workspace @myownradio/frontend build
 
-CMD ['yarn', 'workspace', '@myownradio/frontend', 'start']
+CMD ["yarn", "workspace", "@myownradio/frontend", "start"]
