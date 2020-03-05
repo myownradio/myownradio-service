@@ -48,6 +48,21 @@ services:
       restart_policy:
         condition: on-failure
 
+  fileserver-local:
+    image: ${FILESERVER_LOCAL_IMAGE_URL}:${IMAGE_TAG}
+    environment:
+      FILESERVER_LOCAL_ROOT_FOLDER: /usr/content
+      FILESERVER_LOCAL_TOKEN_SECRET: me9IQW0atAzzE5nYKC6EiibAareI0to1
+      PORT: 8080
+    volumes:
+      - fileserver-local:/usr/content
+    deploy:
+      replicas: 1
+      update_config:
+        order: start-first
+      restart_policy:
+        condition: on-failure
+
   # Migration
   migration:
     image: ${MIGRATION_IMAGE_URL}:latest
@@ -79,4 +94,7 @@ services:
 volumes:
 
   postgres:
+    driver: local
+
+  fileserver-local:
     driver: local

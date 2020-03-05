@@ -110,10 +110,14 @@ jobs:
           ssh_private_key: 'deployer_private_key.value'
           ssh_public_key: 'deployer_public_key.value'
           ip_address: 'mor_master_ip_address.value'
+
+          # images here
           frontend_image: 'frontend_image_url.value'
           frontend_proxy_image: 'frontend-proxy_image_url.value'
           migration_image: 'migration_image_url.value'
           auth_server_image: 'auth-server_image_url.value'
+          fileserver_local_image: 'fileserver-local_image_url.value'
+
           url: 'url.value'
       - name: Authenticate Remote Docker on AWS
         uses: appleboy/ssh-action@master
@@ -132,10 +136,12 @@ jobs:
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           args: stack deploy --with-registry-auth --compose-file docker-compose.prod.yml mor
         env:
+          # images here
           FRONTEND_IMAGE_URL: ${{ steps.parsed_output.outputs.frontend_image }}
           FRONTEND_PROXY_IMAGE_URL: ${{ steps.parsed_output.outputs.frontend_proxy_image }}
           MIGRATION_IMAGE_URL: ${{ steps.parsed_output.outputs.migration_image }}
           AUTH_SERVER_IMAGE_URL: ${{ steps.parsed_output.outputs.auth_server_image }}
+          FILESERVER_LOCAL_IMAGE_URL: ${{ steps.parsed_output.outputs.fileserver_local_image }}
           IMAGE_TAG: ${{ github.sha }}
       - name: Add comment to commit
         uses: peter-evans/commit-comment@v1.0.1
