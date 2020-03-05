@@ -18,6 +18,8 @@ services:
       - 443:443
     depends_on:
       - frontend
+      - auth-server
+      - fileserver-local
     deploy:
       replicas: 1
       update_config:
