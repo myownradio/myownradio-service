@@ -53,6 +53,16 @@ resource "digitalocean_droplet" "new" {
       "chown -R deployer:deployer /home/deployer/.aws"
     ]
   }
+
+  provisioner "remote-exec" {
+    inline = [
+      "fallocate -l 2G /swapfile",
+      "chmod 600 /swapfile",
+      "mkswap /swapfile",
+      "swapon /swapfile",
+      "echo \"/swapfile   none    swap    sw    0   0\" >> /etc/fstab"
+    ]
+  }
 }
 
 resource "digitalocean_floating_ip" "new" {
