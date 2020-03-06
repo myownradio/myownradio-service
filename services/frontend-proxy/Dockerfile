@@ -52,17 +52,25 @@ server {\n\
         proxy_set_header   X-Real-IP $remote_addr;\n\
         proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;\n\
         proxy_set_header   X-Forwarded-Host $server_name;\n\
-        \n\
+    }\n\
+    location /test {\n\
         auth_request       /auth;\n\
         auth_request_set   $user_id $upstream_http_user_id;\n\
         more_set_headers   "User-Id: $user_id";\n\
+        \n\
+        proxy_pass         https://en4mgndmou9qv.x.pipedream.net;\n\
+        proxy_redirect     off;\n\
+        proxy_set_header   Host $host;\n\
+        proxy_set_header   X-Real-IP $remote_addr;\n\
+        proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;\n\
+        proxy_set_header   X-Forwarded-Host $server_name;\n\
     }\n\
     location = /auth {\n\
         internal;\n\
         proxy_pass_request_body off;\n\
-        proxy_pass              http://auth-server:8080/auth/verify;\n\
+        proxy_pass              http://auth-server:8080/auth;\n\
     }\n\
-    location /healthcheck {\n\
+    location = /healthcheck {\n\
         add_header Content-Type text/plain;\n\
         allow 127.0.0.1;\n\
         deny all;\n\
