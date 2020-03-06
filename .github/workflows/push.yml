@@ -120,6 +120,7 @@ jobs:
           migration_image: 'migration_image_url.value'
           auth_server_image: 'auth-server_image_url.value'
           fileserver_local_image: 'fileserver-local_image_url.value'
+          audio_uploader_image: 'audio-uploader_image_url.value'
 
           url: 'url.value'
       - name: Authenticate Remote Docker on AWS
@@ -145,6 +146,7 @@ jobs:
           MIGRATION_IMAGE_URL: ${{ steps.parsed_output.outputs.migration_image }}
           AUTH_SERVER_IMAGE_URL: ${{ steps.parsed_output.outputs.auth_server_image }}
           FILESERVER_LOCAL_IMAGE_URL: ${{ steps.parsed_output.outputs.fileserver_local_image }}
+          AUDIO_UPLOADER_IMAGE_URL: ${{ steps.parsed_output.outputs.audio_uploader_image }}
           IMAGE_TAG: ${{ github.sha }}
       - name: Add comment to commit
         uses: peter-evans/commit-comment@v1.0.1
