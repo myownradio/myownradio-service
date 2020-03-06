@@ -20,6 +20,7 @@ services:
       - frontend
       - auth-server
       - fileserver-local
+      - audio-uploader
     deploy:
       replicas: 1
       update_config:
