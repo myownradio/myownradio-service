@@ -63,6 +63,18 @@ resource "digitalocean_droplet" "new" {
       "echo \"/swapfile   none    swap    sw    0   0\" >> /etc/fstab"
     ]
   }
+
+  provisioner "remote-exec" {
+    inline = [
+      "docker run -v /var/run/docker.sock:/var/run/docker.sock "
+               + "--read-only "
+               + "--security-opt=no-new-privileges "
+               + "--restart=failure "
+               + "-d "
+               + "rapid7/r7insight_docker "
+               + "-t ${var.insight_token} -r eu -j -a host=`uname -n`"
+    ]
+  }
 }
 
 resource "digitalocean_floating_ip" "new" {
