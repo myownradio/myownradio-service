@@ -39,7 +39,7 @@ output "fileserver-local_image_url" {
 }
 
 resource "aws_ecr_repository" "audio-uploader" {
-  name = "myownradio/fileserver-local"
+  name = "myownradio/audio-uploader"
 }
 
 output "audio-uploader_image_url" {
