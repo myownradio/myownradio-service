@@ -52,9 +52,15 @@ server {\n\
         proxy_set_header   X-Real-IP $remote_addr;\n\
         proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;\n\
         proxy_set_header   X-Forwarded-Host $server_name;\n\
+        \n\
+        auth_request       /auth;\n\
+        auth_request_set   $user_id $upstream_http_user_id;\n\
+        more_set_headers   "User-Id: $user_id";\n\
     }\n\
-    location /auth {\n\
+    location = /auth {\n\
+        internal;\n\
         proxy_pass_request_body off;\n\
+        proxy_pass              http://auth-server:8080/auth/verify;\n\
     }\n\
     location /healthcheck {\n\
         add_header Content-Type text/plain;\n\
