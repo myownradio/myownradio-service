@@ -7,6 +7,7 @@ const createSignupRouteHandler = require("./createSignupRouteHandler");
 const createLoginRouteHandler = require("./createLoginRouteHandler");
 const createRefreshTokenRouteHandler = require("./createRefreshTokenRouteHandler");
 const createMeRouteHandler = require("./createMeRouteHandler");
+const createAuthRouteHandler = require("./createAuthRouteHandler");
 
 module.exports = function createRouter(config, knexConnection) {
   const router = new Router();
@@ -31,6 +32,11 @@ module.exports = function createRouter(config, knexConnection) {
     "/me",
     jwt({ secret: config.AUTH_SERVER_TOKEN_SECRET }),
     createMeRouteHandler(config, knexConnection)
+  );
+  router.get(
+    "/auth",
+    jwt({ secret: config.AUTH_SERVER_TOKEN_SECRET }),
+    createAuthRouteHandler(config, knexConnection)
   );
 
   return router;
