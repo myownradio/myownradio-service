@@ -20,6 +20,7 @@ services:
       - frontend
       - auth-server
       - fileserver-local
+      - audio-uploader
     deploy:
       replicas: 1
       update_config:
@@ -67,6 +68,21 @@ services:
       restart_policy:
         condition: on-failure
 
+  audio-uploader:
+    image: ${AUDIO_UPLOADER_IMAGE_URL}:${IMAGE_TAG}
+    environment:
+      AUDIO_UPLOADER_ROOT_FOLDER: /usr/content
+      AUDIO_UPLOADER_TOKEN_SECRET: me9IQW0atAzzE5nYKC6EiibAareI0to1
+      PORT: 8080
+    volumes:
+      - audio-uploader:/usr/content
+    deploy:
+      replicas: 1
+      update_config:
+        order: start-first
+      restart_policy:
+        condition: on-failure
+
   # Migration
   migration:
     image: ${MIGRATION_IMAGE_URL}:latest
@@ -103,4 +119,7 @@ volumes:
     driver: local
 
   fileserver-local:
+    driver: local
+
+  audio-uploader:
     driver: local
