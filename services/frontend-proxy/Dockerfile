@@ -53,6 +53,9 @@ server {\n\
         proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;\n\
         proxy_set_header   X-Forwarded-Host $server_name;\n\
     }\n\
+    location /auth {\n\
+        proxy_pass_request_body off;\n\
+    }\n\
     location /healthcheck {\n\
         add_header Content-Type text/plain;\n\
         allow 127.0.0.1;\n\
