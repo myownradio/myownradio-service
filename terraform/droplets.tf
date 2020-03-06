@@ -18,6 +18,7 @@ resource "digitalocean_droplet" "new" {
     private_key = tls_private_key.deployer_key.private_key_pem
   }
 
+  # setup swarm master node
   provisioner "remote-exec" {
     inline = [
       // Initialize and install dependencies
@@ -43,6 +44,7 @@ resource "digitalocean_droplet" "new" {
     ]
   }
 
+  # ecr provisioner (todo maybe it isn't neccesarry)
   provisioner "remote-exec" {
     inline = [
       // Configure ECR credentials
@@ -54,6 +56,7 @@ resource "digitalocean_droplet" "new" {
     ]
   }
 
+  # swapfile provisioner
   provisioner "remote-exec" {
     inline = [
       "fallocate -l 2G /swapfile",
@@ -61,6 +64,17 @@ resource "digitalocean_droplet" "new" {
       "mkswap /swapfile",
       "swapon /swapfile",
       "echo \"/swapfile   none    swap    sw    0   0\" >> /etc/fstab"
+    ]
+  }
+
+  # monitoring provisioner
+  provisioner "remote-exec" {
+    inline = [
+      <<-HEREDOC
+        docker run -v /var/run/docker.sock:/var/run/docker.sock -d --read-only --restart=on-failure \
+               --security-opt=no-new-privileges rapid7/r7insight_docker \
+               -t ${var.insight_token} -r eu -j -a host=`uname -n`
+      HEREDOC
     ]
   }
 }
