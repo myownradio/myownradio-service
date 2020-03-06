@@ -43,6 +43,8 @@ services:
       AUTH_SERVER_ACCESS_TOKEN_LIFETIME: 60
       AUTH_SERVER_REFRESH_TOKEN_LIFETIME: 3600
       AUTH_SERVER_ALLOWED_ORIGIN: https://new.myownradio.biz
+    depends_on:
+      - postgres
     deploy:
       replicas: 1
       update_config:
@@ -70,6 +72,8 @@ services:
     image: ${MIGRATION_IMAGE_URL}:latest
     environment:
       MIGRATION_DATABASE_URL: postgres://mor:mor@postgres:5432/mor
+    depends_on:
+      - postgres
     deploy:
       replicas: 1
       update_config:

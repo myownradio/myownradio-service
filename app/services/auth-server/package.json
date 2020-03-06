@@ -24,6 +24,7 @@
     "koa-bodyparser": "^4.2.1",
     "koa-jwt": "^3.6.0",
     "koa-router": "^8.0.7",
+    "parse-strings-in-object": "^2.0.0",
     "pg": "^7.18.1"
   }
 }

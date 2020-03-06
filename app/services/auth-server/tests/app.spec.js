@@ -15,7 +15,7 @@ const config = {
   AUTH_SERVER_DATABASE_CLIENT: "sqlite3",
   AUTH_SERVER_ACCESS_TOKEN_LIFETIME: 30,
   AUTH_SERVER_REFRESH_TOKEN_LIFETIME: 2592000,
-  AUTH_SERVER_ALLOWED_ORIGIN: '*',
+  AUTH_SERVER_ALLOWED_ORIGIN: "*",
   PORT: 8080
 };
 
@@ -213,5 +213,21 @@ describe("/me", () => {
       .get("/me")
       .set("Authorization", `Bearer Wrong`)
       .expect(401);
+  });
+});
+
+describe("/auth", () => {
+  // eslint-disable-next-line jest/expect-expect
+  test("GET /auth - should set authorized User-Id in header", async () => {
+    await request
+      .get("/auth")
+      .set("Authorization", `Bearer ${accessToken}`)
+      .expect("User-Id", "1")
+      .expect(200);
+  });
+
+  // eslint-disable-next-line jest/expect-expect
+  test("GET /auth - should fail if unauthorized", async () => {
+    await request.get("/auth").expect(401);
   });
 });
