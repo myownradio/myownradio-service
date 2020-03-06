@@ -37,3 +37,11 @@ resource "aws_ecr_repository" "fileserver-local" {
 output "fileserver-local_image_url" {
   value = aws_ecr_repository.fileserver-local.repository_url
 }
+
+resource "aws_ecr_repository" "audio-uploader" {
+  name = "myownradio/fileserver-local"
+}
+
+output "audio-uploader_image_url" {
+  value = aws_ecr_repository.audio-uploader.repository_url
+}
