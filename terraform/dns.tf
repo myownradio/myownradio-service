@@ -1,5 +1,9 @@
 resource "cloudflare_zone" "myownradio_biz" {
   zone = "myownradio.biz"
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "cloudflare_record" "a_record" {
