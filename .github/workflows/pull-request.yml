@@ -19,9 +19,7 @@ jobs:
         run: make run-linter
       - name: Tests
         uses: ziishaned/jest-reporter-action@v0.0.1
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          test-command: "make run-tests"
+        run: make run-tests
 
   terraform:
     needs: init
