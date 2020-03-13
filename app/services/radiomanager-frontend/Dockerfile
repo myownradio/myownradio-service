@@ -1,11 +1,11 @@
 FROM node:13.10
 
-WORKDIR /usr/app
+COPY ./ /usr/app/
 
-COPY ./ ./
+WORKDIR /usr/app/services/radiomanager-frontend
 
-RUN ["yarn", "workspace", "@myownradio/radiomanager-frontend", "install"]
-RUN ["yarn", "workspace", "@myownradio/radiomanager-frontend", "build"]
+RUN ["yarn", "install"]
+RUN ["yarn", "build"]
 
 FROM nginx:1.17
 
