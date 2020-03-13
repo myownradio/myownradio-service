@@ -18,7 +18,6 @@ jobs:
       - name: Linter
         run: make run-linter
       - name: Tests
-        uses: ziishaned/jest-reporter-action@v0.0.1
         run: make run-tests
 
   terraform:
