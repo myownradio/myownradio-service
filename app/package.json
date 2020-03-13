@@ -15,7 +15,7 @@
     "dev": "concurrently -n w: npm:dev:*",
     "migrate": "knex migrate:latest",
     "format": "prettier --write services/**/*.{js,jsx}",
-    "test": "jest",
+    "test": "jest --coverage",
     "lint": "eslint services/**/*.{js,jsx}"
   },
   "repository": {
