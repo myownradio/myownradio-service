@@ -1,11 +1,3 @@
-resource "aws_ecr_repository" "frontend" {
-  name = "myownradio/frontend"
-}
-
-output "frontend_image_url" {
-  value = aws_ecr_repository.frontend.repository_url
-}
-
 resource "aws_ecr_repository" "frontend_proxy" {
   name = "myownradio/frontend-proxy"
 }
@@ -44,4 +36,12 @@ resource "aws_ecr_repository" "audio-uploader" {
 
 output "audio-uploader_image_url" {
   value = aws_ecr_repository.audio-uploader.repository_url
+}
+
+resource "aws_ecr_repository" "radiomanager-frontend" {
+  name = "myownradio/radiomanager-frontend"
+}
+
+output "radiomanager-frontend_image_url" {
+  value = aws_ecr_repository.radiomanager-frontend.repository_url
 }
