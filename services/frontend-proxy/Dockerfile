@@ -28,7 +28,7 @@ server {\n\
     access_log              /dev/stderr combined;\n\
     client_max_body_size    '${MAX_UPLOAD_FILESIZE}'M;\n\
     location / {\n\
-        proxy_pass         http://radiomanager-frontend:3000;\n\
+        proxy_pass         http://radiomanager-frontend:80;\n\
         proxy_redirect     off;\n\
         proxy_set_header   Host $host;\n\
         proxy_set_header   X-Real-IP $remote_addr;\n\
