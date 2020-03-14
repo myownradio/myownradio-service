@@ -5,14 +5,14 @@ const {
   AUDIO_UPLOADER_ROOT_FOLDER,
   AUDIO_UPLOADER_TOKEN_SECRET,
   AUDIO_UPLOADER_TEMP_DIR = os.tmpdir(),
-  PORT
+  PORT,
 } = process.env;
 
 const config = {
   AUDIO_UPLOADER_ROOT_FOLDER,
   AUDIO_UPLOADER_TOKEN_SECRET,
   AUDIO_UPLOADER_TEMP_DIR,
-  PORT
+  PORT,
 };
 
 assert(typeof config.PORT === "string");

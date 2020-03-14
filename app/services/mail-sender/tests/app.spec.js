@@ -1,5 +1,5 @@
 const testTransport = {
-  sendMail: jest.fn()
+  sendMail: jest.fn(),
 };
 
 test("Should work", async () => {
@@ -8,6 +8,6 @@ test("Should work", async () => {
     to: "Recipient <recipient@example.com>",
     subject: "Nodemailer is unicode friendly ✔",
     text: "Hello to myself!",
-    html: "<p><b>Hello</b> to myself!</p>"
+    html: "<p><b>Hello</b> to myself!</p>",
   });
 });

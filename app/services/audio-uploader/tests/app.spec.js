@@ -9,7 +9,7 @@ beforeEach(() => {
   app = createApp({
     AUDIO_UPLOADER_ROOT_FOLDER: `${__dirname}/__fixtures__/uploadDir`,
     AUDIO_UPLOADER_TOKEN_SECRET: "secret",
-    PORT: 8080
+    PORT: 8080,
   });
 });
 
@@ -32,7 +32,7 @@ test("POST /upload - upload new audio file", async () => {
       bitrate: 242824,
       duration: 1.07475,
       format: "MP2/3 (MPEG audio layer 2/3)",
-      path: "d/0/d021bc63dd8f6dee822baa1b2a69b4e9a4d97a7c"
+      path: "d/0/d021bc63dd8f6dee822baa1b2a69b4e9a4d97a7c",
     });
 });
 

@@ -11,7 +11,7 @@ mock.onHead("http://temporary/path/to/file2").reply(200);
 const config = {
   OVERLAY_PROXY_PERMANENT_SERVER: "http://permanent",
   OVERLAY_PROXY_TEMPORARY_SERVER: "http://temporary",
-  PORT: 8080
+  PORT: 8080,
 };
 
 let request;

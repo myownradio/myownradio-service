@@ -1,7 +1,7 @@
 import * as React from "react";
 import Router from "./Router";
 
-const App = () => {
+const App: React.FC = () => {
   return <Router />;
 };
 

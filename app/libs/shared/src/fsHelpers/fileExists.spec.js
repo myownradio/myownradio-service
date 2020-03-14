@@ -6,8 +6,6 @@ test("Should return false if file does not exist", async () => {
 });
 
 test("Should return true if file exists", async () => {
-  const result = await fileExists(
-    `${__dirname}/../../tests/__fixtures__/testfile.txt`
-  );
+  const result = await fileExists(`${__dirname}/../../tests/__fixtures__/testfile.txt`);
   expect(result).toBeTruthy();
 });

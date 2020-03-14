@@ -7,7 +7,7 @@ module.exports = function createAppServer(config) {
 
     const locations = [
       config.OVERLAY_PROXY_PERMANENT_SERVER,
-      config.OVERLAY_PROXY_TEMPORARY_SERVER
+      config.OVERLAY_PROXY_TEMPORARY_SERVER,
     ];
 
     try {
@@ -15,7 +15,7 @@ module.exports = function createAppServer(config) {
         locations.map(loc => {
           const location = `${loc}${url}`;
           return axios.head(location).then(() => location);
-        })
+        }),
       );
 
       res.statusCode = 302;

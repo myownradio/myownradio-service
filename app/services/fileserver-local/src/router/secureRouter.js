@@ -9,17 +9,10 @@ const check = require("../middleware/checkPermission");
 module.exports = function createSecureRouter(config) {
   const secureRouter = new Router();
 
-  secureRouter.use(
-    jwtMiddleware({ secret: config.FILESERVER_LOCAL_TOKEN_SECRET })
-  );
+  secureRouter.use(jwtMiddleware({ secret: config.FILESERVER_LOCAL_TOKEN_SECRET }));
 
   secureRouter.get("*", check("read"), createGetHandler(config));
-  secureRouter.post(
-    "*",
-    check("write"),
-    body({ multipart: true }),
-    createPostHandler(config)
-  );
+  secureRouter.post("*", check("write"), body({ multipart: true }), createPostHandler(config));
   secureRouter.del("*", check("write"), createDeleteHandler(config));
 
   return secureRouter;

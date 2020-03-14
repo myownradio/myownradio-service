@@ -15,9 +15,9 @@ module.exports = function createRouter(config) {
     jwtMiddleware({ secret: config.AUDIO_UPLOADER_TOKEN_SECRET }),
     body({
       multipart: true,
-      formidable: { hash: "sha1", uploadDir: config.AUDIO_UPLOADER_TEMP_DIR }
+      formidable: { hash: "sha1", uploadDir: config.AUDIO_UPLOADER_TEMP_DIR },
     }),
-    createUploadHandler(config)
+    createUploadHandler(config),
   );
 
   return router;

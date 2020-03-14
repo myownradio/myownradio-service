@@ -4,7 +4,7 @@ import { BrowserRouter, Switch, Route } from "react-router-dom";
 
 const LoginPage = React.lazy(() => import("./pages/login/LoginPage"));
 
-const Router = () => {
+const Router: React.FC = () => {
   return (
     <Suspense fallback={<div />}>
       <BrowserRouter>

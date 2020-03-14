@@ -34,7 +34,7 @@ module.exports = function getMediaFileMetadata(filepath) {
             artist: metadata.format.tags.artist,
             title: metadata.format.tags.title,
             album: metadata.format.tags.album,
-            genre: metadata.format.tags.genre
+            genre: metadata.format.tags.genre,
           });
         }
       });

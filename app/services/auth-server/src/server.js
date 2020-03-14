@@ -4,7 +4,7 @@ const config = require("./config");
 
 const knexConnection = knex({
   connection: config.AUTH_SERVER_DATABASE_URL,
-  client: config.AUTH_SERVER_DATABASE_CLIENT
+  client: config.AUTH_SERVER_DATABASE_CLIENT,
 });
 
 const app = createApp(config, knexConnection);

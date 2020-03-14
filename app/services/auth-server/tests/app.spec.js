@@ -16,7 +16,7 @@ const config = {
   AUTH_SERVER_ACCESS_TOKEN_LIFETIME: 30,
   AUTH_SERVER_REFRESH_TOKEN_LIFETIME: 2592000,
   AUTH_SERVER_ALLOWED_ORIGIN: "*",
-  PORT: 8080
+  PORT: 8080,
 };
 
 let request;
@@ -25,15 +25,15 @@ let knexConnection;
 beforeEach(async () => {
   knexConnection = knex({
     connection: config.AUTH_SERVER_DATABASE_URL,
-    client: config.AUTH_SERVER_DATABASE_CLIENT
+    client: config.AUTH_SERVER_DATABASE_CLIENT,
   });
 
   await knexConnection.migrate.latest({
-    directory: migrationsDir
+    directory: migrationsDir,
   });
 
   await knexConnection.seed.run({
-    directory: seedsDir
+    directory: seedsDir,
   });
 
   request = supertest(createApp(config, knexConnection).callback());
@@ -47,9 +47,7 @@ test("GET / - should respond with OK", async () => {
 describe("/signup", () => {
   // eslint-disable-next-line jest/expect-expect
   test("POST /signup - should fail when body has no email or password", async () => {
-    await request
-      .post("/signup")
-      .expect(400, errorConstants.EMAIL_AND_PASSWORD_REQUIRED);
+    await request.post("/signup").expect(400, errorConstants.EMAIL_AND_PASSWORD_REQUIRED);
 
     await request
       .post("/signup")
@@ -71,13 +69,13 @@ describe("/signup", () => {
     await expect(
       knexConnection("users")
         .where({ email: "someone@mail.com" })
-        .first()
+        .first(),
     ).resolves.toEqual({
       id: expect.any(Number),
       email: "someone@mail.com",
       password: expect.any(String),
       created_at: expect.any(String),
-      updated_at: expect.any(String)
+      updated_at: expect.any(String),
     });
   });
 
@@ -87,7 +85,7 @@ describe("/signup", () => {
       .post("/signup")
       .send({
         email: "foo@bar.baz",
-        password: "123"
+        password: "123",
       })
       .expect(400, errorConstants.EMAIL_ALREADY_IN_USE);
   });
@@ -104,27 +102,25 @@ describe("/login", () => {
       id: 1,
       email: "foo@bar.baz",
       refresh_token: expect.any(String),
-      access_token: expect.any(String)
+      access_token: expect.any(String),
     });
 
     await expect(
       knexConnection("refresh_tokens")
         .where({ user_id: 1 })
-        .first()
+        .first(),
     ).resolves.toEqual({
       id: expect.any(Number),
       user_id: 1,
       refresh_token: expect.any(String),
       created_at: expect.any(String),
-      updated_at: expect.any(String)
+      updated_at: expect.any(String),
     });
   });
 
   // eslint-disable-next-line jest/expect-expect
   test("POST /login - should fail if email or password not specified", async () => {
-    await request
-      .post("/login")
-      .expect(400, errorConstants.EMAIL_AND_PASSWORD_REQUIRED);
+    await request.post("/login").expect(400, errorConstants.EMAIL_AND_PASSWORD_REQUIRED);
   });
 
   // eslint-disable-next-line jest/expect-expect
@@ -150,7 +146,7 @@ describe("/refreshToken", () => {
     expect(response.status).toBe(200);
     expect(response.body).toEqual({
       refresh_token: expect.any(String),
-      access_token: expect.any(String)
+      access_token: expect.any(String),
     });
   });
 
@@ -176,9 +172,7 @@ describe("/refreshToken", () => {
 
   // eslint-disable-next-line jest/expect-expect
   test("POST /refreshToken - should fail if refresh token isn't specified", async () => {
-    await request
-      .post("/refreshToken")
-      .expect(400, errorConstants.REFRESH_TOKEN_REQUIRED);
+    await request.post("/refreshToken").expect(400, errorConstants.REFRESH_TOKEN_REQUIRED);
   });
 
   // eslint-disable-next-line jest/expect-expect
@@ -198,7 +192,7 @@ describe("/me", () => {
       .set("Authorization", `Bearer ${accessToken}`)
       .expect(200, {
         id: 1,
-        email: "foo@bar.baz"
+        email: "foo@bar.baz",
       });
   });
 
@@ -211,7 +205,7 @@ describe("/me", () => {
   test("GET /me - should fail if authorization is wrong", async () => {
     await request
       .get("/me")
-      .set("Authorization", `Bearer Wrong`)
+      .set("Authorization", "Bearer Wrong")
       .expect(401);
   });
 });
