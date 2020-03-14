@@ -10,12 +10,12 @@ const Router: React.FC = () => {
     <Suspense fallback={<div />}>
       <BrowserRouter>
         <Switch>
-          <Route path={config.routes.login}>
-            <LoginPage />
-          </Route>
-          <Route path={config.routes.home}>
+          <Route path={config.routes.login} component={LoginPage} />
+          <Route path={"/test"}>URL: {config.siteUrl}</Route>
+          <Route exact path={config.routes.home}>
             <Redirect to={config.routes.login} />
           </Route>
+          <Route>404</Route>
         </Switch>
       </BrowserRouter>
     </Suspense>
