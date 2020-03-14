@@ -41,6 +41,7 @@ export class AuthServer {
 
   public async login(email: string, password: string): Promise<ISuccessfulLoginResponse> {
     return this.makeRequest<ISuccessfulLoginResponse>("login", {
+      method: "post",
       data: { email, password },
     });
   }

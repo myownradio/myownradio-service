@@ -12,10 +12,12 @@ import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
-import { makeStyles, Theme } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
+import Alert from "@material-ui/lab/Alert";
+import { useStyles } from "./styles";
+import ErrorBox from "../../../common/components/ErrorBox/ErrorBox";
 
-function Copyright(): React.ElementType {
+function Copyright(): JSX.Element {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {"Copyright © "}
@@ -28,29 +30,10 @@ function Copyright(): React.ElementType {
   );
 }
 
-const useStyles = makeStyles((theme: Theme) => ({
-  paper: {
-    marginTop: theme.spacing(8),
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
-  form: {
-    width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(1),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-}));
-
 type ILoginFormProps = {
   email: string;
   password: string;
+  errorMessage: null | string;
   onEmailChange: (email: string) => void;
   onPasswordChange: (password: string) => void;
   onLoginClicked: () => void;
@@ -59,6 +42,7 @@ type ILoginFormProps = {
 const LoginForm: React.FC<ILoginFormProps> = ({
   email,
   password,
+  errorMessage,
   onEmailChange,
   onPasswordChange,
   onLoginClicked,
@@ -98,6 +82,7 @@ const LoginForm: React.FC<ILoginFormProps> = ({
           Sign in
         </Typography>
         <form className={classes.form} noValidate>
+          <ErrorBox errorMessage={errorMessage} />
           <TextField
             value={email}
             onChange={handleEmailChange}
@@ -162,6 +147,7 @@ const LoginForm: React.FC<ILoginFormProps> = ({
 LoginForm.propTypes = {
   email: PropTypes.string.isRequired,
   password: PropTypes.string.isRequired,
+  errorMessage: PropTypes.string,
   onEmailChange: PropTypes.func.isRequired,
   onPasswordChange: PropTypes.func.isRequired,
   onLoginClicked: PropTypes.func.isRequired,

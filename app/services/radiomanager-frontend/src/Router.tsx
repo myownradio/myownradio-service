@@ -3,7 +3,7 @@ import { Suspense } from "react";
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import config from "./config";
 
-const LoginPage = React.lazy(() => import("./pages/login/LoginPage"));
+const LoginPage = React.lazy(() => import("./pages/login/LoginPage/LoginPage"));
 
 const Router: React.FC = () => {
   return (
