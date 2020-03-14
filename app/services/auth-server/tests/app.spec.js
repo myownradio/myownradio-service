@@ -99,8 +99,6 @@ describe("/login", () => {
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual({
-      id: 1,
-      email: "foo@bar.baz",
       refresh_token: expect.any(String),
       access_token: expect.any(String),
     });

@@ -42,8 +42,6 @@ module.exports = function createIndexRouteHandler(config, knexConnection) {
     );
 
     ctx.body = {
-      id: user.id,
-      email,
       refresh_token: refreshToken,
       access_token: accessToken,
     };
