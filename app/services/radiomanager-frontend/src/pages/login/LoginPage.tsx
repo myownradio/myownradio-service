@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 const LoginPage = () => {
-    return <>Hello, World!</>;
+    return <>Login Page</>;
 };
 
 export default LoginPage;

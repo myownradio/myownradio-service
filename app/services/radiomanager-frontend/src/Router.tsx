@@ -1,11 +1,13 @@
-import React from "react";
+import * as React from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
-import LoginPage from "./pages/login/LoginPage";
+
+const LoginPage = React.lazy(() => import("./pages/login/LoginPage"));
 
 const Router = () => {
   return (
     <BrowserRouter>
       <Switch>
+        <Route path="/"><>Home Page</></Route>
         <Route path="/login">
           <LoginPage />
         </Route>
