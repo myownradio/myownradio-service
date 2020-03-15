@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig } from "axios";
 import UnauthorizedError from "./errors/UnauthorizedError";
 import UnknownError from "./errors/UnknownError";
-import { getTopCancelTokenSource } from "./utils";
+import { getTopCancelTokenSource, isAccessTokenValid } from "./utils";
 import { SessionService } from "../common/services/sessionService";
 
 export abstract class AbstractApiClientWithRefresh {
@@ -63,7 +63,10 @@ export abstract class AbstractApiClientWithRefresh {
   ): Promise<T> {
     const accessToken = this.sessionService.getAccessToken();
     if (accessToken === null) {
-      throw new UnauthorizedError(`No access token or refresh token found. Request didn't made.`);
+      throw new UnauthorizedError(`No access token found. Request didn't made.`);
+    }
+    if (!isAccessTokenValid(accessToken)) {
+      throw new UnauthorizedError(`Invalid access token. Request didn't made.`);
     }
     const mergedHeaders = {
       Authorization: `Bearer ${accessToken}`,
