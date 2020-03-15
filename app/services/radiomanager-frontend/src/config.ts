@@ -5,6 +5,7 @@ const config = {
 
   routes: {
     home: "/",
+    test: "/test",
     login: "/login",
   },
 };
