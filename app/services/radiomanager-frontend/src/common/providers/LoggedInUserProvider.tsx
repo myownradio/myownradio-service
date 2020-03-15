@@ -10,7 +10,7 @@ export interface LoggedInUserProviderProps {
 const LoggedInUserProvider: React.FC<LoggedInUserProviderProps> = ({ fallback, children }) => {
   const { storageService } = useDependencies();
 
-  if (storageService.get("access_key")) {
+  if (storageService.get("access_token")) {
     return <>{children}</>;
   }
 
