@@ -13,8 +13,6 @@ interface LoggedInUserProviderProps {
   children?: React.ReactNode;
 }
 
-type IUserResolvingState = "init" | "failed" | "resolved";
-
 export const loggedInUserContext = React.createContext<IUserState | null>(null);
 
 const LoggedInUserProvider: React.FC<LoggedInUserProviderProps> = ({
@@ -22,7 +20,7 @@ const LoggedInUserProvider: React.FC<LoggedInUserProviderProps> = ({
   children,
   loader,
 }) => {
-  const [userResolvingState, setUserResolvingState] = useState<IUserResolvingState>("init");
+  const [authorized, setAuthorized] = useState<boolean | null>(null);
   const [userState, setUserState] = useState<IUserState | null>(null);
   const { authApiClient } = useDependencies();
 
@@ -30,24 +28,24 @@ const LoggedInUserProvider: React.FC<LoggedInUserProviderProps> = ({
     return withCancelToken(() =>
       authApiClient.me().then(
         userState => {
-          setUserResolvingState("resolved");
+          setAuthorized(true);
           setUserState(userState);
         },
         () => {
-          setUserResolvingState("failed");
+          setAuthorized(false);
           setUserState(null);
         },
       ),
     );
   }, [authApiClient]);
 
-  if (userResolvingState === "resolved" && userState !== null) {
+  if (authorized === true && userState !== null) {
     return (
       <loggedInUserContext.Provider value={userState}>{children}</loggedInUserContext.Provider>
     );
   }
 
-  if (userResolvingState === "failed") {
+  if (authorized === false) {
     return <>{fallback}</>;
   }
 
