@@ -3,29 +3,27 @@ import { createStorageService, StorageService } from "./services/storageService"
 import { AuthServer } from "../api/authServer";
 import { IConfig } from "../interfaces";
 
-export type IReactAppDependencies = {
+export type IAppDependencies = {
   authServer: AuthServer;
-  storageService: StorageService,
+  storageService: StorageService;
 };
 
-class ReactAppDependenciesError extends Error {}
+class AppDependenciesError extends Error {}
 
-const reactAppDependenciesContext = createContext<IReactAppDependencies | null>(null);
+const appDependenciesContext = createContext<IAppDependencies | null>(null);
 
-export const ReactAppDependenciesProvider = reactAppDependenciesContext.Provider;
+export const AppDependenciesProvider = appDependenciesContext.Provider;
 
-export function createDependencies(config: IConfig): IReactAppDependencies {
+export function createDependencies(config: IConfig): IAppDependencies {
   const storageService = createStorageService();
   const authServer = new AuthServer(config.authServerUrl, storageService);
   return { authServer, storageService };
 }
 
-export function useDependencies(): IReactAppDependencies {
-  const value = useContext(reactAppDependenciesContext);
+export function useDependencies(): IAppDependencies {
+  const value = useContext(appDependenciesContext);
   if (value === null) {
-    throw new ReactAppDependenciesError(
-      "You probably forgot to put <ReactAppDependenciesProvider>.",
-    );
+    throw new AppDependenciesError("You probably forgot to put <AppDependenciesProvider>.");
   }
   return value;
 }

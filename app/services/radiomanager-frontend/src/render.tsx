@@ -1,16 +1,13 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import { IReactAppDependencies, ReactAppDependenciesProvider } from "./common/reactAppDependencies";
+import { IAppDependencies, AppDependenciesProvider } from "./common/reactAppDependencies";
 import App from "./App";
 
-export default function render(
-  element: HTMLElement | null,
-  dependencies: IReactAppDependencies,
-): void {
+export default function render(element: HTMLElement | null, dependencies: IAppDependencies): void {
   ReactDOM.render(
-    <ReactAppDependenciesProvider value={dependencies}>
+    <AppDependenciesProvider value={dependencies}>
       <App />
-    </ReactAppDependenciesProvider>,
+    </AppDependenciesProvider>,
     element,
   );
 }
