@@ -8,36 +8,56 @@ import { withCancelToken } from "../../api/utils";
 type IUserState = ISuccessfulMeResponse;
 
 interface LoggedInUserProviderProps {
-  fallback?: React.ReactElement;
-  children?: React.ReactElement;
+  fallback?: React.ReactNode;
+  loader?: React.ReactNode;
+  children?: React.ReactNode;
 }
+
+type IUserResolvingState = "init" | "failed" | "resolved";
 
 export const loggedInUserContext = React.createContext<IUserState | null>(null);
 
-const LoggedInUserProvider: React.FC<LoggedInUserProviderProps> = ({ fallback, children }) => {
-  const [userState, setUserState] = useState<IUserState | null | false>(null);
+const LoggedInUserProvider: React.FC<LoggedInUserProviderProps> = ({
+  fallback,
+  children,
+  loader,
+}) => {
+  const [userResolvingState, setUserResolvingState] = useState<IUserResolvingState>("init");
+  const [userState, setUserState] = useState<IUserState | null>(null);
   const { authApiClient } = useDependencies();
 
   useEffect(() => {
     return withCancelToken(() =>
-      authApiClient.me().then(setUserState, () => {
-        setUserState(false);
-      }),
+      authApiClient.me().then(
+        userState => {
+          setUserResolvingState("resolved");
+          setUserState(userState);
+        },
+        () => {
+          setUserResolvingState("failed");
+          setUserState(null);
+        },
+      ),
     );
   }, [authApiClient]);
 
-  if (userState) {
+  if (userResolvingState === "resolved" && userState !== null) {
     return (
       <loggedInUserContext.Provider value={userState}>{children}</loggedInUserContext.Provider>
     );
   }
 
-  return <>{fallback}</>;
+  if (userResolvingState === "failed") {
+    return <>{fallback}</>;
+  }
+
+  return <>{loader || null}</>;
 };
 
 LoggedInUserProvider.propTypes = {
-  fallback: PropTypes.element,
-  children: PropTypes.element,
+  fallback: PropTypes.node,
+  children: PropTypes.node,
+  loader: PropTypes.node,
 };
 
 export default LoggedInUserProvider;
