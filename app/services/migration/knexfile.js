@@ -3,7 +3,7 @@ module.exports = {
     client: "postgresql",
     connection: process.env.MIGRATION_DATABASE_URL,
     migrations: {
-      directory: "/usr/app/migrations"
-    }
-  }
+      directory: "/usr/app/migrations",
+    },
+  },
 };

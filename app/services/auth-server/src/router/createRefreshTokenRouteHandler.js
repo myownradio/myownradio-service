@@ -4,15 +4,11 @@ const hasUpdatedRows = require("../utils/hasUpdatedRows");
 const createAccessToken = require("../utils/createAccessToken");
 
 function calculateExpirationThreshold(config) {
-  const thresholdMillis =
-    new Date().getTime() - config.AUTH_SERVER_REFRESH_TOKEN_LIFETIME * 1000;
+  const thresholdMillis = new Date().getTime() - config.AUTH_SERVER_REFRESH_TOKEN_LIFETIME * 1000;
   return new Date(thresholdMillis).toISOString();
 }
 
-module.exports = function createRefreshTokenRouteHandler(
-  config,
-  knexConnection
-) {
+module.exports = function createRefreshTokenRouteHandler(config, knexConnection) {
   return async ctx => {
     const { refresh_token: oldRefreshToken } = ctx.request.body;
 
@@ -43,13 +39,13 @@ module.exports = function createRefreshTokenRouteHandler(
       return createAccessToken(
         config.AUTH_SERVER_TOKEN_SECRET,
         config.AUTH_SERVER_ACCESS_TOKEN_LIFETIME,
-        updatedRow.user_id
+        updatedRow.user_id,
       );
     });
 
     ctx.body = {
       refresh_token: newRefreshToken,
-      access_token: newAccessToken
+      access_token: newAccessToken,
     };
   };
 };

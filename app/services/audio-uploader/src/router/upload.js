@@ -18,13 +18,10 @@ module.exports = function createUploadHandler(config) {
 
     const [metadata, { size }] = await Promise.all([
       getMediaFileMetadata(source.path),
-      fs.promises.stat(source.path)
+      fs.promises.stat(source.path),
     ]);
 
-    const filepath = path.join(
-      config.AUDIO_UPLOADER_ROOT_FOLDER,
-      `${hashPath}${extension}`
-    );
+    const filepath = path.join(config.AUDIO_UPLOADER_ROOT_FOLDER, `${hashPath}${extension}`);
 
     if (await fileExists(filepath)) {
       await fs.promises.unlink(source.path);
@@ -32,6 +29,12 @@ module.exports = function createUploadHandler(config) {
       await fs.promises.rename(source.path, filepath);
     }
 
-    ctx.body = { hash, size, name, path: hashPath, ...metadata };
+    ctx.body = {
+      hash,
+      size,
+      name,
+      path: hashPath,
+      ...metadata,
+    };
   };
 };

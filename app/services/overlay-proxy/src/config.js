@@ -1,15 +1,11 @@
 const { assert } = require("@myownradio/shared");
 
-const {
-  OVERLAY_PROXY_PERMANENT_SERVER,
-  OVERLAY_PROXY_TEMPORARY_SERVER,
-  PORT
-} = process.env;
+const { OVERLAY_PROXY_PERMANENT_SERVER, OVERLAY_PROXY_TEMPORARY_SERVER, PORT } = process.env;
 
 const config = {
   OVERLAY_PROXY_PERMANENT_SERVER,
   OVERLAY_PROXY_TEMPORARY_SERVER,
-  PORT
+  PORT,
 };
 
 assert(typeof config.PORT === "string");

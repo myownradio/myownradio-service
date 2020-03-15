@@ -8,7 +8,7 @@ const {
   AUTH_SERVER_ACCESS_TOKEN_LIFETIME,
   AUTH_SERVER_REFRESH_TOKEN_LIFETIME,
   AUTH_SERVER_ALLOWED_ORIGIN,
-  PORT = String(8080)
+  PORT = String(8080),
 } = process.env;
 
 const config = parse({
@@ -18,7 +18,7 @@ const config = parse({
   AUTH_SERVER_ACCESS_TOKEN_LIFETIME,
   AUTH_SERVER_REFRESH_TOKEN_LIFETIME,
   AUTH_SERVER_ALLOWED_ORIGIN,
-  PORT
+  PORT,
 });
 
 assert(typeof config.PORT === "number");

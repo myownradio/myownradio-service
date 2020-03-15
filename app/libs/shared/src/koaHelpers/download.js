@@ -68,7 +68,7 @@ function sendHeaders(ctx, filepath, fileSize, startRange) {
  */
 function sendData(ctx, filepath, startRange) {
   ctx.body = fs.createReadStream(filepath, {
-    start: startRange
+    start: startRange,
   });
 }
 

@@ -9,6 +9,6 @@ const fs = require("fs");
 module.exports = async function fileExists(path) {
   return fs.promises.access(path, fs.constants.F_OK).then(
     () => true,
-    () => false
+    () => false,
   );
 };

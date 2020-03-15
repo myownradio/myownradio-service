@@ -10,13 +10,13 @@
     "start:auth-server": "env-cmd -f env/auth-server.env -- yarn --cwd services/auth-server start",
     "dev:overlay-proxy": "env-cmd -f env/overlay-proxy.env -- yarn --cwd services/overlay-proxy run dev",
     "start:overlay-proxy": "env-cmd -f env/overlay-proxy.env -- yarn --cwd services/overlay-proxy start",
-    "dev:frontend": "yarn --cwd services/frontend run dev",
-    "start:frontend": "yarn --cwd services/frontend start",
+    "dev:radiomanager-frontend": "env-cmd -f env/radiomanager-frontend.env -- yarn --cwd services/radiomanager-frontend start",
+    "start:radiomanager-frontend": "env-cmd -f env/radiomanager-frontend.env -- yarn --cwd services/radiomanager-frontend start",
     "dev": "concurrently -n w: npm:dev:*",
     "migrate": "knex migrate:latest",
-    "format": "prettier --write services/**/*.{js,jsx}",
     "test": "jest --coverage",
-    "lint": "eslint services/**/*.{js,jsx}"
+    "lint": "eslint ./{services,libs}/**/*.{js,jsx,ts,tsx}",
+    "lint:fix": "eslint ./{services,libs}/**/*.{js,jsx,ts,tsx} --fix"
   },
   "repository": {
     "type": "git",
@@ -28,15 +28,19 @@
     "libs/*"
   ],
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^2.23.0",
+    "@typescript-eslint/parser": "^2.23.0",
     "concurrently": "^5.1.0",
     "env-cmd": "^10.0.1",
     "eslint": "^6.8.0",
+    "eslint-config-airbnb": "^18.1.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-config-prettier": "^6.10.0",
     "eslint-plugin-import": "^2.20.1",
     "eslint-plugin-jest": "^23.7.0",
     "eslint-plugin-prettier": "^3.1.2",
     "eslint-plugin-react": "^7.18.3",
+    "eslint-plugin-react-hooks": "^2.5.0",
     "jest": "^25.1.0",
     "knex": "^0.20.9",
     "pg": "^7.18.1",

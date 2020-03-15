@@ -1,15 +1,11 @@
 const { assert } = require("@myownradio/shared");
 
-const {
-  FILESERVER_LOCAL_ROOT_FOLDER,
-  FILESERVER_LOCAL_TOKEN_SECRET,
-  PORT
-} = process.env;
+const { FILESERVER_LOCAL_ROOT_FOLDER, FILESERVER_LOCAL_TOKEN_SECRET, PORT } = process.env;
 
 const config = {
   FILESERVER_LOCAL_ROOT_FOLDER,
   FILESERVER_LOCAL_TOKEN_SECRET,
-  PORT
+  PORT,
 };
 
 assert(typeof config.PORT === "string");

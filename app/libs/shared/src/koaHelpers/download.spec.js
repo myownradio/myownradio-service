@@ -8,7 +8,7 @@ test("Should download entire file", async () => {
     get: jest.fn().mockReturnValue(null),
     set: jest.fn(),
     body: null,
-    status: null
+    status: null,
   };
 
   await download(ctx, filepath);
@@ -17,7 +17,7 @@ test("Should download entire file", async () => {
     ["x-transfer-length", 573],
     ["content-length", 573],
     ["content-type", "text/plain"],
-    ["content-disposition", "attachment; filename=testfile.txt"]
+    ["content-disposition", "attachment; filename=testfile.txt"],
   ]);
 
   expect(ctx.get).toBeCalledTimes(1);
@@ -37,7 +37,7 @@ test("Should download file with specific range", async () => {
     }),
     set: jest.fn(),
     body: null,
-    status: null
+    status: null,
   };
 
   await download(ctx, filepath);
@@ -47,7 +47,7 @@ test("Should download file with specific range", async () => {
     ["accept-ranges", "bytes"],
     ["content-range", "bytes 100-572/573"],
     ["content-type", "text/plain"],
-    ["content-disposition", "attachment; filename=testfile.txt"]
+    ["content-disposition", "attachment; filename=testfile.txt"],
   ]);
 
   expect(ctx.get).toBeCalledTimes(1);

@@ -9,5 +9,5 @@ module.exports = function hasUpdatedRows(updatedRows) {
   if (Array.isArray(updatedRows)) {
     return updatedRows.length > 0;
   }
-  throw new TypeError(`Unknown type of updated rows`);
+  throw new TypeError("Unknown type of updated rows");
 };

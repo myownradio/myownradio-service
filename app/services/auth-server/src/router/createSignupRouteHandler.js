@@ -17,7 +17,7 @@ module.exports = function createSignupRouteHandler(config, knexConnection) {
         email,
         password: passwordHash,
         created_at: now,
-        updated_at: now
+        updated_at: now,
       });
 
       ctx.status = 200;
