@@ -1,24 +1,17 @@
-import { Type } from "io-ts";
-import { isRight } from "fp-ts/lib/Either";
-
 export interface StorageService {
-  get<T>(key: string, contract: Type<T, unknown>, defaultValue: T): T;
+  get<T>(key: string): T | null;
   put<T>(key: string, value: T): void;
 }
 
 class LocalStorageService implements StorageService {
-  public get<T>(key: string, contract: Type<T, unknown>, defaultValue: T): T {
+  public get<T>(key: string): T | null {
     const rawValue = window.localStorage.getItem(key);
     if (rawValue !== null) {
       try {
-        const value = JSON.parse(rawValue);
-        const decodedEither = contract.decode(value);
-        if (isRight(decodedEither)) {
-          return decodedEither.right;
-        }
+        return JSON.parse(rawValue);
       } catch {}
     }
-    return defaultValue;
+    return null;
   }
 
   public put<T>(key: string, value: T): void {
@@ -30,8 +23,8 @@ class LocalStorageService implements StorageService {
 class MemoryStorageService implements StorageService {
   private storage = new Map();
 
-  public get<T>(key: string, contract: Type<T, unknown>, defaultValue: T): T {
-    return this.storage.has(key) ? this.storage.get(key) : defaultValue;
+  public get<T>(key: string): T | null {
+    return this.storage.has(key) ? this.storage.get(key) : null;
   }
 
   public put<T>(key: string, value: T): void {
