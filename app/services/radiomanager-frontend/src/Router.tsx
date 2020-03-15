@@ -9,7 +9,7 @@ const { routes } = config;
 
 const Loader: React.FC = () => <>Loading...</>;
 
-const LoginPage = React.lazy(() => import("./pages/login/LoginPage/LoginPage"));
+const LoginPage = React.lazy(() => import("./pages/login/LoginPage"));
 
 const Router: React.FC = () => {
   return (
