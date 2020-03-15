@@ -4,7 +4,7 @@ import * as PropTypes from "prop-types";
 const AudioPlayerProvider: React.FC = ({ children }) => <>{children}</>;
 
 AudioPlayerProvider.propTypes = {
-  children: PropTypes.element,
+  children: PropTypes.node,
 };
 
 export default AudioPlayerProvider;

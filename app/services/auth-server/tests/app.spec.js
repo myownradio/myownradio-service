@@ -189,7 +189,6 @@ describe("/me", () => {
       .get("/me")
       .set("Authorization", `Bearer ${accessToken}`)
       .expect(200, {
-        id: 1,
         email: "foo@bar.baz",
       });
   });
