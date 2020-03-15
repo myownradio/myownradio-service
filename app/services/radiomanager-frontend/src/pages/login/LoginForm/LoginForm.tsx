@@ -13,7 +13,6 @@ import Box from "@material-ui/core/Box";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
-import Alert from "@material-ui/lab/Alert";
 import { useStyles } from "./styles";
 import ErrorBox from "../../../common/components/ErrorBox/ErrorBox";
 
@@ -81,7 +80,7 @@ const LoginForm: React.FC<ILoginFormProps> = ({
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} noValidate onSubmit={handleSignInClick}>
           <ErrorBox errorMessage={errorMessage} />
           <TextField
             value={email}
@@ -94,6 +93,7 @@ const LoginForm: React.FC<ILoginFormProps> = ({
             label="Email Address"
             name="email"
             autoComplete="email"
+            type="email"
             autoFocus
           />
           <TextField
@@ -114,7 +114,6 @@ const LoginForm: React.FC<ILoginFormProps> = ({
             label="Remember me"
           />
           <Button
-            onClick={handleSignInClick}
             type="submit"
             fullWidth
             variant="contained"

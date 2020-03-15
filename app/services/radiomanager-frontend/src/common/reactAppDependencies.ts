@@ -1,9 +1,11 @@
 import { createContext, useContext } from "react";
+import { createStorageService, StorageService } from "./services/storageService";
 import { AuthServer } from "../api/authServer";
 import { IConfig } from "../interfaces";
 
 export type IReactAppDependencies = {
   authServer: AuthServer;
+  storageService: StorageService,
 };
 
 class ReactAppDependenciesError extends Error {}
@@ -13,8 +15,9 @@ const reactAppDependenciesContext = createContext<IReactAppDependencies | null>(
 export const ReactAppDependenciesProvider = reactAppDependenciesContext.Provider;
 
 export function createDependencies(config: IConfig): IReactAppDependencies {
-  const authServer = new AuthServer(config.authServerUrl);
-  return { authServer };
+  const storageService = createStorageService();
+  const authServer = new AuthServer(config.authServerUrl, storageService);
+  return { authServer, storageService };
 }
 
 export function useDependencies(): IReactAppDependencies {
