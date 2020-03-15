@@ -12,7 +12,6 @@ module.exports = function createMeTokenRouteHandler(config, knexConnection) {
     }
 
     ctx.body = {
-      id: userDetails.id,
       email: userDetails.email,
     };
   };

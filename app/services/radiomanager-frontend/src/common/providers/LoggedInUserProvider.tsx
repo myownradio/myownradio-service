@@ -1,17 +1,35 @@
 import * as React from "react";
+import { useState, useEffect } from "react";
 import * as PropTypes from "prop-types";
-import { useDependencies } from "../reactAppDependencies";
+import { useDependencies } from "../appDependencies";
+import { ISuccessfulMeResponse } from "../../api/AuthApiClient";
+import { withCancelToken } from "../../api/utils";
 
-export interface LoggedInUserProviderProps {
+type IUserState = ISuccessfulMeResponse;
+
+interface LoggedInUserProviderProps {
   fallback?: React.ReactElement;
   children?: React.ReactElement;
 }
 
-const LoggedInUserProvider: React.FC<LoggedInUserProviderProps> = ({ fallback, children }) => {
-  const { storageService } = useDependencies();
+export const loggedInUserContext = React.createContext<IUserState | null>(null);
 
-  if (storageService.get("access_token")) {
-    return <>{children}</>;
+const LoggedInUserProvider: React.FC<LoggedInUserProviderProps> = ({ fallback, children }) => {
+  const [userState, setUserState] = useState<IUserState | null | false>(null);
+  const { authApiClient } = useDependencies();
+
+  useEffect(() => {
+    return withCancelToken(() =>
+      authApiClient.me().then(setUserState, () => {
+        setUserState(false);
+      }),
+    );
+  }, [authApiClient]);
+
+  if (userState) {
+    return (
+      <loggedInUserContext.Provider value={userState}>{children}</loggedInUserContext.Provider>
+    );
   }
 
   return <>{fallback}</>;
