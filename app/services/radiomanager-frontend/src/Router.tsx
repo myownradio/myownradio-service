@@ -3,7 +3,7 @@ import { Suspense } from "react";
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import config from "./config";
 import AudioPlayerProvider from "./common/player/AudioPlayerProvider";
-import LoggedInUserProvider from "./common/providers/LoggedInUserProvider";
+import LoggedInUserProvider from "./common/providers/LoggedInUserProvider/LoggedInUserProvider";
 
 const { routes } = config;
 

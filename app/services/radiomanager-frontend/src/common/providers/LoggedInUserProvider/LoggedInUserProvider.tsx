@@ -1,9 +1,10 @@
 import * as React from "react";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import * as PropTypes from "prop-types";
-import { useDependencies } from "../appDependencies";
-import { ISuccessfulMeResponse } from "../../api/AuthApiClient";
-import { withCancelToken } from "../../api/utils";
+import { useDependencies } from "~/common/appDependencies";
+import { ISuccessfulMeResponse } from "~/api/AuthApiClient";
+import { withCancelToken } from "~/api/utils";
+import useAuthState from "./use/useAuthState";
 
 type IUserState = ISuccessfulMeResponse;
 
@@ -20,32 +21,31 @@ const LoggedInUserProvider: React.FC<LoggedInUserProviderProps> = ({
   children,
   loader,
 }) => {
-  const [authorized, setAuthorized] = useState<boolean | null>(null);
-  const [userState, setUserState] = useState<IUserState | null>(null);
+  const [authState, setAuthState] = useAuthState();
   const { authApiClient } = useDependencies();
 
   useEffect(() => {
     return withCancelToken(() =>
       authApiClient.me().then(
         userState => {
-          setAuthorized(true);
-          setUserState(userState);
+          setAuthState({ authenticated: true, userState });
         },
         () => {
-          setAuthorized(false);
-          setUserState(null);
+          setAuthState({ authenticated: false });
         },
       ),
     );
-  }, [authApiClient]);
+  }, [authApiClient, setAuthState]);
 
-  if (authorized === true && userState !== null) {
+  if (authState.authenticated === true) {
     return (
-      <loggedInUserContext.Provider value={userState}>{children}</loggedInUserContext.Provider>
+      <loggedInUserContext.Provider value={authState.userState}>
+        {children}
+      </loggedInUserContext.Provider>
     );
   }
 
-  if (authorized === false) {
+  if (authState.authenticated === false) {
     return <>{fallback}</>;
   }
 
