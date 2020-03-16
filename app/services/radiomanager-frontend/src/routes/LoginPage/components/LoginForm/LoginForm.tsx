@@ -13,8 +13,8 @@ import Box from "@material-ui/core/Box";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
+import ErrorBox from "~/common/components/ErrorBox/ErrorBox";
 import { useStyles } from "./styles";
-import ErrorBox from "../../../../common/components/ErrorBox/ErrorBox";
 
 function Copyright(): JSX.Element {
   return (
