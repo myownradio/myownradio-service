@@ -2,7 +2,7 @@ import * as React from "react";
 import { useEffect } from "react";
 import * as PropTypes from "prop-types";
 import { useDependencies } from "~/common/appDependencies";
-import { ISuccessfulMeResponse } from "~/api/AuthApiClient";
+import { ISuccessfulMeResponse } from "~/services/authApiService";
 import { withCancelToken } from "~/api/utils";
 import useAuthState from "./use/useAuthState";
 

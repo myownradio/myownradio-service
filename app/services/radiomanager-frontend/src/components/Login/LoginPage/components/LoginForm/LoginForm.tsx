@@ -14,7 +14,7 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import { useStyles } from "./styles";
-import ErrorBox from "../../../common/components/ErrorBox/ErrorBox";
+import ErrorBox from "../../../../../common/components/ErrorBox/ErrorBox";
 
 function Copyright(): JSX.Element {
   return (

@@ -1,11 +1,11 @@
 import { createContext, useContext } from "react";
-import { createStorageService, StorageService } from "./services/storageService";
-import { AuthApiClient } from "../api/AuthApiClient";
+import { createStorageService, StorageService } from "../services/storageService";
+import { AuthApiService } from "../services/authApiService";
 import { IConfig } from "../interfaces";
-import { BasicSessionService, SessionService } from "./services/sessionService";
+import { BasicSessionService, SessionService } from "../services/sessionService";
 
 export type AppDependencies = {
-  authApiClient: AuthApiClient;
+  authApiClient: AuthApiService;
   storageService: StorageService;
   sessionService: SessionService;
 };
@@ -19,7 +19,7 @@ export const AppDependenciesProvider = appDependenciesContext.Provider;
 export function createDependencies(config: IConfig): AppDependencies {
   const storageService = createStorageService();
   const sessionService = new BasicSessionService(storageService);
-  const authApiClient = new AuthApiClient(config.authServerUrl, sessionService);
+  const authApiClient = new AuthApiService(config.authServerUrl, sessionService);
 
   sessionService.setAuthApiClient(authApiClient);
 

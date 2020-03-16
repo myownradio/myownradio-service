@@ -1,5 +1,5 @@
-import { AbstractApiClientWithRefresh } from "./AbstractApiClientWithRefresh";
-import { SessionService } from "../common/services/sessionService";
+import { AbstractApiService } from "./abstractApiService";
+import { SessionService } from "./sessionService";
 
 export type ISuccessfulLoginResponse = {
   refresh_token: string;
@@ -15,7 +15,7 @@ export type ISuccessfulMeResponse = {
   email: string;
 };
 
-export class AuthApiClient extends AbstractApiClientWithRefresh {
+export class AuthApiService extends AbstractApiService {
   constructor(authServerUrl: string, sessionService: SessionService) {
     super(authServerUrl, sessionService);
   }

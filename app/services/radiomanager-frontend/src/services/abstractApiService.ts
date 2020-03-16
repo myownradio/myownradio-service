@@ -1,14 +1,13 @@
 import axios, { AxiosRequestConfig } from "axios";
 import UnauthorizedError from "./errors/UnauthorizedError";
 import UnknownError from "./errors/UnknownError";
-import { getTopCancelTokenSource, isAccessTokenValid } from "./utils";
-import { SessionService } from "../common/services/sessionService";
+import { SessionService } from "./sessionService";
+import isAccessTokenValid from "~/services/utils/isAccessTokenValid";
 
-export abstract class AbstractApiClientWithRefresh {
+export abstract class AbstractApiService {
   protected constructor(private urlPrefix: string, private sessionService: SessionService) {}
 
   protected async makeRequest<T>(path: string, requestConfig: AxiosRequestConfig): Promise<T> {
-    const cancelTokenSource = getTopCancelTokenSource();
     const url = `${this.urlPrefix}${path}`;
     const config: AxiosRequestConfig = {
       withCredentials: true,
@@ -16,10 +15,6 @@ export abstract class AbstractApiClientWithRefresh {
       ...requestConfig,
       url,
     };
-
-    if (cancelTokenSource) {
-      config.cancelToken = cancelTokenSource.token;
-    }
 
     const { data, status } = await axios(config);
 
