@@ -21,10 +21,6 @@ export function createDependencies(config: IConfig): AppDependencies {
   const sessionService = new BasicSessionService(storageService);
   const authApiClient = new AuthApiClient(config.authServerUrl, sessionService);
 
-  /**
-   * WARNING! We add dependency using setter because AuthApiClient and SessionService
-   * both has circular dependency on each other.
-   */
   sessionService.setAuthApiClient(authApiClient);
 
   return { authApiClient, storageService, sessionService };

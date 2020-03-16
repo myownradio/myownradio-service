@@ -17,7 +17,7 @@ const Router: React.FC = () => {
       <BrowserRouter>
         <Switch>
           <Route exact path={routes.login} component={LoginPage} />
-          <Route path={[routes.home, routes.test]}>
+          <Route exact path={[routes.home, routes.test]}>
             <LoggedInUserProvider fallback={<Redirect to={routes.login} />}>
               <AudioPlayerProvider>
                 <Route exact path={routes.home}>
