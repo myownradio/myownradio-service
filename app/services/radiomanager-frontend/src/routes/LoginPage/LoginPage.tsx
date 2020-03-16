@@ -2,10 +2,10 @@ import * as React from "react";
 import { useState, useCallback } from "react";
 import { useHistory } from "react-router-dom";
 import LoginForm from "./components/LoginForm";
-import { useDependencies } from "../../../common/appDependencies";
-import UnauthorizedError from "../../../services/errors/UnauthorizedError";
-import BadRequestError from "../../../services/errors/BadRequestError";
-import config from "../../../config";
+import { useDependencies } from "../../bootstrap/dependencies";
+import UnauthorizedError from "../../services/errors/UnauthorizedError";
+import BadRequestError from "../../services/errors/BadRequestError";
+import config from "../../config";
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState("");

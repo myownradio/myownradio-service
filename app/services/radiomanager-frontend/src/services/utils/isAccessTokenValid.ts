@@ -1,11 +1,12 @@
-import * as jwtDecode from "jwt-decode";
+import jwtDecode = require("jwt-decode");
 
 export default function isAccessTokenValid(accessToken: string): boolean {
   try {
     const decodedToken = jwtDecode<{ exp?: number }>(accessToken);
+    console.log(decodedToken);
     return typeof decodedToken.exp === "number" && decodedToken.exp > Date.now() / 1000;
-  } catch {
-    /* NO-OP */
+  } catch (e) {
+    // todo sentry integration
   }
   return false;
 }

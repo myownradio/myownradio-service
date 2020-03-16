@@ -1,6 +1,6 @@
 import { StorageService } from "./storageService";
 import { AuthApiService } from "./authApiService";
-import { ACCESS_TOKEN_STORAGE_KEY, REFRESH_TOKEN_STORAGE_KEY } from "../constants";
+import { ACCESS_TOKEN_STORAGE_KEY, REFRESH_TOKEN_STORAGE_KEY } from "../common/constants";
 
 export interface SessionService {
   getAccessToken(): string | null;
