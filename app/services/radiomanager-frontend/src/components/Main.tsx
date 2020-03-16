@@ -1,17 +1,17 @@
 import * as React from "react";
 import { Suspense } from "react";
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
-import config from "./config";
-import AudioPlayerProvider from "./common/player/AudioPlayerProvider";
-import LoggedInUserProvider from "./common/providers/LoggedInUserProvider";
+import { config } from "~/config";
+import AudioPlayerProvider from "../common/player/AudioPlayerProvider";
+import LoggedInUserProvider from "../common/providers/LoggedInUserProvider";
 
 const { routes } = config;
 
 const Loader: React.FC = () => <>Loading...</>;
 
-const LoginPage = React.lazy(() => import("./pages/login/LoginPage"));
+const LoginPage = React.lazy(() => import("../routes/LoginPage"));
 
-const Router: React.FC = () => {
+const Main: React.FC = () => {
   return (
     <Suspense fallback={<Loader />}>
       <BrowserRouter>
@@ -36,4 +36,4 @@ const Router: React.FC = () => {
   );
 };
 
-export default Router;
+export default Main;

@@ -1,9 +1,8 @@
 import * as React from "react";
 import { useEffect } from "react";
 import * as PropTypes from "prop-types";
-import { useDependencies } from "~/common/appDependencies";
-import { ISuccessfulMeResponse } from "~/api/AuthApiClient";
-import { withCancelToken } from "~/api/utils";
+import { useDependencies } from "~/bootstrap/dependencies";
+import { ISuccessfulMeResponse } from "~/services/authApiService";
 import useAuthState from "./use/useAuthState";
 
 type IUserState = ISuccessfulMeResponse;
@@ -25,15 +24,13 @@ const LoggedInUserProvider: React.FC<LoggedInUserProviderProps> = ({
   const { authApiClient } = useDependencies();
 
   useEffect(() => {
-    return withCancelToken(() =>
-      authApiClient.me().then(
-        userState => {
-          setAuthState({ authenticated: true, userState });
-        },
-        () => {
-          setAuthState({ authenticated: false });
-        },
-      ),
+    authApiClient.me().then(
+      userState => {
+        setAuthState({ authenticated: true, userState });
+      },
+      () => {
+        setAuthState({ authenticated: false });
+      },
     );
   }, [authApiClient, setAuthState]);
 

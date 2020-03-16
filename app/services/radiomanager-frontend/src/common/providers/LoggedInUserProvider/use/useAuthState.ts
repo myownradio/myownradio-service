@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, useState } from "react";
-import { ISuccessfulMeResponse } from "~/api/AuthApiClient";
+import { ISuccessfulMeResponse } from "~/services/authApiService";
 
 type IUserState = ISuccessfulMeResponse;
 type ILoginState =

@@ -1,4 +1,4 @@
-const config = {
+export const config = {
   siteUrl: process.env.REACT_APP_SITE_URL as string,
 
   authServerUrl: process.env.REACT_APP_AUTH_SERVER_URL as string,
@@ -10,4 +10,4 @@ const config = {
   },
 };
 
-export default config;
+export type IConfig = typeof config;

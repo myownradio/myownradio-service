@@ -1,6 +1,6 @@
 import { StorageService } from "./storageService";
-import { AuthApiClient } from "../../api/AuthApiClient";
-import { ACCESS_TOKEN_STORAGE_KEY, REFRESH_TOKEN_STORAGE_KEY } from "../../constants";
+import { AuthApiService } from "./authApiService";
+import { ACCESS_TOKEN_STORAGE_KEY, REFRESH_TOKEN_STORAGE_KEY } from "../common/constants";
 
 export interface SessionService {
   getAccessToken(): string | null;
@@ -8,11 +8,11 @@ export interface SessionService {
 }
 
 export class BasicSessionService implements SessionService {
-  private authApiClient: AuthApiClient | undefined;
+  private authApiClient: AuthApiService | undefined;
 
   constructor(private storageService: StorageService) {}
 
-  public setAuthApiClient(apiAuthClient: AuthApiClient): void {
+  public setAuthApiClient(apiAuthClient: AuthApiService): void {
     this.authApiClient = apiAuthClient;
   }
 
