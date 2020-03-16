@@ -19,7 +19,7 @@ export const AppDependenciesProvider = appDependenciesContext.Provider;
 export function createDependencies(config: IConfig): AppDependencies {
   const storageService = createStorageService();
   const sessionService = new BasicSessionService(storageService);
-  const authApiClient = new AuthApiService(config.authServerUrl, sessionService);
+  const authApiClient = new AuthApiService(config.authApiUrl, sessionService);
 
   sessionService.setAuthApiClient(authApiClient);
 

@@ -16,8 +16,8 @@ export type ISuccessfulMeResponse = {
 };
 
 export class AuthApiService extends AbstractApiService {
-  constructor(authServerUrl: string, sessionService: SessionService) {
-    super(authServerUrl, sessionService);
+  constructor(authApiUrl: string, sessionService: SessionService) {
+    super(authApiUrl, sessionService);
   }
 
   public async login(email: string, password: string): Promise<ISuccessfulLoginResponse> {
