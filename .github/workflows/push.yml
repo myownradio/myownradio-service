@@ -55,7 +55,7 @@ jobs:
 
   build-frontend-proxy:
     needs: terraform
-    name: Build and push "frontend-proxy" image
+    name: Build "frontend-proxy" image
     runs-on: ubuntu-latest
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -79,7 +79,7 @@ jobs:
 
   build-radiomanager-frontend:
     needs: terraform
-    name: Build and push "radiomanager-frontend" image
+    name: Build "radiomanager-frontend" image
     runs-on: ubuntu-latest
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -103,7 +103,7 @@ jobs:
 
   build-migration:
     needs: terraform
-    name: Build and push "migration" image
+    name: Build "migration" image
     runs-on: ubuntu-latest
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -127,7 +127,7 @@ jobs:
 
   build-auth-server:
     needs: terraform
-    name: Build and push "auth-server" image
+    name: Build "auth-server" image
     runs-on: ubuntu-latest
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -151,7 +151,7 @@ jobs:
 
   build-fileserver-local:
     needs: terraform
-    name: Build and push "fileserver-local" image
+    name: Build "fileserver-local" image
     runs-on: ubuntu-latest
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -175,7 +175,7 @@ jobs:
 
   build-audio-uploader:
     needs: terraform
-    name: Build and push "audio-uploader" image
+    name: Build "audio-uploader" image
     runs-on: ubuntu-latest
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
