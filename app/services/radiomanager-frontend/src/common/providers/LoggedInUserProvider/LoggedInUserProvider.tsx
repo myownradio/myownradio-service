@@ -21,10 +21,10 @@ const LoggedInUserProvider: React.FC<LoggedInUserProviderProps> = ({
   loader,
 }) => {
   const [authState, setAuthState] = useAuthState();
-  const { authApiClient } = useDependencies();
+  const { authApiService } = useDependencies();
 
   useEffect(() => {
-    authApiClient.me().then(
+    authApiService.me().then(
       userState => {
         setAuthState({ authenticated: true, userState });
       },
@@ -32,7 +32,7 @@ const LoggedInUserProvider: React.FC<LoggedInUserProviderProps> = ({
         setAuthState({ authenticated: false });
       },
     );
-  }, [authApiClient, setAuthState]);
+  }, [authApiService, setAuthState]);
 
   if (authState.authenticated === true) {
     return (
