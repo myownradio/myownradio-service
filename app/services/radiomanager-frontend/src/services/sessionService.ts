@@ -1,11 +1,14 @@
 import { StorageService } from "./storageService";
 import { AuthApiService } from "./authApiService";
-import { ACCESS_TOKEN_STORAGE_KEY, REFRESH_TOKEN_STORAGE_KEY } from "../common/constants";
 
 export interface SessionService {
   getAccessToken(): string | null;
   refreshToken(): Promise<void>;
+  saveTokens(accessToken: string, refreshToken: string): void;
 }
+
+const ACCESS_TOKEN_STORAGE_KEY = "access_token";
+const REFRESH_TOKEN_STORAGE_KEY = "refresh_token";
 
 export class BasicSessionService implements SessionService {
   private authApiClient: AuthApiService | undefined;
@@ -27,5 +30,10 @@ export class BasicSessionService implements SessionService {
       this.storageService.put(REFRESH_TOKEN_STORAGE_KEY, newTokens.refresh_token);
       this.storageService.put(ACCESS_TOKEN_STORAGE_KEY, newTokens.access_token);
     }
+  }
+
+  public saveTokens(accessToken: string, refreshToken: string): void {
+    this.storageService.put("access_token", accessToken);
+    this.storageService.put("refresh_token", refreshToken);
   }
 }

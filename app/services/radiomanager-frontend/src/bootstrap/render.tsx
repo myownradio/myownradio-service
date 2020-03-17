@@ -1,12 +1,15 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { AppDependencies, AppDependenciesProvider } from "./dependencies";
-import Main from "~/components/Main";
 
-export default function render(element: HTMLElement | null, dependencies: AppDependencies): void {
+export default function render(
+  element: HTMLElement | null,
+  dependencies: AppDependencies,
+  Component: React.ComponentType,
+): void {
   ReactDOM.render(
     <AppDependenciesProvider value={dependencies}>
-      <Main />
+      <Component />
     </AppDependenciesProvider>,
     element,
   );

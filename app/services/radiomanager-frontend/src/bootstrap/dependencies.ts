@@ -5,7 +5,7 @@ import { IConfig } from "~/config";
 import { BasicSessionService, SessionService } from "~/services/sessionService";
 
 export type AppDependencies = {
-  authApiClient: AuthApiService;
+  authApiService: AuthApiService;
   storageService: StorageService;
   sessionService: SessionService;
 };
@@ -19,11 +19,11 @@ export const AppDependenciesProvider = appDependenciesContext.Provider;
 export function createDependencies(config: IConfig): AppDependencies {
   const storageService = createStorageService();
   const sessionService = new BasicSessionService(storageService);
-  const authApiClient = new AuthApiService(config.authApiUrl, sessionService);
+  const authApiService = new AuthApiService(config.authApiUrl, sessionService);
 
-  sessionService.setAuthApiClient(authApiClient);
+  sessionService.setAuthApiClient(authApiService);
 
-  return { authApiClient, storageService, sessionService };
+  return { authApiService, storageService, sessionService };
 }
 
 export function useDependencies(): AppDependencies {
