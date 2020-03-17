@@ -13,7 +13,7 @@ export default function useHandleSubmit(
   setPassword: ISetter<string>,
   setErrorMessage: ISetter<string | null>,
 ): () => Promise<void> {
-  const { authApiService, storageService } = useDependencies();
+  const { authApiService, sessionService } = useDependencies();
   const history = useHistory();
 
   return useCallback(async () => {
@@ -21,8 +21,7 @@ export default function useHandleSubmit(
 
     try {
       const { access_token, refresh_token } = await authApiService.login(email, password);
-      storageService.put("access_token", access_token);
-      storageService.put("refresh_token", refresh_token);
+      sessionService.saveTokens(access_token, refresh_token);
       history.push(config.routes.home);
     } catch (e) {
       if (e instanceof UnauthorizedError) {
@@ -33,5 +32,5 @@ export default function useHandleSubmit(
         setErrorMessage("Unknown error occurred");
       }
     }
-  }, [email, password, history, authApiService, storageService, setErrorMessage]);
+  }, [email, password, history, authApiService, sessionService, setErrorMessage]);
 }
