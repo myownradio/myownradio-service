@@ -2,8 +2,8 @@ import * as React from "react";
 import { Suspense } from "react";
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import { config } from "~/config";
-import AudioPlayerProvider from "./common/player/AudioPlayerProvider";
-import LoggedInUserProvider from "./common/providers/LoggedInUserProvider";
+import AudioPlayerProvider from "~/modules/AudioPlayer/AudioPlayerProvider";
+import LoggedInUserProvider from "~/modules/LoggedInUser/LoggedInUserProvider";
 
 const LoginPage = React.lazy(() => import("./routes/LoginPage"));
 
