@@ -27,6 +27,13 @@ export class AuthApiService extends AbstractApiService {
     });
   }
 
+  public async signup(email: string, password: string): Promise<void> {
+    await this.makeRequest<void>("signup", {
+      method: "post",
+      data: { email, password },
+    });
+  }
+
   public async refreshRefreshToken(refreshToken: string): Promise<ISuccessfulRefreshResponse> {
     return this.makeRequest<ISuccessfulRefreshResponse>("refreshToken", {
       method: "post",
