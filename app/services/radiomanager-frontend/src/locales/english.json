@@ -1,0 +1,3 @@
+{
+  "api_login_error400": "You should specify both email and password to be signed in"
+}

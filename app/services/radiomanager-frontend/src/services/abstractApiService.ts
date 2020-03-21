@@ -3,6 +3,7 @@ import UnauthorizedError from "./errors/UnauthorizedError";
 import UnknownError from "./errors/UnknownError";
 import { SessionService } from "./sessionService";
 import isAccessTokenValid from "~/services/utils/isAccessTokenValid";
+import EmailExistsError from "~/services/errors/EmailExistsError";
 
 export abstract class AbstractApiService {
   protected constructor(private urlPrefix: string, private sessionService: SessionService) {}
@@ -25,11 +26,17 @@ export abstract class AbstractApiService {
     const responseText = typeof data === "string" ? data : JSON.stringify(data);
 
     if (status === 400) {
-      throw new UnauthorizedError(`Bad request. Original response - ${responseText}`);
+      throw new UnauthorizedError(
+        `Server responded with "Bad request" on ${config.method} ${config.url} request. Original response - ${responseText}`,
+      );
     }
 
     if (status === 401) {
       throw new UnauthorizedError(`Unauthorized. Original response - ${responseText}`);
+    }
+
+    if (status === 409) {
+      throw new EmailExistsError(`Email already exists. Original response - ${responseText}`);
     }
 
     throw new UnknownError(
