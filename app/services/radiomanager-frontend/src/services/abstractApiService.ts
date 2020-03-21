@@ -1,13 +1,9 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { ILocaleKey } from "~/locales";
-import { SessionService } from "./sessionService";
 import isAccessTokenValid from "~/services/utils/isAccessTokenValid";
-import UnauthorizedError from "./errors/UnauthorizedError";
-import UnknownError from "./errors/UnknownError";
-import BadRequestError from "~/services/errors/BadRequestError";
-import EmailExistsError from "~/services/errors/EmailExistsError";
+import { SessionService } from "./sessionService";
+import { BadRequestError, EmailExistsError, UnknownError, UnauthorizedError } from "./errors";
 
-type IHandledStatusCodes = 400 | 401 | 409;
 
 type IStatusCodeToLocaleKeyMap = Partial<
   {
@@ -15,13 +11,15 @@ type IStatusCodeToLocaleKeyMap = Partial<
   }
 >;
 
+type IHandledStatusCodes = 400 | 401 | 409;
+
 export abstract class AbstractApiService {
   protected constructor(private urlPrefix: string, private sessionService: SessionService) {}
 
   protected async makeRequest<T>(
     path: string,
     requestConfig: AxiosRequestConfig,
-    statusMap: IStatusCodeToLocaleKeyMap = {},
+    statusCodeMap: IStatusCodeToLocaleKeyMap = {},
   ): Promise<T> {
     const url = `${this.urlPrefix}${path}`;
     const config: AxiosRequestConfig = {
@@ -40,15 +38,15 @@ export abstract class AbstractApiService {
     const responseText = typeof data === "string" ? data : JSON.stringify(data);
 
     if (status === 400) {
-      throw new BadRequestError("Bad Request", "api_error400");
+      throw new BadRequestError("Bad Request", statusCodeMap[400] || "api_error400");
     }
 
     if (status === 401) {
-      throw new UnauthorizedError("Unauthorized", "api_error401");
+      throw new UnauthorizedError("Unauthorized", statusCodeMap[401] || "api_error401");
     }
 
     if (status === 409) {
-      throw new EmailExistsError("Email Exists", "api_error409");
+      throw new EmailExistsError("Email Exists", statusCodeMap[409] || "api_error409");
     }
 
     throw new UnknownError(
