@@ -23,7 +23,6 @@ module.exports = function createSignupRouteHandler(config, knexConnection) {
       ctx.status = 200;
     } catch (e) {
       if (e.message.match(/constraint/)) {
-        ctx.body = errorConstants.EMAIL_ALREADY_IN_USE;
         ctx.status = 409;
       } else {
         throw e;
