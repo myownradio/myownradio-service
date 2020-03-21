@@ -87,7 +87,7 @@ describe("/signup", () => {
         email: "foo@bar.baz",
         password: "123",
       })
-      .expect(400, errorConstants.EMAIL_ALREADY_IN_USE);
+      .expect(409, errorConstants.EMAIL_ALREADY_IN_USE);
   });
 });
 
