@@ -52,12 +52,12 @@ describe("/signup", () => {
     await request
       .post("/signup")
       .send({ email: "someone@mail.com" })
-      .expect(400, errorConstants.EMAIL_AND_PASSWORD_REQUIRED);
+      .expect(400);
 
     await request
       .post("/signup")
       .send({ password: "somepassword" })
-      .expect(400, errorConstants.EMAIL_AND_PASSWORD_REQUIRED);
+      .expect(400);
   });
 
   test("POST /signup - should create user", async () => {
@@ -118,7 +118,7 @@ describe("/login", () => {
 
   // eslint-disable-next-line jest/expect-expect
   test("POST /login - should fail if email or password not specified", async () => {
-    await request.post("/login").expect(400, errorConstants.EMAIL_AND_PASSWORD_REQUIRED);
+    await request.post("/login").expect(400);
   });
 
   // eslint-disable-next-line jest/expect-expect
@@ -126,12 +126,12 @@ describe("/login", () => {
     await request
       .post("/login")
       .send({ email: "foo@bar.baz", password: "wrong" })
-      .expect(401, errorConstants.WRONG_EMAIL_OR_PASSWORD);
+      .expect(401);
 
     await request
       .post("/login")
       .send({ email: "wrong@bar.baz", password: "wrong" })
-      .expect(401, errorConstants.WRONG_EMAIL_OR_PASSWORD);
+      .expect(401);
   });
 });
 

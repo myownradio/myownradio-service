@@ -8,7 +8,7 @@ module.exports = function createIndexRouteHandler(config, knexConnection) {
     const { email, password } = ctx.request.body;
 
     if (!email || !password) {
-      ctx.throw(400, errorConstants.EMAIL_AND_PASSWORD_REQUIRED);
+      ctx.throw(400);
     }
 
     const user = await knexConnection("users")
@@ -16,13 +16,13 @@ module.exports = function createIndexRouteHandler(config, knexConnection) {
       .first();
 
     if (!user) {
-      ctx.throw(401, errorConstants.WRONG_EMAIL_OR_PASSWORD);
+      ctx.throw(401);
     }
 
-    const passwordsAreEqual = await bcrypt.compare(password, user.password);
+    const arePasswordsEqual = await bcrypt.compare(password, user.password);
 
-    if (!passwordsAreEqual) {
-      ctx.throw(401, errorConstants.WRONG_EMAIL_OR_PASSWORD);
+    if (!arePasswordsEqual) {
+      ctx.throw(401);
     }
 
     const refreshToken = await generateTokenForUser();
