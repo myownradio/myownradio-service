@@ -1,14 +1,28 @@
 import axios, { AxiosRequestConfig } from "axios";
-import UnauthorizedError from "./errors/UnauthorizedError";
-import UnknownError from "./errors/UnknownError";
+import { ILocaleKey } from "~/locales";
 import { SessionService } from "./sessionService";
 import isAccessTokenValid from "~/services/utils/isAccessTokenValid";
+import UnauthorizedError from "./errors/UnauthorizedError";
+import UnknownError from "./errors/UnknownError";
+import BadRequestError from "~/services/errors/BadRequestError";
 import EmailExistsError from "~/services/errors/EmailExistsError";
+
+type IHandledStatusCodes = 400 | 401 | 409;
+
+type IStatusCodeToLocaleKeyMap = Partial<
+  {
+    [S in IHandledStatusCodes]: ILocaleKey;
+  }
+>;
 
 export abstract class AbstractApiService {
   protected constructor(private urlPrefix: string, private sessionService: SessionService) {}
 
-  protected async makeRequest<T>(path: string, requestConfig: AxiosRequestConfig): Promise<T> {
+  protected async makeRequest<T>(
+    path: string,
+    requestConfig: AxiosRequestConfig,
+    statusMap: IStatusCodeToLocaleKeyMap = {},
+  ): Promise<T> {
     const url = `${this.urlPrefix}${path}`;
     const config: AxiosRequestConfig = {
       withCredentials: true,
@@ -26,21 +40,20 @@ export abstract class AbstractApiService {
     const responseText = typeof data === "string" ? data : JSON.stringify(data);
 
     if (status === 400) {
-      throw new UnauthorizedError(
-        `Server responded with "Bad request" on ${config.method} ${config.url} request. Original response - ${responseText}`,
-      );
+      throw new BadRequestError("Bad Request", "api_error400");
     }
 
     if (status === 401) {
-      throw new UnauthorizedError(`Unauthorized. Original response - ${responseText}`);
+      throw new UnauthorizedError("Unauthorized", "api_error401");
     }
 
     if (status === 409) {
-      throw new EmailExistsError(`Email already exists. Original response - ${responseText}`);
+      throw new EmailExistsError("Email Exists", "api_error409");
     }
 
     throw new UnknownError(
-      `Unknown error occurred on API request. Original status - ${status}, Original response - ${responseText}`,
+      `Unknown Error. Original status - ${status}, Original response - ${responseText}`,
+      "api_error",
     );
   }
 
@@ -65,10 +78,10 @@ export abstract class AbstractApiService {
   ): Promise<T> {
     const accessToken = this.sessionService.getAccessToken();
     if (accessToken === null) {
-      throw new UnauthorizedError(`No access token found. Request didn't made.`);
+      throw new UnauthorizedError(`No access token found`, "api_error401");
     }
     if (!isAccessTokenValid(accessToken)) {
-      throw new UnauthorizedError(`Invalid access token. Request didn't made.`);
+      throw new UnauthorizedError(`Invalid access token`, "api_error401");
     }
     const mergedHeaders = {
       Authorization: `Bearer ${accessToken}`,
