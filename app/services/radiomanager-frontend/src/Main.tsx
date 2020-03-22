@@ -7,11 +7,11 @@ import LoggedInUserProvider from "~/modules/LoggedInUser/LoggedInUserProvider";
 import messagesEn from "~/locales/english";
 import { config } from "~/config";
 
-const LoginPage = React.lazy(() => import("./routes/LoginPage"));
-
 const { routes } = config;
-
 const Loader: React.FC = () => <>Loading...</>;
+
+const LoginPage = React.lazy(() => import("./routes/LoginPage"));
+const SignupPage = React.lazy(() => import("./routes/SignupPage"));
 
 const Main: React.FC = () => {
   return (
@@ -20,6 +20,7 @@ const Main: React.FC = () => {
         <BrowserRouter>
           <Switch>
             <Route exact path={routes.login} component={LoginPage} />
+            <Route exact path={routes.signup} component={SignupPage} />
             <Route exact path={[routes.home, routes.test]}>
               <LoggedInUserProvider fallback={<Redirect to={routes.login} />}>
                 <AudioPlayerProvider>

@@ -7,6 +7,7 @@ export const config = {
     home: "/",
     test: "/test",
     login: "/login",
+    signup: "/signup",
   },
 };
 
