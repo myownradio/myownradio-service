@@ -5,7 +5,6 @@ import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
-import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
@@ -14,6 +13,7 @@ import Container from "@material-ui/core/Container";
 import ErrorBox from "~/components/ErrorBox";
 import { useStyles } from "./styles";
 import Copyright from "~/components/Copyright";
+import RouterLink from "~/components/RouterLink";
 import { config } from "~/config";
 import { FormattedMessage } from "react-intl";
 
@@ -108,9 +108,9 @@ const SignupForm: React.FC<ISignupFormProps> = ({
           </Button>
           <Grid container>
             <Grid item>
-              <Link href={config.routes.login} variant="body2">
+              <RouterLink href={config.routes.login} variant="body2">
                 <FormattedMessage id="ui_signup_form_login_link_title" />
-              </Link>
+              </RouterLink>
             </Grid>
           </Grid>
         </form>

@@ -2,8 +2,8 @@ import * as React from "react";
 import { useState } from "react";
 import { Redirect } from "react-router-dom";
 import LoggedInUserProvider from "~/modules/LoggedInUser/LoggedInUserProvider";
-import LoginForm from "~/routes/LoginPage/components/LoginForm";
 import { config } from "~/config";
+import SignupForm from "./components/SignupForm";
 import useHandleSubmit from "./use/useHandleSubmit";
 
 const SignupPage: React.FC = () => {
@@ -16,12 +16,12 @@ const SignupPage: React.FC = () => {
   return (
     <LoggedInUserProvider
       fallback={
-        <LoginForm
+        <SignupForm
           email={email}
           password={password}
           onEmailChange={setEmail}
           onPasswordChange={setPassword}
-          onLoginClicked={handleSubmit}
+          onSignupClicked={handleSubmit}
           errorMessage={errorMessage}
         />
       }

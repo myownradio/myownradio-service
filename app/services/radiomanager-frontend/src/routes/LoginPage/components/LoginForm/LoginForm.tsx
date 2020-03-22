@@ -14,6 +14,7 @@ import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import ErrorBox from "~/components/ErrorBox";
 import Copyright from "~/components/Copyright";
+import RouterLink from "~/components/RouterLink";
 import { useStyles } from "./styles";
 import { config } from "~/config";
 
@@ -113,9 +114,9 @@ const LoginForm: React.FC<ILoginFormProps> = ({
               </Link>
             </Grid>
             <Grid item>
-              <Link href={config.routes.signup} variant="body2">
+              <RouterLink href={config.routes.signup} variant="body2">
                 <FormattedMessage id="ui_login_form_signup_link_title" />
-              </Link>
+              </RouterLink>
             </Grid>
           </Grid>
         </form>
