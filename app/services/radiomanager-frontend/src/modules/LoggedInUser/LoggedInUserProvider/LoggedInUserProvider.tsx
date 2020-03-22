@@ -1,6 +1,6 @@
+import * as PropTypes from "prop-types";
 import * as React from "react";
 import { useEffect } from "react";
-import * as PropTypes from "prop-types";
 import { useDependencies } from "~/bootstrap/dependencies";
 import { ISuccessfulMeResponse } from "~/services/authApiService";
 import useAuthState from "./use/useAuthState";

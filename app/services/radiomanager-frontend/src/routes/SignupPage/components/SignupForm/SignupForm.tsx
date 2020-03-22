@@ -4,7 +4,6 @@ import Button from "@material-ui/core/Button";
 import Container from "@material-ui/core/Container";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Grid from "@material-ui/core/Grid";
-import Link from "@material-ui/core/Link";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
@@ -19,22 +18,22 @@ import { IErrorMessage } from "~/components/use/useErrorMessage";
 import { config } from "~/config";
 import { useStyles } from "./styles";
 
-type ILoginFormProps = {
+type ISignupFormProps = {
   email: string;
   password: string;
   errorMessage: IErrorMessage;
   onEmailChange: (email: string) => void;
   onPasswordChange: (password: string) => void;
-  onLoginClicked: () => void;
+  onSignupClicked: () => void;
 };
 
-const LoginForm: React.FC<ILoginFormProps> = ({
+const SignupForm: React.FC<ISignupFormProps> = ({
   email,
   password,
   errorMessage,
   onEmailChange,
   onPasswordChange,
-  onLoginClicked,
+  onSignupClicked,
 }) => {
   const classes = useStyles();
 
@@ -52,12 +51,12 @@ const LoginForm: React.FC<ILoginFormProps> = ({
     [onPasswordChange],
   );
 
-  const handleSignInClick = useCallback(
+  const handleSignupClick = useCallback(
     event => {
       event.preventDefault();
-      onLoginClicked();
+      onSignupClicked();
     },
-    [onLoginClicked],
+    [onSignupClicked],
   );
 
   return (
@@ -68,9 +67,9 @@ const LoginForm: React.FC<ILoginFormProps> = ({
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          <FormattedMessage id="ui_login_form_login_title" />
+          <FormattedMessage id="ui_signup_form_signup_title" />
         </Typography>
-        <form className={classes.form} noValidate onSubmit={handleSignInClick}>
+        <form className={classes.form} noValidate onSubmit={handleSignupClick}>
           <ErrorBox errorMessage={errorMessage} />
           <TextField
             value={email}
@@ -106,17 +105,12 @@ const LoginForm: React.FC<ILoginFormProps> = ({
             color="primary"
             className={classes.submit}
           >
-            <FormattedMessage id="ui_login_form_login_button_title" />
+            <FormattedMessage id="ui_signup_form_signup_button_title" />
           </Button>
           <Grid container>
-            <Grid item xs>
-              <Link href="#" variant="body2">
-                <FormattedMessage id="ui_login_form_forgot_link_title" />
-              </Link>
-            </Grid>
             <Grid item>
-              <RouterLink href={config.routes.signup} variant="body2">
-                <FormattedMessage id="ui_login_form_signup_link_title" />
+              <RouterLink href={config.routes.login} variant="body2">
+                <FormattedMessage id="ui_signup_form_login_link_title" />
               </RouterLink>
             </Grid>
           </Grid>
@@ -129,13 +123,13 @@ const LoginForm: React.FC<ILoginFormProps> = ({
   );
 };
 
-LoginForm.propTypes = {
+SignupForm.propTypes = {
   email: PropTypes.string.isRequired,
   password: PropTypes.string.isRequired,
   errorMessage: PropTypes.any,
   onEmailChange: PropTypes.func.isRequired,
   onPasswordChange: PropTypes.func.isRequired,
-  onLoginClicked: PropTypes.func.isRequired,
+  onSignupClicked: PropTypes.func.isRequired,
 };
 
-export default LoginForm;
+export default SignupForm;

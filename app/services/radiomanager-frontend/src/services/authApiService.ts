@@ -21,10 +21,31 @@ export class AuthApiService extends AbstractApiService {
   }
 
   public async login(email: string, password: string): Promise<ISuccessfulLoginResponse> {
-    return this.makeRequest<ISuccessfulLoginResponse>("login", {
-      method: "post",
-      data: { email, password },
-    });
+    return this.makeRequest<ISuccessfulLoginResponse>(
+      "login",
+      {
+        method: "post",
+        data: { email, password },
+      },
+      {
+        400: "api_login_error400",
+        401: "api_login_error401",
+      },
+    );
+  }
+
+  public async signup(email: string, password: string): Promise<void> {
+    await this.makeRequest<void>(
+      "signup",
+      {
+        method: "post",
+        data: { email, password },
+      },
+      {
+        400: "api_signup_error400",
+        409: "api_signup_error409",
+      },
+    );
   }
 
   public async refreshRefreshToken(refreshToken: string): Promise<ISuccessfulRefreshResponse> {

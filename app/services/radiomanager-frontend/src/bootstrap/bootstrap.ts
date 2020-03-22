@@ -1,6 +1,6 @@
 import { config } from "~/config";
-import render from "./render";
 import { createDependencies } from "./dependencies";
+import render from "./render";
 
 export default function bootstrap(Component: React.ComponentType): void {
   const dependencies = createDependencies(config);

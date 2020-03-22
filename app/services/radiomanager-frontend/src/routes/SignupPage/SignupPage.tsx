@@ -2,16 +2,14 @@ import * as React from "react";
 import { Redirect } from "react-router-dom";
 import { config } from "~/config";
 import LoggedInUserProvider from "~/modules/LoggedInUser/LoggedInUserProvider";
-import LoginForm from "./components/LoginForm";
+import SignupForm from "./components/SignupForm";
 
-const LoginPage: React.FC = () => {
+const SignupPage: React.FC = () => {
   return (
-    <LoggedInUserProvider fallback={<LoginForm />}>
+    <LoggedInUserProvider fallback={<SignupForm />}>
       <Redirect to={config.routes.home} />
     </LoggedInUserProvider>
   );
 };
 
-LoginPage.propTypes = {};
-
-export default LoginPage;
+export default SignupPage;

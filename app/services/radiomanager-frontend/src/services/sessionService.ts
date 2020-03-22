@@ -1,5 +1,5 @@
-import { StorageService } from "./storageService";
 import { AuthApiService } from "./authApiService";
+import { StorageService } from "./storageService";
 
 export interface SessionService {
   getAccessToken(): string | null;

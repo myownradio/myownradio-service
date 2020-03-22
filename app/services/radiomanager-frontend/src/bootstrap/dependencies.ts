@@ -1,8 +1,8 @@
 import { createContext, useContext } from "react";
-import { createStorageService, StorageService } from "~/services/storageService";
-import { AuthApiService } from "~/services/authApiService";
 import { IConfig } from "~/config";
+import { AuthApiService } from "~/services/authApiService";
 import { BasicSessionService, SessionService } from "~/services/sessionService";
+import { createStorageService, StorageService } from "~/services/storageService";
 
 export type AppDependencies = {
   authApiService: AuthApiService;

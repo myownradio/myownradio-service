@@ -1,7 +1,6 @@
-const errorConstants = require("@myownradio/independent/constants/error");
+const createAccessToken = require("../utils/createAccessToken");
 const generateTokenForUser = require("../utils/generateTokenForUser");
 const hasUpdatedRows = require("../utils/hasUpdatedRows");
-const createAccessToken = require("../utils/createAccessToken");
 
 function calculateExpirationThreshold(config) {
   const thresholdMillis = new Date().getTime() - config.AUTH_SERVER_REFRESH_TOKEN_LIFETIME * 1000;
@@ -13,7 +12,7 @@ module.exports = function createRefreshTokenRouteHandler(config, knexConnection)
     const { refresh_token: oldRefreshToken } = ctx.request.body;
 
     if (!oldRefreshToken) {
-      ctx.throw(400, errorConstants.REFRESH_TOKEN_REQUIRED);
+      ctx.throw(400);
     }
 
     const newRefreshToken = await generateTokenForUser();
@@ -29,7 +28,7 @@ module.exports = function createRefreshTokenRouteHandler(config, knexConnection)
         .returning("*");
 
       if (!hasUpdatedRows(updatedRows)) {
-        ctx.throw(401, errorConstants.INVALID_REFRESH_TOKEN);
+        ctx.throw(401);
       }
 
       const updatedRow = await trx("refresh_tokens")
