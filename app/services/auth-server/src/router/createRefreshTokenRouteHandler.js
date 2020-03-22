@@ -1,6 +1,5 @@
 const createAccessToken = require("../utils/createAccessToken");
 const generateTokenForUser = require("../utils/generateTokenForUser");
-const hasUpdatedRows = require("../utils/hasUpdatedRows");
 
 function calculateExpirationThreshold(config) {
   const thresholdMillis = new Date().getTime() - config.AUTH_SERVER_REFRESH_TOKEN_LIFETIME * 1000;
@@ -25,9 +24,9 @@ module.exports = function createRefreshTokenRouteHandler(config, knexConnection)
         .update({ refresh_token: newRefreshToken, updated_at: now })
         .where("updated_at", ">", threshold)
         .where({ refresh_token: oldRefreshToken })
-        .returning("*");
+        .count();
 
-      if (!hasUpdatedRows(updatedRows)) {
+      if (updatedRows === 0) {
         ctx.throw(401);
       }
 

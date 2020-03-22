@@ -2,6 +2,7 @@ import Link from "@material-ui/core/Link";
 import Typography from "@material-ui/core/Typography";
 import * as React from "react";
 import { FormattedMessage } from "react-intl";
+
 import { config } from "~/config";
 
 const Copyright: React.FC = () => {

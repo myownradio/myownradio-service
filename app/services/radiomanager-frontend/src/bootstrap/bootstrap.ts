@@ -1,4 +1,5 @@
 import { config } from "~/config";
+
 import { createDependencies } from "./dependencies";
 import render from "./render";
 

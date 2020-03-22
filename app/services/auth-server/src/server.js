@@ -1,4 +1,5 @@
 const knex = require("knex");
+
 const createApp = require("./app");
 const config = require("./config");
 

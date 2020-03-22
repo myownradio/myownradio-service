@@ -1,12 +1,8 @@
-import { AbstractApiService } from "./abstractApiService";
+import { AbstractApiWithSessionService } from "~/services/abstractApiWithSessionService";
+
 import { SessionService } from "./sessionService";
 
 export type ISuccessfulLoginResponse = {
-  refresh_token: string;
-  access_token: string;
-};
-
-export type ISuccessfulRefreshResponse = {
   refresh_token: string;
   access_token: string;
 };
@@ -15,7 +11,7 @@ export type ISuccessfulMeResponse = {
   email: string;
 };
 
-export class AuthApiService extends AbstractApiService {
+export class AuthApiService extends AbstractApiWithSessionService {
   constructor(authApiUrl: string, sessionService: SessionService) {
     super(authApiUrl, sessionService);
   }
@@ -46,13 +42,6 @@ export class AuthApiService extends AbstractApiService {
         409: "api_signup_error409",
       },
     );
-  }
-
-  public async refreshRefreshToken(refreshToken: string): Promise<ISuccessfulRefreshResponse> {
-    return this.makeRequest<ISuccessfulRefreshResponse>("refreshToken", {
-      method: "post",
-      data: { refresh_token: refreshToken },
-    });
   }
 
   public async me(): Promise<ISuccessfulMeResponse> {

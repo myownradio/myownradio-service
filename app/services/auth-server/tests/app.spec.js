@@ -1,5 +1,6 @@
 const knex = require("knex");
 const supertest = require("supertest");
+
 const createApp = require("../src/app");
 
 const migrationsDir = `${__dirname}/../../../migrations`;
@@ -232,5 +233,25 @@ describe("/auth", () => {
   // eslint-disable-next-line jest/expect-expect
   test("GET /auth - should fail if unauthorized", async () => {
     await request.get("/auth").expect(401);
+  });
+});
+
+describe("POST /forgotToken", () => {
+  it("should respond with 200 if success", async () => {
+    await request
+      .post("/forgotToken")
+      .send({ refresh_token: "8e6112346a91d135e3cb8bbad7f5363eae2108ff" })
+      .expect(200);
+  });
+
+  it("should respond with 400 if no refresh token specified", async () => {
+    await request.post("/forgotToken").expect(400);
+  });
+
+  it("should respond with 401 if refresh token is not valid", async () => {
+    await request
+      .post("/forgotToken")
+      .send({ refresh_token: "invalid_refresh_token" })
+      .expect(401);
   });
 });

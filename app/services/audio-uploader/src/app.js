@@ -1,4 +1,5 @@
 const Application = require("koa");
+
 const createRouter = require("./router");
 
 module.exports = function createApp(config) {

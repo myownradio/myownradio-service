@@ -1,7 +1,9 @@
 import * as React from "react";
 import { Redirect } from "react-router-dom";
+
 import { config } from "~/config";
 import LoggedInUserProvider from "~/modules/LoggedInUser/LoggedInUserProvider";
+
 import LoginForm from "./components/LoginForm";
 
 const LoginPage: React.FC = () => {

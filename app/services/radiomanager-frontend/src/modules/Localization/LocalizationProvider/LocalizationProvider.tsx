@@ -1,6 +1,7 @@
 import * as PropTypes from "prop-types";
 import * as React from "react";
 import { IntlProvider } from "react-intl";
+
 import messagesEn from "~/locales/english";
 
 const LocalizationProvider: React.FC = ({ children }) => {

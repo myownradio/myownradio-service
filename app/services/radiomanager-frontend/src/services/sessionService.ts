@@ -1,4 +1,6 @@
-import { AuthApiService } from "./authApiService";
+import { TokenService } from "~/services/tokenService";
+import nop from "~/services/utils/nop";
+
 import { StorageService } from "./storageService";
 
 export interface SessionService {
@@ -12,13 +14,7 @@ const ACCESS_TOKEN_STORAGE_KEY = "access_token";
 const REFRESH_TOKEN_STORAGE_KEY = "refresh_token";
 
 export class BasicSessionService implements SessionService {
-  private authApiClient: AuthApiService | undefined;
-
-  constructor(private storageService: StorageService) {}
-
-  public setAuthApiClient(apiAuthClient: AuthApiService): void {
-    this.authApiClient = apiAuthClient;
-  }
+  constructor(private storageService: StorageService, private tokenService: TokenService) {}
 
   public getAccessToken(): string | null {
     return this.storageService.get(ACCESS_TOKEN_STORAGE_KEY);
@@ -26,20 +22,26 @@ export class BasicSessionService implements SessionService {
 
   public async refreshToken(): Promise<void> {
     const refreshToken = this.storageService.get<string>(REFRESH_TOKEN_STORAGE_KEY);
-    if (refreshToken && this.authApiClient) {
-      const newTokens = await this.authApiClient.refreshRefreshToken(refreshToken);
+    if (refreshToken) {
+      const newTokens = await this.tokenService.refreshRefreshToken(refreshToken);
       this.storageService.put(REFRESH_TOKEN_STORAGE_KEY, newTokens.refresh_token);
       this.storageService.put(ACCESS_TOKEN_STORAGE_KEY, newTokens.access_token);
     }
   }
 
   public saveTokens(accessToken: string, refreshToken: string): void {
-    this.storageService.put("access_token", accessToken);
-    this.storageService.put("refresh_token", refreshToken);
+    this.storageService.put(ACCESS_TOKEN_STORAGE_KEY, accessToken);
+    this.storageService.put(REFRESH_TOKEN_STORAGE_KEY, refreshToken);
   }
 
   public clearTokens(): void {
-    this.storageService.delete("access_token");
-    this.storageService.delete("refresh_token");
+    const currentRefreshToken = this.storageService.get<string>(REFRESH_TOKEN_STORAGE_KEY);
+
+    if (currentRefreshToken) {
+      this.tokenService.forgotRefreshToken(currentRefreshToken).catch(nop);
+    }
+
+    this.storageService.delete(ACCESS_TOKEN_STORAGE_KEY);
+    this.storageService.delete(REFRESH_TOKEN_STORAGE_KEY);
   }
 }
