@@ -9,7 +9,7 @@ interface ErrorBoxProps {
 }
 
 const ErrorBox: React.FC<ErrorBoxProps> = ({ errorMessage }) => (
-  <Box height={48}>
+  <Box height={64}>
     {errorMessage && (
       <Alert severity="error">
         <FormattedMessage id={errorMessage} />
