@@ -1,4 +1,5 @@
 import { ILocaleKey } from "~/locales";
+
 import AbstractErrorWithReason, { IErrorReason } from "./AbstractErrorWithReason";
 
 export default class UnknownError extends AbstractErrorWithReason {

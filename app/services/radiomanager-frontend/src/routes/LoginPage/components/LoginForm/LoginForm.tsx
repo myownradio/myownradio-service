@@ -12,11 +12,13 @@ import * as PropTypes from "prop-types";
 import { useCallback } from "react";
 import * as React from "react";
 import { FormattedMessage } from "react-intl";
+
 import Copyright from "~/components/Copyright";
 import ErrorBox from "~/components/ErrorBox";
 import RouterLink from "~/components/RouterLink";
 import { IErrorMessage } from "~/components/use/useErrorMessage";
 import { config } from "~/config";
+
 import { useStyles } from "./styles";
 
 type ILoginFormProps = {

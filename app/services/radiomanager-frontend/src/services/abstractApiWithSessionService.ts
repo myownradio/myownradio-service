@@ -1,17 +1,10 @@
-import axios, { AxiosRequestConfig } from "axios";
-import { ILocaleKey } from "~/locales";
-import isAccessTokenValid from "~/services/utils/isAccessTokenValid";
-import { BadRequestError, EmailExistsError, UnknownError, UnauthorizedError } from "./errors";
-import { SessionService } from "./sessionService";
+import { AxiosRequestConfig } from "axios";
+
 import { AbstractApiService } from "~/services/abstractApiService";
+import isAccessTokenValid from "~/services/utils/isAccessTokenValid";
 
-type IStatusCodeToLocaleKeyMap = Partial<
-  {
-    [S in IHandledStatusCodes]: ILocaleKey;
-  }
->;
-
-type IHandledStatusCodes = 400 | 401 | 409;
+import { UnauthorizedError } from "./errors";
+import { SessionService } from "./sessionService";
 
 export abstract class AbstractApiWithSessionService extends AbstractApiService {
   protected constructor(urlPrefix: string, private sessionService: SessionService) {

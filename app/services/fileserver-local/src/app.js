@@ -1,4 +1,5 @@
 const Application = require("koa");
+
 const createPublicRouter = require("./router/publicRouter");
 const createSecureRouter = require("./router/secureRouter");
 

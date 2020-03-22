@@ -1,6 +1,7 @@
 import { validate as isValidEmail } from "email-validator";
 import { useCallback } from "react";
 import { useHistory } from "react-router-dom";
+
 import { useDependencies } from "~/bootstrap/dependencies";
 import { IErrorMessage } from "~/components/use/useErrorMessage";
 import { config } from "~/config";
