@@ -15,6 +15,7 @@ import ErrorBox from "~/components/ErrorBox";
 import { useStyles } from "./styles";
 import Copyright from "~/components/Copyright";
 import { config } from "~/config";
+import { FormattedMessage } from "react-intl";
 
 type ISignupFormProps = {
   email: string;
@@ -65,7 +66,7 @@ const SignupForm: React.FC<ISignupFormProps> = ({
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign up
+          <FormattedMessage id="ui_signup_form_signup_title" />
         </Typography>
         <form className={classes.form} noValidate onSubmit={handleSignupClick}>
           <ErrorBox errorMessage={errorMessage} />
@@ -77,7 +78,7 @@ const SignupForm: React.FC<ISignupFormProps> = ({
             required
             fullWidth
             id="email"
-            label="Email Address"
+            label={<FormattedMessage id="ui_common_email_address" />}
             name="email"
             autoComplete="email"
             type="email"
@@ -91,7 +92,7 @@ const SignupForm: React.FC<ISignupFormProps> = ({
             required
             fullWidth
             name="password"
-            label="Password"
+            label={<FormattedMessage id="ui_common_password" />}
             type="password"
             id="password"
             autoComplete="current-password"
@@ -103,12 +104,12 @@ const SignupForm: React.FC<ISignupFormProps> = ({
             color="primary"
             className={classes.submit}
           >
-            Sign Up
+            <FormattedMessage id="ui_signup_form_signup_button_title" />
           </Button>
           <Grid container>
             <Grid item>
               <Link href={config.routes.login} variant="body2">
-                {"Already have an account? Sign In"}
+                <FormattedMessage id="ui_signup_form_login_link_title" />
               </Link>
             </Grid>
           </Grid>
