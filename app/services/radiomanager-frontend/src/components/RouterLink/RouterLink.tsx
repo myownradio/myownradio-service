@@ -1,8 +1,8 @@
+import { Link, LinkProps } from "@material-ui/core";
+import * as PropTypes from "prop-types";
 import * as React from "react";
 import { useCallback } from "react";
-import * as PropTypes from "prop-types";
 import { useHistory } from "react-router-dom";
-import { Link, LinkProps } from "@material-ui/core";
 
 interface RouterLinkProps extends Omit<LinkProps, "onClick"> {
   href: string;

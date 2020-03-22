@@ -5,7 +5,7 @@ export type IErrorReason = "unauthorized" | "unknown" | "bad_request" | "email_e
 export default abstract class AbstractErrorWithReason extends Error {
   protected abstract reason: IErrorReason;
 
-  protected constructor(message: string, protected localeKey: ILocaleKey) {
+  protected constructor(message: string, readonly localeKey: ILocaleKey) {
     super(message);
   }
 }

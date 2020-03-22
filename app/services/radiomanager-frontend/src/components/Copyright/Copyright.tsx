@@ -1,8 +1,8 @@
-import * as React from "react";
-import Typography from "@material-ui/core/Typography";
 import Link from "@material-ui/core/Link";
-import { config } from "~/config";
+import Typography from "@material-ui/core/Typography";
+import * as React from "react";
 import { FormattedMessage } from "react-intl";
+import { config } from "~/config";
 
 const Copyright: React.FC = () => {
   return (

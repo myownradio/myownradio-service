@@ -1,13 +1,13 @@
-const Router = require("koa-router");
 const bodyparser = require("koa-bodyparser");
 const jwt = require("koa-jwt");
+const Router = require("koa-router");
 
-const createIndexRouteHandler = require("./createIndexRouteHandler");
-const createSignupRouteHandler = require("./createSignupRouteHandler");
-const createLoginRouteHandler = require("./createLoginRouteHandler");
-const createRefreshTokenRouteHandler = require("./createRefreshTokenRouteHandler");
-const createMeRouteHandler = require("./createMeRouteHandler");
 const createAuthRouteHandler = require("./createAuthRouteHandler");
+const createIndexRouteHandler = require("./createIndexRouteHandler");
+const createLoginRouteHandler = require("./createLoginRouteHandler");
+const createMeRouteHandler = require("./createMeRouteHandler");
+const createRefreshTokenRouteHandler = require("./createRefreshTokenRouteHandler");
+const createSignupRouteHandler = require("./createSignupRouteHandler");
 
 module.exports = function createRouter(config, knexConnection) {
   const router = new Router();

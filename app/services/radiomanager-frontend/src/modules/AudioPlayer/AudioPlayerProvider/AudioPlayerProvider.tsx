@@ -1,5 +1,5 @@
-import * as React from "react";
 import * as PropTypes from "prop-types";
+import * as React from "react";
 
 const AudioPlayerProvider: React.FC = ({ children }) => <>{children}</>;
 

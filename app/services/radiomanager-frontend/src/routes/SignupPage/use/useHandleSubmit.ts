@@ -1,17 +1,17 @@
-import { useDependencies } from "~/bootstrap/dependencies";
 import { useCallback } from "react";
 import { useHistory } from "react-router-dom";
-import { ISetter } from "~/interfaces";
-import BadRequestError from "~/services/errors/BadRequestError";
-import EmailExistsError from "~/services/errors/EmailExistsError";
+import { useDependencies } from "~/bootstrap/dependencies";
+import { IErrorMessage } from "~/components/use/useErrorMessage";
 import { config } from "~/config";
+import { ISetter } from "~/interfaces";
+import AbstractErrorWithReason from "~/services/errors/AbstractErrorWithReason";
 
 export default function useHandleSubmit(
   email: string,
   setEmail: ISetter<string>,
   password: string,
   setPassword: ISetter<string>,
-  setErrorMessage: ISetter<string | null>,
+  setErrorMessage: ISetter<IErrorMessage>,
 ): () => Promise<void> {
   const { authApiService } = useDependencies();
   const history = useHistory();
@@ -23,12 +23,10 @@ export default function useHandleSubmit(
       await authApiService.signup(email, password);
       history.push(config.routes.login);
     } catch (e) {
-      if (e instanceof BadRequestError) {
-        setErrorMessage("Email and password should be specified");
-      } else if (e instanceof EmailExistsError) {
-        setErrorMessage("Email used by someone else");
+      if (e instanceof AbstractErrorWithReason) {
+        setErrorMessage(e.localeKey);
       } else {
-        setErrorMessage("Unknown error occurred");
+        setErrorMessage("api_error");
       }
     }
   }, [email, password, authApiService, setErrorMessage, history]);

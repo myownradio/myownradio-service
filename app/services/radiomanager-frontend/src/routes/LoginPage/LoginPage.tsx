@@ -1,15 +1,16 @@
 import * as React from "react";
 import { useState } from "react";
 import { Redirect } from "react-router-dom";
+import useErrorMessage from "~/components/use/useErrorMessage";
 import { config } from "~/config";
 import LoggedInUserProvider from "~/modules/LoggedInUser/LoggedInUserProvider";
-import useHandleSubmit from "~/routes/LoginPage/use/useHandleSubmit";
 import LoginForm from "./components/LoginForm";
+import useHandleSubmit from "./use/useHandleSubmit";
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState<null | string>(null);
+  const [errorMessage, setErrorMessage] = useErrorMessage();
 
   const handleSubmit = useHandleSubmit(email, setEmail, password, setPassword, setErrorMessage);
 

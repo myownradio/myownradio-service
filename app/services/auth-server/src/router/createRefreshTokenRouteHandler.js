@@ -1,6 +1,6 @@
+const createAccessToken = require("../utils/createAccessToken");
 const generateTokenForUser = require("../utils/generateTokenForUser");
 const hasUpdatedRows = require("../utils/hasUpdatedRows");
-const createAccessToken = require("../utils/createAccessToken");
 
 function calculateExpirationThreshold(config) {
   const thresholdMillis = new Date().getTime() - config.AUTH_SERVER_REFRESH_TOKEN_LIFETIME * 1000;

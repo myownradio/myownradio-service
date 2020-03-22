@@ -1,8 +1,8 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { ILocaleKey } from "~/locales";
 import isAccessTokenValid from "~/services/utils/isAccessTokenValid";
-import { SessionService } from "./sessionService";
 import { BadRequestError, EmailExistsError, UnknownError, UnauthorizedError } from "./errors";
+import { SessionService } from "./sessionService";
 
 type IStatusCodeToLocaleKeyMap = Partial<
   {

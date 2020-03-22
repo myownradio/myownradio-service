@@ -13,7 +13,7 @@
     "prettier/@typescript-eslint",
     "plugin:prettier/recommended"
   ],
-  "plugins": ["react-hooks", "jest"],
+  "plugins": ["react-hooks", "jest", "import"],
   "env": {
     "jest": true
   },
@@ -21,7 +21,19 @@
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
     "jest/expect-expect": "off",
-    "@typescript-eslint/camelcase": "off"
+    "@typescript-eslint/camelcase": "off",
+    "import/order": ["error", {
+      "alphabetize": {
+        "order": "asc",
+        "caseInsensitive": true
+      },
+      "pathGroups": [
+        {
+          "pattern": "~/**",
+          "group": "external"
+        }
+      ]
+    }]
   },
   "overrides": [
     {

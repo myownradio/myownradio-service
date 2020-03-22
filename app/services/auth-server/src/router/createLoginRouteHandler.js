@@ -1,5 +1,4 @@
 const bcrypt = require("bcryptjs");
-const errorConstants = require("@myownradio/independent/constants/error");
 const createAccessToken = require("../utils/createAccessToken");
 const generateTokenForUser = require("../utils/generateTokenForUser");
 

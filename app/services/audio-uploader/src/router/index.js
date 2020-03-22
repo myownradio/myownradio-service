@@ -1,9 +1,9 @@
-const Router = require("koa-router");
 const body = require("koa-body");
 const jwtMiddleware = require("koa-jwt");
+const Router = require("koa-router");
 
-const createUploadHandler = require("./upload");
 const createGetHandler = require("./get");
+const createUploadHandler = require("./upload");
 
 module.exports = function createRouter(config) {
   const router = new Router();

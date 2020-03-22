@@ -1,26 +1,27 @@
-import * as React from "react";
+import Avatar from "@material-ui/core/Avatar";
+import Box from "@material-ui/core/Box";
+import Button from "@material-ui/core/Button";
+import Container from "@material-ui/core/Container";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import Grid from "@material-ui/core/Grid";
+import TextField from "@material-ui/core/TextField";
+import Typography from "@material-ui/core/Typography";
+import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import * as PropTypes from "prop-types";
 import { useCallback } from "react";
-import Avatar from "@material-ui/core/Avatar";
-import Button from "@material-ui/core/Button";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
-import Grid from "@material-ui/core/Grid";
-import Box from "@material-ui/core/Box";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import Typography from "@material-ui/core/Typography";
-import Container from "@material-ui/core/Container";
-import ErrorBox from "~/components/ErrorBox";
-import { useStyles } from "./styles";
-import Copyright from "~/components/Copyright";
-import RouterLink from "~/components/RouterLink";
-import { config } from "~/config";
+import * as React from "react";
 import { FormattedMessage } from "react-intl";
+import Copyright from "~/components/Copyright";
+import ErrorBox from "~/components/ErrorBox";
+import RouterLink from "~/components/RouterLink";
+import { IErrorMessage } from "~/components/use/useErrorMessage";
+import { config } from "~/config";
+import { useStyles } from "./styles";
 
 type ISignupFormProps = {
   email: string;
   password: string;
-  errorMessage: null | string;
+  errorMessage: IErrorMessage;
   onEmailChange: (email: string) => void;
   onPasswordChange: (password: string) => void;
   onSignupClicked: () => void;
@@ -125,7 +126,7 @@ const SignupForm: React.FC<ISignupFormProps> = ({
 SignupForm.propTypes = {
   email: PropTypes.string.isRequired,
   password: PropTypes.string.isRequired,
-  errorMessage: PropTypes.string,
+  errorMessage: PropTypes.any,
   onEmailChange: PropTypes.func.isRequired,
   onPasswordChange: PropTypes.func.isRequired,
   onSignupClicked: PropTypes.func.isRequired,

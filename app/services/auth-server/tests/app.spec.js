@@ -1,6 +1,6 @@
+const errorConstants = require("@myownradio/independent/constants/error");
 const knex = require("knex");
 const supertest = require("supertest");
-const errorConstants = require("@myownradio/independent/constants/error");
 const createApp = require("../src/app");
 
 const migrationsDir = `${__dirname}/../../../migrations`;

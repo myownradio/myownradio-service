@@ -1,11 +1,11 @@
 import * as React from "react";
 import { Suspense } from "react";
-import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import { IntlProvider } from "react-intl";
+import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
+import { config } from "~/config";
+import messagesEn from "~/locales/english";
 import AudioPlayerProvider from "~/modules/AudioPlayer/AudioPlayerProvider";
 import LoggedInUserProvider from "~/modules/LoggedInUser/LoggedInUserProvider";
-import messagesEn from "~/locales/english";
-import { config } from "~/config";
 
 const { routes } = config;
 const Loader: React.FC = () => <>Loading...</>;

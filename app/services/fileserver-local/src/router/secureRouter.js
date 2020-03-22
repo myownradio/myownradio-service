@@ -1,10 +1,10 @@
-const Router = require("koa-router");
 const body = require("koa-body");
 const jwtMiddleware = require("koa-jwt");
+const Router = require("koa-router");
+const check = require("../middleware/checkPermission");
+const createDeleteHandler = require("./routeHandlers/secure/del");
 const createGetHandler = require("./routeHandlers/secure/get");
 const createPostHandler = require("./routeHandlers/secure/post");
-const createDeleteHandler = require("./routeHandlers/secure/del");
-const check = require("../middleware/checkPermission");
 
 module.exports = function createSecureRouter(config) {
   const secureRouter = new Router();

@@ -1,27 +1,28 @@
-import * as React from "react";
+import Avatar from "@material-ui/core/Avatar";
+import Box from "@material-ui/core/Box";
+import Button from "@material-ui/core/Button";
+import Container from "@material-ui/core/Container";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import Grid from "@material-ui/core/Grid";
+import Link from "@material-ui/core/Link";
+import TextField from "@material-ui/core/TextField";
+import Typography from "@material-ui/core/Typography";
+import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import * as PropTypes from "prop-types";
 import { useCallback } from "react";
+import * as React from "react";
 import { FormattedMessage } from "react-intl";
-import Avatar from "@material-ui/core/Avatar";
-import Button from "@material-ui/core/Button";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
-import Link from "@material-ui/core/Link";
-import Grid from "@material-ui/core/Grid";
-import Box from "@material-ui/core/Box";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import Typography from "@material-ui/core/Typography";
-import Container from "@material-ui/core/Container";
-import ErrorBox from "~/components/ErrorBox";
 import Copyright from "~/components/Copyright";
+import ErrorBox from "~/components/ErrorBox";
 import RouterLink from "~/components/RouterLink";
-import { useStyles } from "./styles";
+import { IErrorMessage } from "~/components/use/useErrorMessage";
 import { config } from "~/config";
+import { useStyles } from "./styles";
 
 type ILoginFormProps = {
   email: string;
   password: string;
-  errorMessage: null | string;
+  errorMessage: IErrorMessage;
   onEmailChange: (email: string) => void;
   onPasswordChange: (password: string) => void;
   onLoginClicked: () => void;
@@ -131,7 +132,7 @@ const LoginForm: React.FC<ILoginFormProps> = ({
 LoginForm.propTypes = {
   email: PropTypes.string.isRequired,
   password: PropTypes.string.isRequired,
-  errorMessage: PropTypes.string,
+  errorMessage: PropTypes.any,
   onEmailChange: PropTypes.func.isRequired,
   onPasswordChange: PropTypes.func.isRequired,
   onLoginClicked: PropTypes.func.isRequired,
