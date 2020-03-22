@@ -1,12 +1,11 @@
 import * as React from "react";
 import * as PropTypes from "prop-types";
 import { useCallback } from "react";
+import { FormattedMessage } from "react-intl";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
@@ -14,20 +13,8 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import ErrorBox from "~/components/ErrorBox";
+import Copyright from "~/components/Copyright";
 import { useStyles } from "./styles";
-
-function Copyright(): JSX.Element {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {"Copyright © "}
-      <Link color="inherit" href="https://myownradio.biz/">
-        Myownradio
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
 
 type ILoginFormProps = {
   email: string;
@@ -78,7 +65,7 @@ const LoginForm: React.FC<ILoginFormProps> = ({
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign in
+          <FormattedMessage id="ui_login_form_login_title" />
         </Typography>
         <form className={classes.form} noValidate onSubmit={handleSignInClick}>
           <ErrorBox errorMessage={errorMessage} />
@@ -90,7 +77,7 @@ const LoginForm: React.FC<ILoginFormProps> = ({
             required
             fullWidth
             id="email"
-            label="Email Address"
+            label={<FormattedMessage id="ui_common_email_address" />}
             name="email"
             autoComplete="email"
             type="email"
@@ -104,14 +91,10 @@ const LoginForm: React.FC<ILoginFormProps> = ({
             required
             fullWidth
             name="password"
-            label="Password"
+            label={<FormattedMessage id="ui_common_password" />}
             type="password"
             id="password"
             autoComplete="current-password"
-          />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
           />
           <Button
             type="submit"
@@ -120,17 +103,17 @@ const LoginForm: React.FC<ILoginFormProps> = ({
             color="primary"
             className={classes.submit}
           >
-            Sign In
+            <FormattedMessage id="ui_login_form_login_button_title" />
           </Button>
           <Grid container>
             <Grid item xs>
               <Link href="#" variant="body2">
-                Forgot password?
+                <FormattedMessage id="ui_login_form_forgot_link_title" />
               </Link>
             </Grid>
             <Grid item>
               <Link href="#" variant="body2">
-                {"Don't have an account? Sign Up"}
+                <FormattedMessage id="ui_login_form_signup_link_title" />
               </Link>
             </Grid>
           </Grid>
