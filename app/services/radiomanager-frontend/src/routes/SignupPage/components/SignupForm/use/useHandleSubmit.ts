@@ -1,3 +1,4 @@
+import { validate as isValidEmail } from "email-validator";
 import { useCallback } from "react";
 import { useHistory } from "react-router-dom";
 import { useDependencies } from "~/bootstrap/dependencies";
@@ -18,6 +19,16 @@ export default function useHandleSubmit(
 
   return useCallback(async () => {
     setErrorMessage(null);
+
+    if (!isValidEmail(email)) {
+      setErrorMessage("ui_signup_validator_email_invalid_message");
+      return;
+    }
+
+    if (password.length < 8) {
+      setErrorMessage("ui_signup_validator_password_short_message");
+      return;
+    }
 
     try {
       await authApiService.signup(email, password);

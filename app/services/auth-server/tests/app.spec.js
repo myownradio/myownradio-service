@@ -1,4 +1,3 @@
-const errorConstants = require("@myownradio/independent/constants/error");
 const knex = require("knex");
 const supertest = require("supertest");
 const createApp = require("../src/app");
@@ -44,23 +43,47 @@ test("GET / - should respond with OK", async () => {
   await request.get("/").expect(200);
 });
 
-describe("/signup", () => {
-  // eslint-disable-next-line jest/expect-expect
-  test("POST /signup - should fail when body has no email or password", async () => {
-    await request.post("/signup").expect(400, errorConstants.EMAIL_AND_PASSWORD_REQUIRED);
-
-    await request
-      .post("/signup")
-      .send({ email: "someone@mail.com" })
-      .expect(400);
-
+describe("on POST /signup", () => {
+  test("should fail with 400 if no email specified", async () => {
     await request
       .post("/signup")
       .send({ password: "somepassword" })
       .expect(400);
   });
 
-  test("POST /signup - should create user", async () => {
+  test("should fail with 400 if email is not invalid", async () => {
+    await request
+      .post("/signup")
+      .send({ email: "invalid_email", password: "somepassword" })
+      .expect(400);
+  });
+
+  test("should fail with 400 if no password specified", async () => {
+    await request
+      .post("/signup")
+      .send({ email: "someone@mail.com" })
+      .expect(400);
+  });
+
+  test("should fail with 400 if password is too short", async () => {
+    await request
+      .post("/signup")
+      .send({ email: "someone@mail.com", password: "short" })
+      .expect(400);
+  });
+
+  test("should fail with 400 when request body is empty", async () => {
+    await request.post("/signup").expect(400);
+  });
+
+  test("should fail with 409 if email already used by someone else", async () => {
+    await request
+      .post("/signup")
+      .send({ email: "foo@bar.baz", password: "somepassword" })
+      .expect(409);
+  });
+
+  test("should create user", async () => {
     await request
       .post("/signup")
       .send({ email: "someone@mail.com", password: "somepassword" })
@@ -77,17 +100,6 @@ describe("/signup", () => {
       created_at: expect.any(String),
       updated_at: expect.any(String),
     });
-  });
-
-  // eslint-disable-next-line jest/expect-expect
-  test("POST /signup - should fail if email already used by someone else", async () => {
-    await request
-      .post("/signup")
-      .send({
-        email: "foo@bar.baz",
-        password: "123",
-      })
-      .expect(409);
   });
 });
 

@@ -12,9 +12,13 @@ export default {
   ui_login_form_login_button_title: "Login",
   ui_login_form_forgot_link_title: "Forgot password?",
   ui_login_form_signup_link_title: "Don't have an account? Sign Up",
+  ui_login_validator_empty_message: "Your email and password should not be empty",
   ui_signup_form_signup_title: "Sign up",
   ui_signup_form_signup_button_title: "Sign Up",
   ui_signup_form_login_link_title: "Already have an account? Sign In",
+  ui_signup_validator_email_invalid_message:
+    "It seems that you entered invalid email address. Please correct it and try again.",
+  ui_signup_validator_password_short_message: "Your password should be at least 6 characters long.",
   ui_common_email_address: "Email Address",
   ui_common_password: "Password",
   ui_common_copyright: "Copyright",

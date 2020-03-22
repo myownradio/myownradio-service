@@ -19,6 +19,11 @@ export default function useHandleSubmit(
   return useCallback(async () => {
     setErrorMessage(null);
 
+    if (!email || !password) {
+      setErrorMessage("ui_login_validator_empty_message");
+      return;
+    }
+
     try {
       const { access_token, refresh_token } = await authApiService.login(email, password);
       sessionService.saveTokens(access_token, refresh_token);

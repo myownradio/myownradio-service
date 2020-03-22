@@ -1,12 +1,21 @@
 const errorConstants = require("@myownradio/independent/constants/error");
 const bcrypt = require("bcryptjs");
+const { validate: isValidEmail } = require("email-validator");
 
 module.exports = function createSignupRouteHandler(config, knexConnection) {
   return async ctx => {
     const { email, password } = ctx.request.body;
 
     if (!email || !password) {
-      ctx.throw(400, errorConstants.EMAIL_AND_PASSWORD_REQUIRED);
+      ctx.throw(400);
+    }
+
+    if (password.length < 8) {
+      ctx.throw(400);
+    }
+
+    if (!isValidEmail(email)) {
+      ctx.throw(400);
     }
 
     const passwordHash = await bcrypt.hash(password, 10);
