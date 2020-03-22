@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import * as React from "react";
-import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
+import { BrowserRouter, Switch, Route, Redirect, Link } from "react-router-dom";
 
 import { config } from "~/config";
 import AudioPlayer from "~/modules/AudioPlayer";
@@ -27,7 +27,7 @@ const Main: React.FC = () => {
               <LoggedInUser.Provider fallback={<Redirect to={routes.login} />}>
                 <AudioPlayer.Provider>
                   <Route exact path={routes.home}>
-                    Home Route
+                    <Link to={routes.logout}>Logout</Link>
                   </Route>
                   <Route exact path={routes.test}>
                     Test Route
