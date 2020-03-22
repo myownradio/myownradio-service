@@ -2,4 +2,11 @@
 New version of myownradio.biz service without platform.
 
 ### Services Diargam
-![Diagrag](https://github.com/pldin601/myownradio-service/blob/master/myownradio.png?raw=true)
+![Diagram](https://github.com/pldin601/myownradio-service/blob/master/myownradio.png?raw=true)
+
+
+#### WSL
+Ignore file mode for git repository:
+```shell
+git config core.fileMode false
+```
