@@ -1,5 +1,4 @@
 import { AbstractApiService } from "./abstractApiService";
-import { SessionService } from "./sessionService";
 
 export type ISuccessfulRefreshResponse = {
   refresh_token: string;
@@ -7,8 +6,8 @@ export type ISuccessfulRefreshResponse = {
 };
 
 export class TokenService extends AbstractApiService {
-  constructor(authApiUrl: string, sessionService: SessionService) {
-    super(authApiUrl, sessionService);
+  constructor(authApiUrl: string) {
+    super(authApiUrl);
   }
 
   public async refreshRefreshToken(refreshToken: string): Promise<ISuccessfulRefreshResponse> {

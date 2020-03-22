@@ -1,4 +1,5 @@
-import { AbstractApiService } from "./abstractApiService";
+import { AbstractApiWithSessionService } from "~/services/abstractApiWithSessionService";
+
 import { SessionService } from "./sessionService";
 
 export type ISuccessfulLoginResponse = {
@@ -10,7 +11,7 @@ export type ISuccessfulMeResponse = {
   email: string;
 };
 
-export class AuthApiService extends AbstractApiService {
+export class AuthApiService extends AbstractApiWithSessionService {
   constructor(authApiUrl: string, sessionService: SessionService) {
     super(authApiUrl, sessionService);
   }
