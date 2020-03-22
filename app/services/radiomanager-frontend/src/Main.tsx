@@ -1,9 +1,8 @@
 import * as React from "react";
 import { Suspense } from "react";
-import { IntlProvider } from "react-intl";
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
+import * as Localization from "~/components/Localization";
 import { config } from "~/config";
-import messagesEn from "~/locales/english";
 import AudioPlayerProvider from "~/modules/AudioPlayer/AudioPlayerProvider";
 import LoggedInUserProvider from "~/modules/LoggedInUser/LoggedInUserProvider";
 
@@ -15,7 +14,7 @@ const SignupPage = React.lazy(() => import("./routes/SignupPage"));
 
 const Main: React.FC = () => {
   return (
-    <IntlProvider locale="en" messages={messagesEn}>
+    <Localization.Provider>
       <Suspense fallback={<Loader />}>
         <BrowserRouter>
           <Switch>
@@ -37,7 +36,7 @@ const Main: React.FC = () => {
           </Switch>
         </BrowserRouter>
       </Suspense>
-    </IntlProvider>
+    </Localization.Provider>
   );
 };
 
