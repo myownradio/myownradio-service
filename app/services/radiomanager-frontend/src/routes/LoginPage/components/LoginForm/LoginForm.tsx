@@ -15,6 +15,7 @@ import Container from "@material-ui/core/Container";
 import ErrorBox from "~/components/ErrorBox";
 import Copyright from "~/components/Copyright";
 import { useStyles } from "./styles";
+import { config } from "~/config";
 
 type ILoginFormProps = {
   email: string;
@@ -112,7 +113,7 @@ const LoginForm: React.FC<ILoginFormProps> = ({
               </Link>
             </Grid>
             <Grid item>
-              <Link href="#" variant="body2">
+              <Link href={config.routes.signup} variant="body2">
                 <FormattedMessage id="ui_login_form_signup_link_title" />
               </Link>
             </Grid>
