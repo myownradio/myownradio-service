@@ -5,6 +5,7 @@ export interface SessionService {
   getAccessToken(): string | null;
   refreshToken(): Promise<void>;
   saveTokens(accessToken: string, refreshToken: string): void;
+  clearTokens(): void;
 }
 
 const ACCESS_TOKEN_STORAGE_KEY = "access_token";
@@ -35,5 +36,10 @@ export class BasicSessionService implements SessionService {
   public saveTokens(accessToken: string, refreshToken: string): void {
     this.storageService.put("access_token", accessToken);
     this.storageService.put("refresh_token", refreshToken);
+  }
+
+  public clearTokens(): void {
+    this.storageService.delete("access_token");
+    this.storageService.delete("refresh_token");
   }
 }

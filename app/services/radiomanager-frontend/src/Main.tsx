@@ -1,6 +1,7 @@
-import * as React from "react";
 import { Suspense } from "react";
+import * as React from "react";
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
+
 import { config } from "~/config";
 import AudioPlayer from "~/modules/AudioPlayer";
 import Localization from "~/modules/Localization";
@@ -11,6 +12,7 @@ const Loader: React.FC = () => <>Loading...</>;
 
 const LoginPage = React.lazy(() => import("./routes/LoginPage"));
 const SignupPage = React.lazy(() => import("./routes/SignupPage"));
+const LogoutPage = React.lazy(() => import("./routes/LogoutPage"));
 
 const Main: React.FC = () => {
   return (
@@ -20,6 +22,7 @@ const Main: React.FC = () => {
           <Switch>
             <Route exact path={routes.login} component={LoginPage} />
             <Route exact path={routes.signup} component={SignupPage} />
+            <Route exact path={routes.logout} component={LogoutPage} />
             <Route exact path={[routes.home, routes.test]}>
               <LoggedInUser.Provider fallback={<Redirect to={routes.login} />}>
                 <AudioPlayer.Provider>
