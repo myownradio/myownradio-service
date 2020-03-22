@@ -22,18 +22,23 @@
     "react-hooks/exhaustive-deps": "warn",
     "jest/expect-expect": "off",
     "@typescript-eslint/camelcase": "off",
-    "import/order": ["error", {
-      "alphabetize": {
-        "order": "asc",
-        "caseInsensitive": true
-      },
-      "pathGroups": [
-        {
-          "pattern": "~/**",
-          "group": "external"
-        }
-      ]
-    }]
+    "import/order": [
+      "error",
+      {
+        "groups": ["builtin", "external", "internal", "unknown", ["parent", "sibling", "index"]],
+        "alphabetize": {
+          "order": "asc",
+          "caseInsensitive": false
+        },
+        "pathGroups": [
+          {
+            "pattern": "~/**",
+            "group": "unknown"
+          }
+        ],
+        "newlines-between": "always"
+      }
+    ]
   },
   "overrides": [
     {
