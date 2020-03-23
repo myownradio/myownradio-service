@@ -9,7 +9,7 @@ module.exports = function createSignupRouteHandler(config, knexConnection) {
       ctx.throw(400);
     }
 
-    if (password.length < 8) {
+    if (password.length < 6) {
       ctx.throw(400);
     }
 
