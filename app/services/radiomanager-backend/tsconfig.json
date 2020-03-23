@@ -1,11 +1,14 @@
 {
-  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "sourceRoot": "src",
+    "rootDir": "src",
     "outDir": "dist",
-    "baseUrl": "src"
-  },
-  "include": [
-    "src"
-  ]
+    "sourceRoot": "src",
+    "inlineSourceMap": true,
+    "baseUrl": "src",
+    "lib": [
+      "dom",
+      "es2015",
+      "es2017.object"
+    ]
+  }
 }
