@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "lint": "eslint ./src/**/*.ts",
+    "lint": "eslint src --ext .js,.jsx,.ts,.tsx",
     "build": "rm -rf dist && ncc build src/server.ts -o dist -s",
     "dev": "ts-node-dev --respawn src/server.ts",
     "start": "node dist/index.js"

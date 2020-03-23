@@ -14,7 +14,7 @@ setup-terraform:
 
 setup-services:
 	(cd app && yarn install)
-
+	(cd services/radiomanager-backend && yarn install)
 
 # Application Section
 run-tests:
@@ -22,6 +22,7 @@ run-tests:
 
 run-linter:
 	(cd app && yarn lint)
+	(cd services/radiomanager-backend && yarn lint)
 	(cd terraform && terraform fmt -check)
 
 # Terraform Section
