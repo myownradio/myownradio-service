@@ -101,6 +101,30 @@ jobs:
       - name: Push image
         run: make push
 
+  build-radiomanager-backend:
+    needs: terraform
+    name: Build "radiomanager-backend" image
+    runs-on: ubuntu-latest
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      SERVICE: radiomanager-backend
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+      - name: Download terraform artifacts
+        uses: actions/download-artifact@v1
+        with:
+          name: tf
+          path: terraform/.terraform
+      - name: Authenticate Docker on AWS
+        run: aws ecr get-login --no-include-email --region eu-central-1 | sh
+      - name: Build image
+        run: make build-service
+      - name: Push image
+        run: make push
+
   build-migration:
     needs: terraform
     name: Build "migration" image
@@ -203,6 +227,7 @@ jobs:
       - terraform
       - build-frontend-proxy
       - build-radiomanager-frontend
+      - build-radiomanager-backend
       - build-migration
       - build-auth-server
       - build-fileserver-local
@@ -239,24 +264,17 @@ jobs:
           ssh_private_key: 'deployer_private_key.value'
           ssh_public_key: 'deployer_public_key.value'
           ip_address: 'mor_master_ip_address.value'
+          url: 'url.value'
 
           # images here
           radiomanager_frontend_image: 'radiomanager-frontend_image_url.value'
+          radiomanager_backend_image: 'radiomanager-backend_image_url.value'
           frontend_proxy_image: 'frontend-proxy_image_url.value'
           migration_image: 'migration_image_url.value'
           auth_server_image: 'auth-server_image_url.value'
           fileserver_local_image: 'fileserver-local_image_url.value'
           audio_uploader_image: 'audio-uploader_image_url.value'
           # end of images
-
-          url: 'url.value'
-#      - name: Authenticate Remote Docker on AWS
-#        uses: appleboy/ssh-action@master
-#        with:
-#          host: ${{ steps.parsed_output.outputs.ip_address }}
-#          username: deployer
-#          key: ${{ steps.parsed_output.outputs.ssh_private_key }}
-#          script: aws ecr get-login --region eu-central-1 --no-include-email | sh
       - name: Deploy stack to Production
         uses: pldin601/docker-swarm-deploy-action@master
         with:
@@ -267,16 +285,17 @@ jobs:
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           args: stack deploy --with-registry-auth --compose-file docker-compose.prod.yml mor
         env:
+          IMAGE_TAG: ${{ github.sha }}
+
           # images here
           RADIOMANAGER_FRONTEND_IMAGE_URL: ${{ steps.parsed_output.outputs.radiomanager_frontend_image }}
+          RADIOMANAGER_BACKEND_IMAGE_URL: ${{ steps.parsed_output.outputs.radiomanager_backend_image }}
           FRONTEND_PROXY_IMAGE_URL: ${{ steps.parsed_output.outputs.frontend_proxy_image }}
           MIGRATION_IMAGE_URL: ${{ steps.parsed_output.outputs.migration_image }}
           AUTH_SERVER_IMAGE_URL: ${{ steps.parsed_output.outputs.auth_server_image }}
           FILESERVER_LOCAL_IMAGE_URL: ${{ steps.parsed_output.outputs.fileserver_local_image }}
           AUDIO_UPLOADER_IMAGE_URL: ${{ steps.parsed_output.outputs.audio_uploader_image }}
           # end of images
-
-          IMAGE_TAG: ${{ github.sha }}
       - name: Add comment to commit
         uses: peter-evans/commit-comment@v1.0.1
         with:

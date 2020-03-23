@@ -4,7 +4,7 @@ GIT_COMMIT = $(shell git log -n 1 --pretty=format:'%H')
 PULL_LATEST = no
 
 APPS := radiomanager-frontend migration auth-server fileserver-local audio-uploader
-SERVICES := frontend-proxy
+SERVICES := frontend-proxy radiomanager-backend
 LATEST_TAG_ONLY := migration
 
 setup: setup-terraform setup-services
@@ -14,14 +14,15 @@ setup-terraform:
 
 setup-services:
 	(cd app && yarn install)
-
+	(cd services/radiomanager-backend && yarn install)
 
 # Application Section
 run-tests:
 	(cd app && yarn test)
 
 run-linter:
-	(cd app && yarn lint)
+	#(cd app && yarn lint)
+	(cd services/radiomanager-backend && yarn lint)
 	(cd terraform && terraform fmt -check)
 
 # Terraform Section

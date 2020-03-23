@@ -45,3 +45,11 @@ resource "aws_ecr_repository" "radiomanager-frontend" {
 output "radiomanager-frontend_image_url" {
   value = aws_ecr_repository.radiomanager-frontend.repository_url
 }
+
+resource "aws_ecr_repository" "radiomanager-backend" {
+  name = "myownradio/radiomanager-backend"
+}
+
+output "radiomanager-backend_image_url" {
+  value = aws_ecr_repository.radiomanager-backend.repository_url
+}

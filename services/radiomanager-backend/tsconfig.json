@@ -1,7 +1,14 @@
 {
   "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "rootDir": "src",
+    "outDir": "dist",
+
     "sourceMap": true,
     "removeComments": true,
+    "skipLibCheck": true,
 
     "strict": true,
     "noImplicitAny": true,
