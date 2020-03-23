@@ -26,7 +26,7 @@ export default function useHandleSubmit(
       return;
     }
 
-    if (password.length < 8) {
+    if (password.length < 6) {
       setErrorMessage("ui_signup_validator_password_short_message");
       return;
     }
