@@ -121,7 +121,7 @@ jobs:
       - name: Authenticate Docker on AWS
         run: aws ecr get-login --no-include-email --region eu-central-1 | sh
       - name: Build image
-        run: make build-service
+        run: make build-app
       - name: Push image
         run: make push
 

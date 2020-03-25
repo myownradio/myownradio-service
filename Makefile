@@ -3,8 +3,8 @@ IMAGE_URL = $(shell cd terraform && terraform output $(SERVICE)_image_url)
 GIT_COMMIT = $(shell git log -n 1 --pretty=format:'%H')
 PULL_LATEST = no
 
-APPS := radiomanager-frontend migration auth-server fileserver-local audio-uploader
-SERVICES := frontend-proxy radiomanager-backend
+APPS := radiomanager-frontend migration auth-server fileserver-local audio-uploader radiomanager-backend
+SERVICES := frontend-proxy
 LATEST_TAG_ONLY := migration
 
 setup: setup-terraform setup-services
@@ -14,7 +14,6 @@ setup-terraform:
 
 setup-services:
 	(cd app && yarn install)
-	(cd services/radiomanager-backend && yarn install)
 
 # Application Section
 run-tests:
@@ -22,7 +21,6 @@ run-tests:
 
 run-linter:
 	#(cd app && yarn lint)
-	(cd services/radiomanager-backend && yarn lint)
 	(cd terraform && terraform fmt -check)
 
 # Terraform Section
