@@ -94,6 +94,7 @@ services:
   # Migration
   migration:
     image: ${MIGRATION_IMAGE_URL}:latest
+    command: npx knex migrate:latest
     environment:
       MIGRATION_DATABASE_URL: postgres://mor:mor@postgres:5432/mor
     depends_on:
