@@ -1,22 +1,20 @@
-FROM node:12
+FROM node:13
+
+WORKDIR /usr/app/
+
+COPY package.json yarn.lock ./
+COPY services/fileserver-local/package.json services/fileserver-local/
+COPY libs/shared/package.json libs/shared/
+RUN ["yarn", "install", "--non-interactive", "--pure-lockfile"]
+
+COPY services/fileserver-local services/fileserver-local
+COPY libs/shared libs/shared
+RUN ["yarn", "install", "--production"]
+
+FROM node:13-alpine
 
 ENV NODE_ENV=production
 
-WORKDIR /usr/app
+COPY --from=0 /usr/app /usr/app
 
-RUN chown 1000 /usr/app
-
-USER 1000
-
-COPY --chown=1000 package.json yarn.lock ./
-COPY --chown=1000 services/fileserver-local/package.json services/fileserver-local/
-
-COPY --chown=1000 libs/shared/package.json libs/shared/
-COPY --chown=1000 libs/independent/package.json libs/independent/
-
-RUN yarn workspace @myownradio/fileserver-local install --production --non-interactive --pure-lockfile
-
-COPY --chown=1000 services/fileserver-local/ services/fileserver-local/
-COPY --chown=1000 libs/ libs/
-
-CMD ["yarn", "workspace", "@myownradio/fileserver-local", "start"]
+CMD ["node", "/usr/app/services/fileserver-local/src/server.js"]
