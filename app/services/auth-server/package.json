@@ -15,7 +15,6 @@
   },
   "dependencies": {
     "@koa/cors": "^3.0.0",
-    "@myownradio/independent": "1.0.0",
     "@myownradio/shared": "1.0.0",
     "bcryptjs": "^2.4.3",
     "email-validator": "^2.0.4",
