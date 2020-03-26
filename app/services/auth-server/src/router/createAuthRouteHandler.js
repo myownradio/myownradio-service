@@ -1,5 +1,3 @@
-const errorConstants = require("@myownradio/independent/constants/error");
-
 module.exports = function createAuthRouteHandler(config, knexConnection) {
   return async ctx => {
     const { uid } = ctx.state.user;
@@ -8,7 +6,7 @@ module.exports = function createAuthRouteHandler(config, knexConnection) {
       .first();
 
     if (!userDetails) {
-      ctx.throw(401, errorConstants.UNAUTHORIZED);
+      ctx.throw(401);
     }
 
     ctx.set("User-Id", userDetails.id);
