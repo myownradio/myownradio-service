@@ -1,21 +1,21 @@
-FROM node:12
+FROM node:13
+
+WORKDIR /usr/app/
+
+COPY package.json yarn.lock ./
+COPY services/migration/package.json services/migration/
+RUN ["yarn", "install", "--non-interactive", "--pure-lockfile"]
+
+COPY services/migration/knexfile.js services/migration/
+RUN ["yarn", "install", "--production"]
+
+
+FROM node:13-alpine
 
 ENV NODE_ENV=production
 
-MAINTAINER Roman Lakhtadyr <roman.lakhtadyr@gmail.com>
+COPY --from=0 /usr/app /usr/app
 
-WORKDIR /usr/app
+WORKDIR /usr/app/services/migration/
 
-RUN chown 1000 /usr/app
-
-USER 1000
-
-COPY --chown=1000 package.json yarn.lock ./
-COPY --chown=1000 services/migration/package.json services/migration/
-
-RUN yarn workspace @myownradio/migration --production --non-interactive --pure-lockfile
-
-COPY --chown=1000 services/migration/knexfile.js services/migration/
-COPY --chown=1000 migrations/ migrations/
-
-CMD ["yarn", "workspace", "@myownradio/migration", "migrate"]
+CMD echo 'To run migrations please run this image with following command: npx knex migrate:latest'

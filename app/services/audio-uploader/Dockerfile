@@ -1,22 +1,20 @@
-FROM node:12
+FROM node:13
+
+WORKDIR /usr/app/
+
+COPY package.json yarn.lock ./
+COPY services/audio-uploader/package.json services/audio-uploader/
+COPY libs/shared/package.json libs/shared/
+RUN ["yarn", "install", "--non-interactive", "--pure-lockfile"]
+
+COPY services/audio-uploader services/audio-uploader
+COPY libs/shared libs/shared
+RUN ["yarn", "install", "--production"]
+
+FROM node:13-alpine
 
 ENV NODE_ENV=production
 
-WORKDIR /usr/app
+COPY --from=0 /usr/app /usr/app
 
-RUN chown 1000 /usr/app
-
-USER 1000
-
-COPY --chown=1000 package.json yarn.lock ./
-COPY --chown=1000 services/audio-uploader/package.json services/audio-uploader/
-
-COPY --chown=1000 libs/shared/package.json libs/shared/
-COPY --chown=1000 libs/independent/package.json libs/independent/
-
-RUN yarn workspace @myownradio/audio-uploader install --production --non-interactive --pure-lockfile
-
-COPY --chown=1000 services/audio-uploader/ services/audio-uploader/
-COPY --chown=1000 libs/ libs/
-
-CMD ["yarn", "workspace", "@myownradio/audio-uploader", "start"]
+CMD ["node", "/usr/app/services/audio-uploader/src/server.js"]
