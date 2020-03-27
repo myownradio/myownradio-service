@@ -2,7 +2,7 @@
   "name": "@myownradio/audio-uploader",
   "version": "1.0.0",
   "scripts": {
-    "start": "node src/server.js",
+    "start": "node dist/index.js",
     "dev": "nodemon src/server.js",
     "build": "rm -rf dist && ncc build src/server.js -o dist -s",
     "test": "echo \"Error: no test specified\" && exit 1"

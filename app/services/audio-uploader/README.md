@@ -1,6 +1,28 @@
 # audio-uploader
 
-Service used to upload user audio files in supported formats.
+Service used to handle uploads of audio files.
+
+## Requirements
+* Mac / Linux / Windows
+* NodeJS 13 & yarn
+
+## Install & Setup
+```shell script
+yarn install
+yarn build
+```
+
+This service requires some environment variables for operation.
+You can create `.env` file and use `env-cmd` to start project in local environment. 
+
+## Run
+```shell script
+# clean way
+yarn start
+
+# read env from .env file
+npx env-cmd yarn start
+```
 
 ## Environment Variables
 
@@ -46,7 +68,7 @@ Upload audio file and return audio file metadata.
 
 ### Error Response
 
-**Condition** : If provided audio file is invalid, e.g. a format is not supported, file corrupted or audio file attached wasn't attached to request.
+**Condition** : If provided audio file is invalid, e.g. a format is not supported, file corrupted or audio file wasn't attached to request.
 
 **Code** : `400 Bad Request`
 
