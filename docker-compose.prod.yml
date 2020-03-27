@@ -79,7 +79,7 @@ services:
   audio-uploader:
     image: ${AUDIO_UPLOADER_IMAGE_URL}:${IMAGE_TAG}
     environment:
-      AUDIO_UPLOADER_ROOT_FOLDER: /usr/content
+      AUDIO_UPLOADER_ROOT_DIR: /usr/content
       AUDIO_UPLOADER_TOKEN_SECRET: me9IQW0atAzzE5nYKC6EiibAareI0to1
       PORT: 8080
     volumes:
