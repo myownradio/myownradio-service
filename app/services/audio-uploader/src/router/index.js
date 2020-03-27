@@ -2,20 +2,22 @@ const body = require("koa-body");
 const jwtMiddleware = require("koa-jwt");
 const Router = require("koa-router");
 
-const createGetHandler = require("./get");
 const createUploadHandler = require("./upload");
 
 module.exports = function createRouter(config) {
   const router = new Router();
 
-  router.get("*", createGetHandler(config));
-
   router.post(
     "/upload",
-    jwtMiddleware({ secret: config.AUDIO_UPLOADER_TOKEN_SECRET }),
+    jwtMiddleware({
+      secret: config.tokenSecret,
+    }),
     body({
       multipart: true,
-      formidable: { hash: "sha1", uploadDir: config.AUDIO_UPLOADER_TEMP_DIR },
+      formidable: {
+        hash: "sha1",
+        uploadDir: config.tempDir,
+      },
     }),
     createUploadHandler(config),
   );

@@ -1,24 +1,31 @@
 const os = require("os");
 
-const { assert } = require("@myownradio/shared");
+class Config {
+  /**
+   * @param env {{
+   *   PORT?: string,
+   *   AUDIO_UPLOADER_ROOT_DIR?: string,
+   *   AUDIO_UPLOADER_TOKEN_SECRET?: string,
+   *   AUDIO_UPLOADER_TEMP_DIR?: string
+   * }}
+   */
+  constructor(env) {
+    this.httpServerPort = env.PORT ? parseInt(env.PORT, 10) : 8080;
 
-const {
-  AUDIO_UPLOADER_ROOT_FOLDER,
-  AUDIO_UPLOADER_TOKEN_SECRET,
-  AUDIO_UPLOADER_TEMP_DIR = os.tmpdir(),
-  PORT,
-} = process.env;
+    if (!env.AUDIO_UPLOADER_ROOT_DIR) {
+      throw new Error("Environment variable AUDIO_UPLOADER_ROOT_DIR is required");
+    }
 
-const config = {
-  AUDIO_UPLOADER_ROOT_FOLDER,
-  AUDIO_UPLOADER_TOKEN_SECRET,
-  AUDIO_UPLOADER_TEMP_DIR,
-  PORT,
-};
+    this.rootDir = env.AUDIO_UPLOADER_ROOT_DIR;
 
-assert(typeof config.PORT === "string");
-assert(typeof config.AUDIO_UPLOADER_ROOT_FOLDER === "string");
-assert(typeof config.AUDIO_UPLOADER_TOKEN_SECRET === "string");
-assert(typeof config.AUDIO_UPLOADER_TEMP_DIR === "string");
+    if (!env.AUDIO_UPLOADER_TOKEN_SECRET) {
+      throw new Error("Environment variable AUDIO_UPLOADER_TOKEN_SECRET is required");
+    }
 
-module.exports = config;
+    this.tokenSecret = env.AUDIO_UPLOADER_TOKEN_SECRET;
+
+    this.tempDir = env.AUDIO_UPLOADER_TEMP_DIR || os.tmpdir();
+  }
+}
+
+module.exports = { Config };
