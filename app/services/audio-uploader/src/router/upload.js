@@ -17,12 +17,9 @@ module.exports = function createUploadHandler(config) {
     const extension = path.extname(name);
     const hashPath = hashToPath(hash);
 
-    const [metadata, { size }] = await Promise.all([
-      getMediaFileMetadata(source.path),
-      fs.promises.stat(source.path),
-    ]);
+    const [metadata, { size }] = await Promise.all([getMediaFileMetadata(source.path), fs.promises.stat(source.path)]);
 
-    const filepath = path.join(config.AUDIO_UPLOADER_ROOT_FOLDER, `${hashPath}${extension}`);
+    const filepath = path.join(config.rootDir, `${hashPath}${extension}`);
 
     if (await fileExists(filepath)) {
       await fs.promises.unlink(source.path);
