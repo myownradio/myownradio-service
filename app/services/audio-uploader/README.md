@@ -16,7 +16,7 @@ Service used to upload user audio files in supported formats.
 
 Upload audio file and return audio file metadata.
 
-**URL** : `/api/upload`
+**URL** : `/upload`
 
 **Method** : `POST`
 

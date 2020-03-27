@@ -1,15 +1,12 @@
 const fs = require("fs");
 const path = require("path");
 
-const { hashToPath } = require("@myownradio/shared").utils;
-const { fileExists } = require("@myownradio/shared").fsHelpers;
-
-const getMediaFileMetadata = require("../utils/getMediaFileMetadata");
+const { fileExists, hashToPath, getMediaFileMetadata } = require("../utils");
 
 module.exports = function createUploadHandler(config) {
   return async ctx => {
     if (!(ctx.request.files || {}).source) {
-      ctx.throw(400, "No file uploaded");
+      ctx.throw(400);
     }
 
     const { source } = ctx.request.files;
@@ -27,12 +24,6 @@ module.exports = function createUploadHandler(config) {
       await fs.promises.rename(source.path, filepath);
     }
 
-    ctx.body = {
-      hash,
-      size,
-      name,
-      path: hashPath,
-      ...metadata,
-    };
+    ctx.body = { hash, size, name, path: hashPath, ...metadata };
   };
 };

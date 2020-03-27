@@ -1,5 +1,32 @@
+const fs = require("fs");
+const path = require("path");
+
 const { path: ffprobePath } = require("ffprobe-static");
 const fluent = require("fluent-ffmpeg");
+
+/**
+ * Converts hash to path with sub directories.
+ *
+ * @param {string} hash
+ * @return {string}
+ */
+function hashToPath(hash) {
+  const parts = [hash.slice(0, 1), hash.slice(1, 2), hash];
+  return parts.join(path.sep);
+}
+
+/**
+ * Checks whether file exists.
+ *
+ * @param {string} path
+ * @return {Promise<boolean>}
+ */
+async function fileExists(path) {
+  return fs.promises.access(path, fs.constants.F_OK).then(
+    () => true,
+    () => false,
+  );
+}
 
 /**
  * @typedef {{
@@ -19,7 +46,7 @@ const fluent = require("fluent-ffmpeg");
  * @param {string} filepath
  * @return {Promise<Metadata>}
  */
-module.exports = function getMediaFileMetadata(filepath) {
+function getMediaFileMetadata(filepath) {
   return new Promise((resolve, reject) => {
     fluent(filepath)
       .setFfprobePath(ffprobePath)
@@ -39,4 +66,6 @@ module.exports = function getMediaFileMetadata(filepath) {
         }
       });
   });
-};
+}
+
+module.exports = { hashToPath, fileExists, getMediaFileMetadata };
