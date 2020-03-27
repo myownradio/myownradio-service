@@ -4,6 +4,7 @@
   "scripts": {
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
+    "build": "rm -rf dist && ncc build src/server.js -o dist -s",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "private": true,
@@ -19,9 +20,11 @@
     "koa-router": "~8.0.6"
   },
   "devDependencies": {
+    "@zeit/ncc": "^0.22.0",
     "jest": "^25.1.0",
     "nodemon": "~2.0.2",
     "supertest": "^4.0.2",
+    "typescript": "^3.8.3",
     "yarn": "^1.21.1"
   }
 }
