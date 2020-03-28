@@ -25,7 +25,7 @@ module.exports = function createUploadHandler(config) {
       await fs.promises.rename(source.path, filepath);
     }
 
-    const body = { hash, size, name, path: hashPath, ...metadata };
+    const body = { hash, size, name, ...metadata };
     const rawBody = JSON.stringify(body);
     const signature = createSignatureForMetadata(rawBody, config.tokenSecret);
 

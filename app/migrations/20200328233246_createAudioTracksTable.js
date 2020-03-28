@@ -20,7 +20,6 @@ exports.up = function up(knex) {
     table.integer("bitrate").notNullable();
     table.decimal("duration", 24, 8).notNullable();
     table.string("format").notNullable();
-    table.string("path").notNullable();
 
     table.timestamps();
   });

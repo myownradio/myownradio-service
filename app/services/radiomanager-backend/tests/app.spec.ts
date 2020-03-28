@@ -77,9 +77,9 @@ describe("/channels/create", () => {
 
 describe("/channels/:id/tracks/add", () => {
   const rawMetadata =
-    '{"hash":"d021bc63dd8f6dee822baa1b2a69b4e9a4d97a7c","size":32622,"name":"sine.mp3","path":"d/0/d021bc63dd8f6dee822baa1b2a69b4e9a4d97a7c","duration":1.07475,"bitrate":242824,"format":"MP2/3 (MPEG audio layer 2/3)","artist":"Sine Artist","title":"Sine Title","album":"Sine Album","genre":"Sine Genre"}';
+    '{"hash":"d021bc63dd8f6dee822baa1b2a69b4e9a4d97a7c","size":32622,"name":"sine.mp3","duration":1.07475,"bitrate":242824,"format":"MP2/3 (MPEG audio layer 2/3)","artist":"Sine Artist","title":"Sine Title","album":"Sine Album","genre":"Sine Genre"}';
 
-  const signature = "MTU4NTQyOTgwODY5My45YmEzNTcyYjI5YzZiOThjOTFhNDdlOGFhNzM3ZGFjZmVmMGY0NDFiMjU2MzM4MmVhZmIxMzIxMTlhMDIxZGQ0";
+  const signature = "MTU4NTQzMjcwMzUyMy4yNjYzMWYzZGUxY2ZlZDk4YTgxMjEzNTk3MWNhNTA5ZWQzYmI1ZDFjNzA4YTVlZmNjNGJhNWM3NTI2NGZkMWVk";
 
   it("should respond with 200 on successful post request", async () => {
     await request
