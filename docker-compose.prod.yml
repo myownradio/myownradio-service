@@ -17,10 +17,11 @@ services:
     ports:
       - 443:443
     depends_on:
-      - frontend
+      - radiomanager-frontend
+      - radiomanager-backend
       - auth-server
-      - fileserver-local
       - audio-uploader
+      - fileserver-local
     deploy:
       replicas: 1
       update_config:
