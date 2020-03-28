@@ -35,8 +35,7 @@
             "pattern": "~/**",
             "group": "unknown"
           }
-        ],
-        "newlines-between": "always"
+        ]
       }
     ]
   },

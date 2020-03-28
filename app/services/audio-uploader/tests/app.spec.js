@@ -18,6 +18,7 @@ beforeEach(() => {
     AUDIO_UPLOADER_TOKEN_SECRET: "secret",
     AUDIO_UPLOADER_METADATA_SECRET: "secret",
     AUDIO_UPLOADER_TEMP_DIR: tempDirectory,
+    AUDIO_UPLOADER_ALLOWED_ORIGIN: '*',
     PORT: 8080,
   });
 

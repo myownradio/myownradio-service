@@ -6,4 +6,4 @@ Used ports in development environment
 12002   auth-server http
 12003   overlay-proxy http
 12004   email-sender http
-
+12005   radiomanager-backend http

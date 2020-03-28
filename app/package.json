@@ -3,18 +3,14 @@
   "version": "1.0.0",
   "scripts": {
     "dev:fileserver-local": "env-cmd -f env/fileserver-local.env -- yarn --cwd services/fileserver-local run dev",
-    "start:fileserver-local": "env-cmd -f env/fileserver-local.env -- yarn --cwd services/fileserver-local start",
     "dev:audio-uploader": "env-cmd -f env/audio-uploader.env -- yarn --cwd services/audio-uploader run dev",
-    "start:audio-uploader": "env-cmd -f env/audio-uploader.env -- yarn --cwd services/audio-uploader start",
     "dev:auth-server": "env-cmd -f env/auth-server.env -- yarn --cwd services/auth-server run dev",
-    "start:auth-server": "env-cmd -f env/auth-server.env -- yarn --cwd services/auth-server start",
     "dev:overlay-proxy": "env-cmd -f env/overlay-proxy.env -- yarn --cwd services/overlay-proxy run dev",
-    "start:overlay-proxy": "env-cmd -f env/overlay-proxy.env -- yarn --cwd services/overlay-proxy start",
     "dev:radiomanager-frontend": "env-cmd -f env/radiomanager-frontend.env -- yarn --cwd services/radiomanager-frontend start",
-    "start:radiomanager-frontend": "env-cmd -f env/radiomanager-frontend.env -- yarn --cwd services/radiomanager-frontend start",
+    "dev:radiomanager-backend": "env-cmd -f env/radiomanager-backend.env -- yarn --cwd services/radiomanager-backend run dev",
     "dev": "concurrently -n w: npm:dev:*",
     "migrate": "knex migrate:latest",
-    "test": "jest --coverage",
+    "test": "jest",
     "lint": "eslint {services,libs}/*/src --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "eslint {services,libs}/*/src --ext .js,.jsx,.ts,.tsx --fix"
   },
@@ -28,6 +24,7 @@
     "libs/*"
   ],
   "devDependencies": {
+    "@types/jest": "^25.1.4",
     "@typescript-eslint/eslint-plugin": "^2.23.0",
     "@typescript-eslint/parser": "^2.23.0",
     "concurrently": "^5.1.0",
@@ -46,6 +43,7 @@
     "knex": "^0.20.9",
     "pg": "^7.18.1",
     "prettier": "^1.19.1",
+    "ts-jest": "^25.2.1",
     "typescript": "^3.8.3"
   },
   "dependencies": {
