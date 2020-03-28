@@ -17,10 +17,11 @@ services:
     ports:
       - 443:443
     depends_on:
-      - frontend
+      - radiomanager-frontend
+      - radiomanager-backend
       - auth-server
-      - fileserver-local
       - audio-uploader
+      - fileserver-local
     deploy:
       replicas: 1
       update_config:
@@ -81,6 +82,7 @@ services:
     environment:
       AUDIO_UPLOADER_ROOT_DIR: /usr/content
       AUDIO_UPLOADER_TOKEN_SECRET: me9IQW0atAzzE5nYKC6EiibAareI0to1
+      AUDIO_UPLOADER_METADATA_SECRET: kYzuRIRETBVZnyvDUrMT
       PORT: 8080
     volumes:
       - audio-uploader:/usr/content

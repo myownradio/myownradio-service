@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 
-const { fileExists, hashToPath, getMediaFileMetadata } = require("../utils");
+const { fileExists, hashToPath, getMediaFileMetadata, createSignatureForMetadata } = require("../utils");
 
 module.exports = function createUploadHandler(config) {
   return async ctx => {
@@ -24,6 +24,13 @@ module.exports = function createUploadHandler(config) {
       await fs.promises.rename(source.path, filepath);
     }
 
-    ctx.body = { hash, size, name, path: hashPath, ...metadata };
+    const body = { hash, size, name, path: hashPath, ...metadata };
+    const rawBody = JSON.stringify(body);
+    const signature = createSignatureForMetadata(rawBody, config.tokenSecret);
+
+    ctx.set("signature", signature);
+    ctx.set("content-type", "application/json");
+
+    ctx.body = rawBody;
   };
 };
