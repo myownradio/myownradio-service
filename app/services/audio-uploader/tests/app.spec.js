@@ -24,10 +24,6 @@ beforeEach(() => {
   app = createApp(config);
 });
 
-afterEach(() => {
-  // todo delete uploads
-});
-
 test("POST /upload - upload new audio file", async () => {
   const filepath = `${__dirname}/__fixtures__/sine.mp3`;
 
