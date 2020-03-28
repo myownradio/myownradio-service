@@ -6,6 +6,7 @@ class Config {
    *   PORT?: string,
    *   AUDIO_UPLOADER_ROOT_DIR?: string,
    *   AUDIO_UPLOADER_TOKEN_SECRET?: string,
+   *   AUDIO_UPLOADER_METADATA_SECRET?: string,
    *   AUDIO_UPLOADER_TEMP_DIR?: string
    * }}
    */
@@ -23,6 +24,12 @@ class Config {
     }
 
     this.tokenSecret = env.AUDIO_UPLOADER_TOKEN_SECRET;
+
+    if (!env.AUDIO_UPLOADER_METADATA_SECRET) {
+      throw new Error("Environment variable AUDIO_UPLOADER_METADATA_SECRET is required");
+    }
+
+    this.metadataSecret = env.AUDIO_UPLOADER_METADATA_SECRET;
 
     this.tempDir = env.AUDIO_UPLOADER_TEMP_DIR || os.tmpdir();
   }
