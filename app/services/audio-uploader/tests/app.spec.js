@@ -27,7 +27,7 @@ beforeEach(() => {
 test("POST /upload - upload new audio file", async () => {
   const filepath = `${__dirname}/__fixtures__/sine.mp3`;
 
-  const { headers, text, request: r } = await request(app.callback())
+  const { headers, text } = await request(app.callback())
     .post("/upload")
     .set("Authorization", `Bearer ${authenticationToken}`)
     .attach("source", filepath)
