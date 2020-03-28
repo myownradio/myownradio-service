@@ -6,5 +6,8 @@
     "moduleResolution": "node",
     "rootDir": "src",
     "outDir": "dist"
-  }
+  },
+  "exclude": [
+    "tests"
+  ]
 }
