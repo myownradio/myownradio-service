@@ -35,6 +35,7 @@ npx env-cmd yarn start
 | AUDIO_UPLOADER_ROOT_DIR        | Directory on server where to store uploaded audio files. |               |
 | AUDIO_UPLOADER_TOKEN_SECRET    | Secret for JWT token validation.                         |               |
 | AUDIO_UPLOADER_METADATA_SECRET | Secret for making metadata signature.                    |               |
+| AUDIO_UPLOADER_ALLOWED_ORIGIN  | Parameter required for cross-origin resource sharing.    |               |
 
 ## Endpoints
 
