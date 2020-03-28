@@ -1,3 +1,4 @@
+const { createHmac } = require("crypto");
 const fs = require("fs");
 const path = require("path");
 
@@ -26,6 +27,55 @@ async function fileExists(path) {
     () => true,
     () => false,
   );
+}
+
+/**
+ * Creates hmac digest using sha256 algorithm.
+ *
+ * @param data
+ * @param secret
+ * @return {string}
+ */
+function createHmacDigest(data, secret) {
+  return createHmac("sha256", secret)
+    .update(data)
+    .digest("hex");
+}
+
+/**
+ * Generates signature for provided metadata.
+ *
+ * @param rawMetadata {string}
+ * @param secret {string}
+ * @return {string}
+ */
+function createSignatureForMetadata(rawMetadata, secret) {
+  const signedAt = Date.now();
+  const payload = `${signedAt}.${rawMetadata}`;
+  const hmacDigest = createHmacDigest(payload, secret);
+  return btoa(`${signedAt}.${hmacDigest}`);
+}
+
+/**
+ * Validates that signature of provided metadata is correct and is not expired.
+ *
+ * @param rawMetadata {string}
+ * @param signature {string}
+ * @param secret {string}
+ * @param ttl {number}
+ * @return {boolean}
+ */
+function verifySignatureOfMetadata(rawMetadata, signature, secret, ttl) {
+  const decodedSignature = atob(signature);
+  const [extractedSignedAt, extractedHmacDigest] = decodedSignature.split(".", 2);
+  const payload = `${extractedSignedAt}.${rawMetadata}`;
+  const hmacDigest = createHmacDigest(payload, secret);
+
+  if (extractedHmacDigest !== hmacDigest) {
+    return false;
+  }
+
+  return Date.now() < extractedSignedAt + ttl;
 }
 
 /**
@@ -68,4 +118,4 @@ function getMediaFileMetadata(filepath) {
   });
 }
 
-module.exports = { hashToPath, fileExists, getMediaFileMetadata };
+module.exports = { hashToPath, fileExists, getMediaFileMetadata, createSignatureForMetadata, verifySignatureOfMetadata };
