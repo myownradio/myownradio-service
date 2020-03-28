@@ -52,6 +52,8 @@ Upload audio file and return audio file metadata.
 
 **Code** : `200 OK`
 
+**Headers** : `Signature`
+
 **Content example**
 
 ```json
