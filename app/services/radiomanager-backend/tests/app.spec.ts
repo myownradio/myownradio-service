@@ -74,3 +74,16 @@ describe("/channels/create", () => {
     await request.post("/channels/create").expect(401);
   });
 });
+
+describe("/channels/:id/tracks/add", () => {
+  it("should respond with 200 on successful post request", async () => {
+    const metadata = {};
+    const signature = "";
+
+    await request
+      .post("/channels/1/tracks/add")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .send({ metadata, signature })
+      .expect(200, {});
+  });
+});
