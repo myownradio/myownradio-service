@@ -15,6 +15,7 @@ FROM node:13-alpine
 ENV NODE_ENV=production
 
 COPY --from=0 /usr/app /usr/app
+COPY migrations /usr/app/migrations
 
 WORKDIR /usr/app/services/migration/
 
