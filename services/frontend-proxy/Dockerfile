@@ -44,7 +44,7 @@ server {\n\
         proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;\n\
         proxy_set_header   X-Forwarded-Host $server_name;\n\
     }\n\
-    location /api/auth {\n\
+    location /api/audio-uploader {\n\
         rewrite            ^/api/audio-uploader/(.*) /$1 break;\n\
         proxy_pass         http://audio-uploader:8080;\n\
         proxy_redirect     off;\n\
