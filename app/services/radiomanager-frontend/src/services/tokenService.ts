@@ -11,10 +11,11 @@ export class TokenService extends AbstractApiService {
   }
 
   public async refreshRefreshToken(refreshToken: string): Promise<ISuccessfulRefreshResponse> {
-    return this.makeRequest<ISuccessfulRefreshResponse>("refreshToken", {
+    const { body } = await this.makeRequest<ISuccessfulRefreshResponse>("refreshToken", {
       method: "post",
       data: { refresh_token: refreshToken },
     });
+    return body;
   }
 
   public async forgotRefreshToken(refreshToken: string): Promise<void> {
