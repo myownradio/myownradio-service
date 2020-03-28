@@ -27,7 +27,6 @@ export default function createChannel(_: Config, knexConnection: knex) {
 
       ctx.body = {
         id: channelId,
-        title: requestBody.title,
       };
     } catch (e) {
       if (e.message.match(/constraint/)) {

@@ -48,6 +48,7 @@ test("POST /upload - upload new audio file", async () => {
       path: "d/0/d021bc63dd8f6dee822baa1b2a69b4e9a4d97a7c",
     });
 
+  console.log(text)
   expect(verifySignatureOfMetadata(text, headers.signature, config.metadataSecret, 30000)).toBeTruthy();
 });
 

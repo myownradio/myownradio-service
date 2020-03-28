@@ -4,6 +4,7 @@ export class Config {
   readonly metadataSecret: string;
   readonly databaseUrl: string;
   readonly databaseClient: string;
+  readonly metadataSignatureTtl: number;
 
   constructor(env: { [name: string]: string | undefined }) {
     if (!env.RADIOMANAGER_BACKEND_TOKEN_SECRET) {
@@ -29,6 +30,13 @@ export class Config {
     }
 
     this.databaseClient = env.RADIOMANAGER_BACKEND_DATABASE_CLIENT;
+
+    if (!env.RADIOMANAGER_BACKEND_METADATA_SIGNATURE_TTL) {
+      throw new Error("Environment variable RADIOMANAGER_BACKEND_METADATA_SIGNATURE_TTL is required");
+    }
+
+    // Used parseFloat instead of parseInt to correctly parse Infinity value
+    this.metadataSignatureTtl = parseFloat(env.RADIOMANAGER_BACKEND_METADATA_SIGNATURE_TTL);
 
     this.httpServerPort = env.PORT ? parseInt(env.PORT, 10) : 8080;
   }
