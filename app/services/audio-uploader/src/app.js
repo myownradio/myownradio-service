@@ -7,7 +7,7 @@ module.exports = function createApp(config) {
   const app = new Application();
   const router = createRouter(config);
 
-  app.use(cors({ credentials: true, origin: config.allowedOrigin }));
+  app.use(cors({ credentials: true, origin: config.allowedOrigin, exposeHeaders: ["signature"] }));
 
   app.use(router.routes());
   app.use(router.allowedMethods());

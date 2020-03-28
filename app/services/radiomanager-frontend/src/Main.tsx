@@ -13,6 +13,7 @@ const Loader: React.FC = () => <>Loading...</>;
 const LoginPage = React.lazy(() => import("./routes/LoginPage"));
 const SignupPage = React.lazy(() => import("./routes/SignupPage"));
 const LogoutPage = React.lazy(() => import("./routes/LogoutPage"));
+const ProfilePage = React.lazy(() => import("./routes/ProfilePage"));
 
 const Main: React.FC = () => {
   return (
@@ -27,6 +28,7 @@ const Main: React.FC = () => {
               <LoggedInUser.Provider fallback={<Redirect to={routes.login} />}>
                 <AudioPlayer.Provider>
                   <Route exact path={routes.home}>
+                    <ProfilePage />
                     <Link to={routes.logout}>Logout</Link>
                   </Route>
                   <Route exact path={routes.test}>

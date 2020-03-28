@@ -5,12 +5,14 @@ import { AuthApiService } from "~/services/authApiService";
 import { BasicSessionService, SessionService } from "~/services/sessionService";
 import { createStorageService, StorageService } from "~/services/storageService";
 import { TokenService } from "~/services/tokenService";
+import { AudioUploaderService } from "~/services/audioUploaderService";
 
 export type AppDependencies = {
   authApiService: AuthApiService;
   storageService: StorageService;
   sessionService: SessionService;
   tokenService: TokenService;
+  audioUploaderService: AudioUploaderService;
 };
 
 class AppDependenciesError extends Error {}
@@ -24,8 +26,9 @@ export function createDependencies(config: IConfig): AppDependencies {
   const tokenService = new TokenService(config.authApiUrl);
   const sessionService = new BasicSessionService(storageService, tokenService);
   const authApiService = new AuthApiService(config.authApiUrl, sessionService);
+  const audioUploaderService = new AudioUploaderService(config.audioUploaderUrl, sessionService);
 
-  return { authApiService, storageService, sessionService, tokenService };
+  return { authApiService, storageService, sessionService, tokenService, audioUploaderService };
 }
 
 export function useDependencies(): AppDependencies {

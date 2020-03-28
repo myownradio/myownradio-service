@@ -83,6 +83,7 @@ services:
       AUDIO_UPLOADER_ROOT_DIR: /usr/content
       AUDIO_UPLOADER_TOKEN_SECRET: me9IQW0atAzzE5nYKC6EiibAareI0to1
       AUDIO_UPLOADER_METADATA_SECRET: kYzuRIRETBVZnyvDUrMT
+      AUDIO_UPLOADER_ALLOWED_ORIGIN: https://new.myownradio.biz
       PORT: 8080
     volumes:
       - audio-uploader:/usr/content

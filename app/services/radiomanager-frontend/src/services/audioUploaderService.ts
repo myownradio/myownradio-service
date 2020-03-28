@@ -17,14 +17,14 @@ export class AudioUploaderService extends AbstractApiWithSessionService {
     const formData = new FormData();
     formData.append("source", source);
 
-    const { headers, body } = await this.makeRequestWithRefresh<IAudioFileMetadata>("/upload", {
+    const {
+      headers: { signature },
+      body: metadata,
+    } = await this.makeRequestWithRefresh<IAudioFileMetadata>("upload", {
       method: "post",
       data: formData,
     });
 
-    return {
-      signature: headers["signature"],
-      metadata: body,
-    };
+    return { signature, metadata };
   }
 }
