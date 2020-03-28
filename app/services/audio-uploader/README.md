@@ -3,19 +3,22 @@
 Service used to handle uploads of audio files.
 
 ## Requirements
-* Mac / Linux / Windows
-* NodeJS 13 & yarn
+
+- Mac / Linux / Windows
+- NodeJS 13 & yarn
 
 ## Install & Setup
+
 ```shell script
 yarn install
 yarn build
 ```
 
 This service requires some environment variables for operation.
-You can create `.env` file and use `env-cmd` to start project in local environment. 
+You can create `.env` file and use `env-cmd` to start project in local environment.
 
 ## Run
+
 ```shell script
 # clean way
 yarn start
@@ -26,11 +29,12 @@ npx env-cmd yarn start
 
 ## Environment Variables
 
-| Variable                    | Description                                              | Default Value |
-| --------------------------- | -------------------------------------------------------- | ------------- |
-| PORT                        | HTTP port on which server should listen for connections. | 8080          |
-| AUDIO_UPLOADER_ROOT_DIR     | Directory on server where to store uploaded audio files. |               |
-| AUDIO_UPLOADER_TOKEN_SECRET | Secret for JWT token validation.                         |               |
+| Variable                       | Description                                              | Default Value |
+| ------------------------------ | -------------------------------------------------------- | ------------- |
+| PORT                           | HTTP port on which server should listen for connections. | 8080          |
+| AUDIO_UPLOADER_ROOT_DIR        | Directory on server where to store uploaded audio files. |               |
+| AUDIO_UPLOADER_TOKEN_SECRET    | Secret for JWT token validation.                         |               |
+| AUDIO_UPLOADER_METADATA_SECRET | Secret for making metadata signature.                    |               |
 
 ## Endpoints
 
