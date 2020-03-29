@@ -61,6 +61,10 @@ services:
         order: start-first
       restart_policy:
         condition: on-failure
+    logging:
+      driver: logentries
+      options:
+        logentries-token: db3ac942-eae5-4dc6-9e46-0a629f523b4d
 
   fileserver-local:
     image: ${FILESERVER_LOCAL_IMAGE_URL}:${IMAGE_TAG}
