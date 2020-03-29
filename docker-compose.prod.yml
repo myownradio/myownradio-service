@@ -15,7 +15,7 @@ services:
       driver: logentries
       options:
         logentries-token: b974df9d-d463-4e9a-bd5a-8e68dcfb691f
-        line-only: true
+        line-only: "true"
 
   frontend-proxy:
     image: ${FRONTEND_PROXY_IMAGE_URL}:${IMAGE_TAG}
@@ -36,7 +36,7 @@ services:
       driver: logentries
       options:
         logentries-token: 38e55397-cad8-4bb5-9e51-ba9e69275fbf
-        line-only: true
+        line-only: "true"
 
   radiomanager-frontend:
     image: ${RADIOMANAGER_FRONTEND_IMAGE_URL}:${IMAGE_TAG}
@@ -49,7 +49,7 @@ services:
       driver: logentries
       options:
         logentries-token: ce50486e-28d5-4f5d-891f-c4579a502f47
-        line-only: true
+        line-only: "true"
 
   radiomanager-backend:
     image: ${RADIOMANAGER_BACKEND_IMAGE_URL}:${IMAGE_TAG}
@@ -62,7 +62,7 @@ services:
       driver: logentries
       options:
         logentries-token: f430fefe-3ec2-4efb-8224-658baede7957
-        line-only: true
+        line-only: "true"
 
   auth-server:
     image: ${AUTH_SERVER_IMAGE_URL}:${IMAGE_TAG}
@@ -85,7 +85,7 @@ services:
       driver: logentries
       options:
         logentries-token: db3ac942-eae5-4dc6-9e46-0a629f523b4d
-        line-only: true
+        line-only: "true"
 
   fileserver-local:
     image: ${FILESERVER_LOCAL_IMAGE_URL}:${IMAGE_TAG}
@@ -105,7 +105,7 @@ services:
       driver: logentries
       options:
         logentries-token: 2be455ac-d8c7-4592-bab3-12f74d3638ec
-        line-only: true
+        line-only: "true"
 
   audio-uploader:
     image: ${AUDIO_UPLOADER_IMAGE_URL}:${IMAGE_TAG}
@@ -126,7 +126,7 @@ services:
       driver: logentries
       options:
         logentries-token: d4283584-5182-498d-a18f-7f6f0ab18a3d
-        line-only: true
+        line-only: "true"
 
   # Migration
   migration:
@@ -146,7 +146,7 @@ services:
       driver: logentries
       options:
         logentries-token: da274147-6e90-42a0-ba73-4c3660588904
-        line-only: true
+        line-only: "true"
 
   # Backing Services
   postgres:
@@ -167,7 +167,7 @@ services:
       driver: logentries
       options:
         logentries-token: 0efaa5fb-80e7-43cb-aea5-94f59caf134f
-        line-only: true
+        line-only: "true"
 
 volumes:
 
