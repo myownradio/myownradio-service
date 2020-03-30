@@ -5,12 +5,10 @@ WORKDIR /usr/app/
 COPY package.json yarn.lock ./
 COPY services/fileserver-local/package.json services/fileserver-local/
 COPY libs/shared/package.json libs/shared/
-COPY libs/independent/package.json libs/independent/
 RUN ["yarn", "install", "--non-interactive", "--pure-lockfile"]
 
 COPY services/fileserver-local services/fileserver-local
 COPY libs/shared libs/shared
-COPY libs/independent libs/independent
 RUN ["yarn", "install", "--production"]
 
 FROM node:13-alpine
