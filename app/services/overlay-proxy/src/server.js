@@ -1,9 +1,9 @@
 const createAppServer = require("./app");
 const config = require("./config");
+const logger = require("./logger");
 
 const server = createAppServer(config);
 
 server.listen(config.PORT, () => {
-  // eslint-disable-next-line no-console
-  console.log(`Listening Port: ${config.PORT}`);
+  logger.debug(`Server is listening on port ${config.PORT}`);
 });
