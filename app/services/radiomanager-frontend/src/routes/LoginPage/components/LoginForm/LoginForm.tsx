@@ -30,14 +30,7 @@ type ILoginFormProps = {
   onLoginClicked: () => void;
 };
 
-const LoginForm: React.FC<ILoginFormProps> = ({
-  email,
-  password,
-  errorMessage,
-  onEmailChange,
-  onPasswordChange,
-  onLoginClicked,
-}) => {
+const LoginForm: React.FC<ILoginFormProps> = ({ email, password, errorMessage, onEmailChange, onPasswordChange, onLoginClicked }) => {
   const classes = useStyles();
 
   const handleEmailChange = useCallback(
@@ -101,13 +94,7 @@ const LoginForm: React.FC<ILoginFormProps> = ({
             id="password"
             autoComplete="current-password"
           />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
+          <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
             <FormattedMessage id="ui_login_form_login_button_title" />
           </Button>
           <Grid container>

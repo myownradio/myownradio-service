@@ -7,13 +7,7 @@ import { config } from "~/config";
 import { ISetter } from "~/interfaces";
 import AbstractErrorWithReason from "~/services/errors/AbstractErrorWithReason";
 
-export default function useHandleSubmit(
-  email: string,
-  setEmail: ISetter<string>,
-  password: string,
-  setPassword: ISetter<string>,
-  setErrorMessage: ISetter<IErrorMessage>,
-): () => Promise<void> {
+export default function useHandleSubmit(email: string, setEmail: ISetter<string>, password: string, setPassword: ISetter<string>, setErrorMessage: ISetter<IErrorMessage>): () => Promise<void> {
   const { authApiService, sessionService } = useDependencies();
   const history = useHistory();
 

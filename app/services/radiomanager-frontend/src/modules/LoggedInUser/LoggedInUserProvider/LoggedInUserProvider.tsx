@@ -17,11 +17,7 @@ interface LoggedInUserProviderProps {
 
 export const loggedInUserContext = React.createContext<IUserState | null>(null);
 
-const LoggedInUserProvider: React.FC<LoggedInUserProviderProps> = ({
-  fallback,
-  children,
-  loader,
-}) => {
+const LoggedInUserProvider: React.FC<LoggedInUserProviderProps> = ({ fallback, children, loader }) => {
   const [authState, setAuthState] = useAuthState();
   const { authApiService } = useDependencies();
 
@@ -37,11 +33,7 @@ const LoggedInUserProvider: React.FC<LoggedInUserProviderProps> = ({
   }, [authApiService, setAuthState]);
 
   if (authState.authenticated === true) {
-    return (
-      <loggedInUserContext.Provider value={authState.userState}>
-        {children}
-      </loggedInUserContext.Provider>
-    );
+    return <loggedInUserContext.Provider value={authState.userState}>{children}</loggedInUserContext.Provider>;
   }
 
   if (authState.authenticated === false) {

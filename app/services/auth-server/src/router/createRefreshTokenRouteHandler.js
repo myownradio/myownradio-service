@@ -34,11 +34,7 @@ module.exports = function createRefreshTokenRouteHandler(config, knexConnection)
         .where({ refresh_token: newRefreshToken })
         .first();
 
-      return createAccessToken(
-        config.AUTH_SERVER_TOKEN_SECRET,
-        config.AUTH_SERVER_ACCESS_TOKEN_LIFETIME,
-        updatedRow.user_id,
-      );
+      return createAccessToken(config.AUTH_SERVER_TOKEN_SECRET, config.AUTH_SERVER_ACCESS_TOKEN_LIFETIME, updatedRow.user_id);
     });
 
     ctx.body = {

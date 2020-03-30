@@ -16,22 +16,10 @@ module.exports = function createRouter(config, knexConnection) {
   router.get("/", createIndexRouteHandler());
   router.post("/signup", bodyparser(), createSignupRouteHandler(config, knexConnection));
   router.post("/login", bodyparser(), createLoginRouteHandler(config, knexConnection));
-  router.post(
-    "/refreshToken",
-    bodyparser(),
-    createRefreshTokenRouteHandler(config, knexConnection),
-  );
+  router.post("/refreshToken", bodyparser(), createRefreshTokenRouteHandler(config, knexConnection));
   router.post("/forgotToken", bodyparser(), createForgotTokenRouteHandler(config, knexConnection));
-  router.get(
-    "/me",
-    jwt({ secret: config.AUTH_SERVER_TOKEN_SECRET }),
-    createMeRouteHandler(config, knexConnection),
-  );
-  router.get(
-    "/auth",
-    jwt({ secret: config.AUTH_SERVER_TOKEN_SECRET }),
-    createAuthRouteHandler(config, knexConnection),
-  );
+  router.get("/me", jwt({ secret: config.AUTH_SERVER_TOKEN_SECRET }), createMeRouteHandler(config, knexConnection));
+  router.get("/auth", jwt({ secret: config.AUTH_SERVER_TOKEN_SECRET }), createAuthRouteHandler(config, knexConnection));
 
   return router;
 };

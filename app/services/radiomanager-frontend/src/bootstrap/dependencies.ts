@@ -1,11 +1,11 @@
 import { createContext, useContext } from "react";
 
 import { IConfig } from "~/config";
+import { AudioUploaderService } from "~/services/audioUploaderService";
 import { AuthApiService } from "~/services/authApiService";
 import { BasicSessionService, SessionService } from "~/services/sessionService";
 import { createStorageService, StorageService } from "~/services/storageService";
 import { TokenService } from "~/services/tokenService";
-import { AudioUploaderService } from "~/services/audioUploaderService";
 
 export type AppDependencies = {
   authApiService: AuthApiService;
