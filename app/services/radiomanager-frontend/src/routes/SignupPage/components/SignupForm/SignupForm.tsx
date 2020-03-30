@@ -29,14 +29,7 @@ type ISignupFormProps = {
   onSignupClicked: () => void;
 };
 
-const SignupForm: React.FC<ISignupFormProps> = ({
-  email,
-  password,
-  errorMessage,
-  onEmailChange,
-  onPasswordChange,
-  onSignupClicked,
-}) => {
+const SignupForm: React.FC<ISignupFormProps> = ({ email, password, errorMessage, onEmailChange, onPasswordChange, onSignupClicked }) => {
   const classes = useStyles();
 
   const handleEmailChange = useCallback(
@@ -100,13 +93,7 @@ const SignupForm: React.FC<ISignupFormProps> = ({
             id="password"
             autoComplete="current-password"
           />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
+          <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
             <FormattedMessage id="ui_signup_form_signup_button_title" />
           </Button>
           <Grid container>

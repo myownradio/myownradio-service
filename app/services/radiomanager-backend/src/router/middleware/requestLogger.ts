@@ -2,7 +2,7 @@ import { Context, Middleware } from "koa";
 import { Logger } from "winston";
 
 export default function requestLogger(logger: Logger): Middleware {
-  return async (ctx: Context, next: () => Promise<void>) => {
+  return async (ctx: Context, next: () => Promise<void>): Promise<void> => {
     const route = ctx._matchedRoute;
     const { method } = ctx.request;
     try {

@@ -13,7 +13,7 @@ const ProfilePage: React.FC = () => {
       audioUploaderService.uploadAudioFile(event.target.files[0]).then(console.log);
     });
     input.click();
-  }, []);
+  }, [audioUploaderService]);
 
   return (
     <section>

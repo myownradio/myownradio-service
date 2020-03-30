@@ -6,10 +6,7 @@ module.exports = function createAppServer(config) {
   return http.createServer(async (req, res) => {
     const { url } = req;
 
-    const locations = [
-      config.OVERLAY_PROXY_PERMANENT_SERVER,
-      config.OVERLAY_PROXY_TEMPORARY_SERVER,
-    ];
+    const locations = [config.OVERLAY_PROXY_PERMANENT_SERVER, config.OVERLAY_PROXY_TEMPORARY_SERVER];
 
     try {
       const foundOnServer = await Promise.race(

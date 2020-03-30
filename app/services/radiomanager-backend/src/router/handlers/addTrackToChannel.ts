@@ -14,7 +14,7 @@ const AddTrackToChannelRequestContract = t.type({
   genre: t.string,
   bitrate: t.number,
   duration: t.number,
-  format: t.string
+  format: t.string,
 });
 
 export default function addTrackToChannel(config: Config, knexConnection: knex) {
@@ -49,7 +49,7 @@ export default function addTrackToChannel(config: Config, knexConnection: knex) 
       genre: requestBody.genre,
       bitrate: requestBody.bitrate,
       duration: requestBody.duration,
-      format: requestBody.format
+      format: requestBody.format,
     });
 
     ctx.body = { id: trackId };

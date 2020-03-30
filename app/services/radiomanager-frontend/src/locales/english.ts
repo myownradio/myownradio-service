@@ -5,8 +5,7 @@ export default {
   api_signup_error409: "This email address already is used. Please, login, if it's yours.",
   api_error400: "Some of entered parameters aren't valid.",
   api_error401: "You're not authenticated or your session is expired. Please, login again.",
-  api_error409:
-    "The request could not be completed due to a conflict with the current state of the target resource.",
+  api_error409: "The request could not be completed due to a conflict with the current state of the target resource.",
   api_error: "We're sorry, but something went wrong on our side. Please, try again later.",
   ui_login_form_login_title: "Login",
   ui_login_form_login_button_title: "Login",
@@ -16,8 +15,7 @@ export default {
   ui_signup_form_signup_title: "Sign up",
   ui_signup_form_signup_button_title: "Sign Up",
   ui_signup_form_login_link_title: "Already have an account? Sign In",
-  ui_signup_validator_email_invalid_message:
-    "It seems that you entered invalid email address. Please correct it and try again.",
+  ui_signup_validator_email_invalid_message: "It seems that you entered invalid email address. Please correct it and try again.",
   ui_signup_validator_password_short_message: "Your password should be at least 6 characters long.",
   ui_common_email_address: "Email Address",
   ui_common_password: "Password",
