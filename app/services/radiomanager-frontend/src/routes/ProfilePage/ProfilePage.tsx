@@ -10,7 +10,12 @@ const ProfilePage: React.FC = () => {
     const input = document.createElement("input");
     input.setAttribute("type", "file");
     input.addEventListener("change", (event: Event) => {
-      audioUploaderService.uploadAudioFile(event.target.files[0]).then(console.log);
+      if (event.target) {
+        const eventTarget = event.target as HTMLInputElement;
+        if (eventTarget.files) {
+          audioUploaderService.uploadAudioFile(eventTarget.files[0]).then(console.log);
+        }
+      }
     });
     input.click();
   }, [audioUploaderService]);
