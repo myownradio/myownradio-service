@@ -26,6 +26,7 @@ beforeEach(async () => {
   knexConnection = knex({
     connection: config.AUTH_SERVER_DATABASE_URL,
     client: config.AUTH_SERVER_DATABASE_CLIENT,
+    useNullAsDefault: false,
   });
 
   await knexConnection.migrate.latest({

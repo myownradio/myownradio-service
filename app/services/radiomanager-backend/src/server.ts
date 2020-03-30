@@ -1,13 +1,14 @@
 import { createServer } from "http";
+import { Config } from "./config";
 
-import { httpServerPort } from "./config";
+const config = new Config(process.env);
 
 const server = createServer((_req, res) => {
   res.end("OK");
 });
 
-server.listen(httpServerPort, () => {
-  console.log(`Listening on :${httpServerPort}`);
+server.listen(config.httpServerPort, () => {
+  console.log(`Server listening on port ${config.httpServerPort}`);
 });
 
 process.on("SIGINT", () => {

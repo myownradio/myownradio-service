@@ -12,14 +12,15 @@ type IStatusCodeToLocaleKeyMap = Partial<
 
 type IHandledStatusCodes = 400 | 401 | 409;
 
+export type IApiServiceResponse<T> = {
+  headers: { [name: string]: string };
+  body: T;
+};
+
 export abstract class AbstractApiService {
   protected constructor(private urlPrefix: string) {}
 
-  protected async makeRequest<T>(
-    path: string,
-    requestConfig: AxiosRequestConfig,
-    statusCodeMap: IStatusCodeToLocaleKeyMap = {},
-  ): Promise<T> {
+  protected async makeRequest<T>(path: string, requestConfig: AxiosRequestConfig, statusCodeMap: IStatusCodeToLocaleKeyMap = {}): Promise<IApiServiceResponse<T>> {
     const url = `${this.urlPrefix}${path}`;
     const config: AxiosRequestConfig = {
       withCredentials: true,
@@ -28,10 +29,10 @@ export abstract class AbstractApiService {
       url,
     };
 
-    const { data, status } = await axios(config);
+    const { data, status, headers } = await axios(config);
 
     if (status === 200) {
-      return data;
+      return { body: data, headers };
     }
 
     const responseText = typeof data === "string" ? data : JSON.stringify(data);
@@ -48,9 +49,6 @@ export abstract class AbstractApiService {
       throw new EmailExistsError("Email Exists", statusCodeMap[409] || "api_error409");
     }
 
-    throw new UnknownError(
-      `Unknown Error. Original status - ${status}, Original response - ${responseText}`,
-      "api_error",
-    );
+    throw new UnknownError(`Unknown Error. Original status - ${status}, Original response - ${responseText}`, "api_error");
   }
 }

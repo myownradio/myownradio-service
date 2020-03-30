@@ -17,7 +17,7 @@ export class AuthApiService extends AbstractApiWithSessionService {
   }
 
   public async login(email: string, password: string): Promise<ISuccessfulLoginResponse> {
-    return this.makeRequest<ISuccessfulLoginResponse>(
+    const { body } = await this.makeRequest<ISuccessfulLoginResponse>(
       "login",
       {
         method: "post",
@@ -28,6 +28,8 @@ export class AuthApiService extends AbstractApiWithSessionService {
         401: "api_login_error401",
       },
     );
+
+    return body;
   }
 
   public async signup(email: string, password: string): Promise<void> {
@@ -45,8 +47,9 @@ export class AuthApiService extends AbstractApiWithSessionService {
   }
 
   public async me(): Promise<ISuccessfulMeResponse> {
-    return this.makeRequestWithRefresh<ISuccessfulMeResponse>("me", {
+    const { body } = await this.makeRequestWithRefresh<ISuccessfulMeResponse>("me", {
       method: "get",
     });
+    return body;
   }
 }

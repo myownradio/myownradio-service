@@ -53,7 +53,7 @@ function createSignatureForMetadata(rawMetadata, secret) {
   const signedAt = Date.now();
   const payload = `${signedAt}.${rawMetadata}`;
   const hmacDigest = createHmacDigest(payload, secret);
-  return btoa(`${signedAt}.${hmacDigest}`);
+  return Buffer.from(`${signedAt}.${hmacDigest}`).toString("base64");
 }
 
 /**
@@ -66,7 +66,7 @@ function createSignatureForMetadata(rawMetadata, secret) {
  * @return {boolean}
  */
 function verifySignatureOfMetadata(rawMetadata, signature, secret, ttl) {
-  const decodedSignature = atob(signature);
+  const decodedSignature = Buffer.from(signature, "base64").toString();
   const [extractedSignedAt, extractedHmacDigest] = decodedSignature.split(".", 2);
   const payload = `${extractedSignedAt}.${rawMetadata}`;
   const hmacDigest = createHmacDigest(payload, secret);
