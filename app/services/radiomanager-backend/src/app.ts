@@ -1,3 +1,4 @@
+import * as cors from "@koa/cors";
 import * as knex from "knex";
 import * as Application from "koa";
 import { Logger } from "winston";
@@ -9,7 +10,7 @@ export function createApp(config: Config, knexConnection: knex, logger: Logger):
   const app = new Application();
 
   app.use(requestLogger(logger));
-  // app.use(cors({ credentials: true, origin: config.AUTH_SERVER_ALLOWED_ORIGIN }));
+  app.use(cors({ credentials: true, origin: config.allowedOrigin }));
 
   const router = createRouter(config, knexConnection, logger);
 
