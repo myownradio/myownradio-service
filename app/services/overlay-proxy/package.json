@@ -11,8 +11,9 @@
     "supertest": "^4.0.2"
   },
   "dependencies": {
-    "@myownradio/shared": "1.0.0",
     "@myownradio/independent": "1.0.0",
-    "axios": "^0.19.2"
+    "@myownradio/shared": "1.0.0",
+    "axios": "^0.19.2",
+    "winston": "^3.2.1"
   }
 }
