@@ -8,7 +8,6 @@
   },
   "private": true,
   "dependencies": {
-    "@myownradio/independent": "1.0.0",
     "@myownradio/shared": "1.0.0",
     "@sentry/node": "5.11.2",
     "idx": "^2.5.6",
