@@ -47,11 +47,6 @@ jobs:
           tf_actions_version: 0.12.20
           tf_actions_subcommand: 'apply'
           tf_actions_working_dir: 'terraform'
-      - name: Upload terraform artifacts
-        uses: actions/upload-artifact@v1
-        with:
-          name: tf
-          path: terraform/.terraform
 
   build-frontend-proxy:
     needs: terraform
@@ -65,11 +60,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@master
-      - name: Download terraform artifacts
-        uses: actions/download-artifact@v1
+      - name: Terraform Init
+        uses: hashicorp/terraform-github-actions@master
         with:
-          name: tf
-          path: terraform/.terraform
+          tf_actions_version: 0.12.20
+          tf_actions_subcommand: 'init'
+          tf_actions_working_dir: 'terraform'
       - name: Authenticate Docker on AWS
         run: aws ecr get-login --no-include-email --region eu-central-1 | sh
       - name: Build image
@@ -89,11 +85,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@master
-      - name: Download terraform artifacts
-        uses: actions/download-artifact@v1
+      - name: Terraform Init
+        uses: hashicorp/terraform-github-actions@master
         with:
-          name: tf
-          path: terraform/.terraform
+          tf_actions_version: 0.12.20
+          tf_actions_subcommand: 'init'
+          tf_actions_working_dir: 'terraform'
       - name: Authenticate Docker on AWS
         run: aws ecr get-login --no-include-email --region eu-central-1 | sh
       - name: Build image
@@ -113,11 +110,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@master
-      - name: Download terraform artifacts
-        uses: actions/download-artifact@v1
+      - name: Terraform Init
+        uses: hashicorp/terraform-github-actions@master
         with:
-          name: tf
-          path: terraform/.terraform
+          tf_actions_version: 0.12.20
+          tf_actions_subcommand: 'init'
+          tf_actions_working_dir: 'terraform'
       - name: Authenticate Docker on AWS
         run: aws ecr get-login --no-include-email --region eu-central-1 | sh
       - name: Build image
@@ -137,11 +135,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@master
-      - name: Download terraform artifacts
-        uses: actions/download-artifact@v1
+      - name: Terraform Init
+        uses: hashicorp/terraform-github-actions@master
         with:
-          name: tf
-          path: terraform/.terraform
+          tf_actions_version: 0.12.20
+          tf_actions_subcommand: 'init'
+          tf_actions_working_dir: 'terraform'
       - name: Authenticate Docker on AWS
         run: aws ecr get-login --no-include-email --region eu-central-1 | sh
       - name: Build image
@@ -161,11 +160,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@master
-      - name: Download terraform artifacts
-        uses: actions/download-artifact@v1
+      - name: Terraform Init
+        uses: hashicorp/terraform-github-actions@master
         with:
-          name: tf
-          path: terraform/.terraform
+          tf_actions_version: 0.12.20
+          tf_actions_subcommand: 'init'
+          tf_actions_working_dir: 'terraform'
       - name: Authenticate Docker on AWS
         run: aws ecr get-login --no-include-email --region eu-central-1 | sh
       - name: Build image
@@ -185,11 +185,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@master
-      - name: Download terraform artifacts
-        uses: actions/download-artifact@v1
+      - name: Terraform Init
+        uses: hashicorp/terraform-github-actions@master
         with:
-          name: tf
-          path: terraform/.terraform
+          tf_actions_version: 0.12.20
+          tf_actions_subcommand: 'init'
+          tf_actions_working_dir: 'terraform'
       - name: Authenticate Docker on AWS
         run: aws ecr get-login --no-include-email --region eu-central-1 | sh
       - name: Build image
@@ -209,11 +210,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@master
-      - name: Download terraform artifacts
-        uses: actions/download-artifact@v1
+      - name: Terraform Init
+        uses: hashicorp/terraform-github-actions@master
         with:
-          name: tf
-          path: terraform/.terraform
+          tf_actions_version: 0.12.20
+          tf_actions_subcommand: 'init'
+          tf_actions_working_dir: 'terraform'
       - name: Authenticate Docker on AWS
         run: aws ecr get-login --no-include-email --region eu-central-1 | sh
       - name: Build image
@@ -244,11 +246,12 @@ jobs:
       - uses: chrislennon/action-aws-cli@v1.1
       - name: Checkout
         uses: actions/checkout@master
-      - name: Download terraform artifacts
-        uses: actions/download-artifact@v1
+      - name: Terraform Init
+        uses: hashicorp/terraform-github-actions@master
         with:
-          name: tf
-          path: terraform/.terraform
+          tf_actions_version: 0.12.20
+          tf_actions_subcommand: 'init'
+          tf_actions_working_dir: 'terraform'
       - name: Gather terraform output
         id: terraform_output
         uses: hashicorp/terraform-github-actions@master
