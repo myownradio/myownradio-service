@@ -1,13 +1,11 @@
 const createApp = require("./app");
 const config = require("./config");
+const logger = require("./logger");
 
 const app = createApp(config);
 
 const server = app.listen(config.PORT, () => {
-  // eslint-disable-next-line no-console
-  console.log(`Content Directory: ${config.FILESERVER_LOCAL_ROOT_FOLDER}`);
-  // eslint-disable-next-line no-console
-  console.log(`Listening Port: ${config.PORT}`);
+  logger.debug(`Server is listening on port ${config.PORT}`);
 });
 
 module.exports = server;

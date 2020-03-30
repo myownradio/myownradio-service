@@ -1,6 +1,6 @@
 const nodemailer = require("nodemailer");
-
 const config = require("./config");
+const logger = require("./logger");
 
 // eslint-disable-next-line no-unused-vars
 const transport = nodemailer.createTransport({
