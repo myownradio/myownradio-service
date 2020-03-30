@@ -1,5 +1,6 @@
 import * as knex from "knex";
 import * as supertest from "supertest";
+import * as winston from "winston";
 import { createApp } from "../src/app";
 import { Config } from "../src/config";
 
@@ -13,6 +14,10 @@ let request: supertest.SuperTest<supertest.Test>;
 let knexConnection: knex;
 
 beforeEach(async () => {
+  const logger = winston.createLogger({
+    silent: true,
+  });
+
   config = new Config({
     RADIOMANAGER_BACKEND_TOKEN_SECRET: "secret",
     RADIOMANAGER_BACKEND_METADATA_SECRET: "secret",
@@ -35,7 +40,7 @@ beforeEach(async () => {
     directory: seedsDir,
   });
 
-  request = supertest(createApp(config, knexConnection).callback());
+  request = supertest(createApp(config, knexConnection, logger).callback());
 });
 
 describe("/healthcheck", () => {
