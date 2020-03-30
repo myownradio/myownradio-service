@@ -24,6 +24,7 @@ beforeEach(async () => {
     RADIOMANAGER_BACKEND_DATABASE_URL: ":memory:",
     RADIOMANAGER_BACKEND_DATABASE_CLIENT: "sqlite3",
     RADIOMANAGER_BACKEND_METADATA_SIGNATURE_TTL: "Infinity",
+    RADIOMANAGER_BACKEND_ALLOWED_ORIGIN: "*",
   });
 
   knexConnection = knex({

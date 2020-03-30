@@ -5,6 +5,7 @@ export class Config {
   readonly databaseUrl: string;
   readonly databaseClient: string;
   readonly metadataSignatureTtl: number;
+  readonly allowedOrigin: string;
 
   constructor(env: { [name: string]: string | undefined }) {
     if (!env.RADIOMANAGER_BACKEND_TOKEN_SECRET) {
@@ -39,5 +40,11 @@ export class Config {
     this.metadataSignatureTtl = parseFloat(env.RADIOMANAGER_BACKEND_METADATA_SIGNATURE_TTL);
 
     this.httpServerPort = env.PORT ? parseInt(env.PORT, 10) : 8080;
+
+    if (!env.RADIOMANAGER_BACKEND_ALLOWED_ORIGIN) {
+      throw new Error("Environment variable RADIOMANAGER_BACKEND_ALLOWED_ORIGIN is required");
+    }
+
+    this.allowedOrigin = env.RADIOMANAGER_BACKEND_ALLOWED_ORIGIN;
   }
 }
