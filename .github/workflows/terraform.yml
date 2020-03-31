@@ -2,6 +2,7 @@ name: Terraform
 on: pull_request
 jobs:
   init:
+    if: github.event.pull_request.merged == 'true'
     name: Foo
     runs-on: ubuntu-latest
     steps:
