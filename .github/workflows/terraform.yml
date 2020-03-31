@@ -7,9 +7,16 @@ on:
 
 jobs:
   init:
-    if: github.event.pull_request.merged == true && github.event.pull_request.head.ref == 'refs/heads/master'
+    if: github.event.pull_request.merged == true
     name: Foo
     runs-on: ubuntu-latest
+    env:
+      FOO: {{ github.event.pull_request.head.ref }}
+      BAR: {{ github.event.pull_request.base.ref }}
+      BAZ: {{ github.event.base.ref }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@master
+      - name: Echo
+        run: |
+          echo $FOO
+          echo $BAR
+          echo $BAZ
