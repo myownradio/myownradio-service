@@ -2,8 +2,8 @@ name: 'Deploy'
 
 on:
   pull_request:
-    if: github.event.action == 'merged'
     branches: [ master ]
+    types: [ merged ]
 
 jobs:
   init:
