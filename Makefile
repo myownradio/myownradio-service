@@ -20,7 +20,7 @@ run-tests:
 	(cd app && yarn test)
 
 run-linter:
-	#(cd app && yarn lint)
+	(cd app && yarn lint)
 	(cd terraform && terraform fmt -check)
 
 # Terraform Section

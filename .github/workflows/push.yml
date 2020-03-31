@@ -286,7 +286,7 @@ jobs:
           ssh_public_key: ${{ steps.parsed_output.outputs.ssh_public_key }}
           aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          args: stack deploy --with-registry-auth --compose-file docker-compose.prod.yml mor
+          args: stack deploy --with-registry-auth --compose-file myownradio-service/docker-compose.prod.yml mor
         env:
           IMAGE_TAG: ${{ github.sha }}
 

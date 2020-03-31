@@ -11,8 +11,8 @@
     "dev": "concurrently -n w: npm:dev:*",
     "migrate": "knex migrate:latest",
     "test": "jest",
-    "lint": "eslint {services,libs}/*/src --ext .js,.jsx,.ts,.tsx",
-    "lint:fix": "eslint {services,libs}/*/src --ext .js,.jsx,.ts,.tsx --fix"
+    "lint": "eslint services libs --ext .js,.jsx,.ts,.tsx",
+    "lint:fix": "eslint services libs --ext .js,.jsx,.ts,.tsx --fix"
   },
   "repository": {
     "type": "git",
