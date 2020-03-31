@@ -7,16 +7,9 @@ on:
 
 jobs:
   init:
-    if: github.event.pull_request.merged == true
+    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'master'
     name: Foo
     runs-on: ubuntu-latest
-    env:
-      FOO: ${{ github.event.pull_request.head.ref }}
-      BAR: ${{ github.event.pull_request.base.ref }}
-      BAZ: ${{ github.event.base.ref }}
     steps:
       - name: Echo
-        run: |
-          echo $FOO
-          echo $BAR
-          echo $BAZ
+        run: echo OK
