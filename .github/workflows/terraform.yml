@@ -1,12 +1,13 @@
 name: Terraform
 
 on:
-  push:
-    branches:
-      - master
+  pull_request:
+    types:
+      - closed
 
 jobs:
   init:
+    if: github.event.pull_request.merged == true && github.event.base.ref == master
     name: Foo
     runs-on: ubuntu-latest
     steps:
