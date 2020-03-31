@@ -11,9 +11,9 @@ jobs:
     name: Foo
     runs-on: ubuntu-latest
     env:
-      FOO: {{ github.event.pull_request.head.ref }}
-      BAR: {{ github.event.pull_request.base.ref }}
-      BAZ: {{ github.event.base.ref }}
+      FOO: ${{ github.event.pull_request.head.ref }}
+      BAR: ${{ github.event.pull_request.base.ref }}
+      BAZ: ${{ github.event.base.ref }}
     steps:
       - name: Echo
         run: |
