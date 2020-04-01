@@ -1,6 +1,7 @@
 import { createContext, useContext } from "react";
 
 import { IConfig } from "~/config";
+import { RadiomanagerService } from "~/services/RadiomanagerService";
 import { AudioUploaderService } from "~/services/audioUploaderService";
 import { AuthApiService } from "~/services/authApiService";
 import { BasicSessionService, SessionService } from "~/services/sessionService";
@@ -13,6 +14,7 @@ export type AppDependencies = {
   sessionService: SessionService;
   tokenService: TokenService;
   audioUploaderService: AudioUploaderService;
+  radiomanagerService: RadiomanagerService;
 };
 
 class AppDependenciesError extends Error {}
@@ -27,8 +29,9 @@ export function createDependencies(config: IConfig): AppDependencies {
   const sessionService = new BasicSessionService(storageService, tokenService);
   const authApiService = new AuthApiService(config.authApiUrl, sessionService);
   const audioUploaderService = new AudioUploaderService(config.audioUploaderUrl, sessionService);
+  const radiomanagerService = new RadiomanagerService(config.radiomanagerUrl, sessionService);
 
-  return { authApiService, storageService, sessionService, tokenService, audioUploaderService };
+  return { authApiService, storageService, sessionService, tokenService, audioUploaderService, radiomanagerService };
 }
 
 export function useDependencies(): AppDependencies {
