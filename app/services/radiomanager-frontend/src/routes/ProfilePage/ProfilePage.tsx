@@ -1,9 +1,20 @@
 import * as React from "react";
+import { useEffect, useState } from "react";
 // import { useCallback } from "react";
 
-// import { useDependencies } from "~/bootstrap/dependencies";
+import { useDependencies } from "~/bootstrap/dependencies";
+import { IRadioChannel } from "~/services/RadioManagerService";
 
 const ProfilePage: React.FC = () => {
+  const [channels, setChannels] = useState<IRadioChannel[]>([]);
+  const [error, setError] = useState(null);
+
+  const { radioManagerService } = useDependencies();
+
+  useEffect(() => {
+    radioManagerService.getChannels().then(setChannels, error => setError(error.message));
+  }, [radioManagerService]);
+
   // const { audioUploaderService } = useDependencies();
 
   // const handleClick = useCallback(() => {
@@ -22,6 +33,19 @@ const ProfilePage: React.FC = () => {
 
   return (
     <section>
+      {error && (
+        <>
+          {error} <br />
+        </>
+      )}
+      Your channels:
+      <br />
+      <ul>
+        {React.Children.map(channels, channel => (
+          <li>{channel.title}</li>
+        ))}
+      </ul>
+      <br />
       Choose your radio channel from the list to start editing.
       <br />
       <button>Create new radio channel</button>
