@@ -123,3 +123,17 @@ describe("/channels/:id/tracks/add", () => {
       .expect(401);
   });
 });
+
+describe("/channels", () => {
+  it("should respond with 200 on successful get request", async () => {
+    await request
+      .get("/channels")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(200, [
+        {
+          id: 1,
+          title: "Foo Radio",
+        },
+      ]);
+  });
+});
