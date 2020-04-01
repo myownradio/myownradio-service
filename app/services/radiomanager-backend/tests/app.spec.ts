@@ -136,4 +136,8 @@ describe("/channels", () => {
         },
       ]);
   });
+
+  it("should respond with 401 if not authorized", async () => {
+    await request.get("/channels").expect(401);
+  });
 });
