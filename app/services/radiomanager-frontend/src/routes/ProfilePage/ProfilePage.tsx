@@ -1,19 +1,19 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
-// import { useCallback } from "react";
 
 import { useDependencies } from "~/bootstrap/dependencies";
+import useErrorMessage from "~/components/use/useErrorMessage";
 import { IRadioChannel } from "~/services/RadioManagerService";
 
 const ProfilePage: React.FC = () => {
   const [channels, setChannels] = useState<IRadioChannel[]>([]);
-  const [error, setError] = useState(null);
+  const [error, setError] = useErrorMessage();
 
   const { radioManagerService } = useDependencies();
 
   useEffect(() => {
     radioManagerService.getChannels().then(setChannels, error => setError(error.message));
-  }, [radioManagerService]);
+  }, [radioManagerService, setError]);
 
   // const { audioUploaderService } = useDependencies();
 
