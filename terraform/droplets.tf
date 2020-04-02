@@ -66,17 +66,6 @@ resource "digitalocean_droplet" "new" {
       "echo \"/swapfile   none    swap    sw    0   0\" >> /etc/fstab"
     ]
   }
-
-  # monitoring provisioner
-  provisioner "remote-exec" {
-    inline = [
-      <<-HEREDOC
-        docker run -v /var/run/docker.sock:/var/run/docker.sock -d --read-only --restart=on-failure \
-               --security-opt=no-new-privileges rapid7/r7insight_docker \
-               -t ${var.insight_token} -r eu -j -a host=`uname -n`
-      HEREDOC
-    ]
-  }
 }
 
 resource "digitalocean_floating_ip" "new" {
