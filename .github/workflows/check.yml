@@ -1,11 +1,11 @@
 name: 'Check'
 
 on:
-  pull_request:
-    branches: [ master ]
+  - pull_request
 
 jobs:
   init:
+    if: github.event.pull_request.base.ref == 'master'
     name: Run linter and tests
     runs-on: ubuntu-latest
     steps:

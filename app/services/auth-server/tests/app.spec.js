@@ -1,5 +1,6 @@
 const knex = require("knex");
 const supertest = require("supertest");
+const { createLogger } = require("winston");
 
 const createApp = require("../src/app");
 
@@ -20,8 +21,13 @@ const config = {
 
 let request;
 let knexConnection;
+let logger;
 
 beforeEach(async () => {
+  logger = createLogger({
+    silent: true,
+  });
+
   knexConnection = knex({
     connection: config.AUTH_SERVER_DATABASE_URL,
     client: config.AUTH_SERVER_DATABASE_CLIENT,
@@ -36,7 +42,7 @@ beforeEach(async () => {
     directory: seedsDir,
   });
 
-  request = supertest(createApp(config, knexConnection).callback());
+  request = supertest(createApp(config, knexConnection, logger).callback());
 });
 
 // eslint-disable-next-line jest/expect-expect
