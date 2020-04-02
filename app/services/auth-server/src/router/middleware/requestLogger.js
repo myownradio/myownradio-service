@@ -11,7 +11,7 @@ module.exports = function requestLogger(logger) {
       const route = ctx._matchedRoute;
       const { method } = ctx.request;
 
-      const statusCode = error.code || DEFAULT_KOAJS_ERROR_STATUS_CODE;
+      const statusCode = error.status || DEFAULT_KOAJS_ERROR_STATUS_CODE;
       const errorText = error.stack || error;
 
       logger.warn(`Error happened during inbound http request: ${errorText}`, { method, route, statusCode });
