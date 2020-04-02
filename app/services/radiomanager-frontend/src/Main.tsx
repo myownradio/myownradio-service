@@ -28,9 +28,7 @@ const Main: React.FC = () => {
             <Route exact path={[routes.home, routes.profile, routes.createChannel]}>
               <LoggedInUser.Provider fallback={<Redirect to={routes.login} />}>
                 <AudioPlayer.Provider>
-                  <Route exact path={routes.home}>
-                    <Redirect to={routes.profile} />
-                  </Route>
+                  <Redirect exact from={routes.home} to={routes.profile} />
                   <Route exact path={routes.profile} component={ProfilePage} />
                   <Route exact path={routes.createChannel} component={CreateChannelPage} />
                   <Link to={routes.logout}>Logout</Link>
