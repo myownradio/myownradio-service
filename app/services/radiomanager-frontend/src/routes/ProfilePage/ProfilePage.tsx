@@ -1,8 +1,10 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
 
+import { Link } from "react-router-dom";
 import { useDependencies } from "~/bootstrap/dependencies";
 import useErrorMessage from "~/components/use/useErrorMessage";
+import { config } from "~/config";
 import { IRadioChannel } from "~/services/RadioManagerService";
 
 const ProfilePage: React.FC = () => {
@@ -41,14 +43,14 @@ const ProfilePage: React.FC = () => {
       Your channels:
       <br />
       <ul>
-        {React.Children.map(channels, channel => (
-          <li>{channel.title}</li>
+        {channels.map(channel => (
+          <li key={channel.id}>{channel.title}</li>
         ))}
       </ul>
       <br />
       Choose your radio channel from the list to start editing.
       <br />
-      <button>Create new radio channel</button>
+      <Link to={config.routes.createChannel}>Create new radio channel</Link>
     </section>
   );
 };
