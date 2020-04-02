@@ -18,4 +18,13 @@ export class RadioManagerService extends AbstractApiWithSessionService {
 
     return body;
   }
+
+  public async createChannel(title: string): Promise<IRadioChannel> {
+    const { body } = await this.makeRequestWithRefresh<IRadioChannel>("channels/create", {
+      method: "post",
+      data: { title },
+    });
+
+    return body;
+  }
 }
