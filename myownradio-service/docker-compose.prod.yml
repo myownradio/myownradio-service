@@ -78,7 +78,7 @@ services:
       AUTH_SERVER_DATABASE_URL: postgres://mor:mor@postgres:5432/mor
       AUTH_SERVER_DATABASE_CLIENT: postgresql
       AUTH_SERVER_ACCESS_TOKEN_LIFETIME: 60
-      AUTH_SERVER_REFRESH_TOKEN_LIFETIME: 3600
+      AUTH_SERVER_REFRESH_TOKEN_LIFETIME: 604800 # one week
       AUTH_SERVER_ALLOWED_ORIGIN: https://new.myownradio.biz
     depends_on:
       - postgres
