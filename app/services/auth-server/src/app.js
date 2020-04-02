@@ -1,9 +1,7 @@
-import requestLogger from "./router/middleware/requestLogger";
-
 const cors = require("@koa/cors");
 const Application = require("koa");
-
 const createRouter = require("./router");
+const requestLogger = require("./router/middleware/requestLogger");
 
 module.exports = function createApp(config, knexConnection, logger) {
   const app = new Application();

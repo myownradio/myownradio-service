@@ -3,7 +3,7 @@
  */
 const DEFAULT_KOAJS_ERROR_STATUS_CODE = 500;
 
-export default function requestLogger(logger) {
+module.exports = function requestLogger(logger) {
   return async (ctx, next) => {
     try {
       await next();
@@ -19,4 +19,4 @@ export default function requestLogger(logger) {
       throw error;
     }
   };
-}
+};
