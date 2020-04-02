@@ -58,6 +58,7 @@ describe("/channels/create", () => {
       .send({ title: "Foo Radio" })
       .expect(200, {
         id: 2,
+        title: "Foo Radio",
       });
   });
 

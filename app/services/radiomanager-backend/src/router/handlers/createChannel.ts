@@ -20,13 +20,17 @@ export default function createChannel(_: Config, knexConnection: knex) {
     const requestBody = decodedResult.right;
 
     try {
-      const [channelId] = await knexConnection("radio_channels").insert({
-        title: requestBody.title,
-        user_id: userId,
-      });
+      const [channelId] = await knexConnection
+        .into("radio_channels")
+        .insert({
+          title: requestBody.title,
+          user_id: userId,
+        })
+        .returning("id");
 
       ctx.body = {
         id: channelId,
+        title: requestBody.title,
       };
     } catch (e) {
       if (e.message.match(/constraint/)) {
