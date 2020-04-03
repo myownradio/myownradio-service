@@ -8,9 +8,9 @@ output "deployer_public_key" {
   sensitive = true
 }
 
-output "mor_master_ip_address" {
-  value = digitalocean_floating_ip.new.ip_address
-}
+//output "mor_master_ip_address" {
+//  value = digitalocean_floating_ip.new.ip_address
+//}
 
 output "url" {
   value = "https://${cloudflare_record.a_record.name}.${cloudflare_zone.myownradio_biz.zone}"

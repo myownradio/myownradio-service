@@ -4,6 +4,8 @@ resource "digitalocean_droplet" "new" {
   size   = "s-1vcpu-2gb"
   region = "fra1"
 
+  count = 0
+
   private_networking = true
   monitoring         = true
 
@@ -68,7 +70,7 @@ resource "digitalocean_droplet" "new" {
   }
 }
 
-resource "digitalocean_floating_ip" "new" {
-  region     = "fra1"
-  droplet_id = digitalocean_droplet.new.id
-}
+//resource "digitalocean_floating_ip" "new" {
+//  region     = "fra1"
+//  droplet_id = digitalocean_droplet.new.id
+//}
