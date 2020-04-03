@@ -5,6 +5,7 @@ import { createApp } from "../src/app";
 import { Config } from "../src/config";
 
 const authorizationToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjEsImlhdCI6MTUxNjIzOTAyMn0.Fknsf_nSFNdqS9JkFJABEEtMVffv9zR1_nrI2mAVx60";
+const otherAuthorizationToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjIsImlhdCI6MTUxNjIzOTAyMn0.5nA5QaNjZmg3Xix3wJm09N35cFWX3YanHQzjz-zSlDc";
 
 const migrationsDir = `${__dirname}/../../../migrations`;
 const seedsDir = `${__dirname}/../../../seeds`;
@@ -140,5 +141,35 @@ describe("/channels", () => {
 
   it("should respond with 401 if not authorized", async () => {
     await request.get("/channels").expect(401);
+  });
+});
+
+describe("GET /channels/:id", () => {
+  it("should respond with 200 on successful get request", async () => {
+    await request
+      .get("/channels/1")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(200, {
+        id: 1,
+        title: "Foo Radio",
+      });
+  });
+
+  it("should respond with 404 if channel not found", async () => {
+    await request
+      .get("/channels/10")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(404);
+  });
+
+  it("should respond with 401 if channel belongs to other user", async () => {
+    await request
+      .get("/channels/1")
+      .set("Authorization", `Bearer ${otherAuthorizationToken}`)
+      .expect(401);
+  });
+
+  it("should respond with 401 if not authorized", async () => {
+    await request.get("/channels/1").expect(401);
   });
 });
