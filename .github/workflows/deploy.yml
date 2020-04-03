@@ -283,7 +283,7 @@ jobs:
       - name: Deploy stack to Production
         uses: pldin601/docker-swarm-deploy-action@master
         with:
-          remote_host: ssh://{{ secrets.SSH_USER }}@${{ secrets.SSH_IP_ADDRESS }}
+          remote_host: ssh://${{ secrets.SSH_USER }}@${{ secrets.SSH_IP_ADDRESS }}
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
           ssh_public_key: ${{ secrets.SSH_PUBLIC_KEY }}
           aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
