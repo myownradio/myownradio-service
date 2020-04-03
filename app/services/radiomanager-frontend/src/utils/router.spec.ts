@@ -6,7 +6,7 @@ describe("createUrlFromRoute", () => {
     expect(createUrlFromRoute("/channels/:channelId/foo/:bar", params)).toBe("/channels/10/foo/OK");
   });
 
-  it("Should successfully pass as is without route parameters", () => {
+  it("Should successfully pass if no route parameters", () => {
     expect(createUrlFromRoute("/channels/create-channel", {})).toBe("/channels/create-channel");
   });
 });
