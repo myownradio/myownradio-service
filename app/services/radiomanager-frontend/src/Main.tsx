@@ -15,6 +15,7 @@ const SignupPage = React.lazy(() => import("./routes/SignupPage"));
 const LogoutPage = React.lazy(() => import("./routes/LogoutPage"));
 const ProfilePage = React.lazy(() => import("./routes/ProfilePage"));
 const CreateChannelPage = React.lazy(() => import("./routes/CreateChannelPage"));
+const ChannelPage = React.lazy(() => import("./routes/ChannelPage"));
 
 const Main: React.FC = () => {
   return (
@@ -25,7 +26,7 @@ const Main: React.FC = () => {
             <Route exact path={routes.login} component={LoginPage} />
             <Route exact path={routes.signup} component={SignupPage} />
             <Route exact path={routes.logout} component={LogoutPage} />
-            <Route exact path={[routes.home, routes.profile, routes.createChannel]}>
+            <Route exact path={[routes.home, routes.profile, routes.createChannel, routes.channel]}>
               <LoggedInUser.Provider fallback={<Redirect to={routes.login} />}>
                 <AudioPlayer.Provider>
                   <Route exact path={routes.home}>
@@ -33,6 +34,7 @@ const Main: React.FC = () => {
                   </Route>
                   <Route exact path={routes.profile} component={ProfilePage} />
                   <Route exact path={routes.createChannel} component={CreateChannelPage} />
+                  <Route exact path={routes.channel} component={ChannelPage} />
                   <Link to={routes.logout}>Logout</Link>
                 </AudioPlayer.Provider>
               </LoggedInUser.Provider>
