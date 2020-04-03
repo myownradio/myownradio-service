@@ -29,12 +29,12 @@ const Main: React.FC = () => {
             <Route exact path={[routes.home, routes.profile, routes.createChannel, routes.channel]}>
               <LoggedInUser.Provider fallback={<Redirect to={routes.login} />}>
                 <AudioPlayer.Provider>
-                  <Route exact path={routes.home}>
-                    <Redirect to={routes.profile} />
-                  </Route>
-                  <Route exact path={routes.profile} component={ProfilePage} />
-                  <Route exact path={routes.createChannel} component={CreateChannelPage} />
-                  <Route exact path={routes.channel} component={ChannelPage} />
+                  <Switch>
+                    <Redirect exact from={routes.home} to={routes.profile} />
+                    <Route exact path={routes.profile} component={ProfilePage} />
+                    <Route exact path={routes.createChannel} component={CreateChannelPage} />
+                    <Route exact path={routes.channel} component={ChannelPage} />
+                  </Switch>
                   <Link to={routes.logout}>Logout</Link>
                 </AudioPlayer.Provider>
               </LoggedInUser.Provider>
