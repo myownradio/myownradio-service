@@ -6,6 +6,7 @@ import { useDependencies } from "~/bootstrap/dependencies";
 import useErrorMessage from "~/components/use/useErrorMessage";
 import { config } from "~/config";
 import { IRadioChannel } from "~/services/RadioManagerService";
+import { createUrlFromRoute } from "~/utils/router";
 
 const ProfilePage: React.FC = () => {
   const [channels, setChannels] = useState<IRadioChannel[]>([]);
@@ -44,7 +45,9 @@ const ProfilePage: React.FC = () => {
       <br />
       <ul>
         {channels.map(channel => (
-          <li key={channel.id}>{channel.title}</li>
+          <li key={channel.id}>
+            <Link to={createUrlFromRoute(config.routes.channel, { channelId: channel.id })}>{channel.title}</Link>
+          </li>
         ))}
       </ul>
       <br />

@@ -26,8 +26,8 @@ export const config = Object.freeze({
     signup: "/signup",
     logout: "/logout",
     profile: "/radiomanager",
-    createChannel: "/radiomanager/new-channel",
-    radioChannel: "/radiomanager/:channelId",
+    createChannel: "/radiomanager/channels/new",
+    channel: "/radiomanager/channels/:channelId",
   },
 });
 

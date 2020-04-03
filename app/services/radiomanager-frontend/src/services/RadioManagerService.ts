@@ -27,4 +27,13 @@ export class RadioManagerService extends AbstractApiWithSessionService {
 
     return body;
   }
+
+  public async getChannel(channelId: string | number): Promise<IRadioChannel> {
+    const rawChannelId = encodeURIComponent(channelId);
+    const { body } = await this.makeRequestWithRefresh<IRadioChannel>(`channels/${rawChannelId}`, {
+      method: "get",
+    });
+
+    return body;
+  }
 }
