@@ -15,7 +15,7 @@ services:
       LETSENCRYPT_HOST: "new.myownradio.biz"
     networks:
       - default
-      - global_default
+      - global
     deploy:
       replicas: 1
       update_config:
@@ -176,3 +176,8 @@ volumes:
 
   audio-uploader:
     driver: local
+
+networks:
+  global:
+    external:
+      name: global_default
