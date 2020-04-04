@@ -13,6 +13,9 @@ services:
     environment:
       VIRTUAL_HOST: "new.myownradio.biz"
       LETSENCRYPT_HOST: "new.myownradio.biz"
+    networks:
+      - default
+      - global_default
     deploy:
       replicas: 1
       update_config:
