@@ -179,5 +179,5 @@ volumes:
 
 networks:
   global:
-    external:
-      name: global_default
+    external: true
+    name: global_default
