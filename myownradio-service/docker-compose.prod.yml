@@ -2,31 +2,17 @@ version: "3.5"
 
 services:
 
-  http-to-https:
-    image: realkinetic/http-to-https:latest
-    ports:
-      - 80:80
-    deploy:
-      replicas: 1
-      update_config:
-        order: start-first
-        failure_action: rollback
-    logging:
-      driver: logentries
-      options:
-        logentries-token: b974df9d-d463-4e9a-bd5a-8e68dcfb691f
-        line-only: "true"
-
   frontend-proxy:
     image: ${FRONTEND_PROXY_IMAGE_URL}:${IMAGE_TAG}
-    ports:
-      - 443:443
     depends_on:
       - radiomanager-frontend
       - radiomanager-backend
       - auth-server
       - audio-uploader
       - fileserver-local
+    environment:
+      VIRTUAL_HOST: "new.myownradio.biz"
+      LETSENCRYPT_HOST: "new.myownradio.biz"
     deploy:
       replicas: 1
       update_config:
