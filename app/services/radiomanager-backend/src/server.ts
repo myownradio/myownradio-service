@@ -5,11 +5,15 @@ import logger from "./logger";
 
 try {
   const config = new Config(process.env);
+
   const knexConnection = knex({
     connection: config.databaseUrl,
     client: config.databaseClient,
+    pool: { min: 0, max: 10 },
   });
+
   const app = createApp(config, knexConnection, logger);
+
   const server = app.listen(config.httpServerPort, () => {
     logger.debug(`Server is listening on port ${config.httpServerPort}`);
   });
