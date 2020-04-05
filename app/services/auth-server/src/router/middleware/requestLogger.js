@@ -7,9 +7,7 @@ module.exports = function requestLogger(logger) {
   return async (ctx, next) => {
     try {
       await next();
-      logger.warn("a");
     } catch (error) {
-      logger.warn("b");
       const route = ctx._matchedRoute;
       const { method } = ctx.request;
 
