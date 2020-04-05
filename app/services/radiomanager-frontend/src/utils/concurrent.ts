@@ -1,4 +1,10 @@
+import * as PropTypes from "prop-types";
+
 export type IResource<T> = { read: () => T };
+
+export const resource = PropTypes.shape({
+  read: PropTypes.func.isRequired,
+});
 
 export function wrapPromise<T>(promise: Promise<T>): IResource<T> {
   let status = "pending";

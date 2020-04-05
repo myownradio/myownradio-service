@@ -8,7 +8,6 @@ import Localization from "~/modules/Localization";
 import LoggedInUser from "~/modules/LoggedInUser";
 
 const { routes } = config;
-const Loader: React.FC = () => <>Loading...</>;
 
 const LoginPage = React.lazy(() => import("./routes/LoginPage"));
 const SignupPage = React.lazy(() => import("./routes/SignupPage"));
@@ -20,7 +19,7 @@ const ChannelPage = React.lazy(() => import("./routes/ChannelPage"));
 const Main: React.FC = () => {
   return (
     <Localization.Provider>
-      <Suspense fallback={<Loader />}>
+      <Suspense fallback={null}>
         <BrowserRouter>
           <Switch>
             <Route exact path={routes.login} component={LoginPage} />
