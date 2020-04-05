@@ -7,6 +7,7 @@ const logger = require("./logger");
 const knexConnection = knex({
   connection: config.AUTH_SERVER_DATABASE_URL,
   client: config.AUTH_SERVER_DATABASE_CLIENT,
+  pool: { min: 0, max: 10 },
 });
 
 const app = createApp(config, knexConnection, logger);
