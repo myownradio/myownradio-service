@@ -1,34 +1,23 @@
 import * as React from "react";
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Redirect } from "react-router-dom";
 import { useDependencies } from "~/bootstrap/dependencies";
-import ErrorBox from "~/components/ErrorBox";
-import useErrorMessage from "~/components/use/useErrorMessage";
-import { IRadioChannel } from "~/services/RadioManagerService";
-import AbstractErrorWithReason from "~/services/errors/AbstractErrorWithReason";
+import CatchError from "~/components/CatchError";
+import { config } from "~/config";
+import { wrapPromise } from "~/utils/concurrent";
+import ChannelView from "./components/ChannelView";
 
 const ChannelPage: React.FC = () => {
   const { channelId } = useParams<{ channelId: string }>();
   const { radioManagerService } = useDependencies();
-  const [channel, setChannel] = useState<IRadioChannel>();
-  const [errorMessage, setErrorMessage] = useErrorMessage();
 
-  useEffect(() => {
-    radioManagerService.getChannel(channelId).then(setChannel, error => {
-      if (error instanceof AbstractErrorWithReason) {
-        setErrorMessage(error.localeKey);
-      } else {
-        setErrorMessage("api_error");
-      }
-    });
-  }, [channelId, radioManagerService, setErrorMessage, setChannel]);
+  const channelResource = wrapPromise(radioManagerService.getChannel(channelId));
 
   return (
-    <section>
-      <ErrorBox errorMessage={errorMessage} />
-      <h1>Channel Page</h1>
-      {channel && <>Title: {channel?.title}</>}
-    </section>
+    <CatchError fallback={<Redirect to={config.routes.profile} />}>
+      <React.Suspense fallback={null}>
+        <ChannelView channelResource={channelResource} />
+      </React.Suspense>
+    </CatchError>
   );
 };
 
