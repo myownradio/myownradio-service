@@ -36,7 +36,7 @@ const ChannelView: React.FC<ChannelViewProps> = ({ channelResource, audioTracksR
   }, [channel.id, audioUploaderService, radioManagerService, setAudioTracks]);
 
   return (
-    <React.Suspense fallback={null}>
+    <>
       <aside>
         <Link to={config.routes.profile}>Back to channels</Link>
       </aside>
@@ -51,7 +51,7 @@ const ChannelView: React.FC<ChannelViewProps> = ({ channelResource, audioTracksR
         </ul>
         <button onClick={handleUploadClick}>Upload</button>
       </section>
-    </React.Suspense>
+    </>
   );
 };
 
