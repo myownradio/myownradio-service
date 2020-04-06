@@ -11,11 +11,12 @@ const ChannelPage: React.FC = () => {
   const { radioManagerService } = useDependencies();
 
   const channelResource = wrapPromise(radioManagerService.getChannel(channelId));
+  const audioTracksResource = wrapPromise(radioManagerService.getAudioTracks(channelId));
 
   return (
     <CatchError fallback={<Redirect to={config.routes.profile} />}>
       <React.Suspense fallback={null}>
-        <ChannelView channelResource={channelResource} />
+        <ChannelView channelResource={channelResource} audioTracksResource={audioTracksResource} />
       </React.Suspense>
     </CatchError>
   );

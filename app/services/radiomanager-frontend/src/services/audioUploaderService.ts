@@ -1,11 +1,23 @@
 import { AbstractApiWithSessionService } from "~/services/abstractApiWithSessionService";
 import { SessionService } from "~/services/sessionService";
 
-export type IAudioFileMetadata = {};
+export type IAudioFileMetadata = {
+  hash: string;
+  size: number;
+  name: string;
+  duration: number;
+  bitrate: number;
+  format: string;
+  artist: string;
+  title: string;
+  album: string;
+  genre: string;
+};
 
 export type ISuccessfulUploadResponse = {
   signature: string;
   metadata: IAudioFileMetadata;
+  rawMetadata: string;
 };
 
 export class AudioUploaderService extends AbstractApiWithSessionService {
@@ -19,12 +31,19 @@ export class AudioUploaderService extends AbstractApiWithSessionService {
 
     const {
       headers: { signature },
-      body: metadata,
-    } = await this.makeRequestWithRefresh<IAudioFileMetadata>("upload", {
+      body: { metadata, rawMetadata },
+    } = await this.makeRequestWithRefresh<{
+      rawMetadata: string;
+      metadata: IAudioFileMetadata;
+    }>("upload", {
       method: "post",
       data: formData,
+      transformResponse: data => ({
+        rawMetadata: data,
+        metadata: JSON.parse(data),
+      }),
     });
 
-    return { signature, metadata };
+    return { signature, metadata, rawMetadata };
   }
 }

@@ -16,6 +16,10 @@ export type IAudioTrack = {
   duration: number;
 };
 
+type IAddAudioTrackToChannelResult = {
+  id: number;
+};
+
 export class RadioManagerService extends AbstractApiWithSessionService {
   constructor(radioManagerUrl: string, sessionService: SessionService) {
     super(radioManagerUrl, sessionService);
@@ -51,6 +55,20 @@ export class RadioManagerService extends AbstractApiWithSessionService {
     const rawChannelId = encodeURIComponent(channelId);
     const { body } = await this.makeRequestWithRefresh<IAudioTrack[]>(`channels/${rawChannelId}/tracks`, {
       method: "get",
+    });
+
+    return body;
+  }
+
+  async addTrackToChannel(channelId: string | number, signature: string, rawMetadata: string): Promise<IAddAudioTrackToChannelResult> {
+    const rawChannelId = encodeURIComponent(channelId);
+    const { body } = await this.makeRequestWithRefresh<IAddAudioTrackToChannelResult>(`channels/${rawChannelId}/tracks/add`, {
+      method: "post",
+      headers: {
+        signature,
+        "Content-Type": "application/json",
+      },
+      data: rawMetadata,
     });
 
     return body;
