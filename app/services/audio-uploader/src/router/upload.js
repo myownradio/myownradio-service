@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+const { supportedAudioExtensions, supportedAudioFormats } = require("../constants");
 
 const { fileExists, hashToPath, getMediaFileMetadata, createSignatureForMetadata } = require("../utils");
 
@@ -11,11 +12,19 @@ module.exports = function createUploadHandler(config) {
 
     const { source } = ctx.request.files;
     const { name, hash } = source;
-    const extension = path.extname(name);
-    const hashPath = hashToPath(hash);
+    const extension = path.extname(name).toLowerCase();
+
+    if (!supportedAudioExtensions.has(extension)) {
+      ctx.throw(415);
+    }
 
     const [metadata, { size }] = await Promise.all([getMediaFileMetadata(source.path), fs.promises.stat(source.path)]);
 
+    if (!supportedAudioFormats.has(metadata.format)) {
+      ctx.throw(415);
+    }
+
+    const hashPath = hashToPath(hash);
     const filepath = path.join(config.rootDir, `${hashPath}${extension}`);
 
     if (await fileExists(filepath)) {

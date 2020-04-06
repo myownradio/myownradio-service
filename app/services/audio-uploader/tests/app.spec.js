@@ -56,3 +56,13 @@ test("POST /upload - should fail if no file attached", async () => {
     .set("Authorization", `Bearer ${authenticationToken}`)
     .expect(400);
 });
+
+test("POST /upload - should fail if attached file in wrong format", async () => {
+  const filepath = `${__dirname}/__fixtures__/non-audio.txt`;
+
+  await request(app.callback())
+    .post("/upload")
+    .attach("source", filepath)
+    .set("Authorization", `Bearer ${authenticationToken}`)
+    .expect(415);
+});
