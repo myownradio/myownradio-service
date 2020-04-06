@@ -19,9 +19,9 @@ export function createRouter(config: Config, knexConnection: knex, _logger: Logg
   router.get("/healthcheck", ctx => (ctx.status = 200));
   router.get("/channels", jwtMiddleware, getChannels(config, knexConnection));
   router.post("/channels/create", bodyparser(), jwtMiddleware, createChannel(config, knexConnection));
-  router.get("/channels/:channelId", jwtMiddleware, getChannel(config, knexConnection));
+  router.get("/channels/:channelId(\\d+)", jwtMiddleware, getChannel(config, knexConnection));
   router.get("/channels/:channelId(\\d+)/tracks", jwtMiddleware, getRadioChannelTracks(config, knexConnection));
-  router.post("/channels/:channelId/tracks/add", bodyparser(), jwtMiddleware, addTrackToChannel(config, knexConnection));
+  router.post("/channels/:channelId(\\d+)/tracks/add", bodyparser(), jwtMiddleware, addTrackToChannel(config, knexConnection));
 
   return router;
 }
