@@ -1,11 +1,11 @@
 import * as React from "react";
 import { useCallback } from "react";
+import { Link } from "react-router-dom";
 import { useDependencies } from "~/bootstrap/dependencies";
 import useResource from "~/components/use/useResource";
+import { config } from "~/config";
 import { IAudioTrack, IRadioChannel } from "~/services/RadioManagerService";
 import { IResource, resource } from "~/utils/concurrent";
-import { config } from "~/config";
-import { Link } from "react-router-dom";
 
 interface ChannelViewProps {
   channelResource: IResource<IRadioChannel>;
