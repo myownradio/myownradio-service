@@ -54,6 +54,14 @@ export default function addTrackToChannel(config: Config, knexConnection: knex) 
       })
       .returning("id");
 
-    ctx.body = { id: trackId };
+    ctx.body = ctx.body = {
+      id: trackId,
+      name: requestBody.name,
+      artist: requestBody.artist,
+      title: requestBody.title,
+      album: requestBody.album,
+      bitrate: requestBody.bitrate,
+      duration: requestBody.duration,
+    };
   };
 }

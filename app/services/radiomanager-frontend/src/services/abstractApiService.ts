@@ -51,4 +51,8 @@ export abstract class AbstractApiService {
 
     throw new UnknownError(`Unknown Error. Original status - ${status}, Original response - ${responseText}`, "api_error");
   }
+
+  public isCancelledRequest(value: unknown): boolean {
+    return axios.isCancel(value);
+  }
 }

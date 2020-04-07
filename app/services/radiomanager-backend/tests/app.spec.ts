@@ -98,6 +98,12 @@ describe("/channels/:id/tracks/add", () => {
       .send(rawMetadata)
       .expect(200, {
         id: 2,
+        name: "sine.mp3",
+        title: "Sine Title",
+        artist: "Sine Artist",
+        album: "Sine Album",
+        bitrate: 242824,
+        duration: 1.07475,
       });
   });
 

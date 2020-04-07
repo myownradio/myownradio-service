@@ -1,7 +1,8 @@
+import { CancelToken } from "axios";
 import { AbstractApiWithSessionService } from "~/services/abstractApiWithSessionService";
 import { SessionService } from "~/services/sessionService";
 
-export type IAudioFileMetadata = {
+type IAudioFileMetadata = {
   hash: string;
   size: number;
   name: string;
@@ -14,18 +15,23 @@ export type IAudioFileMetadata = {
   genre: string;
 };
 
-export type ISuccessfulUploadResponse = {
+type ISuccessfulUploadResponse = {
   signature: string;
   metadata: IAudioFileMetadata;
   rawMetadata: string;
 };
+
+interface UploadAudioOptions {
+  cancelToken?: CancelToken;
+  onProgress?: (loaded: number, total: number) => void;
+}
 
 export class AudioUploaderService extends AbstractApiWithSessionService {
   constructor(audioUploaderUrl: string, sessionService: SessionService) {
     super(audioUploaderUrl, sessionService);
   }
 
-  public async uploadAudioFile(source: File): Promise<ISuccessfulUploadResponse> {
+  public async uploadAudioFile(source: File, options: UploadAudioOptions = {}): Promise<ISuccessfulUploadResponse> {
     const formData = new FormData();
     formData.append("source", source);
 
@@ -42,6 +48,10 @@ export class AudioUploaderService extends AbstractApiWithSessionService {
         rawMetadata: data,
         metadata: JSON.parse(data),
       }),
+      cancelToken: options.cancelToken,
+      onUploadProgress(progressEvent: ProgressEvent) {
+        options.onProgress && options.onProgress(progressEvent.loaded, progressEvent.total);
+      },
     });
 
     return { signature, metadata, rawMetadata };

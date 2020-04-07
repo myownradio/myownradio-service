@@ -1,11 +1,11 @@
 import * as React from "react";
 import { useCallback } from "react";
 import { Link } from "react-router-dom";
-import { useDependencies } from "~/bootstrap/dependencies";
 import useResource from "~/components/use/useResource";
 import { config } from "~/config";
 import { IAudioTrack, IRadioChannel } from "~/services/RadioManagerService";
 import { IResource, resource } from "~/utils/concurrent";
+import AudioUploader from "./components/AudioUploader";
 
 interface ChannelViewProps {
   channelResource: IResource<IRadioChannel>;
@@ -16,24 +16,12 @@ const ChannelView: React.FC<ChannelViewProps> = ({ channelResource, audioTracksR
   const [channel] = useResource(channelResource);
   const [audioTracks, setAudioTracks] = useResource(audioTracksResource);
 
-  const { audioUploaderService, radioManagerService } = useDependencies();
-
-  const handleUploadClick = useCallback(() => {
-    const input = document.createElement("input");
-    input.setAttribute("type", "file");
-    input.addEventListener("change", async (event: Event) => {
-      if (event.target) {
-        const eventTarget = event.target as HTMLInputElement;
-        if (eventTarget.files) {
-          const { signature, rawMetadata, metadata } = await audioUploaderService.uploadAudioFile(eventTarget.files[0]);
-          const { id } = await radioManagerService.addTrackToChannel(channel.id, signature, rawMetadata);
-
-          setAudioTracks(audioTracks => [...audioTracks, { ...metadata, id }]);
-        }
-      }
-    });
-    input.click();
-  }, [channel.id, audioUploaderService, radioManagerService, setAudioTracks]);
+  const handleUploadSuccess = useCallback(
+    uploadedTrack => {
+      setAudioTracks(audioTracks => [...audioTracks, uploadedTrack]);
+    },
+    [setAudioTracks],
+  );
 
   return (
     <>
@@ -49,7 +37,7 @@ const ChannelView: React.FC<ChannelViewProps> = ({ channelResource, audioTracksR
             <li key={audioTrack.id}>{audioTrack.name}</li>
           ))}
         </ul>
-        <button onClick={handleUploadClick}>Upload</button>
+        <AudioUploader channelId={channel.id} onUploadSuccess={handleUploadSuccess} />
       </section>
     </>
   );
