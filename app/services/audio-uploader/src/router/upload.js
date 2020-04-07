@@ -22,7 +22,8 @@ module.exports = function createUploadHandler(config) {
       await fs.promises.unlink(source.path);
     } else {
       await fs.promises.mkdir(path.dirname(filepath), { recursive: true });
-      await fs.promises.rename(source.path, filepath);
+      await fs.promises.copyFile(source.path, filepath);
+      await fs.promises.unlink(source.path);
     }
 
     const body = { hash, size, name, ...metadata };
