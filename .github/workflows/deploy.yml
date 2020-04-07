@@ -62,18 +62,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@master
-      - name: Terraform Init
-        uses: hashicorp/terraform-github-actions@master
+      - name: Build myownradio/frontend-proxy
+        uses: docker/build-push-action@v1
         with:
-          tf_actions_version: 0.12.20
-          tf_actions_subcommand: 'init'
-          tf_actions_working_dir: 'terraform'
-      - name: Authenticate Docker on AWS
-        run: aws ecr get-login --no-include-email --region eu-central-1 | sh
-      - name: Build image
-        run: make build-service
-      - name: Push image
-        run: make push
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          repository: ${{ secrets.DOCKER_REGISTRY }}/myownradio/frontend-proxy
+          tags: ${{ github.sha }},latest
+          path: services/frontend-proxy
 
   build-radiomanager-frontend:
     needs: terraform
@@ -87,18 +83,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@master
-      - name: Terraform Init
-        uses: hashicorp/terraform-github-actions@master
+      - name: Build myownradio/radiomanager-frontend
+        uses: docker/build-push-action@v1
         with:
-          tf_actions_version: 0.12.20
-          tf_actions_subcommand: 'init'
-          tf_actions_working_dir: 'terraform'
-      - name: Authenticate Docker on AWS
-        run: aws ecr get-login --no-include-email --region eu-central-1 | sh
-      - name: Build image
-        run: make build-app
-      - name: Push image
-        run: make push
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          repository: ${{ secrets.DOCKER_REGISTRY }}/myownradio/radiomanager-frontend
+          tags: ${{ github.sha }},latest
+          path: app/services/radiomanager-frontend
 
   build-radiomanager-backend:
     needs: terraform
@@ -112,18 +104,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@master
-      - name: Terraform Init
-        uses: hashicorp/terraform-github-actions@master
+      - name: Build myownradio/radiomanager-backend
+        uses: docker/build-push-action@v1
         with:
-          tf_actions_version: 0.12.20
-          tf_actions_subcommand: 'init'
-          tf_actions_working_dir: 'terraform'
-      - name: Authenticate Docker on AWS
-        run: aws ecr get-login --no-include-email --region eu-central-1 | sh
-      - name: Build image
-        run: make build-app
-      - name: Push image
-        run: make push
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          repository: ${{ secrets.DOCKER_REGISTRY }}/myownradio/radiomanager-backend
+          tags: ${{ github.sha }},latest
+          path: app/services/radiomanager-backend
 
   build-migration:
     needs: terraform
@@ -137,18 +125,15 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@master
-      - name: Terraform Init
-        uses: hashicorp/terraform-github-actions@master
+      - name: Build myownradio/migration
+        uses: docker/build-push-action@v1
         with:
-          tf_actions_version: 0.12.20
-          tf_actions_subcommand: 'init'
-          tf_actions_working_dir: 'terraform'
-      - name: Authenticate Docker on AWS
-        run: aws ecr get-login --no-include-email --region eu-central-1 | sh
-      - name: Build image
-        run: make build-app
-      - name: Push image
-        run: make push
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          repository: ${{ secrets.DOCKER_REGISTRY }}/myownradio/migration
+          tags: latest
+          path: app/services/migration
+
 
   build-auth-server:
     needs: terraform
@@ -162,18 +147,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@master
-      - name: Terraform Init
-        uses: hashicorp/terraform-github-actions@master
+      - name: Build myownradio/auth-server
+        uses: docker/build-push-action@v1
         with:
-          tf_actions_version: 0.12.20
-          tf_actions_subcommand: 'init'
-          tf_actions_working_dir: 'terraform'
-      - name: Authenticate Docker on AWS
-        run: aws ecr get-login --no-include-email --region eu-central-1 | sh
-      - name: Build image
-        run: make build-app
-      - name: Push image
-        run: make push
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          repository: ${{ secrets.DOCKER_REGISTRY }}/myownradio/auth-server
+          tags: ${{ github.sha }},latest
+          path: app/services/auth-server
 
   build-fileserver-local:
     needs: terraform
@@ -187,18 +168,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@master
-      - name: Terraform Init
-        uses: hashicorp/terraform-github-actions@master
+      - name: Build myownradio/fileserver-local
+        uses: docker/build-push-action@v1
         with:
-          tf_actions_version: 0.12.20
-          tf_actions_subcommand: 'init'
-          tf_actions_working_dir: 'terraform'
-      - name: Authenticate Docker on AWS
-        run: aws ecr get-login --no-include-email --region eu-central-1 | sh
-      - name: Build image
-        run: make build-app
-      - name: Push image
-        run: make push
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          repository: ${{ secrets.DOCKER_REGISTRY }}/myownradio/fileserver-local
+          tags: ${{ github.sha }},latest
+          path: app/services/fileserver-local
 
   build-audio-uploader:
     needs: terraform
@@ -212,18 +189,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@master
-      - name: Terraform Init
-        uses: hashicorp/terraform-github-actions@master
+      - name: Build myownradio/audio-uploader
+        uses: docker/build-push-action@v1
         with:
-          tf_actions_version: 0.12.20
-          tf_actions_subcommand: 'init'
-          tf_actions_working_dir: 'terraform'
-      - name: Authenticate Docker on AWS
-        run: aws ecr get-login --no-include-email --region eu-central-1 | sh
-      - name: Build image
-        run: make build-app
-      - name: Push image
-        run: make push
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          repository: ${{ secrets.DOCKER_REGISTRY }}/myownradio/audio-uploader
+          tags: ${{ github.sha }},latest
+          path: app/services/audio-uploader
 
   deploy:
     name: Deploy to Production
@@ -245,69 +218,27 @@ jobs:
       TF_VAR_deploy_ip_address: ${{ secrets.SSH_IP_ADDRESS }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
-      - uses: chrislennon/action-aws-cli@v1.1
       - name: Checkout
         uses: actions/checkout@master
-      - name: Terraform Init
-        uses: hashicorp/terraform-github-actions@master
-        with:
-          tf_actions_version: 0.12.20
-          tf_actions_subcommand: 'init'
-          tf_actions_working_dir: 'terraform'
-      - name: Gather terraform output
-        id: terraform_output
-        uses: hashicorp/terraform-github-actions@master
-        with:
-          tf_actions_version: 0.12.20
-          tf_actions_subcommand: 'output'
-          tf_actions_working_dir: 'terraform'
-      - name: Parse terraform output
-        id: parsed_output
-        uses: gr2m/get-json-paths-action@v1.x
-        with:
-          json: ${{ steps.terraform_output.outputs.tf_actions_output }}
-          ssh_private_key: 'deployer_private_key.value'
-          ssh_public_key: 'deployer_public_key.value'
-          ip_address: 'mor_master_ip_address.value'
-          url: 'url.value'
-
-          # images here
-          radiomanager_frontend_image: 'radiomanager-frontend_image_url.value'
-          radiomanager_backend_image: 'radiomanager-backend_image_url.value'
-          frontend_proxy_image: 'frontend-proxy_image_url.value'
-          migration_image: 'migration_image_url.value'
-          auth_server_image: 'auth-server_image_url.value'
-          fileserver_local_image: 'fileserver-local_image_url.value'
-          audio_uploader_image: 'audio-uploader_image_url.value'
-          # end of images
+      - name: Login to Docker
+        run: |
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }} ${{ secrets.DOCKER_REGISTRY }}
       - name: Deploy stack to Production
         uses: pldin601/docker-swarm-deploy-action@master
         with:
           remote_host: ssh://${{ secrets.SSH_USER }}@${{ secrets.SSH_IP_ADDRESS }}
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
           ssh_public_key: ${{ secrets.SSH_PUBLIC_KEY }}
-          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           args: stack deploy --with-registry-auth --compose-file myownradio-service/docker-compose.prod.yml mor
         env:
           IMAGE_TAG: ${{ github.sha }}
 
           # images here
-          RADIOMANAGER_FRONTEND_IMAGE_URL: ${{ steps.parsed_output.outputs.radiomanager_frontend_image }}
-          RADIOMANAGER_BACKEND_IMAGE_URL: ${{ steps.parsed_output.outputs.radiomanager_backend_image }}
-          FRONTEND_PROXY_IMAGE_URL: ${{ steps.parsed_output.outputs.frontend_proxy_image }}
-          MIGRATION_IMAGE_URL: ${{ steps.parsed_output.outputs.migration_image }}
-          AUTH_SERVER_IMAGE_URL: ${{ steps.parsed_output.outputs.auth_server_image }}
-          FILESERVER_LOCAL_IMAGE_URL: ${{ steps.parsed_output.outputs.fileserver_local_image }}
-          AUDIO_UPLOADER_IMAGE_URL: ${{ steps.parsed_output.outputs.audio_uploader_image }}
+          RADIOMANAGER_FRONTEND_IMAGE_URL: ${{ secrets.DOCKER_REGISTRY }}/myownradio/radiomanager-frontend
+          RADIOMANAGER_BACKEND_IMAGE_URL: ${{ secrets.DOCKER_REGISTRY }}/myownradio/radiomanager-backend
+          FRONTEND_PROXY_IMAGE_URL: ${{ secrets.DOCKER_REGISTRY }}/myownradio/frontend-proxy
+          MIGRATION_IMAGE_URL: ${{ secrets.DOCKER_REGISTRY }}/myownradio/migration
+          AUTH_SERVER_IMAGE_URL: ${{ secrets.DOCKER_REGISTRY }}/myownradio/auth-server
+          FILESERVER_LOCAL_IMAGE_URL: ${{ secrets.DOCKER_REGISTRY }}/myownradio/fileserver-local
+          AUDIO_UPLOADER_IMAGE_URL: ${{ secrets.DOCKER_REGISTRY }}/myownradio/audio-uploader
           # end of images
-      - name: Add comment to commit
-        uses: peter-evans/commit-comment@v1.0.1
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          body: |
-            Successfully deployed to servers:
-            - ${{ steps.parsed_output.outputs.ip_address }}
-
-            URL:
-            - ${{ steps.parsed_output.outputs.url }}
