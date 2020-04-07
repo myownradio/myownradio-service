@@ -3,6 +3,7 @@ import * as React from "react";
 import { useState, useCallback } from "react";
 import { FormattedMessage } from "react-intl";
 import { useDependencies } from "~/bootstrap/dependencies";
+import useFileSelect from "~/components/use/useFileSelect";
 import { SUPPORTED_AUDIO_EXTENSIONS } from "~/constants";
 import { IAudioTrack } from "~/services/RadioManagerService";
 import { getLocalizedErrorKey } from "~/utils/error";
@@ -13,30 +14,21 @@ interface AudioUploaderProps {
   onUploadSuccess: (audioTrack: IAudioTrack) => void;
 }
 
+interface FailedUploadState {
+  file: File;
+  error: Error;
+}
+
 const AudioUploader: React.FC<AudioUploaderProps> = ({ channelId, onUploadSuccess }) => {
   const [fileQueue, setFileQueue] = useState<File[]>([]);
-  const [failedUploads, setFailedUploads] = useState<Array<{ file: File; error: Error }>>([]);
-
+  const [failedUploads, setFailedUploads] = useState<FailedUploadState[]>([]);
   const { audioUploaderService } = useDependencies();
 
-  const file = fileQueue[0];
+  const handleUploadClick = useFileSelect(SUPPORTED_AUDIO_EXTENSIONS, selectedFiles => {
+    setFileQueue(files => [...files, ...selectedFiles]);
+  });
 
-  const handleUploadClick = useCallback(() => {
-    const input = document.createElement("input");
-    input.setAttribute("multiple", "1");
-    input.setAttribute("type", "file");
-    input.setAttribute("accept", SUPPORTED_AUDIO_EXTENSIONS);
-    input.addEventListener("change", async (event: Event) => {
-      if (event.target) {
-        const eventTarget = event.target as HTMLInputElement;
-        if (eventTarget.files) {
-          const newFiles = Array.from(eventTarget.files);
-          setFileQueue(files => [...files, ...newFiles]);
-        }
-      }
-    });
-    input.click();
-  }, [setFileQueue]);
+  const file = fileQueue[0];
 
   const handleUploadSuccess = useCallback<(audioTrack: IAudioTrack) => void>(
     audioTrack => {
