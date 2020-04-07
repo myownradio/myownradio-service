@@ -1,9 +1,11 @@
 import * as PropTypes from "prop-types";
 import * as React from "react";
 import { useState, useCallback } from "react";
+import { FormattedMessage } from "react-intl";
 import { useDependencies } from "~/bootstrap/dependencies";
 import { SUPPORTED_AUDIO_EXTENSIONS } from "~/constants";
 import { IAudioTrack } from "~/services/RadioManagerService";
+import { getLocalizedErrorKey } from "~/utils/error";
 import UploadSingleFile from "./components/UploadSingleFile";
 
 interface AudioUploaderProps {
@@ -65,7 +67,7 @@ const AudioUploader: React.FC<AudioUploaderProps> = ({ channelId, onUploadSucces
           <ul>
             {failedUploads.map(({ file, error }) => (
               <li key={file.name}>
-                {file.name}: {error.message}
+                {file.name}: <FormattedMessage key={getLocalizedErrorKey(error)} />
               </li>
             ))}
           </ul>
