@@ -89,7 +89,8 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: ${{ secrets.DOCKER_REGISTRY }}/myownradio/radiomanager-frontend
+          registry: ${{ secrets.DOCKER_REGISTRY }}
+          repository: myownradio/radiomanager-frontend
           tags: ${{ github.sha }},latest
           path: app/services/radiomanager-frontend
 
@@ -110,7 +111,8 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: ${{ secrets.DOCKER_REGISTRY }}/myownradio/radiomanager-backend
+          registry: ${{ secrets.DOCKER_REGISTRY }}
+          repository: myownradio/radiomanager-backend
           tags: ${{ github.sha }},latest
           path: app/services/radiomanager-backend
 
@@ -131,7 +133,8 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: ${{ secrets.DOCKER_REGISTRY }}/myownradio/migration
+          registry: ${{ secrets.DOCKER_REGISTRY }}
+          repository: myownradio/migration
           tags: latest
           path: app/services/migration
 
@@ -153,7 +156,8 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: ${{ secrets.DOCKER_REGISTRY }}/myownradio/auth-server
+          registry: ${{ secrets.DOCKER_REGISTRY }}
+          repository: myownradio/auth-server
           tags: ${{ github.sha }},latest
           path: app/services/auth-server
 
@@ -174,7 +178,8 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: ${{ secrets.DOCKER_REGISTRY }}/myownradio/fileserver-local
+          registry: ${{ secrets.DOCKER_REGISTRY }}
+          repository: myownradio/fileserver-local
           tags: ${{ github.sha }},latest
           path: app/services/fileserver-local
 
@@ -195,7 +200,8 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: ${{ secrets.DOCKER_REGISTRY }}/myownradio/audio-uploader
+          registry: ${{ secrets.DOCKER_REGISTRY }}
+          repository: myownradio/audio-uploader
           tags: ${{ github.sha }},latest
           path: app/services/audio-uploader
 
