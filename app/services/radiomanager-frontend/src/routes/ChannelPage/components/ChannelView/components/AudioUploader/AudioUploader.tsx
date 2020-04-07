@@ -59,7 +59,7 @@ const AudioUploader: React.FC<AudioUploaderProps> = ({ channelId, onUploadSucces
           <ul>
             {failedUploads.map(({ file, error }) => (
               <li key={file.name}>
-                {file.name}: <FormattedMessage key={getLocalizedErrorKey(error)} />
+                {file.name}: <FormattedMessage id={getLocalizedErrorKey(error)} />
               </li>
             ))}
           </ul>
