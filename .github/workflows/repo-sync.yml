@@ -1,0 +1,19 @@
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  repo-sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: repo-sync
+        uses: wei/git-sync@v1
+        env:
+          SOURCE_REPO: ${{ github.repository }}
+          SOURCE_BRANCH: master
+          DESTINATION_REPO: git@gitlab.com:pldin601/myownradio-service.git
+          DESTINATION_BRANCH: master
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        with:
+          args: $SOURCE_REPO $SOURCE_BRANCH $DESTINATION_REPO $DESTINATION_BRANCH
