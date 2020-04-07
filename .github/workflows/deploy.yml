@@ -92,7 +92,7 @@ jobs:
           registry: ${{ secrets.DOCKER_REGISTRY }}
           repository: myownradio/radiomanager-frontend
           path: app
-          dockerfile: services/radiomanager-frontend
+          dockerfile: app/services/radiomanager-frontend/Dockerfile
           tags: ${{ github.sha }},latest
 
   build-radiomanager-backend:
@@ -115,7 +115,7 @@ jobs:
           registry: ${{ secrets.DOCKER_REGISTRY }}
           repository: myownradio/radiomanager-backend
           path: app
-          dockerfile: services/radiomanager-backend
+          dockerfile: app/services/radiomanager-backend/Dockerfile
           tags: ${{ github.sha }},latest
 
   build-migration:
@@ -138,7 +138,7 @@ jobs:
           registry: ${{ secrets.DOCKER_REGISTRY }}
           repository: myownradio/migration
           path: app
-          dockerfile: services/migration
+          dockerfile: app/services/migration/Dockerfile
           tags: latest
 
 
@@ -162,7 +162,7 @@ jobs:
           registry: ${{ secrets.DOCKER_REGISTRY }}
           repository: myownradio/auth-server
           path: app
-          dockerfile: app/services/auth-server
+          dockerfile: app/services/auth-server/Dockerfile
           tags: ${{ github.sha }},latest
 
   build-fileserver-local:
