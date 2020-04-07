@@ -9,7 +9,7 @@ jobs:
   repo-sync:
     runs-on: ubuntu-latest
     steps:
-      - name: repo-sync
+      - name: Mirror
         uses: wei/git-sync@v1
         env:
           SOURCE_REPO: ${{ github.repository }}
