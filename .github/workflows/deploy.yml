@@ -208,7 +208,7 @@ jobs:
           registry: ${{ secrets.DOCKER_REGISTRY }}
           repository: myownradio/audio-uploader
           path: app
-          dockerfile: {path}/services/audio-uploader/Dockerfile
+          dockerfile: app/services/audio-uploader/Dockerfile
           tags: ${{ github.sha }},latest
 
   deploy:
