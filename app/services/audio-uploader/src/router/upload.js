@@ -27,11 +27,13 @@ module.exports = function createUploadHandler(config) {
     const hashPath = hashToPath(hash);
     const filepath = path.join(config.rootDir, `${hashPath}${extension}`);
 
+    // todo do we need to explicitly delete uploaded temp file?
     if (await fileExists(filepath)) {
       await fs.promises.unlink(source.path);
     } else {
       await fs.promises.mkdir(path.dirname(filepath), { recursive: true });
-      await fs.promises.rename(source.path, filepath);
+      await fs.promises.copyFile(source.path, filepath);
+      await fs.promises.unlink(source.path);
     }
 
     const body = { hash, size, name, ...metadata };
