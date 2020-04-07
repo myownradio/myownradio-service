@@ -162,7 +162,7 @@ jobs:
           registry: ${{ secrets.DOCKER_REGISTRY }}
           repository: myownradio/auth-server
           path: app
-          dockerfile: services/auth-server
+          dockerfile: app/services/auth-server
           tags: ${{ github.sha }},latest
 
   build-fileserver-local:
@@ -185,7 +185,7 @@ jobs:
           registry: ${{ secrets.DOCKER_REGISTRY }}
           repository: myownradio/fileserver-local
           path: app
-          dockerfile: {path}/services/fileserver-local/Dockerfile
+          dockerfile: app/services/fileserver-local/Dockerfile
           tags: ${{ github.sha }},latest
 
   build-audio-uploader:
