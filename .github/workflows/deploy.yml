@@ -233,18 +233,15 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@master
-      - name: Login to Docker
-        uses: azure/docker-login@v1
-        with:
-          login-server: ${{ secrets.DOCKER_REGISTRY }}
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
       - name: Deploy stack to Production
         uses: pldin601/docker-swarm-deploy-action@master
         with:
           remote_host: ssh://${{ secrets.SSH_USER }}@${{ secrets.SSH_IP_ADDRESS }}
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
           ssh_public_key: ${{ secrets.SSH_PUBLIC_KEY }}
+          docker_username: ${{ secrets.DOCKER_USERNAME }}
+          docker_password: ${{ secrets.DOCKER_PASSWORD }}
+          docker_registry: ${{ secrets.DOCKER_REGISTRY }}
           args: stack deploy --with-registry-auth --compose-file myownradio-service/docker-compose.prod.yml mor
         env:
           IMAGE_TAG: ${{ github.sha }}
