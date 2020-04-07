@@ -98,6 +98,12 @@ describe("/channels/:id/tracks/add", () => {
       .send(rawMetadata)
       .expect(200, {
         id: 2,
+        name: "sine.mp3",
+        title: "Sine Title",
+        artist: "Sine Artist",
+        album: "Sine Album",
+        bitrate: 242824,
+        duration: 1.07475,
       });
   });
 
@@ -171,5 +177,42 @@ describe("GET /channels/:id", () => {
 
   it("should respond with 401 if not authorized", async () => {
     await request.get("/channels/1").expect(401);
+  });
+});
+
+describe("GET /channels/:id/tracks", () => {
+  it("should respond with 200 on successful get request", async () => {
+    await request
+      .get("/channels/1/tracks")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(200, [
+        {
+          id: 1,
+          name: "bob_marley_this_is_love.mp3",
+          artist: "Bob Marley",
+          title: "This Is Love",
+          album: "Legend - The Best Of Bob Marley And The Wailers",
+          bitrate: 242824,
+          duration: 230.07475,
+        },
+      ]);
+  });
+
+  it("should respond with 404 if channel not found", async () => {
+    await request
+      .get("/channels/10/tracks")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(404);
+  });
+
+  it("should respond with 401 if channel belongs to other user", async () => {
+    await request
+      .get("/channels/1/tracks")
+      .set("Authorization", `Bearer ${otherAuthorizationToken}`)
+      .expect(401);
+  });
+
+  it("should respond with 401 if not authorized", async () => {
+    await request.get("/channels/1/tracks").expect(401);
   });
 });

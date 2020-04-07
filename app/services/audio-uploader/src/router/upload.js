@@ -36,7 +36,7 @@ module.exports = function createUploadHandler(config) {
 
     const body = { hash, size, name, ...metadata };
     const rawBody = JSON.stringify(body);
-    const signature = createSignatureForMetadata(rawBody, config.tokenSecret);
+    const signature = createSignatureForMetadata(rawBody, config.metadataSecret);
 
     ctx.set("signature", signature);
     ctx.set("content-type", "application/json");

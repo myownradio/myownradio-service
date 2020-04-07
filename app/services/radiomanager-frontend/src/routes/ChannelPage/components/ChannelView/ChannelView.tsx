@@ -1,29 +1,51 @@
-import * as PropTypes from "prop-types";
 import * as React from "react";
-import { IRadioChannel } from "~/services/RadioManagerService";
-import { IResource } from "~/utils/concurrent";
+import { useCallback } from "react";
+import { Link } from "react-router-dom";
+import useResource from "~/components/use/useResource";
+import { config } from "~/config";
+import { IAudioTrack, IRadioChannel } from "~/services/RadioManagerService";
+import { IResource, resource } from "~/utils/concurrent";
+import AudioUploader from "./components/AudioUploader";
 
 interface ChannelViewProps {
   channelResource: IResource<IRadioChannel>;
+  audioTracksResource: IResource<IAudioTrack[]>;
 }
 
-const ChannelView: React.FC<ChannelViewProps> = ({ channelResource }) => {
-  const channel = channelResource.read();
+const ChannelView: React.FC<ChannelViewProps> = ({ channelResource, audioTracksResource }) => {
+  const [channel] = useResource(channelResource);
+  const [audioTracks, setAudioTracks] = useResource(audioTracksResource);
+
+  const handleUploadSuccess = useCallback(
+    uploadedTrack => {
+      setAudioTracks(audioTracks => [...audioTracks, uploadedTrack]);
+    },
+    [setAudioTracks],
+  );
 
   return (
-    <React.Suspense fallback={null}>
+    <>
+      <aside>
+        <Link to={config.routes.profile}>Back to channels</Link>
+      </aside>
       <section>
         <h1>Channel Page</h1>
-        {channel && <>Title: {channel?.title}</>}
+        Title: {channel.title}
+        <h2>Audio Tracks</h2>
+        <ul>
+          {audioTracks.map(audioTrack => (
+            <li key={audioTrack.id}>{audioTrack.name}</li>
+          ))}
+        </ul>
+        <AudioUploader channelId={channel.id} onUploadSuccess={handleUploadSuccess} />
       </section>
-    </React.Suspense>
+    </>
   );
 };
 
 ChannelView.propTypes = {
-  channelResource: PropTypes.shape({
-    read: PropTypes.func.isRequired,
-  }).isRequired,
+  channelResource: resource.isRequired,
+  audioTracksResource: resource.isRequired,
 };
 
 export default ChannelView;

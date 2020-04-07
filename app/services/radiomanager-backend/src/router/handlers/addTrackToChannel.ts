@@ -37,21 +37,31 @@ export default function addTrackToChannel(config: Config, knexConnection: knex) 
 
     const requestBody = decodedRequest.right;
 
-    const [trackId] = await knexConnection("audio_tracks").insert({
-      channel_id: channelId,
-      user_id: userId,
+    const [trackId] = await knexConnection("audio_tracks")
+      .insert({
+        channel_id: channelId,
+        user_id: userId,
+        name: requestBody.name,
+        hash: requestBody.hash,
+        size: requestBody.size,
+        artist: requestBody.artist,
+        title: requestBody.title,
+        album: requestBody.album,
+        genre: requestBody.genre,
+        bitrate: requestBody.bitrate,
+        duration: requestBody.duration,
+        format: requestBody.format,
+      })
+      .returning("id");
+
+    ctx.body = ctx.body = {
+      id: trackId,
       name: requestBody.name,
-      hash: requestBody.hash,
-      size: requestBody.size,
       artist: requestBody.artist,
       title: requestBody.title,
       album: requestBody.album,
-      genre: requestBody.genre,
       bitrate: requestBody.bitrate,
       duration: requestBody.duration,
-      format: requestBody.format,
-    });
-
-    ctx.body = { id: trackId };
+    };
   };
 }
