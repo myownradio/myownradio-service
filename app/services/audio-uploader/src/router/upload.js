@@ -18,6 +18,7 @@ module.exports = function createUploadHandler(config) {
 
     const filepath = path.join(config.rootDir, `${hashPath}${extension}`);
 
+    // todo do we need to explicitly delete uploaded temp file?
     if (await fileExists(filepath)) {
       await fs.promises.unlink(source.path);
     } else {
