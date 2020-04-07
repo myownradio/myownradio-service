@@ -69,8 +69,8 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
           registry: ${{ secrets.DOCKER_REGISTRY }}
           repository: myownradio/frontend-proxy
-          tags: ${{ github.sha }},latest
           path: services/frontend-proxy
+          tags: ${{ github.sha }},latest
 
   build-radiomanager-frontend:
     needs: terraform
@@ -91,8 +91,9 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
           registry: ${{ secrets.DOCKER_REGISTRY }}
           repository: myownradio/radiomanager-frontend
+          path: app
+          dockerfile: services/radiomanager-frontend
           tags: ${{ github.sha }},latest
-          path: app/services/radiomanager-frontend
 
   build-radiomanager-backend:
     needs: terraform
@@ -113,8 +114,9 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
           registry: ${{ secrets.DOCKER_REGISTRY }}
           repository: myownradio/radiomanager-backend
+          path: app
+          dockerfile: services/radiomanager-backend
           tags: ${{ github.sha }},latest
-          path: app/services/radiomanager-backend
 
   build-migration:
     needs: terraform
@@ -135,8 +137,9 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
           registry: ${{ secrets.DOCKER_REGISTRY }}
           repository: myownradio/migration
+          path: app
+          dockerfile: services/migration
           tags: latest
-          path: app/services/migration
 
 
   build-auth-server:
@@ -158,8 +161,9 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
           registry: ${{ secrets.DOCKER_REGISTRY }}
           repository: myownradio/auth-server
+          path: app
+          dockerfile: services/auth-server
           tags: ${{ github.sha }},latest
-          path: app/services/auth-server
 
   build-fileserver-local:
     needs: terraform
@@ -180,8 +184,9 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
           registry: ${{ secrets.DOCKER_REGISTRY }}
           repository: myownradio/fileserver-local
+          path: app
+          dockerfile: services/fileserver-local
           tags: ${{ github.sha }},latest
-          path: app/services/fileserver-local
 
   build-audio-uploader:
     needs: terraform
@@ -202,8 +207,9 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
           registry: ${{ secrets.DOCKER_REGISTRY }}
           repository: myownradio/audio-uploader
+          path: app
+          dockerfile: services/audio-uploader
           tags: ${{ github.sha }},latest
-          path: app/services/audio-uploader
 
   deploy:
     name: Deploy to Production
