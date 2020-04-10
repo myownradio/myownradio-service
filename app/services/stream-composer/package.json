@@ -1,0 +1,28 @@
+{
+  "name": "@myownradio/stream-composer",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "rm -rf dist && ncc build src/server.ts -o dist -s",
+    "dev": "ts-node-dev --respawn src/server.ts",
+    "start": "node dist/index.js"
+  },
+  "devDependencies": {
+    "@types/jest": "^25.1.4",
+    "@types/koa": "^2.11.3",
+    "@types/koa-jwt": "^3.3.0",
+    "@types/koa-router": "^7.4.0",
+    "@types/node": "^13.9.3",
+    "@types/supertest": "^2.0.8",
+    "@zeit/ncc": "^0.21.1",
+    "supertest": "^4.0.2",
+    "ts-node-dev": "^1.0.0-pre.44",
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "@koa/cors": "^3.0.0",
+    "koa": "^2.11.0",
+    "koa-router": "^8.0.8",
+    "winston": "^3.2.1"
+  }
+}
