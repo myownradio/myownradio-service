@@ -125,6 +125,18 @@ services:
         logentries-token: d4283584-5182-498d-a18f-7f6f0ab18a3d
         line-only: "true"
 
+  stream-composer:
+    image: ${STREAM_COMPOSER_IMAGE_URL}:${IMAGE_TAG}
+    environment:
+      STREAM_COMPOSER_TOKEN_SECRET: me9IQW0atAzzE5nYKC6EiibAareI0to1
+      PORT: 8080
+    deploy:
+      replicas: 1
+      update_config:
+        order: start-first
+      restart_policy:
+        condition: on-failure
+
   # Migration
   migration:
     image: ${MIGRATION_IMAGE_URL}:latest
