@@ -13,5 +13,5 @@ RUN ["yarn", "workspace", "@myownradio/stream-composer", "build"]
 FROM node:13-alpine
 ENV NODE_ENV=production
 
-COPY --from=0 /usr/app/services/rstream-composer/dist/ /usr/app/
+COPY --from=0 /usr/app/services/stream-composer/dist/ /usr/app/
 CMD ["node", "/usr/app/index.js"]
