@@ -7,7 +7,8 @@ const createApp = require("../src/app");
 const migrationsDir = `${__dirname}/../../../migrations`;
 const seedsDir = `${__dirname}/../../../seeds`;
 
-const accessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjEsImlhdCI6MTUxNjIzOTAyMn0.Fknsf_nSFNdqS9JkFJABEEtMVffv9zR1_nrI2mAVx60";
+const accessToken =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjEsImlhdCI6MTUxNjIzOTAyMn0.Fknsf_nSFNdqS9JkFJABEEtMVffv9zR1_nrI2mAVx60";
 
 const config = {
   AUTH_SERVER_TOKEN_SECRET: "secret",
@@ -154,7 +155,9 @@ describe("/login", () => {
 
 describe("/refreshToken", () => {
   test("POST /refreshToken - should update refresh token and create new access token", async () => {
-    const response = await request.post("/refreshToken").send({ refresh_token: "8e6112346a91d135e3cb8bbad7f5363eae2108ff" });
+    const response = await request
+      .post("/refreshToken")
+      .send({ refresh_token: "8e6112346a91d135e3cb8bbad7f5363eae2108ff" });
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual({

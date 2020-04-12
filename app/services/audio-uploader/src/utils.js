@@ -118,4 +118,10 @@ function getMediaFileMetadata(filepath) {
   });
 }
 
-module.exports = { hashToPath, fileExists, getMediaFileMetadata, createSignatureForMetadata, verifySignatureOfMetadata };
+module.exports = {
+  hashToPath,
+  fileExists,
+  getMediaFileMetadata,
+  createSignatureForMetadata,
+  verifySignatureOfMetadata,
+};

@@ -5,7 +5,8 @@ const { Config } = require("../src/config");
 const { verifySignatureOfMetadata } = require("../src/utils");
 const withTempDirectory = require("./with/withTempDirectory");
 
-const authenticationToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwZXJtIjpbInVwbG9hZCJdLCJpYXQiOjE1MTYyMzkwMjJ9.6YVvCcjFSaHFw8HgbiUd-sVUQQxmcf8LaNGE7GXIQ6w";
+const authenticationToken =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwZXJtIjpbInVwbG9hZCJdLCJpYXQiOjE1MTYyMzkwMjJ9.6YVvCcjFSaHFw8HgbiUd-sVUQQxmcf8LaNGE7GXIQ6w";
 
 const tempDirectory = withTempDirectory();
 

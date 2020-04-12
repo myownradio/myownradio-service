@@ -11,7 +11,10 @@ export abstract class AbstractApiWithSessionService extends AbstractApiService {
     super(urlPrefix);
   }
 
-  protected async makeRequestWithRefresh<T>(path: string, requestConfig: AxiosRequestConfig): Promise<IApiServiceResponse<T>> {
+  protected async makeRequestWithRefresh<T>(
+    path: string,
+    requestConfig: AxiosRequestConfig,
+  ): Promise<IApiServiceResponse<T>> {
     try {
       return await this.makeRequestWithAuthorization(path, requestConfig);
     } catch (e) {
@@ -23,7 +26,10 @@ export abstract class AbstractApiWithSessionService extends AbstractApiService {
     }
   }
 
-  private async makeRequestWithAuthorization<T>(path: string, requestConfig: AxiosRequestConfig): Promise<IApiServiceResponse<T>> {
+  private async makeRequestWithAuthorization<T>(
+    path: string,
+    requestConfig: AxiosRequestConfig,
+  ): Promise<IApiServiceResponse<T>> {
     const accessToken = this.sessionService.getAccessToken();
     if (accessToken === null) {
       throw new UnauthorizedError(`No access token found`, "api_error401");

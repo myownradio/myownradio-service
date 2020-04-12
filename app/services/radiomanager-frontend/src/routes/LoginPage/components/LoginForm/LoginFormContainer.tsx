@@ -13,7 +13,16 @@ const LoginFormContainer: React.FC = () => {
 
   const handleSubmit = useHandleSubmit(email, setEmail, password, setPassword, setErrorMessage);
 
-  return <LoginForm email={email} password={password} onEmailChange={setEmail} onPasswordChange={setPassword} onLoginClicked={handleSubmit} errorMessage={errorMessage} />;
+  return (
+    <LoginForm
+      email={email}
+      password={password}
+      onEmailChange={setEmail}
+      onPasswordChange={setPassword}
+      onLoginClicked={handleSubmit}
+      errorMessage={errorMessage}
+    />
+  );
 };
 
 export default LoginFormContainer;

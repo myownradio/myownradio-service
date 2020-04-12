@@ -4,6 +4,8 @@ import { IConfig } from "~/config";
 import { RadioManagerService } from "~/services/RadioManagerService";
 import { AudioUploaderService } from "~/services/audioUploaderService";
 import { AuthApiService } from "~/services/authApiService";
+import { LoggerService } from "~/services/logger/LoggerService";
+import ConsoleLoggerService from "~/services/logger/impl/ConsoleLoggerService";
 import { BasicSessionService, SessionService } from "~/services/sessionService";
 import { createStorageService, StorageService } from "~/services/storageService";
 import { TokenService } from "~/services/tokenService";
@@ -15,6 +17,7 @@ export type AppDependencies = {
   tokenService: TokenService;
   audioUploaderService: AudioUploaderService;
   radioManagerService: RadioManagerService;
+  loggerService: LoggerService;
 };
 
 class AppDependenciesError extends Error {}
@@ -24,6 +27,7 @@ const appDependenciesContext = createContext<AppDependencies | null>(null);
 export const AppDependenciesProvider = appDependenciesContext.Provider;
 
 export function createDependencies(config: IConfig): AppDependencies {
+  const loggerService = new ConsoleLoggerService();
   const storageService = createStorageService();
   const tokenService = new TokenService(config.authApiUrl);
   const sessionService = new BasicSessionService(storageService, tokenService);
@@ -31,7 +35,15 @@ export function createDependencies(config: IConfig): AppDependencies {
   const audioUploaderService = new AudioUploaderService(config.audioUploaderUrl, sessionService);
   const radioManagerService = new RadioManagerService(config.radioManagerUrl, sessionService);
 
-  return { authApiService, storageService, sessionService, tokenService, audioUploaderService, radioManagerService };
+  return {
+    authApiService,
+    storageService,
+    sessionService,
+    tokenService,
+    audioUploaderService,
+    radioManagerService,
+    loggerService,
+  };
 }
 
 export function useDependencies(): AppDependencies {

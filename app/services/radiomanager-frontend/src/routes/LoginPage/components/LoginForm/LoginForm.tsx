@@ -30,7 +30,14 @@ type ILoginFormProps = {
   onLoginClicked: () => void;
 };
 
-const LoginForm: React.FC<ILoginFormProps> = ({ email, password, errorMessage, onEmailChange, onPasswordChange, onLoginClicked }) => {
+const LoginForm: React.FC<ILoginFormProps> = ({
+  email,
+  password,
+  errorMessage,
+  onEmailChange,
+  onPasswordChange,
+  onLoginClicked,
+}) => {
   const classes = useStyles();
 
   const handleEmailChange = useCallback(

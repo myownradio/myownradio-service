@@ -20,7 +20,11 @@ export type IApiServiceResponse<T> = {
 export abstract class AbstractApiService {
   protected constructor(private urlPrefix: string) {}
 
-  protected async makeRequest<T>(path: string, requestConfig: AxiosRequestConfig, statusCodeMap: IStatusCodeToLocaleKeyMap = {}): Promise<IApiServiceResponse<T>> {
+  protected async makeRequest<T>(
+    path: string,
+    requestConfig: AxiosRequestConfig,
+    statusCodeMap: IStatusCodeToLocaleKeyMap = {},
+  ): Promise<IApiServiceResponse<T>> {
     const url = `${this.urlPrefix}${path}`;
     const config: AxiosRequestConfig = {
       withCredentials: true,
@@ -49,7 +53,10 @@ export abstract class AbstractApiService {
       throw new EmailExistsError("Email Exists", statusCodeMap[409] || "api_error409");
     }
 
-    throw new UnknownError(`Unknown Error. Original status - ${status}, Original response - ${responseText}`, "api_error");
+    throw new UnknownError(
+      `Unknown Error. Original status - ${status}, Original response - ${responseText}`,
+      "api_error",
+    );
   }
 
   public isCancelledRequest(value: unknown): boolean {
