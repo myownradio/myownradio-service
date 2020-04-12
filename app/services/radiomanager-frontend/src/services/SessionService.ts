@@ -1,7 +1,7 @@
-import { TokenService } from "~/services/tokenService";
+import { TokenService } from "~/services/TokenService";
 import nop from "~/services/utils/nop";
 
-import { StorageService } from "./storageService";
+import { StorageService } from "./StorageService";
 
 export interface SessionService {
   getAccessToken(): string | null;
@@ -13,7 +13,7 @@ export interface SessionService {
 const ACCESS_TOKEN_STORAGE_KEY = "access_token";
 const REFRESH_TOKEN_STORAGE_KEY = "refresh_token";
 
-export class BasicSessionService implements SessionService {
+export class BaseSessionService implements SessionService {
   constructor(private storageService: StorageService, private tokenService: TokenService) {}
 
   public getAccessToken(): string | null {
@@ -44,4 +44,8 @@ export class BasicSessionService implements SessionService {
     this.storageService.delete(ACCESS_TOKEN_STORAGE_KEY);
     this.storageService.delete(REFRESH_TOKEN_STORAGE_KEY);
   }
+}
+
+export function createSessionService(storageService: StorageService, tokenService: TokenService): SessionService {
+  return new BaseSessionService(storageService, tokenService);
 }
