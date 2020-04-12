@@ -26,10 +26,10 @@ export class NaiveLocksManager implements LocksManager {
     }
 
     this.locked = true;
+    this.loggerService.info("Performing sensitive operation.", {
+      lockId: this.lockId,
+    });
     try {
-      this.loggerService.info("Performing sensitive operation.", {
-        lockId: this.lockId,
-      });
       await fn();
       this.loggerService.info("Sensitive operation finished.", {
         lockId: this.lockId,
