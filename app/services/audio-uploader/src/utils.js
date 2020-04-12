@@ -108,14 +108,20 @@ function getMediaFileMetadata(filepath) {
             duration: metadata.format.duration,
             bitrate: metadata.format.bit_rate,
             format: metadata.format.format_long_name || "Unknown audio format",
-            artist: metadata.format.tags.artist || "",
-            title: metadata.format.tags.title || "",
-            album: metadata.format.tags.album || "",
-            genre: metadata.format.tags.genre || "",
+            artist: (metadata.format.tags || {}).artist || "",
+            title: (metadata.format.tags || {}).title || "",
+            album: (metadata.format.tags || {}).album || "",
+            genre: (metadata.format.tags || {}).genre || "",
           });
         }
       });
   });
 }
 
-module.exports = { hashToPath, fileExists, getMediaFileMetadata, createSignatureForMetadata, verifySignatureOfMetadata };
+module.exports = {
+  hashToPath,
+  fileExists,
+  getMediaFileMetadata,
+  createSignatureForMetadata,
+  verifySignatureOfMetadata,
+};

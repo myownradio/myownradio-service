@@ -15,7 +15,8 @@ export default {
   ui_signup_form_signup_title: "Sign up",
   ui_signup_form_signup_button_title: "Sign Up",
   ui_signup_form_login_link_title: "Already have an account? Sign In",
-  ui_signup_validator_email_invalid_message: "It seems that you have entered an invalid email address. Please correct it and try again.",
+  ui_signup_validator_email_invalid_message:
+    "It seems that you have entered an invalid email address. Please correct it and try again.",
   ui_signup_validator_password_short_message: "Your password should be at least 6 characters long.",
   ui_common_email_address: "Email Address",
   ui_common_password: "Password",

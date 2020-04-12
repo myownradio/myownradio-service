@@ -1,6 +1,12 @@
 const { assert } = require("@myownradio/shared");
 
-const { EMAIL_SENDER_SMTP_HOST, EMAIL_SENDER_SMTP_USER, EMAIL_SENDER_SMTP_PASSWORD, EMAIL_SENDER_SMTP_PORT, PORT } = process.env;
+const {
+  EMAIL_SENDER_SMTP_HOST,
+  EMAIL_SENDER_SMTP_USER,
+  EMAIL_SENDER_SMTP_PASSWORD,
+  EMAIL_SENDER_SMTP_PORT,
+  PORT,
+} = process.env;
 const EMAIL_SENDER_SMTP_SECURE = process.env.EMAIL_SENDER_SMTP_SECURE === "yes";
 
 const config = {

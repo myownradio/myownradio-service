@@ -6,7 +6,7 @@ import { useDependencies } from "~/bootstrap/dependencies";
 import useFileSelect from "~/components/use/useFileSelect";
 import { SUPPORTED_AUDIO_EXTENSIONS } from "~/constants";
 import { IAudioTrack } from "~/services/RadioManagerService";
-import { getLocalizedErrorKey } from "~/utils/error";
+import { getLocaleErrorKey } from "~/utils/error";
 import UploadSingleFile from "./components/UploadSingleFile";
 
 interface AudioUploaderProps {
@@ -20,52 +20,66 @@ interface FailedUploadState {
 }
 
 const AudioUploader: React.FC<AudioUploaderProps> = ({ channelId, onUploadSuccess }) => {
-  const [fileQueue, setFileQueue] = useState<File[]>([]);
+  const [uploadQueue, setUploadQueue] = useState<File[]>([]);
   const [failedUploads, setFailedUploads] = useState<FailedUploadState[]>([]);
-  const { audioUploaderService } = useDependencies();
+  const { audioUploaderService, loggerService } = useDependencies();
 
   const handleUploadClick = useFileSelect(SUPPORTED_AUDIO_EXTENSIONS, selectedFiles => {
-    setFileQueue(files => [...files, ...selectedFiles]);
+    setUploadQueue(files => [...files, ...selectedFiles]);
   });
-
-  const file = fileQueue[0];
 
   const handleUploadSuccess = useCallback<(audioTrack: IAudioTrack) => void>(
     audioTrack => {
-      setFileQueue(files => files.slice(1));
+      setUploadQueue(files => files.slice(1));
       onUploadSuccess(audioTrack);
     },
-    [setFileQueue, onUploadSuccess],
+    [setUploadQueue, onUploadSuccess],
   );
 
   const handleUploadFailure = useCallback(
-    error => {
+    (error, file) => {
       if (audioUploaderService.isCancelledRequest(error)) {
-        setFileQueue([]);
-      } else {
-        setFailedUploads(failedUploads => [...failedUploads, { file, error }]);
-        setFileQueue(files => files.slice(1));
+        loggerService.error("Upload cancelled by user request");
+        setUploadQueue([]);
+        return;
       }
+
+      loggerService.error("Error occurred on audio file upload", { error, file });
+      const failedUpload = { error, file };
+      setFailedUploads(failedUploads => [...failedUploads, failedUpload]);
+      setUploadQueue(files => files.slice(1));
     },
-    [file, audioUploaderService],
+    [audioUploaderService, loggerService],
   );
 
   return (
-    <>
-      {file ? <UploadSingleFile channelId={channelId} file={file} onSuccess={handleUploadSuccess} onFailure={handleUploadFailure} /> : <button onClick={handleUploadClick}>Upload</button>}
-      {failedUploads.length > 0 && (
+    <section>
+      {uploadQueue.length > 0 ? (
         <>
-          <h2>Failed uploads</h2>
+          <header>Upload in progress...</header>
+          <UploadSingleFile
+            channelId={channelId}
+            file={uploadQueue[0]}
+            onSuccess={handleUploadSuccess}
+            onFailure={handleUploadFailure}
+          />
+        </>
+      ) : (
+        <button onClick={handleUploadClick}>Upload</button>
+      )}
+      {failedUploads.length > 0 && (
+        <section>
+          <header>Failed uploads</header>
           <ul>
             {failedUploads.map(({ file, error }) => (
               <li key={file.name}>
-                {file.name}: <FormattedMessage id={getLocalizedErrorKey(error)} />
+                {file.name}: <FormattedMessage id={getLocaleErrorKey(error)} />
               </li>
             ))}
           </ul>
-        </>
+        </section>
       )}
-    </>
+    </section>
   );
 };
 

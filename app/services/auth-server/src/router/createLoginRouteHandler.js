@@ -35,7 +35,11 @@ module.exports = function createIndexRouteHandler(config, knexConnection) {
       updated_at: now,
     });
 
-    const accessToken = await createAccessToken(config.AUTH_SERVER_TOKEN_SECRET, config.AUTH_SERVER_ACCESS_TOKEN_LIFETIME, user.id);
+    const accessToken = await createAccessToken(
+      config.AUTH_SERVER_TOKEN_SECRET,
+      config.AUTH_SERVER_ACCESS_TOKEN_LIFETIME,
+      user.id,
+    );
 
     ctx.body = {
       refresh_token: refreshToken,

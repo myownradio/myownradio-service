@@ -13,7 +13,16 @@ const SignupFormContainer: React.FC = () => {
 
   const handleSubmit = useHandleSubmit(email, setEmail, password, setPassword, setErrorMessage);
 
-  return <SignupForm email={email} password={password} onEmailChange={setEmail} onPasswordChange={setPassword} onSignupClicked={handleSubmit} errorMessage={errorMessage} />;
+  return (
+    <SignupForm
+      email={email}
+      password={password}
+      onEmailChange={setEmail}
+      onPasswordChange={setPassword}
+      onSignupClicked={handleSubmit}
+      errorMessage={errorMessage}
+    />
+  );
 };
 
 export default SignupFormContainer;

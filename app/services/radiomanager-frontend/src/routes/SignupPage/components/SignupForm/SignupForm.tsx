@@ -29,7 +29,14 @@ type ISignupFormProps = {
   onSignupClicked: () => void;
 };
 
-const SignupForm: React.FC<ISignupFormProps> = ({ email, password, errorMessage, onEmailChange, onPasswordChange, onSignupClicked }) => {
+const SignupForm: React.FC<ISignupFormProps> = ({
+  email,
+  password,
+  errorMessage,
+  onEmailChange,
+  onPasswordChange,
+  onSignupClicked,
+}) => {
   const classes = useStyles();
 
   const handleEmailChange = useCallback(
