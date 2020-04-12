@@ -53,20 +53,23 @@ const AudioUploader: React.FC<AudioUploaderProps> = ({ channelId, onUploadSucces
   );
 
   return (
-    <>
+    <section>
       {uploadQueue.length > 0 ? (
-        <UploadSingleFile
-          channelId={channelId}
-          file={uploadQueue[0]}
-          onSuccess={handleUploadSuccess}
-          onFailure={handleUploadFailure}
-        />
+        <>
+          <header>Upload in progress...</header>
+          <UploadSingleFile
+            channelId={channelId}
+            file={uploadQueue[0]}
+            onSuccess={handleUploadSuccess}
+            onFailure={handleUploadFailure}
+          />
+        </>
       ) : (
         <button onClick={handleUploadClick}>Upload</button>
       )}
       {failedUploads.length > 0 && (
-        <>
-          <h2>Failed uploads</h2>
+        <section>
+          <header>Failed uploads</header>
           <ul>
             {failedUploads.map(({ file, error }) => (
               <li key={file.name}>
@@ -74,9 +77,9 @@ const AudioUploader: React.FC<AudioUploaderProps> = ({ channelId, onUploadSucces
               </li>
             ))}
           </ul>
-        </>
+        </section>
       )}
-    </>
+    </section>
   );
 };
 
