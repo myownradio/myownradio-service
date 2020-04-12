@@ -1,9 +1,9 @@
+import { LocksManager } from "~/services/LocksManager";
 import { TokenService } from "~/services/TokenService";
 import { LoggerService } from "~/services/logger/LoggerService";
 import nop from "~/services/utils/nop";
 
 import { StorageService } from "./StorageService";
-import { LocksManager } from "~/services/LocksManager";
 
 export interface SessionService {
   getAccessToken(): string | null;
