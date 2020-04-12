@@ -1,8 +1,13 @@
 import { CancelToken } from "axios";
+import { SessionService } from "~/services/SessionService";
 import { AbstractApiWithSessionService } from "~/services/abstractApiWithSessionService";
-import { SessionService } from "~/services/sessionService";
 
-type IAudioFileMetadata = {
+export interface AudioUploaderService {
+  uploadAudioFile(source: File): Promise<SuccessfulUploadResponse>;
+  uploadAudioFile(source: File, options: UploadAudioOptions): Promise<SuccessfulUploadResponse>;
+}
+
+export interface AudioFileMetadata {
   hash: string;
   size: number;
   name: string;
@@ -13,25 +18,25 @@ type IAudioFileMetadata = {
   title: string;
   album: string;
   genre: string;
-};
+}
 
-type ISuccessfulUploadResponse = {
+export interface SuccessfulUploadResponse {
   signature: string;
-  metadata: IAudioFileMetadata;
+  metadata: AudioFileMetadata;
   rawMetadata: string;
-};
+}
 
-interface UploadAudioOptions {
+export interface UploadAudioOptions {
   cancelToken?: CancelToken;
   onProgress?: (loaded: number, total: number) => void;
 }
 
-export class AudioUploaderService extends AbstractApiWithSessionService {
+export class BaseAudioUploaderService extends AbstractApiWithSessionService implements AudioUploaderService {
   constructor(audioUploaderUrl: string, sessionService: SessionService) {
     super(audioUploaderUrl, sessionService);
   }
 
-  public async uploadAudioFile(source: File, options: UploadAudioOptions = {}): Promise<ISuccessfulUploadResponse> {
+  public async uploadAudioFile(source: File, options: UploadAudioOptions = {}): Promise<SuccessfulUploadResponse> {
     const formData = new FormData();
     formData.append("source", source);
 
@@ -40,7 +45,7 @@ export class AudioUploaderService extends AbstractApiWithSessionService {
       body: { metadata, rawMetadata },
     } = await this.makeRequestWithRefresh<{
       rawMetadata: string;
-      metadata: IAudioFileMetadata;
+      metadata: AudioFileMetadata;
     }>("upload", {
       method: "post",
       data: formData,
@@ -56,4 +61,11 @@ export class AudioUploaderService extends AbstractApiWithSessionService {
 
     return { signature, metadata, rawMetadata };
   }
+}
+
+export function createAudioUploaderService(
+  audioUploaderUrl: string,
+  sessionService: SessionService,
+): AudioUploaderService {
+  return new BaseAudioUploaderService(audioUploaderUrl, sessionService);
 }
