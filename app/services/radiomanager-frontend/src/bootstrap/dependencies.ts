@@ -2,6 +2,7 @@ import { createContext, useContext } from "react";
 import { IConfig } from "~/config";
 import { createAudioUploaderService, AudioUploaderService } from "~/services/AudioUploaderService";
 import { createAuthService, AuthService } from "~/services/AuthService";
+import { createLocksManager } from "~/services/LocksManager";
 import { createRadioManagerService, RadioManagerService } from "~/services/RadioManagerService";
 import { createSessionService, SessionService } from "~/services/SessionService";
 import { createStorageService, StorageService } from "~/services/StorageService";
@@ -26,9 +27,10 @@ export const AppDependenciesProvider = appDependenciesContext.Provider;
 
 export function createDependencies(config: IConfig): AppDependencies {
   const loggerService = createLoggerService();
+  const refreshTokenLockManager = createLocksManager("refreshToken", loggerService);
   const storageService = createStorageService();
   const tokenService = createTokenService(config.authApiUrl);
-  const sessionService = createSessionService(storageService, tokenService);
+  const sessionService = createSessionService(storageService, tokenService, loggerService, refreshTokenLockManager);
   const authApiService = createAuthService(config.authApiUrl, sessionService);
   const audioUploaderService = createAudioUploaderService(config.audioUploaderUrl, sessionService);
   const radioManagerService = createRadioManagerService(config.radioManagerUrl, sessionService);

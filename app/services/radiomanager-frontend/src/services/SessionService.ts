@@ -1,7 +1,9 @@
 import { TokenService } from "~/services/TokenService";
+import { LoggerService } from "~/services/logger/LoggerService";
 import nop from "~/services/utils/nop";
 
 import { StorageService } from "./StorageService";
+import { LocksManager } from "~/services/LocksManager";
 
 export interface SessionService {
   getAccessToken(): string | null;
@@ -14,19 +16,27 @@ const ACCESS_TOKEN_STORAGE_KEY = "access_token";
 const REFRESH_TOKEN_STORAGE_KEY = "refresh_token";
 
 export class BaseSessionService implements SessionService {
-  constructor(private storageService: StorageService, private tokenService: TokenService) {}
+  constructor(
+    private storageService: StorageService,
+    private tokenService: TokenService,
+    private loggerService: LoggerService,
+    private locksManager: LocksManager,
+  ) {}
 
   public getAccessToken(): string | null {
     return this.storageService.get(ACCESS_TOKEN_STORAGE_KEY);
   }
 
   public async refreshToken(): Promise<void> {
-    const refreshToken = this.storageService.get<string>(REFRESH_TOKEN_STORAGE_KEY);
-    if (refreshToken) {
-      const newTokens = await this.tokenService.refreshRefreshToken(refreshToken);
-      this.storageService.put(REFRESH_TOKEN_STORAGE_KEY, newTokens.refresh_token);
-      this.storageService.put(ACCESS_TOKEN_STORAGE_KEY, newTokens.access_token);
-    }
+    this.loggerService.info("Going to refresh token");
+    await this.locksManager.lock(async () => {
+      const refreshToken = this.storageService.get<string>(REFRESH_TOKEN_STORAGE_KEY);
+      if (refreshToken) {
+        const newTokens = await this.tokenService.refreshRefreshToken(refreshToken);
+        this.storageService.put(REFRESH_TOKEN_STORAGE_KEY, newTokens.refresh_token);
+        this.storageService.put(ACCESS_TOKEN_STORAGE_KEY, newTokens.access_token);
+      }
+    });
   }
 
   public saveTokens(accessToken: string, refreshToken: string): void {
@@ -46,6 +56,11 @@ export class BaseSessionService implements SessionService {
   }
 }
 
-export function createSessionService(storageService: StorageService, tokenService: TokenService): SessionService {
-  return new BaseSessionService(storageService, tokenService);
+export function createSessionService(
+  storageService: StorageService,
+  tokenService: TokenService,
+  loggerService: LoggerService,
+  locksManager: LocksManager,
+): SessionService {
+  return new BaseSessionService(storageService, tokenService, loggerService, locksManager);
 }
