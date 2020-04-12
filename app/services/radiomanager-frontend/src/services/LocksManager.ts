@@ -21,7 +21,7 @@ export class NaiveLocksManager implements LocksManager {
         lockId: this.lockId,
       });
       return new Promise((resolve, reject) => {
-        this.waitList.push(error => (error ? resolve() : reject(error)));
+        this.waitList.push(error => (error ? reject(error) : resolve()));
       });
     }
 
