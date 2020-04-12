@@ -5,13 +5,13 @@ import { FormattedMessage } from "react-intl";
 import { useDependencies } from "~/bootstrap/dependencies";
 import useFileSelect from "~/components/use/useFileSelect";
 import { SUPPORTED_AUDIO_EXTENSIONS } from "~/constants";
-import { IAudioTrack } from "~/services/RadioManagerService";
+import { AudioTrack } from "~/services/RadioManagerService";
 import { getLocaleErrorKey } from "~/utils/error";
 import UploadSingleFile from "./components/UploadSingleFile";
 
 interface AudioUploaderProps {
   channelId: number;
-  onUploadSuccess: (audioTrack: IAudioTrack) => void;
+  onUploadSuccess: (audioTrack: AudioTrack) => void;
 }
 
 interface FailedUploadState {
@@ -28,7 +28,7 @@ const AudioUploader: React.FC<AudioUploaderProps> = ({ channelId, onUploadSucces
     setUploadQueue(files => [...files, ...selectedFiles]);
   });
 
-  const handleUploadSuccess = useCallback<(audioTrack: IAudioTrack) => void>(
+  const handleUploadSuccess = useCallback<(audioTrack: AudioTrack) => void>(
     audioTrack => {
       setUploadQueue(files => files.slice(1));
       onUploadSuccess(audioTrack);

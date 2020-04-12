@@ -1,20 +1,15 @@
 import { AxiosRequestConfig } from "axios";
-
-import { AbstractApiService, IApiServiceResponse } from "~/services/abstractApiService";
+import { AbstractApiService } from "~/services/AbstractApiService";
 import isAccessTokenValid from "~/services/utils/isAccessTokenValid";
-
+import { SessionService } from "./SessionService";
 import { UnauthorizedError } from "./errors";
-import { SessionService } from "./sessionService";
 
 export abstract class AbstractApiWithSessionService extends AbstractApiService {
   protected constructor(urlPrefix: string, private sessionService: SessionService) {
     super(urlPrefix);
   }
 
-  protected async makeRequestWithRefresh<T>(
-    path: string,
-    requestConfig: AxiosRequestConfig,
-  ): Promise<IApiServiceResponse<T>> {
+  protected async makeRequestWithRefresh<T>(path: string, requestConfig: AxiosRequestConfig): Promise<T> {
     try {
       return await this.makeRequestWithAuthorization(path, requestConfig);
     } catch (e) {
@@ -26,10 +21,7 @@ export abstract class AbstractApiWithSessionService extends AbstractApiService {
     }
   }
 
-  private async makeRequestWithAuthorization<T>(
-    path: string,
-    requestConfig: AxiosRequestConfig,
-  ): Promise<IApiServiceResponse<T>> {
+  private async makeRequestWithAuthorization<T>(path: string, requestConfig: AxiosRequestConfig): Promise<T> {
     const accessToken = this.sessionService.getAccessToken();
     if (accessToken === null) {
       throw new UnauthorizedError(`No access token found`, "api_error401");

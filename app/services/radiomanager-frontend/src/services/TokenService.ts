@@ -1,4 +1,4 @@
-import { AbstractApiService } from "./abstractApiService";
+import { AbstractApiService } from "./AbstractApiService";
 
 export interface TokenService {
   refreshRefreshToken(refreshToken: string): Promise<SuccessfulRefreshResponse>;
@@ -16,11 +16,10 @@ export class BaseTokenService extends AbstractApiService implements TokenService
   }
 
   public async refreshRefreshToken(refreshToken: string): Promise<SuccessfulRefreshResponse> {
-    const { body } = await this.makeRequest<SuccessfulRefreshResponse>("refreshToken", {
+    return this.makeRequest<SuccessfulRefreshResponse>("refreshToken", {
       method: "post",
       data: { refresh_token: refreshToken },
     });
-    return body;
   }
 
   public async forgotRefreshToken(refreshToken: string): Promise<void> {

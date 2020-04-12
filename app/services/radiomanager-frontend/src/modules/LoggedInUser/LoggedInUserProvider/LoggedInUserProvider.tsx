@@ -3,11 +3,11 @@ import * as React from "react";
 import { useEffect } from "react";
 
 import { useDependencies } from "~/bootstrap/dependencies";
-import { ISuccessfulMeResponse } from "~/services/authApiService";
+import { SuccessfulMeResponse } from "~/services/AuthService";
 
 import useAuthState from "./use/useAuthState";
 
-type IUserState = ISuccessfulMeResponse;
+type IUserState = SuccessfulMeResponse;
 
 interface LoggedInUserProviderProps {
   fallback?: React.ReactNode;

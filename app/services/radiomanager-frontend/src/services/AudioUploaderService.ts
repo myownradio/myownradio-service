@@ -1,6 +1,6 @@
 import { CancelToken } from "axios";
+import { AbstractApiWithSessionService } from "~/services/AbstractApiWithSessionService";
 import { SessionService } from "~/services/SessionService";
-import { AbstractApiWithSessionService } from "~/services/abstractApiWithSessionService";
 
 export interface AudioUploaderService {
   uploadAudioFile(source: File): Promise<SuccessfulUploadResponse>;
@@ -40,26 +40,19 @@ export class BaseAudioUploaderService extends AbstractApiWithSessionService impl
     const formData = new FormData();
     formData.append("source", source);
 
-    const {
-      headers: { signature },
-      body: { metadata, rawMetadata },
-    } = await this.makeRequestWithRefresh<{
-      rawMetadata: string;
-      metadata: AudioFileMetadata;
-    }>("upload", {
+    return this.makeRequestWithRefresh<SuccessfulUploadResponse>("upload", {
       method: "post",
       data: formData,
-      transformResponse: data => ({
-        rawMetadata: data,
-        metadata: JSON.parse(data),
+      transformResponse: (rawMetadata, { signature }) => ({
+        signature,
+        rawMetadata,
+        metadata: JSON.parse(rawMetadata),
       }),
       cancelToken: options.cancelToken,
       onUploadProgress(progressEvent: ProgressEvent) {
         options.onProgress && options.onProgress(progressEvent.loaded, progressEvent.total);
       },
     });
-
-    return { signature, metadata, rawMetadata };
   }
 }
 

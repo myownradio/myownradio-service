@@ -1,8 +1,8 @@
-import { AbstractApiWithSessionService } from "~/services/abstractApiWithSessionService";
-
+import { AbstractApiWithSessionService } from "~/services/AbstractApiWithSessionService";
+import { BadRequestError, EmailExistsError, UnauthorizedError } from "~/services/errors";
 import { SessionService } from "./SessionService";
 
-interface AuthService {
+export interface AuthService {
   login(email: string, password: string): Promise<SuccessfulLoginResponse>;
   signup(email: string, password: string): Promise<void>;
   me(): Promise<SuccessfulMeResponse>;
@@ -23,19 +23,17 @@ export class BaseAuthService extends AbstractApiWithSessionService implements Au
   }
 
   public async login(email: string, password: string): Promise<SuccessfulLoginResponse> {
-    const { body } = await this.makeRequest<SuccessfulLoginResponse>(
+    return this.makeRequest<SuccessfulLoginResponse>(
       "login",
       {
         method: "post",
         data: { email, password },
       },
       {
-        400: "api_login_error400",
-        401: "api_login_error401",
+        400: () => new BadRequestError("Some request parameters are wrong", "api_login_error400"),
+        401: () => new UnauthorizedError("Wrong login or password", "api_login_error401"),
       },
     );
-
-    return body;
   }
 
   public async signup(email: string, password: string): Promise<void> {
@@ -46,17 +44,16 @@ export class BaseAuthService extends AbstractApiWithSessionService implements Au
         data: { email, password },
       },
       {
-        400: "api_signup_error400",
-        409: "api_signup_error409",
+        400: () => new BadRequestError("Some request parameters are wrong", "api_signup_error400"),
+        409: () => new EmailExistsError("Email already used", "api_signup_error409"),
       },
     );
   }
 
   public async me(): Promise<SuccessfulMeResponse> {
-    const { body } = await this.makeRequestWithRefresh<SuccessfulMeResponse>("me", {
+    return this.makeRequestWithRefresh<SuccessfulMeResponse>("me", {
       method: "get",
     });
-    return body;
   }
 }
 

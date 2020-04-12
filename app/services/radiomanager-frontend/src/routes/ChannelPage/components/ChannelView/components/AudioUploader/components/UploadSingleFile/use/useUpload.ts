@@ -1,13 +1,13 @@
 import { CancelTokenSource } from "axios";
 import { useEffect, useState } from "react";
 import { useDependencies } from "~/bootstrap/dependencies";
-import { IAudioTrack } from "~/services/RadioManagerService";
+import { AudioTrack } from "~/services/RadioManagerService";
 
 export default function useUpload(
   channelId: number,
   file: File,
   cancelTokenSource: CancelTokenSource,
-  onSuccess: (audioTrack: IAudioTrack) => void,
+  onSuccess: (audioTrack: AudioTrack) => void,
   onFailure: (error: Error, file: File) => void,
 ): [number] {
   const [progress, setProgress] = useState<number>(0);

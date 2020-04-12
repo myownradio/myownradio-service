@@ -1,8 +1,7 @@
 import { ILocaleKey } from "~/locales";
+import AbstractErrorWithLocaleKey, { IErrorReason } from "./AbstractErrorWithLocaleKey";
 
-import AbstractErrorWithReason, { IErrorReason } from "./AbstractErrorWithReason";
-
-export default class EmailExistsError extends AbstractErrorWithReason {
+export default class EmailExistsError extends AbstractErrorWithLocaleKey {
   protected reason: IErrorReason = "email_exists";
 
   constructor(message: string, localeKey: ILocaleKey) {
