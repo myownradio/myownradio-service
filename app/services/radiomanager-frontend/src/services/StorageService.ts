@@ -1,7 +1,7 @@
 export interface StorageService {
   get<T>(key: string): T | null;
   put<T>(key: string, value: T): void;
-  delete<T>(key: string): void;
+  delete(key: string): void;
 }
 
 class LocalStorageService implements StorageService {
@@ -20,7 +20,7 @@ class LocalStorageService implements StorageService {
     window.localStorage.setItem(key, stringifiedValue);
   }
 
-  delete<T>(key: string): void {
+  delete(key: string): void {
     window.localStorage.removeItem(key);
   }
 }
@@ -36,7 +36,7 @@ class MemoryStorageService implements StorageService {
     this.storage.set(key, value);
   }
 
-  delete<T>(key: string): void {
+  delete(key: string): void {
     this.storage.delete(key);
   }
 }
