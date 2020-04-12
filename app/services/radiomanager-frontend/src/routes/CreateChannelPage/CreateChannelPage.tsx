@@ -5,7 +5,7 @@ import { useDependencies } from "~/bootstrap/dependencies";
 import ErrorBox from "~/components/ErrorBox";
 import useErrorMessage from "~/components/use/useErrorMessage";
 import { config } from "~/config";
-import AbstractErrorWithReason from "~/services/errors/AbstractErrorWithReason";
+import AbstractErrorWithLocaleKey from "~/services/errors/AbstractErrorWithLocaleKey";
 
 const CreateChannelPage: React.FC = () => {
   const [title, setTitle] = useState("");
@@ -36,7 +36,7 @@ const CreateChannelPage: React.FC = () => {
         await radioManagerService.createChannel(title);
         onSubmitSuccess();
       } catch (error) {
-        if (error instanceof AbstractErrorWithReason) {
+        if (error instanceof AbstractErrorWithLocaleKey) {
           setErrorMessage(error.localeKey);
         } else {
           setErrorMessage("api_error");

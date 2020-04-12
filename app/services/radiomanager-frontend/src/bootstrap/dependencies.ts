@@ -1,17 +1,15 @@
 import { createContext, useContext } from "react";
-
 import { IConfig } from "~/config";
-import { RadioManagerService } from "~/services/RadioManagerService";
-import { AudioUploaderService } from "~/services/audioUploaderService";
-import { AuthApiService } from "~/services/authApiService";
-import { LoggerService } from "~/services/logger/LoggerService";
-import ConsoleLoggerService from "~/services/logger/impl/ConsoleLoggerService";
-import { BasicSessionService, SessionService } from "~/services/sessionService";
-import { createStorageService, StorageService } from "~/services/storageService";
-import { TokenService } from "~/services/tokenService";
+import { createAudioUploaderService, AudioUploaderService } from "~/services/AudioUploaderService";
+import { createAuthService, AuthService } from "~/services/AuthService";
+import { createRadioManagerService, RadioManagerService } from "~/services/RadioManagerService";
+import { createSessionService, SessionService } from "~/services/SessionService";
+import { createStorageService, StorageService } from "~/services/StorageService";
+import { createTokenService, TokenService } from "~/services/TokenService";
+import { createLoggerService, LoggerService } from "~/services/logger/LoggerService";
 
 export type AppDependencies = {
-  authApiService: AuthApiService;
+  authApiService: AuthService;
   storageService: StorageService;
   sessionService: SessionService;
   tokenService: TokenService;
@@ -27,13 +25,13 @@ const appDependenciesContext = createContext<AppDependencies | null>(null);
 export const AppDependenciesProvider = appDependenciesContext.Provider;
 
 export function createDependencies(config: IConfig): AppDependencies {
-  const loggerService = new ConsoleLoggerService();
+  const loggerService = createLoggerService();
   const storageService = createStorageService();
-  const tokenService = new TokenService(config.authApiUrl);
-  const sessionService = new BasicSessionService(storageService, tokenService);
-  const authApiService = new AuthApiService(config.authApiUrl, sessionService);
-  const audioUploaderService = new AudioUploaderService(config.audioUploaderUrl, sessionService);
-  const radioManagerService = new RadioManagerService(config.radioManagerUrl, sessionService);
+  const tokenService = createTokenService(config.authApiUrl);
+  const sessionService = createSessionService(storageService, tokenService);
+  const authApiService = createAuthService(config.authApiUrl, sessionService);
+  const audioUploaderService = createAudioUploaderService(config.audioUploaderUrl, sessionService);
+  const radioManagerService = createRadioManagerService(config.radioManagerUrl, sessionService);
 
   return {
     authApiService,

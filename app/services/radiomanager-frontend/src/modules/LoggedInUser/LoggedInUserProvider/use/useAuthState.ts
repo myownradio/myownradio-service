@@ -1,8 +1,8 @@
 import { Dispatch, SetStateAction, useState } from "react";
 
-import { ISuccessfulMeResponse } from "~/services/authApiService";
+import { SuccessfulMeResponse } from "~/services/AuthService";
 
-type IUserState = ISuccessfulMeResponse;
+type IUserState = SuccessfulMeResponse;
 type ILoginState =
   | { readonly authenticated: true; readonly userState: IUserState }
   | { readonly authenticated: false | null };

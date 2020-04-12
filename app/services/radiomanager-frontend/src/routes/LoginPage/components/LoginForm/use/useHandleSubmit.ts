@@ -5,7 +5,7 @@ import { useDependencies } from "~/bootstrap/dependencies";
 import { IErrorMessage } from "~/components/use/useErrorMessage";
 import { config } from "~/config";
 import { ISetter } from "~/interfaces";
-import AbstractErrorWithReason from "~/services/errors/AbstractErrorWithReason";
+import AbstractErrorWithLocaleKey from "~/services/errors/AbstractErrorWithLocaleKey";
 
 export default function useHandleSubmit(
   email: string,
@@ -30,7 +30,7 @@ export default function useHandleSubmit(
       sessionService.saveTokens(access_token, refresh_token);
       history.push(config.routes.home);
     } catch (e) {
-      if (e instanceof AbstractErrorWithReason) {
+      if (e instanceof AbstractErrorWithLocaleKey) {
         setErrorMessage(e.localeKey);
       } else {
         setErrorMessage("api_error");

@@ -1,8 +1,7 @@
 import { ILocaleKey } from "~/locales";
+import AbstractErrorWithLocaleKey, { IErrorReason } from "./AbstractErrorWithLocaleKey";
 
-import AbstractErrorWithReason, { IErrorReason } from "./AbstractErrorWithReason";
-
-export default class UnauthorizedError extends AbstractErrorWithReason {
+export default class UnauthorizedError extends AbstractErrorWithLocaleKey {
   protected reason: IErrorReason = "unauthorized";
 
   constructor(message: string, localeKey: ILocaleKey) {

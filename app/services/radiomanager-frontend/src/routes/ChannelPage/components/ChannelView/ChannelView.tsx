@@ -3,13 +3,13 @@ import { useCallback } from "react";
 import { Link } from "react-router-dom";
 import useResource from "~/components/use/useResource";
 import { config } from "~/config";
-import { IAudioTrack, IRadioChannel } from "~/services/RadioManagerService";
+import { AudioTrack, RadioChannel } from "~/services/RadioManagerService";
 import { IResource, resource } from "~/utils/concurrent";
 import AudioUploader from "./components/AudioUploader";
 
 interface ChannelViewProps {
-  channelResource: IResource<IRadioChannel>;
-  audioTracksResource: IResource<IAudioTrack[]>;
+  channelResource: IResource<RadioChannel>;
+  audioTracksResource: IResource<AudioTrack[]>;
 }
 
 const ChannelView: React.FC<ChannelViewProps> = ({ channelResource, audioTracksResource }) => {

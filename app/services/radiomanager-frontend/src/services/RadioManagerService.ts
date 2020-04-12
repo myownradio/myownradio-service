@@ -1,12 +1,20 @@
-import { AbstractApiWithSessionService } from "~/services/abstractApiWithSessionService";
-import { SessionService } from "~/services/sessionService";
+import { AbstractApiWithSessionService } from "~/services/AbstractApiWithSessionService";
+import { SessionService } from "~/services/SessionService";
 
-export type IRadioChannel = {
+export interface RadioManagerService {
+  getChannels(): Promise<RadioChannel[]>;
+  createChannel(title: string): Promise<RadioChannel>;
+  getChannel(channelId: string | number): Promise<RadioChannel>;
+  getAudioTracks(channelId: string | number): Promise<AudioTrack[]>;
+  addTrackToChannel(channelId: string | number, signature: string, rawMetadata: string): Promise<AudioTrack>;
+}
+
+export interface RadioChannel {
   title: string;
   id: number;
-};
+}
 
-export type IAudioTrack = {
+export interface AudioTrack {
   id: number;
   name: string;
   artist: string;
@@ -14,51 +22,47 @@ export type IAudioTrack = {
   album: string;
   bitrate: number;
   duration: number;
-};
+}
 
-export class RadioManagerService extends AbstractApiWithSessionService {
+export class BaseRadioManagerService extends AbstractApiWithSessionService implements RadioManagerService {
   constructor(radioManagerUrl: string, sessionService: SessionService) {
     super(radioManagerUrl, sessionService);
   }
 
-  public async getChannels(): Promise<IRadioChannel[]> {
-    const { body } = await this.makeRequestWithRefresh<IRadioChannel[]>("channels", {
+  public async getChannels(): Promise<RadioChannel[]> {
+    return this.makeRequestWithRefresh<RadioChannel[]>("channels", {
       method: "get",
     });
-
-    return body;
   }
 
-  public async createChannel(title: string): Promise<IRadioChannel> {
-    const { body } = await this.makeRequestWithRefresh<IRadioChannel>("channels/create", {
+  public async createChannel(title: string): Promise<RadioChannel> {
+    return this.makeRequestWithRefresh<RadioChannel>("channels/create", {
       method: "post",
       data: { title },
     });
-
-    return body;
   }
 
-  public async getChannel(channelId: string | number): Promise<IRadioChannel> {
+  public async getChannel(channelId: string | number): Promise<RadioChannel> {
     const rawChannelId = encodeURIComponent(channelId);
-    const { body } = await this.makeRequestWithRefresh<IRadioChannel>(`channels/${rawChannelId}`, {
+    return this.makeRequestWithRefresh<RadioChannel>(`channels/${rawChannelId}`, {
       method: "get",
     });
-
-    return body;
   }
 
-  public async getAudioTracks(channelId: string | number): Promise<IAudioTrack[]> {
+  public async getAudioTracks(channelId: string | number): Promise<AudioTrack[]> {
     const rawChannelId = encodeURIComponent(channelId);
-    const { body } = await this.makeRequestWithRefresh<IAudioTrack[]>(`channels/${rawChannelId}/tracks`, {
+    return this.makeRequestWithRefresh<AudioTrack[]>(`channels/${rawChannelId}/tracks`, {
       method: "get",
     });
-
-    return body;
   }
 
-  async addTrackToChannel(channelId: string | number, signature: string, rawMetadata: string): Promise<IAudioTrack> {
+  public async addTrackToChannel(
+    channelId: string | number,
+    signature: string,
+    rawMetadata: string,
+  ): Promise<AudioTrack> {
     const rawChannelId = encodeURIComponent(channelId);
-    const { body } = await this.makeRequestWithRefresh<IAudioTrack>(`channels/${rawChannelId}/tracks/add`, {
+    return this.makeRequestWithRefresh<AudioTrack>(`channels/${rawChannelId}/tracks/add`, {
       method: "post",
       headers: {
         signature,
@@ -66,7 +70,12 @@ export class RadioManagerService extends AbstractApiWithSessionService {
       },
       data: rawMetadata,
     });
-
-    return body;
   }
+}
+
+export function createRadioManagerService(
+  radioManagerUrl: string,
+  sessionService: SessionService,
+): RadioManagerService {
+  return new BaseRadioManagerService(radioManagerUrl, sessionService);
 }

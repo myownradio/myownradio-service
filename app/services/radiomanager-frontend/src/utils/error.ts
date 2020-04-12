@@ -1,6 +1,6 @@
 import { ILocaleKey } from "~/locales";
-import AbstractErrorWithReason from "~/services/errors/AbstractErrorWithReason";
+import { AbstractErrorWithLocaleKey } from "~/services/errors";
 
 export function getLocaleErrorKey(error: Error): ILocaleKey {
-  return error instanceof AbstractErrorWithReason ? error.localeKey : "api_error";
+  return error instanceof AbstractErrorWithLocaleKey ? error.localeKey : "api_error";
 }
