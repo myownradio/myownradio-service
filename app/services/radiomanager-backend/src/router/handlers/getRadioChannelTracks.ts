@@ -33,6 +33,7 @@ export default function getRadioChannelTracks(_: Config, knexConnection: knex) {
       album: audioTrack.album,
       bitrate: audioTrack.bitrate,
       duration: audioTrack.duration,
+      order_id: audioTrack.order_id,
     }));
   };
 }

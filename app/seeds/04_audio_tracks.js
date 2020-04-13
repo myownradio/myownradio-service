@@ -18,6 +18,7 @@ exports.seed = async function seed(knex) {
       bitrate: 242824,
       duration: 230.07475,
       format: "MP2/3 (MPEG audio layer 2/3)",
+      order_id: 1,
     },
   ]);
 };

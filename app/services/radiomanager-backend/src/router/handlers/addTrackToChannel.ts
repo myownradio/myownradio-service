@@ -29,6 +29,18 @@ export default function addTrackToChannel(config: Config, knexConnection: knex) 
       ctx.throw(400);
     }
 
+    const channel = await knexConnection("radio_channels")
+      .where({ id: channelId })
+      .first();
+
+    if (!channel) {
+      ctx.throw(404);
+    }
+
+    if (channel.user_id !== userId) {
+      ctx.throw(401);
+    }
+
     const decodedRequest = AddTrackToChannelRequestContract.decode(ctx.request.body);
 
     if (decodedRequest._tag === "Left") {
@@ -36,6 +48,13 @@ export default function addTrackToChannel(config: Config, knexConnection: knex) 
     }
 
     const requestBody = decodedRequest.right;
+
+    const countObject = await knexConnection("audio_tracks")
+      .where({ channel_id: channelId })
+      .count("id as count");
+
+    const totalTracks = +countObject[0]["count"];
+    const nextOrderId = totalTracks + 1;
 
     const [trackId] = await knexConnection("audio_tracks")
       .insert({
@@ -51,6 +70,7 @@ export default function addTrackToChannel(config: Config, knexConnection: knex) 
         bitrate: requestBody.bitrate,
         duration: requestBody.duration,
         format: requestBody.format,
+        order_id: nextOrderId,
       })
       .returning("id");
 
@@ -62,6 +82,7 @@ export default function addTrackToChannel(config: Config, knexConnection: knex) 
       album: requestBody.album,
       bitrate: requestBody.bitrate,
       duration: requestBody.duration,
+      order_id: nextOrderId,
     };
   };
 }
