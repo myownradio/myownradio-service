@@ -2,6 +2,8 @@ export class Config {
   readonly httpServerPort: number;
   readonly tokenSecret: string;
   readonly allowedOrigin: string;
+  readonly databaseUrl: string;
+  readonly databaseClient: string;
 
   constructor(env: { [name: string]: string | undefined }) {
     if (!env.SCHEDULER_TOKEN_SECRET) {
@@ -17,5 +19,17 @@ export class Config {
     }
 
     this.allowedOrigin = env.SCHEDULER_ALLOWED_ORIGIN;
+
+    if (!env.SCHEDULER_DATABASE_URL) {
+      throw new Error("Environment variable SCHEDULER_DATABASE_URL is required");
+    }
+
+    this.databaseUrl = env.SCHEDULER_DATABASE_URL;
+
+    if (!env.SCHEDULER_DATABASE_CLIENT) {
+      throw new Error("Environment variable SCHEDULER_DATABASE_CLIENT is required");
+    }
+
+    this.databaseClient = env.SCHEDULER_DATABASE_CLIENT;
   }
 }
