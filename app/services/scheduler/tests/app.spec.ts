@@ -53,7 +53,10 @@ describe("/healthcheck", () => {
 
 describe("POST /channels/1/start", () => {
   it("should start the channel and respond with 200 on post request", async () => {
-    await request.post("/channels/1/start").expect(200);
+    await request
+      .post("/channels/1/start")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(200);
   });
 
   it("should fail with 401 when unauthorized", async () => {

@@ -3,7 +3,7 @@ import { Context, Middleware } from "koa";
 import { Logger } from "winston";
 import { Config } from "../../config";
 
-export default function startRadioChannel(_: Config, knexConnection: knex, logger: Logger): Middleware {
+export default function startRadioChannel(_: Config, knexConnection: knex, __: Logger): Middleware {
   return async (ctx: Context): Promise<void> => {
     const userId = ctx.state.user.uid;
 
@@ -21,6 +21,21 @@ export default function startRadioChannel(_: Config, knexConnection: knex, logge
       ctx.throw(401);
     }
 
-    ctx.status = 501;
+    try {
+      const now = Date.now();
+      await knexConnection("playing_channels").insert({
+        channel_id: channelId,
+        start_offset: 0,
+        started_at: now,
+        paused_at: null,
+      });
+      ctx.status = 200;
+    } catch (e) {
+      if (e.message.match(/constraint/)) {
+        ctx.status = 409;
+      } else {
+        throw e;
+      }
+    }
   };
 }
