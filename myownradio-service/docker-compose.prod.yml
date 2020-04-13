@@ -29,6 +29,8 @@ services:
         failure_action: rollback
   radiomanager-backend:
     image: ${RADIOMANAGER_BACKEND_IMAGE_URL}:${IMAGE_TAG}
+    depends_on:
+      - scheduler
     environment:
       RADIOMANAGER_BACKEND_TOKEN_SECRET: me9IQW0atAzzE5nYKC6EiibAareI0to1
       RADIOMANAGER_BACKEND_METADATA_SECRET: kYzuRIRETBVZnyvDUrMT
@@ -93,6 +95,17 @@ services:
     environment:
       STREAM_COMPOSER_TOKEN_SECRET: me9IQW0atAzzE5nYKC6EiibAareI0to1
       PORT: 8080
+    deploy:
+      replicas: 1
+      update_config:
+        order: start-first
+      restart_policy:
+        condition: on-failure
+  scheduler:
+    image: ${SCHEDULER_IMAGE_URL}:${IMAGE_TAG}
+    environment:
+      - SCHEDULER_TOKEN_SECRET=me9IQW0atAzzE5nYKC6EiibAareI0to1
+      - PORT=8080
     deploy:
       replicas: 1
       update_config:

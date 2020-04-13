@@ -21,7 +21,6 @@ jobs:
         run: make run-linter
       - name: Tests
         run: make run-tests
-
   terraform:
     needs: init
     name: Terraform
@@ -49,7 +48,6 @@ jobs:
           tf_actions_version: 0.12.20
           tf_actions_subcommand: 'apply'
           tf_actions_working_dir: 'terraform'
-
   build-frontend-proxy:
     needs: terraform
     name: Build "frontend-proxy" image
@@ -71,7 +69,6 @@ jobs:
           repository: myownradio/frontend-proxy
           path: services/frontend-proxy
           tags: ${{ github.sha }},latest
-
   build-radiomanager-frontend:
     needs: terraform
     name: Build "radiomanager-frontend" image
@@ -94,7 +91,6 @@ jobs:
           path: app
           dockerfile: app/services/radiomanager-frontend/Dockerfile
           tags: ${{ github.sha }},latest
-
   build-radiomanager-backend:
     needs: terraform
     name: Build "radiomanager-backend" image
@@ -117,7 +113,6 @@ jobs:
           path: app
           dockerfile: app/services/radiomanager-backend/Dockerfile
           tags: ${{ github.sha }},latest
-
   build-migration:
     needs: terraform
     name: Build "migration" image
@@ -140,8 +135,6 @@ jobs:
           path: app
           dockerfile: app/services/migration/Dockerfile
           tags: latest
-
-
   build-auth-server:
     needs: terraform
     name: Build "auth-server" image
@@ -164,7 +157,6 @@ jobs:
           path: app
           dockerfile: app/services/auth-server/Dockerfile
           tags: ${{ github.sha }},latest
-
   build-fileserver-local:
     needs: terraform
     name: Build "fileserver-local" image
@@ -187,7 +179,6 @@ jobs:
           path: app
           dockerfile: app/services/fileserver-local/Dockerfile
           tags: ${{ github.sha }},latest
-
   build-audio-uploader:
     needs: terraform
     name: Build "audio-uploader" image
@@ -210,7 +201,6 @@ jobs:
           path: app
           dockerfile: app/services/audio-uploader/Dockerfile
           tags: ${{ github.sha }},latest
-
   build-stream-composer:
     needs: terraform
     name: Build "stream-composer" image
@@ -233,7 +223,28 @@ jobs:
           path: app
           dockerfile: app/services/stream-composer/Dockerfile
           tags: ${{ github.sha }},latest
-
+  build-scheduler:
+    needs: terraform
+    name: Build "scheduler" image
+    runs-on: ubuntu-latest
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      SERVICE: scheduler
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+      - name: Build myownradio/stream-composer
+        uses: docker/build-push-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          registry: ${{ secrets.DOCKER_REGISTRY }}
+          repository: myownradio/scheduler
+          path: app
+          dockerfile: app/services/scheduler/Dockerfile
+          tags: ${{ github.sha }},latest
   deploy:
     name: Deploy to Production
     needs:
@@ -246,6 +257,7 @@ jobs:
       - build-fileserver-local
       - build-audio-uploader
       - build-stream-composer
+      - build-scheduler
     runs-on: ubuntu-latest
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -279,4 +291,5 @@ jobs:
           FILESERVER_LOCAL_IMAGE_URL: ${{ secrets.DOCKER_REGISTRY }}/myownradio/fileserver-local
           AUDIO_UPLOADER_IMAGE_URL: ${{ secrets.DOCKER_REGISTRY }}/myownradio/audio-uploader
           STREAM_COMPOSER_IMAGE_URL: ${{ secrets.DOCKER_REGISTRY }}/myownradio/stream-composer
+          SCHEDULER_IMAGE_URL: ${{ secrets.DOCKER_REGISTRY }}/myownradio/scheduler
           # end of images
