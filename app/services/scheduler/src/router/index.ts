@@ -18,5 +18,7 @@ export function createRouter(config: Config): Router {
   router.post("channels/:channelId(\\d+)/stop", jwtMiddleware, stopRadioChannel());
   router.post("channels/:channelId(\\d+)/pause", jwtMiddleware, pauseRadioChannel());
 
+  router.get("/healthcheck", ctx => (ctx.status = 200));
+
   return router;
 }
