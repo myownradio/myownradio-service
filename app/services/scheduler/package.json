@@ -1,5 +1,5 @@
 {
-  "name": "@myownradio/stream-composer",
+  "name": "@myownradio/scheduler",
   "version": "1.0.0",
   "private": true,
   "scripts": {
