@@ -1,7 +1,7 @@
 const body = require("koa-body");
 const jwtMiddleware = require("koa-jwt");
 const Router = require("koa-router");
-
+const cleanupUploads = require("./middleware/cleanupUploads");
 const createUploadHandler = require("./upload");
 
 module.exports = function createRouter(config) {
@@ -12,6 +12,7 @@ module.exports = function createRouter(config) {
     jwtMiddleware({
       secret: config.tokenSecret,
     }),
+    cleanupUploads,
     body({
       multipart: true,
       formidable: {
