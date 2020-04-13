@@ -21,15 +21,15 @@ export class NaiveLocksManager implements LocksManager {
         lockId: this.lockId,
       });
       return new Promise((resolve, reject) => {
-        this.waitList.push(error => (error ? resolve() : reject(error)));
+        this.waitList.push(error => (error ? reject(error) : resolve()));
       });
     }
 
     this.locked = true;
+    this.loggerService.info("Performing sensitive operation.", {
+      lockId: this.lockId,
+    });
     try {
-      this.loggerService.info("Performing sensitive operation.", {
-        lockId: this.lockId,
-      });
       await fn();
       this.loggerService.info("Sensitive operation finished.", {
         lockId: this.lockId,
