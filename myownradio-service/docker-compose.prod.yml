@@ -106,6 +106,7 @@ services:
     image: ${SCHEDULER_IMAGE_URL}:${IMAGE_TAG}
     environment:
       - SCHEDULER_TOKEN_SECRET=me9IQW0atAzzE5nYKC6EiibAareI0to1
+      - SCHEDULER_ALLOWED_ORIGIN=https://new.myownradio.biz
       - PORT=8080
     deploy:
       replicas: 1
