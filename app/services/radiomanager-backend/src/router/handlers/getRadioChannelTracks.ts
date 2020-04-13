@@ -23,7 +23,7 @@ export default function getRadioChannelTracks(_: Config, knexConnection: knex) {
     const audioTracks = await knexConnection
       .from("audio_tracks")
       .where("channel_id", channelId)
-      .orderBy("created_at", "ASC");
+      .orderBy("order_id", "ASC");
 
     ctx.body = audioTracks.map(audioTrack => ({
       id: audioTrack.id,
