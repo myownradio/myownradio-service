@@ -49,30 +49,34 @@ export default function addTrackToChannel(config: Config, knexConnection: knex) 
 
     const requestBody = decodedRequest.right;
 
-    const countObject = await knexConnection("audio_tracks")
-      .where({ channel_id: channelId })
-      .count("id as count");
+    const [trackId, orderId] = await knexConnection.transaction(async trx => {
+      const countQueryResult = await trx("audio_tracks")
+        .where({ channel_id: channelId })
+        .count<[{ count: string }]>("id as count");
 
-    const totalTracks = +countObject[0]["count"];
-    const nextOrderId = totalTracks + 1;
+      const count = +countQueryResult[0]["count"];
+      const nextOrderId = count + 1;
 
-    const [trackId] = await knexConnection("audio_tracks")
-      .insert({
-        channel_id: channelId,
-        user_id: userId,
-        name: requestBody.name,
-        hash: requestBody.hash,
-        size: requestBody.size,
-        artist: requestBody.artist,
-        title: requestBody.title,
-        album: requestBody.album,
-        genre: requestBody.genre,
-        bitrate: requestBody.bitrate,
-        duration: requestBody.duration,
-        format: requestBody.format,
-        order_id: nextOrderId,
-      })
-      .returning("id");
+      const [trackId] = await trx("audio_tracks")
+        .insert({
+          channel_id: channelId,
+          user_id: userId,
+          name: requestBody.name,
+          hash: requestBody.hash,
+          size: requestBody.size,
+          artist: requestBody.artist,
+          title: requestBody.title,
+          album: requestBody.album,
+          genre: requestBody.genre,
+          bitrate: requestBody.bitrate,
+          duration: requestBody.duration,
+          format: requestBody.format,
+          order_id: nextOrderId,
+        })
+        .returning("id");
+
+      return [trackId, nextOrderId];
+    });
 
     ctx.body = ctx.body = {
       id: trackId,
@@ -82,7 +86,7 @@ export default function addTrackToChannel(config: Config, knexConnection: knex) 
       album: requestBody.album,
       bitrate: requestBody.bitrate,
       duration: requestBody.duration,
-      order_id: nextOrderId,
+      order_id: orderId,
     };
   };
 }
