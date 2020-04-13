@@ -107,6 +107,7 @@ describe("/channels/:id/tracks/add", () => {
         album: "Sine Album",
         bitrate: 242824,
         duration: 1.07475,
+        order_id: 2,
       });
   });
 
@@ -197,6 +198,7 @@ describe("GET /channels/:id/tracks", () => {
           album: "Legend - The Best Of Bob Marley And The Wailers",
           bitrate: 242824,
           duration: 230.07475,
+          order_id: 1,
         },
       ]);
   });
