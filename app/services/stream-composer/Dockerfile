@@ -3,15 +3,15 @@ FROM node:13
 WORKDIR /usr/app/
 
 COPY package.json yarn.lock ./
-COPY services/stream-composer/package.json services/stream-composer/
+COPY services/scheduler/package.json services/scheduler/
 RUN ["yarn", "install", "--non-interactive", "--pure-lockfile"]
 
 COPY tsconfig.json ./
-COPY services/stream-composer services/stream-composer
-RUN ["yarn", "workspace", "@myownradio/stream-composer", "build"]
+COPY services/scheduler services/scheduler
+RUN ["yarn", "workspace", "@myownradio/scheduler", "build"]
 
 FROM node:13-alpine
 ENV NODE_ENV=production
 
-COPY --from=0 /usr/app/services/stream-composer/dist/ /usr/app/
+COPY --from=0 /usr/app/services/scheduler/dist/ /usr/app/
 CMD ["node", "/usr/app/index.js"]
