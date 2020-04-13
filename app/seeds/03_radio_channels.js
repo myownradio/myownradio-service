@@ -9,5 +9,12 @@ exports.seed = async function seed(knex) {
       created_at: now,
       updated_at: now,
     },
+    {
+      id: 2,
+      user_id: 1,
+      title: "Foo 2 Radio",
+      created_at: now,
+      updated_at: now,
+    },
   ]);
 };

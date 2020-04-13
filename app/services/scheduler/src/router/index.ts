@@ -17,7 +17,7 @@ export function createRouter(config: Config, knexConnection: knex, logger: Logge
 
   router.get("/channels/:channelId(\\d+)/nowPlaying", jwtMiddleware, getNowPlaying());
   router.post("/channels/:channelId(\\d+)/start", jwtMiddleware, startRadioChannel(config, knexConnection, logger));
-  router.post("/channels/:channelId(\\d+)/stop", jwtMiddleware, stopRadioChannel());
+  router.post("/channels/:channelId(\\d+)/stop", jwtMiddleware, stopRadioChannel(config, knexConnection, logger));
   router.post("/channels/:channelId(\\d+)/pause", jwtMiddleware, pauseRadioChannel());
 
   router.get("/healthcheck", ctx => (ctx.status = 200));

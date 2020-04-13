@@ -77,3 +77,37 @@ describe("POST /channels/1/start", () => {
       .expect(404);
   });
 });
+
+describe("POST /channels/1/stop", () => {
+  it("should stop the channel and respond with 200 on post request", async () => {
+    await request
+      .post("/channels/2/stop")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(200);
+  });
+
+  it("should fail with 409 if channel isn't playing", async () => {
+    await request
+      .post("/channels/1/stop")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(409);
+  });
+
+  it("should fail with 401 when unauthorized", async () => {
+    await request.post("/channels/1/stop").expect(401);
+  });
+
+  it("should fail with 401 if authorized by someone else", async () => {
+    await request
+      .post("/channels/1/stop")
+      .set("Authorization", `Bearer ${otherAuthorizationToken}`)
+      .expect(401);
+  });
+
+  it("should fail with 404 if channel does not exist", async () => {
+    await request
+      .post("/channels/11/stop")
+      .set("Authorization", `Bearer ${otherAuthorizationToken}`)
+      .expect(404);
+  });
+});

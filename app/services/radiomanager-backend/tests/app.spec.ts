@@ -58,10 +58,10 @@ describe("/channels/create", () => {
     await request
       .post("/channels/create")
       .set("Authorization", `Bearer ${authorizationToken}`)
-      .send({ title: "Foo Radio" })
+      .send({ title: "Foo Radio Me" })
       .expect(200, {
-        id: 2,
-        title: "Foo Radio",
+        id: 3,
+        title: "Foo Radio Me",
       });
   });
 
@@ -100,7 +100,7 @@ describe("/channels/:id/tracks/add", () => {
       .set("Signature", signature)
       .send(rawMetadata)
       .expect(200, {
-        id: 2,
+        id: 3,
         name: "sine.mp3",
         title: "Sine Title",
         artist: "Sine Artist",
@@ -145,6 +145,10 @@ describe("/channels", () => {
         {
           id: 1,
           title: "Foo Radio",
+        },
+        {
+          id: 2,
+          title: "Foo 2 Radio",
         },
       ]);
   });
