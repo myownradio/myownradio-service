@@ -62,6 +62,15 @@ server {\n\
         proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;\n\
         proxy_set_header   X-Forwarded-Host $server_name;\n\
     }\n\
+    location /api/radiomanager {\n\
+        rewrite            ^/api/scheduler/(.*) /$1 break;\n\
+        proxy_pass         http://scheduler:8080;\n\
+        proxy_redirect     off;\n\
+        proxy_set_header   Host $host;\n\
+        proxy_set_header   X-Real-IP $remote_addr;\n\
+        proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;\n\
+        proxy_set_header   X-Forwarded-Host $server_name;\n\
+    }\n\
     location = /healthcheck {\n\
         add_header Content-Type text/plain;\n\
         allow 127.0.0.1;\n\
