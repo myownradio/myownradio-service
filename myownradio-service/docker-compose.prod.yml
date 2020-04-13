@@ -93,8 +93,8 @@ services:
   stream-composer:
     image: ${STREAM_COMPOSER_IMAGE_URL}:${IMAGE_TAG}
     environment:
-      STREAM_COMPOSER_TOKEN_SECRET: me9IQW0atAzzE5nYKC6EiibAareI0to1
-      PORT: 8080
+      - STREAM_COMPOSER_TOKEN_SECRET=me9IQW0atAzzE5nYKC6EiibAareI0to1
+      - PORT=8080
     deploy:
       replicas: 1
       update_config:
