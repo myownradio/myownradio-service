@@ -5,7 +5,7 @@ import logger from "./logger";
 try {
   const config = new Config(process.env);
 
-  const app = createApp(config);
+  const app = createApp(config, logger);
 
   const server = app.listen(config.httpServerPort, () => {
     logger.debug(`Server is listening on port ${config.httpServerPort}`);
