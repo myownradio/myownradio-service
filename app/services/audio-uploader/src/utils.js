@@ -105,7 +105,7 @@ function getMediaFileMetadata(filepath) {
           reject(err);
         } else {
           resolve({
-            duration: metadata.format.duration,
+            duration: metadata.format.duration * 1000,
             bitrate: metadata.format.bit_rate,
             format: metadata.format.format_long_name || "Unknown audio format",
             artist: (metadata.format.tags || {}).artist || "",

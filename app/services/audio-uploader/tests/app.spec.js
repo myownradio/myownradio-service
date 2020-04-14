@@ -44,7 +44,7 @@ test("POST /upload - upload new audio file", async () => {
       album: "Sine Album",
       genre: "Sine Genre",
       bitrate: 242824,
-      duration: 1.07475,
+      duration: 1074.75,
       format: "MP2/3 (MPEG audio layer 2/3)",
     });
 

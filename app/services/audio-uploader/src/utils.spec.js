@@ -6,7 +6,7 @@ describe("getMediaFileMetadata", () => {
     const metadata = await getMediaFileMetadata(filepath);
 
     expect(metadata).toEqual({
-      duration: 1.07475,
+      duration: 1074.75,
       bitrate: 242824,
       format: "MP2/3 (MPEG audio layer 2/3)",
       artist: "Sine Artist",
