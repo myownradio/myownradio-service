@@ -8,7 +8,6 @@ services:
       - radiomanager-backend
       - auth-server
       - audio-uploader
-      - fileserver-local
       - scheduler
     environment:
       VIRTUAL_HOST: "new.myownradio.biz"
