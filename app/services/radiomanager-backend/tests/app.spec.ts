@@ -201,7 +201,7 @@ describe("GET /channels/:id/tracks", () => {
           title: "This Is Love",
           album: "Legend - The Best Of Bob Marley And The Wailers",
           bitrate: 242824,
-          duration: 230.07475,
+          duration: 230074.75,
           order_id: 1,
         },
       ]);

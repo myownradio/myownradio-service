@@ -208,7 +208,10 @@ describe("GET /channels/:channelId/nowPlaying", () => {
     await request
       .get("/channels/2/nowPlaying")
       .set("Authorization", `Bearer ${authorizationToken}`)
-      .expect(200);
+      .expect(200, {
+        track_id: 2,
+        offset: 95136.5,
+      });
   });
 
   it("should fail with 409 if channel isn't playing", async () => {
@@ -219,7 +222,7 @@ describe("GET /channels/:channelId/nowPlaying", () => {
   });
 
   it("should fail with 401 when unauthorized", async () => {
-    await request.post("/channels/1/nowPlaying").expect(401);
+    await request.get("/channels/1/nowPlaying").expect(401);
   });
 
   it("should fail with 401 if authorized by someone else", async () => {

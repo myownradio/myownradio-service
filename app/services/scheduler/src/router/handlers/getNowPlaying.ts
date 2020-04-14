@@ -33,8 +33,21 @@ export default function getNowPlaying(knexConnection: knex, timeService: TimeSer
       .orderBy("order_id", "asc");
     const now = timeService.now();
     const playlistDuration = channelAudioTracks.reduce((acc, t) => acc + t.duration, 0);
-    const playlistPosition = (now - playingChannel.started_at) % (playlistDuration * 1000);
+    const playlistPosition = (now - playingChannel.started_at) % playlistDuration;
 
-    ctx.status = 501;
+    let currentOffset = 0;
+    for (const track of channelAudioTracks) {
+      if (currentOffset <= playlistPosition && currentOffset + track.duration > playlistPosition) {
+        ctx.body = {
+          track_id: track.id,
+          offset: playlistPosition - currentOffset,
+        };
+        ctx.status = 200;
+        return;
+      }
+      currentOffset += track.duration;
+    }
+
+    ctx.status = 204;
   };
 }
