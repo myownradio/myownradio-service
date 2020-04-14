@@ -15,9 +15,9 @@ import { FormattedMessage } from "react-intl";
 
 import Copyright from "~/components/Copyright";
 import ErrorBox from "~/components/ErrorBox";
-import RouterLink from "~/components/RouterLink";
+// import RouterLink from "~/components/RouterLink";
 import { IErrorMessage } from "~/components/use/useErrorMessage";
-import { config } from "~/config";
+// import { config } from "~/config";
 
 import { useStyles } from "./styles";
 
@@ -111,9 +111,9 @@ const LoginForm: React.FC<ILoginFormProps> = ({
               </Link>
             </Grid>
             <Grid item>
-              <RouterLink href={config.routes.signup} variant="body2">
-                <FormattedMessage id="ui_login_form_signup_link_title" />
-              </RouterLink>
+              {/*<RouterLink href={config.routes.signup} variant="body2">*/}
+              {/*  <FormattedMessage id="ui_login_form_signup_link_title" />*/}
+              {/*</RouterLink>*/}
             </Grid>
           </Grid>
         </form>
