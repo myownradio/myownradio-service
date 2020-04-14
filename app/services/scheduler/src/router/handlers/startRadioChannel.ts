@@ -4,7 +4,12 @@ import { Logger } from "winston";
 import { Config } from "../../config";
 import { TimeService } from "../../time";
 
-export default function startRadioChannel(_: Config, knexConnection: knex, __: Logger, timeService: TimeService): Middleware {
+export default function startRadioChannel(
+  _: Config,
+  knexConnection: knex,
+  __: Logger,
+  timeService: TimeService,
+): Middleware {
   return async (ctx: Context): Promise<void> => {
     const userId = ctx.state.user.uid;
 
