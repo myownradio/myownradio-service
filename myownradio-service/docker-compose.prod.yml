@@ -106,6 +106,8 @@ services:
     environment:
       - SCHEDULER_TOKEN_SECRET=me9IQW0atAzzE5nYKC6EiibAareI0to1
       - SCHEDULER_ALLOWED_ORIGIN=https://new.myownradio.biz
+      - SCHEDULER_DATABASE_URL=postgres://mor:mor@postgres:5432/mor
+      - SCHEDULER_DATABASE_CLIENT=postgresql
       - PORT=8080
     deploy:
       replicas: 1
