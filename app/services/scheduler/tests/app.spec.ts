@@ -202,3 +202,37 @@ describe("POST /channels/:channelId/resume", () => {
       .expect(404);
   });
 });
+
+describe("GET /channels/:channelId/nowPlaying", () => {
+  it("should get what's playing and respond with 200 on get request", async () => {
+    await request
+      .get("/channels/2/nowPlaying")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(200);
+  });
+
+  it("should fail with 409 if channel isn't playing", async () => {
+    await request
+      .get("/channels/1/nowPlaying")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(409);
+  });
+
+  it("should fail with 401 when unauthorized", async () => {
+    await request.post("/channels/1/nowPlaying").expect(401);
+  });
+
+  it("should fail with 401 if authorized by someone else", async () => {
+    await request
+      .get("/channels/1/nowPlaying")
+      .set("Authorization", `Bearer ${otherAuthorizationToken}`)
+      .expect(401);
+  });
+
+  it("should fail with 404 if channel does not exist", async () => {
+    await request
+      .get("/channels/11/nowPlaying")
+      .set("Authorization", `Bearer ${otherAuthorizationToken}`)
+      .expect(404);
+  });
+});

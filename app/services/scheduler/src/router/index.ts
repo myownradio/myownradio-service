@@ -6,9 +6,9 @@ import { Config } from "../config";
 import { TimeService } from "../time";
 import getNowPlaying from "./handlers/getNowPlaying";
 import pauseRadioChannel from "./handlers/pauseRadioChannel";
+import resumeRadioChannel from "./handlers/resumeRadioChannel";
 import startRadioChannel from "./handlers/startRadioChannel";
 import stopRadioChannel from "./handlers/stopRadioChannel";
-import resumeRadioChannel from "./handlers/resumeRadioChannel";
 
 export function createRouter(config: Config, knexConnection: knex, logger: Logger, timeService: TimeService): Router {
   const router = new Router();
@@ -17,7 +17,7 @@ export function createRouter(config: Config, knexConnection: knex, logger: Logge
     secret: config.tokenSecret,
   });
 
-  router.get("/channels/:channelId(\\d+)/nowPlaying", jwtMiddleware, getNowPlaying());
+  router.get("/channels/:channelId(\\d+)/nowPlaying", jwtMiddleware, getNowPlaying(knexConnection, timeService));
   router.post(
     "/channels/:channelId(\\d+)/start",
     jwtMiddleware,
