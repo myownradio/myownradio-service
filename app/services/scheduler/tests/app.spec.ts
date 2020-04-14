@@ -3,6 +3,7 @@ import * as supertest from "supertest";
 import * as winston from "winston";
 import { createApp } from "../src/app";
 import { Config } from "../src/config";
+import { FixedTimeService, TimeService } from "../src/time";
 
 const authorizationToken =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjEsImlhdCI6MTUxNjIzOTAyMn0.Fknsf_nSFNdqS9JkFJABEEtMVffv9zR1_nrI2mAVx60";
@@ -15,11 +16,14 @@ const seedsDir = `${__dirname}/../../../seeds`;
 let config: Config;
 let request: supertest.SuperTest<supertest.Test>;
 let knexConnection: knex;
+let timeService: TimeService;
 
 beforeEach(async () => {
   const logger = winston.createLogger({
     silent: true,
   });
+
+  timeService = new FixedTimeService(1586849301429);
 
   config = new Config({
     SCHEDULER_DATABASE_URL: ":memory:",
@@ -42,7 +46,7 @@ beforeEach(async () => {
     directory: seedsDir,
   });
 
-  request = supertest(createApp(config, knexConnection, logger).callback());
+  request = supertest(createApp(config, knexConnection, logger, timeService).callback());
 });
 
 describe("/healthcheck", () => {
@@ -57,6 +61,13 @@ describe("POST /channels/1/start", () => {
       .post("/channels/1/start")
       .set("Authorization", `Bearer ${authorizationToken}`)
       .expect(200);
+  });
+
+  it("should fail with 409 if channel already started", async () => {
+    await request
+      .post("/channels/2/start")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(409);
   });
 
   it("should fail with 401 when unauthorized", async () => {
@@ -107,6 +118,86 @@ describe("POST /channels/1/stop", () => {
   it("should fail with 404 if channel does not exist", async () => {
     await request
       .post("/channels/11/stop")
+      .set("Authorization", `Bearer ${otherAuthorizationToken}`)
+      .expect(404);
+  });
+});
+
+describe("POST /channels/:channelId/pause", () => {
+  it("should pause the channel and respond with 200 on post request", async () => {
+    await request
+      .post("/channels/2/pause")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(200);
+  });
+
+  it("should fail with 409 if channel isn't playing", async () => {
+    await request
+      .post("/channels/1/pause")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(409);
+  });
+
+  it("should fail with 401 when unauthorized", async () => {
+    await request.post("/channels/1/pause").expect(401);
+  });
+
+  it("should fail with 401 if authorized by someone else", async () => {
+    await request
+      .post("/channels/1/pause")
+      .set("Authorization", `Bearer ${otherAuthorizationToken}`)
+      .expect(401);
+  });
+
+  it("should fail with 404 if channel does not exist", async () => {
+    await request
+      .post("/channels/11/pause")
+      .set("Authorization", `Bearer ${otherAuthorizationToken}`)
+      .expect(404);
+  });
+});
+
+describe("POST /channels/:channelId/resume", () => {
+  it("should resume the channel and respond with 200 on post request", async () => {
+    await request
+      .post("/channels/2/pause")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(200);
+
+    await request
+      .post("/channels/2/resume")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(200);
+  });
+
+  it("should fail with 409 if channel isn't playing", async () => {
+    await request
+      .post("/channels/1/resume")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(409);
+  });
+
+  it("should fail with 409 if channel isn't paused", async () => {
+    await request
+      .post("/channels/2/resume")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(409);
+  });
+
+  it("should fail with 401 when unauthorized", async () => {
+    await request.post("/channels/1/pause").expect(401);
+  });
+
+  it("should fail with 401 if authorized by someone else", async () => {
+    await request
+      .post("/channels/1/pause")
+      .set("Authorization", `Bearer ${otherAuthorizationToken}`)
+      .expect(401);
+  });
+
+  it("should fail with 404 if channel does not exist", async () => {
+    await request
+      .post("/channels/11/pause")
       .set("Authorization", `Bearer ${otherAuthorizationToken}`)
       .expect(404);
   });

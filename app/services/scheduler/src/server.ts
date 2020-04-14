@@ -2,6 +2,7 @@ import * as knex from "knex";
 import { createApp } from "./app";
 import { Config } from "./config";
 import logger from "./logger";
+import { BaseTimeService } from "./time";
 
 try {
   const config = new Config(process.env);
@@ -12,7 +13,9 @@ try {
     pool: { min: 0, max: 10 },
   });
 
-  const app = createApp(config, knexConnection, logger);
+  const timeService = new BaseTimeService();
+
+  const app = createApp(config, knexConnection, logger, timeService);
 
   const server = app.listen(config.httpServerPort, () => {
     logger.debug(`Server is listening on port ${config.httpServerPort}`);

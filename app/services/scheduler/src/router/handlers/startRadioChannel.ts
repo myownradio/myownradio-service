@@ -2,8 +2,9 @@ import * as knex from "knex";
 import { Context, Middleware } from "koa";
 import { Logger } from "winston";
 import { Config } from "../../config";
+import { TimeService } from "../../time";
 
-export default function startRadioChannel(_: Config, knexConnection: knex, __: Logger): Middleware {
+export default function startRadioChannel(_: Config, knexConnection: knex, __: Logger, timeService: TimeService): Middleware {
   return async (ctx: Context): Promise<void> => {
     const userId = ctx.state.user.uid;
 
@@ -22,7 +23,7 @@ export default function startRadioChannel(_: Config, knexConnection: knex, __: L
     }
 
     try {
-      const now = Date.now();
+      const now = timeService.now();
       await knexConnection("playing_channels").insert({
         channel_id: channelId,
         start_offset: 0,
