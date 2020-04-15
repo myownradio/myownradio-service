@@ -1,0 +1,20 @@
+{
+  "name": "@myownradio/entities",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build:database": "npx rimraf db && npx postgres-iots-codegen --host=localhost --port=15432 --username=myownradio --password=myownradio --database=myownradio --outdir=db --index --capital --nosuffix --ignore=knex_migrations,knex_migrations_lock"
+  },
+  "devDependencies": {
+    "@types/knex": "^0.16.1",
+    "@types/node": "^13.9.3",
+    "sqlite3": "^4.1.1",
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "fp-ts": "^2.5.3",
+    "io-ts": "^2.1.3",
+    "knex": "^0.20.13",
+    "pg": "^7.18.2"
+  }
+}

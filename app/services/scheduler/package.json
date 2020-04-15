@@ -21,6 +21,7 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
+    "@myownradio/entities": "1.0.0",
     "@koa/cors": "^3.0.0",
     "koa": "^2.11.0",
     "koa-router": "^8.0.8",
