@@ -1,12 +1,12 @@
-import { BehaviorSubject, Observable, Subject } from "rxjs";
+import { BehaviorSubject, Subject } from "rxjs";
 import { scan } from "rxjs/operators";
 import { createAudioPlayer, Command, Event, playCommand, stopCommand } from "./player";
 import { reducer } from "./reducer";
 import { AudioPlayerState, initialAudioPlayerState } from "./state";
 
 export interface AudioPlayerStore {
-  state$: Observable<AudioPlayerState>;
-  start(url: string): void;
+  state$: BehaviorSubject<AudioPlayerState>;
+  play(url: string): void;
   stop(): void;
   shutdown(): void;
 }
@@ -22,7 +22,7 @@ export function createStore(): AudioPlayerStore {
 
   return {
     state$,
-    start(url: string): void {
+    play(url: string): void {
       command$.next(playCommand(url));
     },
     stop(): void {

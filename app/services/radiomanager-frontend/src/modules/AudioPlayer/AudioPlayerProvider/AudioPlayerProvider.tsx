@@ -8,9 +8,11 @@ import { AudioPlayerState } from "../AudioPlayerStore";
 const AudioPlayerProvider: React.FC = ({ children }) => {
   const audioPlayerStore = useMemo(() => createStore(), []);
 
-  const [playerState, setPlayerState] = useState<AudioPlayerState>();
+  // todo: remove after finish debugging
+  const [playerState, setPlayerState] = useState<AudioPlayerState>(audioPlayerStore.state$.getValue());
 
   useEffect(() => {
+    // todo: remove after finish debugging
     const sub = audioPlayerStore.state$.subscribe(setPlayerState);
 
     return (): void => {
@@ -23,7 +25,7 @@ const AudioPlayerProvider: React.FC = ({ children }) => {
     <>
       <AudioPlayerContext.Provider value={audioPlayerStore}>{children}</AudioPlayerContext.Provider>
       <pre>Debug Player State: {JSON.stringify(playerState)}</pre>
-      {playerState?.status === "playing" && <button onClick={audioPlayerStore.stop}>Stop</button>}
+      {playerState.status === "playing" && <button onClick={audioPlayerStore.stop}>Stop</button>}
     </>
   );
 };
