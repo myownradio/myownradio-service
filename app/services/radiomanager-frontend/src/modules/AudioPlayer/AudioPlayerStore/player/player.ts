@@ -14,7 +14,6 @@ export function createAudioPlayer(command$: Observable<Command>, event$: Subject
   let audioElement: HTMLAudioElement;
   try {
     audioElement = document.createElement("audio");
-    event$.next(createAudioInitialized());
   } catch (error) {
     event$.next(createAudioInitializationErrorEvent(error.message));
     return (): void => {
@@ -24,6 +23,8 @@ export function createAudioPlayer(command$: Observable<Command>, event$: Subject
 
   if (typeof audioElement.canPlayType !== "function") {
     event$.next(createAudioUnsupportedEvent());
+  } else {
+    event$.next(createAudioInitialized());
   }
 
   const timeUpdateListener = (): void => {
