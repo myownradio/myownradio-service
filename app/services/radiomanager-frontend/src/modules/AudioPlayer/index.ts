@@ -1,5 +1,6 @@
+import Context from "./AudioPlayerContext";
 import Provider from "./AudioPlayerProvider";
+import useAudioPlayerControls from "./use/useAudioPlayerControls";
+import useAudioPlayerState from "./use/useAudioPlayerState";
 
-export { Provider };
-
-export default { Provider };
+export { Provider, Context, useAudioPlayerState, useAudioPlayerControls };

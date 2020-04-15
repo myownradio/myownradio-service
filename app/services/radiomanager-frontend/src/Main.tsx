@@ -3,7 +3,7 @@ import * as React from "react";
 import { BrowserRouter, Switch, Route, Redirect, Link } from "react-router-dom";
 
 import { config } from "~/config";
-import AudioPlayer from "~/modules/AudioPlayer";
+import { Provider as AudioPlayerProvider } from "~/modules/AudioPlayer";
 import Localization from "~/modules/Localization";
 import LoggedInUser from "~/modules/LoggedInUser";
 
@@ -27,7 +27,7 @@ const Main: React.FC = () => {
             <Route exact path={routes.logout} component={LogoutPage} />
             <Route exact path={[routes.home, routes.profile, routes.createChannel, routes.channel]}>
               <LoggedInUser.Provider fallback={<Redirect to={routes.login} />}>
-                <AudioPlayer.Provider>
+                <AudioPlayerProvider>
                   <Switch>
                     <Redirect exact from={routes.home} to={routes.profile} />
                     <Route exact path={routes.profile} component={ProfilePage} />
@@ -35,7 +35,7 @@ const Main: React.FC = () => {
                     <Route exact path={routes.channel} component={ChannelPage} />
                   </Switch>
                   <Link to={routes.logout}>Logout</Link>
-                </AudioPlayer.Provider>
+                </AudioPlayerProvider>
               </LoggedInUser.Provider>
             </Route>
             <Route>404 Not Found</Route>
