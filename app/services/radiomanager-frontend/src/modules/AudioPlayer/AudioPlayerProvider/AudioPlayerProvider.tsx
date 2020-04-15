@@ -23,6 +23,7 @@ const AudioPlayerProvider: React.FC = ({ children }) => {
     <>
       <AudioPlayerContext.Provider value={audioPlayerStore}>{children}</AudioPlayerContext.Provider>
       <pre>Debug Player State: {JSON.stringify(playerState)}</pre>
+      {playerState?.status === "playing" && <button onClick={audioPlayerStore.stop}>Stop</button>}
     </>
   );
 };

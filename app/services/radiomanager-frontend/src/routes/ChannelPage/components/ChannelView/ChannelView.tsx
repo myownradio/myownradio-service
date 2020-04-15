@@ -34,7 +34,7 @@ const ChannelView: React.FC<ChannelViewProps> = ({ channelResource, audioTracksR
         <h2>Audio Tracks</h2>
         <ul>
           {audioTracks.map(audioTrack => (
-            <li key={audioTrack.id}>{audioTrack.name}</li>
+            <li key={audioTrack.id}>{audioTrack.name} <button>Preview</button></li>
           ))}
         </ul>
         <AudioUploader channelId={channel.id} onUploadSuccess={handleUploadSuccess} />
