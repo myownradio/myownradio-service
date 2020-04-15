@@ -1,5 +1,6 @@
 import Provider from "./AudioPlayerProvider";
+import Context from "./AudioPlayerContext";
 
-export { Provider };
+export { Provider, Context };
 
-export default { Provider };
+export default { Provider, Context };
