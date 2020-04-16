@@ -21,6 +21,7 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
+    "@myownradio/entities": "1.0.0",
     "ffmpeg-static": "^4.1.1",
     "fluent-ffmpeg": "^2.1.2",
     "koa": "^2.11.0",
