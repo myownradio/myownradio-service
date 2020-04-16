@@ -3,7 +3,7 @@ IMAGE_URL = $(shell cd terraform && terraform output $(SERVICE)_image_url)
 GIT_COMMIT = $(shell git log -n 1 --pretty=format:'%H')
 PULL_LATEST = no
 
-APPS := radiomanager-frontend migration auth-server fileserver-local audio-uploader radiomanager-backend
+APPS := radiomanager-frontend migration auth-server fileserver-local audio-uploader radiomanager-backend scheduler stream-composer audio-player
 SERVICES := frontend-proxy
 LATEST_TAG_ONLY := migration
 

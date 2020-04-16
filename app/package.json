@@ -9,6 +9,7 @@
     "dev:radiomanager-frontend": "env-cmd -f env/radiomanager-frontend.env -- yarn --cwd services/radiomanager-frontend start",
     "dev:radiomanager-backend": "env-cmd -f env/radiomanager-backend.env -- yarn --cwd services/radiomanager-backend run dev",
     "dev:scheduler": "env-cmd -f env/scheduler.env -- yarn --cwd services/scheduler run dev",
+    "dev:audio-player": "env-cmd -f env/audio-player.env -- yarn --cwd services/audio-player run dev",
     "dev": "concurrently -n w: npm:dev:*",
     "migrate": "knex migrate:latest",
     "test": "jest",
