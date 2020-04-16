@@ -21,6 +21,13 @@ export function createMediaErrorEvent(message: string): MediaErrorEvent {
   return { type: "MEDIA_ERROR", message };
 }
 
+interface LoadingEvent {
+  type: "LOADING";
+}
+export function createLoadingEvent(): LoadingEvent {
+  return { type: "LOADING" };
+}
+
 interface PlayingEvent {
   type: "PLAYING";
 }
@@ -53,6 +60,7 @@ export function createAudioInitialized(): InitializedEvent {
 export type Event =
   | AudioUnsupportedEvent
   | MediaErrorEvent
+  | LoadingEvent
   | PlayingEvent
   | StoppedEvent
   | OnProgressEvent
