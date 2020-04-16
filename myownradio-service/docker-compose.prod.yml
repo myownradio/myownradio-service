@@ -115,6 +115,16 @@ services:
         order: start-first
       restart_policy:
         condition: on-failure
+  audio-player:
+    image: ${AUDIO_PLAYER_IMAGE_URL}:${IMAGE_TAG}
+    environment:
+      - PORT=8080
+    deploy:
+      replicas: 1
+      update_config:
+        order: start-first
+      restart_policy:
+        condition: on-failure
   # Migration
   migration:
     image: ${MIGRATION_IMAGE_URL}:latest

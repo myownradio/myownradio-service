@@ -9,3 +9,4 @@ Used ports in development environment
 12005   radiomanager-backend http
 12006   scheduler
 12007   stream-composer
+12008   audio-player
