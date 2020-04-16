@@ -9,6 +9,8 @@ export function reducer(state: AudioPlayerState, event: Event): AudioPlayerState
       return { ...state, status: "audio_unsupported" };
     case "MEDIA_ERROR":
       return { ...state, status: "media_error" };
+    case "LOADING":
+      return { ...state, status: "loading" };
     case "PLAYING":
       return { ...state, status: "playing" };
     case "STOPPED":

@@ -8,7 +8,7 @@ import {
   createAudioInitialized,
   createOnProgressEvent,
   createAudioInitializationErrorEvent,
-  Event,
+  Event, createLoadingEvent,
 } from "./events";
 
 export function createAudioPlayer(command$: Observable<Command>, event$: Subject<Event>): () => void {
@@ -30,10 +30,15 @@ export function createAudioPlayer(command$: Observable<Command>, event$: Subject
 
   const timeUpdateListener = (): void => {
     event$.next(createOnProgressEvent(audioElement.currentTime));
-    console.log();
+  };
+
+  const playListener = (): void => {
+    event$.next(createLoadingEvent());
   };
 
   audioElement.addEventListener("timeupdate", timeUpdateListener);
+
+  audioElement.addEventListener("play", playListener);
 
   const subscription = command$.subscribe(command => {
     switch (command.type) {
@@ -56,6 +61,7 @@ export function createAudioPlayer(command$: Observable<Command>, event$: Subject
 
   return function destroy(): void {
     audioElement.removeEventListener("timeupdate", timeUpdateListener);
+    audioElement.removeEventListener("play", playListener);
     audioElement.remove();
     subscription.unsubscribe();
   };

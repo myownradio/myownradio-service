@@ -1,5 +1,5 @@
 export interface AudioPlayerState {
-  status: "initial" | "audio_unsupported" | "media_error" | "playing" | "stopped";
+  status: "initial" | "audio_unsupported" | "media_error" | "loading" | "playing" | "stopped";
   currentTime: number;
 }
 
