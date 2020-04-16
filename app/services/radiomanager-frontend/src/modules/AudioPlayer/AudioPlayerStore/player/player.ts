@@ -8,7 +8,8 @@ import {
   createAudioInitialized,
   createOnProgressEvent,
   createAudioInitializationErrorEvent,
-  Event, createLoadingEvent,
+  createLoadingEvent,
+  Event,
 } from "./events";
 
 export function createAudioPlayer(command$: Observable<Command>, event$: Subject<Event>): () => void {
