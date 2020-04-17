@@ -118,6 +118,10 @@ services:
   audio-player:
     image: ${AUDIO_PLAYER_IMAGE_URL}:${IMAGE_TAG}
     environment:
+      - AUDIO_PLAYER_TOKEN_SECRET=me9IQW0atAzzE5nYKC6EiibAareI0to1
+      - AUDIO_PLAYER_ALLOWED_ORIGIN=https://new.myownradio.biz
+      - AUDIO_PLAYER_DATABASE_URL=postgres://mor:mor@postgres:5432/mor
+      - AUDIO_PLAYER_DATABASE_CLIENT=postgresql
       - PORT=8080
     deploy:
       replicas: 1

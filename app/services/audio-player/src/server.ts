@@ -1,3 +1,4 @@
+import * as knex from "knex";
 import { createApp } from "./app";
 import { Config } from "./config";
 import logger from "./logger";
@@ -5,7 +6,13 @@ import logger from "./logger";
 try {
   const config = new Config(process.env);
 
-  const app = createApp(config, logger);
+  const knexConnection = knex({
+    connection: config.databaseUrl,
+    client: config.databaseClient,
+    pool: { min: 0, max: 10 },
+  });
+
+  const app = createApp(config, logger, knexConnection);
 
   const server = app.listen(config.httpServerPort, () => {
     logger.debug(`Server is listening on port ${config.httpServerPort}`);
