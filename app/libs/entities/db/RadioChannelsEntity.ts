@@ -9,3 +9,11 @@ export const RadioChannelsEntityContract = t.interface({
 });
 
 export type IRadioChannelsEntity = t.TypeOf<typeof RadioChannelsEntityContract>;
+
+export enum RadioChannelsProps {
+  UserId = "user_id",
+  UpdatedAt = "updated_at",
+  Title = "title",
+  Id = "id",
+  CreatedAt = "created_at",
+}

@@ -6,5 +6,8 @@ import * as ff from "fluent-ffmpeg";
 export function createPreviewStream(filename: string, writableStream: Writable): void {
   ff(filename)
     .setFfmpegPath(ffmpegPath)
-    .writeToStream(writableStream, { end: true });
+    .withNativeFramerate()
+    .withOutputFormat("mp3")
+    .writeToStream(writableStream, { end: true })
+    .on("error", error => writableStream.destroy(error));
 }

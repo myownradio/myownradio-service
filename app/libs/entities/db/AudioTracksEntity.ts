@@ -20,3 +20,22 @@ export const AudioTracksEntityContract = t.interface({
 });
 
 export type IAudioTracksEntity = t.TypeOf<typeof AudioTracksEntityContract>;
+
+export enum AudioTracksProps {
+  Bitrate = "bitrate",
+  UserId = "user_id",
+  Genre = "genre",
+  Duration = "duration",
+  UpdatedAt = "updated_at",
+  Hash = "hash",
+  Format = "format",
+  Size = "size",
+  Title = "title",
+  CreatedAt = "created_at",
+  ChannelId = "channel_id",
+  Artist = "artist",
+  Album = "album",
+  Name = "name",
+  OrderId = "order_id",
+  Id = "id",
+}
