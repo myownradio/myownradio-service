@@ -1,4 +1,4 @@
-import { PassThrough } from "stream";
+// import { PassThrough } from "stream";
 import {
   IAudioTracksEntity,
   AudioTracksProps,
@@ -8,7 +8,7 @@ import {
 } from "@myownradio/entities/db";
 import * as knex from "knex";
 import { IMiddleware } from "koa-router";
-import { createPreviewStream } from "../../utils";
+// import { createPreviewStream } from "../../utils";
 
 export default function previewAudioTrack(knexConnection: knex): IMiddleware {
   return async (ctx): Promise<void> => {
@@ -37,9 +37,10 @@ export default function previewAudioTrack(knexConnection: knex): IMiddleware {
     //   return ctx.throw(401);
     // }
 
-    const pass = new PassThrough();
-    createPreviewStream("https://file-examples.com/wp-content/uploads/2017/11/file_example_MP3_5MG.mp3", pass);
-    ctx.set('Content-Type', 'audio/mpeg');
-    ctx.body = pass;
+    // const pass = new PassThrough();
+    // createPreviewStream("https://file-examples.com/wp-content/uploads/2017/11/file_example_MP3_5MG.mp3", pass);
+    // ctx.set('Content-Type', 'audio/mpeg');
+    // ctx.body = pass;
+    ctx.status = 501;
   };
 }
