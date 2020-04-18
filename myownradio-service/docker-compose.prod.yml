@@ -9,6 +9,7 @@ services:
       - auth-server
       - audio-uploader
       - scheduler
+      - audio-player
     environment:
       VIRTUAL_HOST: "new.myownradio.biz"
       LETSENCRYPT_HOST: "new.myownradio.biz"
