@@ -12,7 +12,7 @@ try {
     pool: { min: 0, max: 10 },
   });
 
-  const app = createApp(config, logger, knexConnection);
+  const app = createApp(config, knexConnection, logger);
 
   const server = app.listen(config.httpServerPort, () => {
     logger.debug(`Server is listening on port ${config.httpServerPort}`);

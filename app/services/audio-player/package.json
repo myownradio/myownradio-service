@@ -29,6 +29,7 @@
     "fluent-ffmpeg": "^2.1.2",
     "knex": "^0.20.15",
     "koa": "^2.11.0",
+    "koa-jwt": "^3.6.0",
     "koa-router": "^8.0.8",
     "winston": "^3.2.1"
   }
