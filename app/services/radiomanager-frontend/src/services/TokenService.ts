@@ -34,7 +34,6 @@ export class BaseTokenService extends AbstractApiService implements TokenService
     });
   }
 
-
   public async forgotRefreshToken(refreshToken: string): Promise<void> {
     await this.makeRequest<void>("forgotToken", {
       method: "post",
