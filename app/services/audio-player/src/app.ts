@@ -8,7 +8,7 @@ import requestLogger from "./router/middleware/requestLogger";
 
 export function createApp(config: Config, knexConnection: knex, logger: Logger): Application {
   const app = new Application();
-  const router = createRouter(knexConnection, config);
+  const router = createRouter(knexConnection, config, logger);
 
   app.use(requestLogger(logger));
   app.use(cors({ credentials: true, origin: config.allowedOrigin }));

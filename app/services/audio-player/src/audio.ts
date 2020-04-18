@@ -1,20 +1,29 @@
 import { Readable, PassThrough } from "stream";
 import * as ffmpegPath from "ffmpeg-static";
-import * as ff from "fluent-ffmpeg";
+import * as ffmpeg from "fluent-ffmpeg";
+import { Logger } from "winston";
 
 const PREVIEW_AUDIO_FORMAT = "mp3";
 const MP3_PREVIEW_CHANNELS = 2;
 const MP3_PREVIEW_BITRATE = 128000;
 
-export function makeMp3Preview(audioFileUrl: string): Readable {
+export function makeMp3Preview(audioFileUrl: string, logger: Logger): Readable {
   const output = new PassThrough();
-  ff(audioFileUrl)
+  const decoder = ffmpeg(audioFileUrl)
     .setFfmpegPath(ffmpegPath)
     .withNativeFramerate()
     .withOutputFormat(PREVIEW_AUDIO_FORMAT)
     .withAudioChannels(MP3_PREVIEW_CHANNELS)
     .withAudioBitrate(MP3_PREVIEW_BITRATE)
-    .writeToStream(output, { end: true });
+    .on("error", error => {
+      const errorText = (error.stack || error) as string;
+      if (!errorText.includes("Output stream closed")) {
+        logger.warn(`Error occurred during streaming in progress: ${errorText}`, { audioFileUrl });
+      }
+    });
+
+  decoder.pipe(output, { end: true });
+
   return output;
 }
 

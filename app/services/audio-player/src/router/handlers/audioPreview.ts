@@ -8,11 +8,12 @@ import {
 } from "@myownradio/entities/db";
 import * as knex from "knex";
 import { IMiddleware } from "koa-router";
+import { Logger } from "winston";
 import { makeMp3Preview } from "../../audio";
 import { Config } from "../../config";
 import { hashToPath } from "../../utils";
 
-export default function audioPreview(knexConnection: knex, config: Config): IMiddleware {
+export default function audioPreview(knexConnection: knex, config: Config, logger: Logger): IMiddleware {
   return async (ctx): Promise<void> => {
     const userId = ctx.state.user.uid;
     const { trackId } = ctx.params;
@@ -44,6 +45,6 @@ export default function audioPreview(knexConnection: knex, config: Config): IMid
     const audioFileUrl = `${config.fileServerUrl}/${hashToPath(result.hash)}${extension}`;
 
     ctx.set("Content-Type", "audio/mpeg");
-    ctx.body = makeMp3Preview(audioFileUrl);
+    ctx.body = makeMp3Preview(audioFileUrl, logger.child({ lib: "ffmpeg" }));
   };
 }

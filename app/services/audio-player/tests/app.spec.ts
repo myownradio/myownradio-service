@@ -52,10 +52,25 @@ test("GET /healthcheck", async () => {
 });
 
 describe("GET /audio/preview", () => {
-  xit("should produce mp3 audio stream", async () => {
+  it("should produce mp3 audio stream when authorized with header", async () => {
     const response = await request
       .get("/audio/preview/1")
       .auth(authorizationToken, { type: "bearer" })
+      .expect(200)
+      .expect("Content-Type", "audio/mpeg")
+      .buffer(true)
+      .parse((res, fn) => {
+        res.once("data", buffer => {
+          fn(null, buffer);
+        });
+      });
+
+    expect(isMp3Header(response.body)).toBe(true);
+  });
+
+  it("should produce mp3 audio stream when authorized with query parameter", async () => {
+    const response = await request
+      .get(`/audio/preview/1?token=${authorizationToken}`)
       .expect(200)
       .expect("Content-Type", "audio/mpeg")
       .buffer(true)
