@@ -15,7 +15,7 @@ import {
 export function createAudioPlayer(command$: Observable<Command>, event$: Subject<Event>): () => void {
   let audioElement: HTMLAudioElement;
   try {
-    audioElement = document.createElement("audio");
+    audioElement = new Audio();
   } catch (error) {
     event$.next(createAudioInitializationErrorEvent(error.message));
     return (): void => {

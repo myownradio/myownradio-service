@@ -31,7 +31,8 @@ const ChannelView: React.FC<ChannelViewProps> = ({ channelResource, audioTracksR
     trackId => {
       return (): void => {
         const accessToken = sessionService.getAccessToken();
-        play(`http://localhost:12008/audio/preview/${trackId}?token=${accessToken}`);
+        const mediaFileUrl = `${config.audioPlayerUrl}/audio/preview/${trackId}?token=${accessToken}`;
+        play(mediaFileUrl);
       };
     },
     [play, sessionService],
