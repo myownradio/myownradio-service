@@ -1,6 +1,7 @@
 import { AbstractApiService } from "./AbstractApiService";
 
 export interface TokenService {
+  issueAccessToken(refreshToken: string): Promise<SuccessfulIssueResponse>;
   refreshRefreshToken(refreshToken: string): Promise<SuccessfulRefreshResponse>;
   forgotRefreshToken(refreshToken: string): Promise<void>;
 }
@@ -10,9 +11,20 @@ export interface SuccessfulRefreshResponse {
   access_token: string;
 }
 
+export interface SuccessfulIssueResponse {
+  access_token: string;
+}
+
 export class BaseTokenService extends AbstractApiService implements TokenService {
   constructor(authApiUrl: string) {
     super(authApiUrl);
+  }
+
+  public async issueAccessToken(refreshToken: string): Promise<SuccessfulIssueResponse> {
+    return this.makeRequest<SuccessfulRefreshResponse>("issue", {
+      method: "post",
+      data: { refresh_token: refreshToken },
+    });
   }
 
   public async refreshRefreshToken(refreshToken: string): Promise<SuccessfulRefreshResponse> {
@@ -21,6 +33,7 @@ export class BaseTokenService extends AbstractApiService implements TokenService
       data: { refresh_token: refreshToken },
     });
   }
+
 
   public async forgotRefreshToken(refreshToken: string): Promise<void> {
     await this.makeRequest<void>("forgotToken", {
