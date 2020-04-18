@@ -16,9 +16,10 @@ export function createAudioInitializationErrorEvent(message: string): AudioIniti
 interface MediaErrorEvent {
   type: "MEDIA_ERROR";
   message: string;
+  url: string;
 }
-export function createMediaErrorEvent(message: string): MediaErrorEvent {
-  return { type: "MEDIA_ERROR", message };
+export function createMediaErrorEvent(message: string, url: string): MediaErrorEvent {
+  return { type: "MEDIA_ERROR", message, url };
 }
 
 interface LoadingEvent {
