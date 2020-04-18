@@ -4,6 +4,7 @@ WORKDIR /usr/app/
 
 COPY package.json yarn.lock ./
 COPY services/stream-composer/package.json services/stream-composer/
+COPY libs/ libs/
 RUN ["yarn", "install", "--non-interactive", "--pure-lockfile"]
 
 COPY tsconfig.json ./

@@ -4,6 +4,7 @@ WORKDIR /usr/app/
 
 COPY package.json yarn.lock ./
 COPY services/radiomanager-backend/package.json services/radiomanager-backend/
+COPY libs/ libs/
 RUN ["yarn", "install", "--non-interactive", "--pure-lockfile"]
 
 COPY tsconfig.json ./
