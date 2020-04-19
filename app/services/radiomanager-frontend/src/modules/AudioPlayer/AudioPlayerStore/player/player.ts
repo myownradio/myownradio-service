@@ -15,7 +15,7 @@ import {
 export function createAudioPlayer(command$: Observable<Command>, event$: Subject<Event>): () => void {
   let audioElement: HTMLAudioElement;
   try {
-    audioElement = document.createElement("audio");
+    audioElement = new Audio();
   } catch (error) {
     event$.next(createAudioInitializationErrorEvent(error.message));
     return (): void => {
@@ -44,18 +44,24 @@ export function createAudioPlayer(command$: Observable<Command>, event$: Subject
   const subscription = command$.subscribe(command => {
     switch (command.type) {
       case "PLAY":
-        audioElement.setAttribute("src", command.payload.url);
-        audioElement.play().then(
-          () => event$.next(createPlayingEvent()),
-          error => event$.next(createMediaErrorEvent(error.message)),
-        );
+        Promise.resolve()
+          .then(() => {
+            audioElement.setAttribute("src", command.payload.url);
+            return audioElement.play();
+          })
+          .then(
+            () => event$.next(createPlayingEvent()),
+            error => event$.next(createMediaErrorEvent(error.message, command.payload.url)),
+          );
         break;
+
       case "STOP":
         audioElement.pause();
         audioElement.currentTime = 0;
         audioElement.removeAttribute("src");
         event$.next(createStoppedEvent());
         break;
+
       default:
     }
   });

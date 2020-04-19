@@ -4,6 +4,7 @@ export class Config {
   readonly allowedOrigin: string;
   readonly databaseUrl: string;
   readonly databaseClient: string;
+  readonly fileServerUrl: string;
 
   constructor(env: { [name: string]: string | undefined }) {
     this.httpServerPort = env.PORT ? parseInt(env.PORT, 10) : 8080;
@@ -31,5 +32,11 @@ export class Config {
     }
 
     this.databaseClient = env.AUDIO_PLAYER_DATABASE_CLIENT;
+
+    if (!env.AUDIO_PLAYER_FILE_SERVER_URL) {
+      throw new Error("Environment variable AUDIO_PLAYER_FILE_SERVER_URL is required");
+    }
+
+    this.fileServerUrl = env.AUDIO_PLAYER_FILE_SERVER_URL;
   }
 }

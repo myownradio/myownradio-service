@@ -1,4 +1,4 @@
-// import { PassThrough } from "stream";
+import * as path from "path";
 import {
   IAudioTracksEntity,
   AudioTracksProps,
@@ -8,11 +8,14 @@ import {
 } from "@myownradio/entities/db";
 import * as knex from "knex";
 import { IMiddleware } from "koa-router";
-// import { createPreviewStream } from "../../utils";
+import { Logger } from "winston";
+import { makeMp3Preview } from "../../audio";
+import { Config } from "../../config";
+import { hashToPath } from "../../utils";
 
-export default function previewAudioTrack(knexConnection: knex): IMiddleware {
+export default function audioPreview(knexConnection: knex, config: Config, logger: Logger): IMiddleware {
   return async (ctx): Promise<void> => {
-    // const userId = ctx.state.user.uid;
+    const userId = ctx.state.user.uid;
     const { trackId } = ctx.params;
 
     const result = await knexConnection
@@ -23,8 +26,9 @@ export default function previewAudioTrack(knexConnection: knex): IMiddleware {
         `${TableName.RadioChannels}.${RadioChannelsProps.Id}`,
       )
       .where(`${TableName.AudioTracks}.${AudioTracksProps.Id}`, trackId)
-      .select<Pick<IAudioTracksEntity, "hash"> & Pick<IRadioChannelsEntity, "user_id">>(
+      .select<Pick<IAudioTracksEntity, "hash" | "name"> & Pick<IRadioChannelsEntity, "user_id">>(
         `${TableName.AudioTracks}.hash`,
+        `${TableName.AudioTracks}.name`,
         `${TableName.RadioChannels}.user_id`,
       )
       .first();
@@ -33,14 +37,14 @@ export default function previewAudioTrack(knexConnection: knex): IMiddleware {
       return ctx.throw(404);
     }
 
-    // if (result.user_id !== userId) {
-    //   return ctx.throw(401);
-    // }
+    if (result.user_id !== userId) {
+      return ctx.throw(401);
+    }
 
-    // const pass = new PassThrough();
-    // createPreviewStream("https://file-examples.com/wp-content/uploads/2017/11/file_example_MP3_5MG.mp3", pass);
-    // ctx.set('Content-Type', 'audio/mpeg');
-    // ctx.body = pass;
-    ctx.status = 501;
+    const extension = path.extname(result.name);
+    const audioFileUrl = `${config.fileServerUrl}/${hashToPath(result.hash)}${extension}`;
+
+    ctx.set("Content-Type", "audio/mpeg");
+    ctx.body = makeMp3Preview(audioFileUrl, logger.child({ lib: "ffmpeg" }));
   };
 }

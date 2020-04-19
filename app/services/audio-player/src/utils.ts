@@ -1,13 +1,12 @@
-import { Writable } from "stream";
-import * as ffmpegPath from "ffmpeg-static";
-import * as ff from "fluent-ffmpeg";
+import * as path from "path";
 
-// todo think about better name and implementation
-export function createPreviewStream(filename: string, writableStream: Writable): void {
-  ff(filename)
-    .setFfmpegPath(ffmpegPath)
-    .withNativeFramerate()
-    .withOutputFormat("mp3")
-    .writeToStream(writableStream, { end: true })
-    .on("error", error => writableStream.destroy(error));
+/**
+ * Converts hash to path with sub directories.
+ *
+ * @param {string} hash
+ * @return {string}
+ */
+export function hashToPath(hash: string): string {
+  const parts = [hash.slice(0, 1), hash.slice(1, 2), hash];
+  return parts.join(path.sep);
 }

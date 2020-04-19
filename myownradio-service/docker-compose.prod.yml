@@ -9,6 +9,7 @@ services:
       - auth-server
       - audio-uploader
       - scheduler
+      - audio-player
     environment:
       VIRTUAL_HOST: "new.myownradio.biz"
       LETSENCRYPT_HOST: "new.myownradio.biz"
@@ -122,7 +123,10 @@ services:
       - AUDIO_PLAYER_ALLOWED_ORIGIN=https://new.myownradio.biz
       - AUDIO_PLAYER_DATABASE_URL=postgres://mor:mor@postgres:5432/mor
       - AUDIO_PLAYER_DATABASE_CLIENT=postgresql
+      - AUDIO_PLAYER_FILE_SERVER_URL=file:///usr/content
       - PORT=8080
+    volumes:
+      - audio-uploader:/usr/content
     deploy:
       replicas: 1
       update_config:

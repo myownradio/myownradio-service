@@ -6,9 +6,9 @@ import { Config } from "./config";
 import { createRouter } from "./router";
 import requestLogger from "./router/middleware/requestLogger";
 
-export function createApp(config: Config, logger: Logger, knexConnection: knex): Application {
+export function createApp(config: Config, knexConnection: knex, logger: Logger): Application {
   const app = new Application();
-  const router = createRouter(knexConnection);
+  const router = createRouter(knexConnection, config, logger);
 
   app.use(requestLogger(logger));
   app.use(cors({ credentials: true, origin: config.allowedOrigin }));

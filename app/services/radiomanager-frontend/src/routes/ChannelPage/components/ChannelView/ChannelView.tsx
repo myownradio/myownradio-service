@@ -1,6 +1,7 @@
 import * as React from "react";
 import { useCallback } from "react";
 import { Link } from "react-router-dom";
+import { useDependencies } from "~/bootstrap/dependencies";
 import useResource from "~/components/use/useResource";
 import { config } from "~/config";
 import { useAudioPlayerControls } from "~/modules/AudioPlayer";
@@ -17,6 +18,7 @@ const ChannelView: React.FC<ChannelViewProps> = ({ channelResource, audioTracksR
   const [channel] = useResource(channelResource);
   const [audioTracks, setAudioTracks] = useResource(audioTracksResource);
   const { play } = useAudioPlayerControls();
+  const { sessionService } = useDependencies();
 
   const handleUploadSuccess = useCallback(
     uploadedTrack => {
@@ -25,9 +27,16 @@ const ChannelView: React.FC<ChannelViewProps> = ({ channelResource, audioTracksR
     [setAudioTracks],
   );
 
-  const handlePreviewClicked = useCallback(() => {
-    play("https://myownradio.biz/flow?s=30&f=mp3_128k&client_id=uyXlZ7BC");
-  }, [play]);
+  const handlePreviewClicked = useCallback(
+    trackId => {
+      return (): void => {
+        const accessToken = sessionService.getAccessToken();
+        const mediaFileUrl = `${config.audioPlayerUrl}audio/preview/${trackId}?token=${accessToken}`;
+        play(mediaFileUrl);
+      };
+    },
+    [play, sessionService],
+  );
 
   return (
     <>
@@ -41,7 +50,7 @@ const ChannelView: React.FC<ChannelViewProps> = ({ channelResource, audioTracksR
         <ul>
           {audioTracks.map(audioTrack => (
             <li key={audioTrack.id}>
-              {audioTrack.name} <button onClick={handlePreviewClicked}>Preview</button>
+              {audioTrack.name} <button onClick={handlePreviewClicked(audioTrack.id)}>Preview</button>
             </li>
           ))}
         </ul>
