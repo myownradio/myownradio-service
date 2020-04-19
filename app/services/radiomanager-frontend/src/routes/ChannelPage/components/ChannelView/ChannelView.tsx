@@ -29,8 +29,8 @@ const ChannelView: React.FC<ChannelViewProps> = ({ channelResource, audioTracksR
 
   const handlePreviewClicked = useCallback(
     trackId => {
-      return async (): Promise<void> => {
-        const accessToken = await sessionService.createTemporaryAccessToken();
+      return (): void => {
+        const accessToken = sessionService.getAccessToken();
         const mediaFileUrl = `${config.audioPlayerUrl}audio/preview/${trackId}?token=${accessToken}`;
         play(mediaFileUrl);
       };

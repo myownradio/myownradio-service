@@ -1,5 +1,4 @@
 import * as knex from "knex";
-import { Context } from "koa";
 import * as jwtMiddleware from "koa-jwt";
 import * as KoaRouter from "koa-router";
 import { Logger } from "winston";
@@ -15,9 +14,6 @@ export function createRouter(knexConnection: knex, config: Config, logger: Logge
     "/audio/preview/:trackId(\\d+)",
     jwtMiddleware({
       secret: config.tokenSecret,
-      getToken(ctx: Context): string {
-        return ctx.query["token"];
-      },
     }),
     audioPreview(knexConnection, config, logger),
   );

@@ -9,7 +9,6 @@ export interface SessionService {
   refreshToken(): Promise<void>;
   saveTokens(accessToken: string, refreshToken: string): void;
   clearTokens(): void;
-  createTemporaryAccessToken(): Promise<string>;
 }
 
 const ACCESS_TOKEN_STORAGE_KEY = "access_token";
@@ -25,15 +24,6 @@ export class BaseSessionService implements SessionService {
 
   public getAccessToken(): string | null {
     return this.storageService.get(ACCESS_TOKEN_STORAGE_KEY);
-  }
-
-  public async createTemporaryAccessToken(): Promise<string> {
-    const refreshToken = this.storageService.get<string>(REFRESH_TOKEN_STORAGE_KEY);
-    if (refreshToken) {
-      const { access_token: accessToken } = await this.tokenService.issueAccessToken(refreshToken);
-      return accessToken;
-    }
-    throw new Error("Refresh token not found");
   }
 
   public async refreshToken(): Promise<void> {
