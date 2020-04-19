@@ -25,6 +25,7 @@
   "dependencies": {
     "@koa/cors": "^3.0.0",
     "@myownradio/entities": "1.0.0",
+    "@myownradio/common": "1.0.0",
     "ffmpeg-static": "^4.1.1",
     "fluent-ffmpeg": "^2.1.2",
     "knex": "^0.20.15",
