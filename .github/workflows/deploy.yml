@@ -15,7 +15,7 @@ jobs:
         uses: actions/checkout@master
       - name: Setup
         run: |
-          make setup-services
+          make install
       - name: Linter
         run: make run-linter
       - name: Tests
