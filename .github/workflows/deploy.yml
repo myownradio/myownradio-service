@@ -15,7 +15,6 @@ jobs:
         uses: actions/checkout@master
       - name: Setup
         run: |
-          sudo snap install terraform
           make setup-services
       - name: Linter
         run: make run-linter
