@@ -7,16 +7,15 @@
 * Docker Compose
 * Terraform
 
-To start project in development environment first of all you need to install development environment:
+To start project in development environment first of all you need to install all required dependencies and initialize project:
 ```bash
 make install
 ```
 
-Not we need to start backing services needed in development:
+Now we need to start background backing services reqired for development:
 ```bash
 make start-services
 ```
-this will start backing services in background.
 
 Now apply latest database migrations:
 ```bash
@@ -32,3 +31,5 @@ To stop background services run:
 ```bash
 make stop-services
 ```
+
+About details and other available rules see `Makefile`.
