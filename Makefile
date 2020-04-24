@@ -1,37 +1,34 @@
 LOCAL_PREFIX := myownradio/
-IMAGE_URL = $(shell cd terraform && terraform output $(SERVICE)_image_url)
+IMAGE_URL := registry.homefs.biz/$(SERVICE)
 GIT_COMMIT = $(shell git log -n 1 --pretty=format:'%H')
-PULL_LATEST = no
 
 APPS := radiomanager-frontend migration auth-server fileserver-local audio-uploader radiomanager-backend scheduler stream-composer audio-player
 SERVICES := frontend-proxy
 LATEST_TAG_ONLY := migration
 
-setup: setup-terraform setup-services
-
-setup-terraform:
-	(cd terraform && terraform init)
-
-setup-services:
+install:
 	(cd app && yarn install)
+	(cd app && docker-compose pull)
 
-# Application Section
+start-services:
+	(cd app && docker-compose up -d)
+
+stop-services:
+	(cd app && docker-compose stop)
+
+start-development:
+	(cd app && yarn dev)
+
+run-migrations:
+	(cd app && yarn migrate)
+
 run-tests:
 	(cd app && yarn test)
 
 run-linter:
 	(cd app && yarn lint)
-	(cd terraform && terraform fmt -check)
 
-# Terraform Section
-terraform-apply:
-	(cd terraform && terraform apply)
-
-terraform-plan:
-	(cd terraform && terraform plan)
-
-
-# Docker Section
+# Build Section
 build-service:
 	@echo "Building image for service: $(SERVICE)..."
 	docker build -t $(LOCAL_PREFIX)$(SERVICE) ./services/$(SERVICE)
