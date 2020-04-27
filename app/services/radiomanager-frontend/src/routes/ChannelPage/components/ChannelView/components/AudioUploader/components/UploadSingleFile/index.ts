@@ -1,1 +1,1 @@
-export { default } from "./UploadSingleFile";
+export { default } from "./UploadSingleFile"

@@ -7,6 +7,6 @@ class InvariantError extends Error {}
  */
 module.exports = function assert(assertion) {
   if (!assertion) {
-    throw new InvariantError("Invariant error");
+    throw new InvariantError("Invariant error")
   }
-};
+}

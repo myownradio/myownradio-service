@@ -1,4 +1,4 @@
-import * as t from "io-ts";
+import * as t from "io-ts"
 
 export const UsersEntityContract = t.interface({
   updated_at: t.union([t.null, t.string]), // timestamp with time zone nullable: YES
@@ -6,9 +6,9 @@ export const UsersEntityContract = t.interface({
   password: t.string, // character varying nullable: NO
   created_at: t.union([t.null, t.string]), // timestamp with time zone nullable: YES
   id: t.number, // integer nullable: NO
-});
+})
 
-export type IUsersEntity = t.TypeOf<typeof UsersEntityContract>;
+export type IUsersEntity = t.TypeOf<typeof UsersEntityContract>
 
 export enum UsersProps {
   UpdatedAt = "updated_at",

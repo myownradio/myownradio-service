@@ -1,3 +1,3 @@
-const fileExists = require("./fileExists");
+const fileExists = require("./fileExists")
 
-module.exports = { fileExists };
+module.exports = { fileExists }

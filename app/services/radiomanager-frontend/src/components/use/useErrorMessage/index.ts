@@ -1,1 +1,1 @@
-export { default, IErrorMessage } from "./useErrorMessage";
+export { default, IErrorMessage } from "./useErrorMessage"

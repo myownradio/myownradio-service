@@ -1,5 +1,5 @@
-import english from "./english";
+import english from "./english"
 
-export type ILocaleKey = keyof typeof english;
+export type ILocaleKey = keyof typeof english
 
-export { english };
+export { english }

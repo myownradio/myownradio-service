@@ -1,6 +1,6 @@
-const nodemailer = require("nodemailer");
-const config = require("./config");
-const logger = require("./logger");
+const nodemailer = require("nodemailer")
+const config = require("./config")
+const logger = require("./logger")
 
 // eslint-disable-next-line no-unused-vars
 const transport = nodemailer.createTransport({
@@ -11,4 +11,4 @@ const transport = nodemailer.createTransport({
     user: config.EMAIL_SENDER_SMTP_USER,
     pass: config.EMAIL_SENDER_SMTP_PASSWORD,
   },
-});
+})

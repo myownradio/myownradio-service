@@ -1,2 +1,2 @@
-export { AudioPlayerStore, createStore } from "./store";
-export { AudioPlayerState } from "./state";
+export { AudioPlayerStore, createStore } from "./store"
+export { AudioPlayerState } from "./state"

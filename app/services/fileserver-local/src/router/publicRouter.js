@@ -1,11 +1,11 @@
-const Router = require("koa-router");
+const Router = require("koa-router")
 
-const createIndexHandler = require("./routeHandlers/public");
+const createIndexHandler = require("./routeHandlers/public")
 
 module.exports = function createPublicRouter() {
-  const publicRouter = new Router();
+  const publicRouter = new Router()
 
-  publicRouter.all("/", createIndexHandler());
+  publicRouter.all("/", createIndexHandler())
 
-  return publicRouter;
-};
+  return publicRouter
+}

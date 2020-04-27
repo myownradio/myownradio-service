@@ -1,4 +1,4 @@
-const path = require("path");
+const path = require("path")
 
 /**
  * Converts hash to path with sub directories.
@@ -7,6 +7,6 @@ const path = require("path");
  * @return {string}
  */
 module.exports = function hashToPath(hash) {
-  const parts = [hash.slice(0, 1), hash.slice(1, 2), hash];
-  return parts.join(path.sep);
-};
+  const parts = [hash.slice(0, 1), hash.slice(1, 2), hash]
+  return parts.join(path.sep)
+}

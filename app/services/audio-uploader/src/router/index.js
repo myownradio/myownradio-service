@@ -1,11 +1,11 @@
-const body = require("koa-body");
-const jwtMiddleware = require("koa-jwt");
-const Router = require("koa-router");
-const cleanupUploads = require("./middleware/cleanupUploads");
-const createUploadHandler = require("./upload");
+const body = require("koa-body")
+const jwtMiddleware = require("koa-jwt")
+const Router = require("koa-router")
+const cleanupUploads = require("./middleware/cleanupUploads")
+const createUploadHandler = require("./upload")
 
 module.exports = function createRouter(config) {
-  const router = new Router();
+  const router = new Router()
 
   router.post(
     "/upload",
@@ -21,7 +21,7 @@ module.exports = function createRouter(config) {
       },
     }),
     createUploadHandler(config),
-  );
+  )
 
-  return router;
-};
+  return router
+}

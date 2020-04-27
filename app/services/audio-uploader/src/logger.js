@@ -1,5 +1,5 @@
-const os = require("os");
-const winston = require("winston");
+const os = require("os")
+const winston = require("winston")
 
 const logger = winston.createLogger({
   level: "debug",
@@ -9,6 +9,6 @@ const logger = winston.createLogger({
       format: winston.format.json(),
     }),
   ],
-});
+})
 
-module.exports = logger;
+module.exports = logger

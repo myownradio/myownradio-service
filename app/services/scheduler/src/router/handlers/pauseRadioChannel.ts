@@ -1,8 +1,8 @@
-import * as knex from "knex";
-import { Context, Middleware } from "koa";
-import { Logger } from "winston";
-import { Config } from "../../config";
-import { TimeService } from "../../time";
+import * as knex from "knex"
+import { Context, Middleware } from "koa"
+import { Logger } from "winston"
+import { Config } from "../../config"
+import { TimeService } from "../../time"
 
 export default function pauseRadioChannel(
   _: Config,
@@ -11,23 +11,23 @@ export default function pauseRadioChannel(
   timeService: TimeService,
 ): Middleware {
   return async (ctx: Context): Promise<void> => {
-    const userId = ctx.state.user.uid;
+    const userId = ctx.state.user.uid
 
-    const { channelId } = ctx.params;
+    const { channelId } = ctx.params
 
     const channel = await knexConnection("radio_channels")
       .where({ id: channelId })
-      .first();
+      .first()
 
     if (!channel) {
-      ctx.throw(404);
+      ctx.throw(404)
     }
 
     if (channel.user_id !== userId) {
-      ctx.throw(401);
+      ctx.throw(401)
     }
 
-    const now = timeService.now();
+    const now = timeService.now()
     const updatedRows = await knexConnection("playing_channels")
       .where({
         channel_id: channelId,
@@ -36,12 +36,12 @@ export default function pauseRadioChannel(
       .update({
         paused_at: now,
       })
-      .count();
+      .count()
 
     if (+updatedRows === 0) {
-      ctx.throw(409);
+      ctx.throw(409)
     }
 
-    ctx.status = 200;
-  };
+    ctx.status = 200
+  }
 }

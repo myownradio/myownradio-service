@@ -1,61 +1,61 @@
 interface AudioUnsupportedEvent {
-  type: "AUDIO_UNSUPPORTED";
+  type: "AUDIO_UNSUPPORTED"
 }
 export function createAudioUnsupportedEvent(): AudioUnsupportedEvent {
-  return { type: "AUDIO_UNSUPPORTED" };
+  return { type: "AUDIO_UNSUPPORTED" }
 }
 
 interface AudioInitializationErrorEvent {
-  type: "AUDIO_INITIALIZATION_ERROR";
-  message: string;
+  type: "AUDIO_INITIALIZATION_ERROR"
+  message: string
 }
 export function createAudioInitializationErrorEvent(message: string): AudioInitializationErrorEvent {
-  return { type: "AUDIO_INITIALIZATION_ERROR", message };
+  return { type: "AUDIO_INITIALIZATION_ERROR", message }
 }
 
 interface MediaErrorEvent {
-  type: "MEDIA_ERROR";
-  message: string;
-  url: string;
+  type: "MEDIA_ERROR"
+  message: string
+  url: string
 }
 export function createMediaErrorEvent(message: string, url: string): MediaErrorEvent {
-  return { type: "MEDIA_ERROR", message, url };
+  return { type: "MEDIA_ERROR", message, url }
 }
 
 interface LoadingEvent {
-  type: "LOADING";
+  type: "LOADING"
 }
 export function createLoadingEvent(): LoadingEvent {
-  return { type: "LOADING" };
+  return { type: "LOADING" }
 }
 
 interface PlayingEvent {
-  type: "PLAYING";
+  type: "PLAYING"
 }
 export function createPlayingEvent(): PlayingEvent {
-  return { type: "PLAYING" };
+  return { type: "PLAYING" }
 }
 
 interface StoppedEvent {
-  type: "STOPPED";
+  type: "STOPPED"
 }
 export function createStoppedEvent(): StoppedEvent {
-  return { type: "STOPPED" };
+  return { type: "STOPPED" }
 }
 
 interface OnProgressEvent {
-  type: "ON_PROGRESS";
-  currentTime: number;
+  type: "ON_PROGRESS"
+  currentTime: number
 }
 export function createOnProgressEvent(currentTime: number): OnProgressEvent {
-  return { type: "ON_PROGRESS", currentTime };
+  return { type: "ON_PROGRESS", currentTime }
 }
 
 interface InitializedEvent {
-  type: "INITIALIZED";
+  type: "INITIALIZED"
 }
 export function createAudioInitialized(): InitializedEvent {
-  return { type: "INITIALIZED" };
+  return { type: "INITIALIZED" }
 }
 
 export type Event =
@@ -66,4 +66,4 @@ export type Event =
   | StoppedEvent
   | OnProgressEvent
   | InitializedEvent
-  | AudioInitializationErrorEvent;
+  | AudioInitializationErrorEvent

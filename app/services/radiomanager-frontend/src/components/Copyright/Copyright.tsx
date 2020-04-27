@@ -1,9 +1,9 @@
-import Link from "@material-ui/core/Link";
-import Typography from "@material-ui/core/Typography";
-import * as React from "react";
-import { FormattedMessage } from "react-intl";
+import Link from "@material-ui/core/Link"
+import Typography from "@material-ui/core/Typography"
+import * as React from "react"
+import { FormattedMessage } from "react-intl"
 
-import { config } from "~/config";
+import { config } from "~/config"
 
 const Copyright: React.FC = () => {
   return (
@@ -16,7 +16,7 @@ const Copyright: React.FC = () => {
       {new Date().getFullYear()}
       {"."}
     </Typography>
-  );
-};
+  )
+}
 
-export default Copyright;
+export default Copyright

@@ -1,39 +1,39 @@
-import { AxiosRequestConfig } from "axios";
-import { AbstractApiService } from "~/services/AbstractApiService";
-import isAccessTokenValid from "~/services/utils/isAccessTokenValid";
-import { SessionService } from "./SessionService";
-import { UnauthorizedError } from "./errors";
+import { AxiosRequestConfig } from "axios"
+import { AbstractApiService } from "~/services/AbstractApiService"
+import isAccessTokenValid from "~/services/utils/isAccessTokenValid"
+import { SessionService } from "./SessionService"
+import { UnauthorizedError } from "./errors"
 
 export abstract class AbstractApiWithSessionService extends AbstractApiService {
   protected constructor(urlPrefix: string, private sessionService: SessionService) {
-    super(urlPrefix);
+    super(urlPrefix)
   }
 
   protected async makeRequestWithRefresh<T>(path: string, requestConfig: AxiosRequestConfig): Promise<T> {
     try {
-      return await this.makeRequestWithAuthorization(path, requestConfig);
+      return await this.makeRequestWithAuthorization(path, requestConfig)
     } catch (e) {
       if (e instanceof UnauthorizedError) {
-        await this.sessionService.refreshToken();
-        return this.makeRequestWithAuthorization(path, requestConfig);
+        await this.sessionService.refreshToken()
+        return this.makeRequestWithAuthorization(path, requestConfig)
       }
-      throw e;
+      throw e
     }
   }
 
   private async makeRequestWithAuthorization<T>(path: string, requestConfig: AxiosRequestConfig): Promise<T> {
-    const accessToken = this.sessionService.getAccessToken();
+    const accessToken = this.sessionService.getAccessToken()
     if (accessToken === null) {
-      throw new UnauthorizedError(`No access token found`, "api_error401");
+      throw new UnauthorizedError(`No access token found`, "api_error401")
     }
     if (!isAccessTokenValid(accessToken)) {
-      throw new UnauthorizedError(`Invalid access token`, "api_error401");
+      throw new UnauthorizedError(`Invalid access token`, "api_error401")
     }
     const mergedHeaders = {
       Authorization: `Bearer ${accessToken}`,
       ...(requestConfig.headers || {}),
-    };
-    const mergedConfig = { ...requestConfig, headers: mergedHeaders };
-    return this.makeRequest(path, mergedConfig);
+    }
+    const mergedConfig = { ...requestConfig, headers: mergedHeaders }
+    return this.makeRequest(path, mergedConfig)
   }
 }

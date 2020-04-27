@@ -1,1 +1,1 @@
-export { default } from "./CatchError";
+export { default } from "./CatchError"

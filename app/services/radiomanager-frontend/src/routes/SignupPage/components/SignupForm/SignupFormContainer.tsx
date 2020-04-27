@@ -1,17 +1,17 @@
-import * as React from "react";
-import { useState } from "react";
+import * as React from "react"
+import { useState } from "react"
 
-import useErrorMessage from "~/components/use/useErrorMessage";
+import useErrorMessage from "~/components/use/useErrorMessage"
 
-import SignupForm from "./SignupForm";
-import useHandleSubmit from "./use/useHandleSubmit";
+import SignupForm from "./SignupForm"
+import useHandleSubmit from "./use/useHandleSubmit"
 
 const SignupFormContainer: React.FC = () => {
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [errorMessage, setErrorMessage] = useErrorMessage();
+  const [email, setEmail] = useState<string>("")
+  const [password, setPassword] = useState<string>("")
+  const [errorMessage, setErrorMessage] = useErrorMessage()
 
-  const handleSubmit = useHandleSubmit(email, setEmail, password, setPassword, setErrorMessage);
+  const handleSubmit = useHandleSubmit(email, setEmail, password, setPassword, setErrorMessage)
 
   return (
     <SignupForm
@@ -22,7 +22,7 @@ const SignupFormContainer: React.FC = () => {
       onSignupClicked={handleSubmit}
       errorMessage={errorMessage}
     />
-  );
-};
+  )
+}
 
-export default SignupFormContainer;
+export default SignupFormContainer

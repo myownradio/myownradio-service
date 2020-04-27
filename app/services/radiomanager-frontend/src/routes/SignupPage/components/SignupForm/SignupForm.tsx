@@ -1,33 +1,33 @@
-import Avatar from "@material-ui/core/Avatar";
-import Box from "@material-ui/core/Box";
-import Button from "@material-ui/core/Button";
-import Container from "@material-ui/core/Container";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import Grid from "@material-ui/core/Grid";
-import TextField from "@material-ui/core/TextField";
-import Typography from "@material-ui/core/Typography";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import * as PropTypes from "prop-types";
-import { useCallback } from "react";
-import * as React from "react";
-import { FormattedMessage } from "react-intl";
+import Avatar from "@material-ui/core/Avatar"
+import Box from "@material-ui/core/Box"
+import Button from "@material-ui/core/Button"
+import Container from "@material-ui/core/Container"
+import CssBaseline from "@material-ui/core/CssBaseline"
+import Grid from "@material-ui/core/Grid"
+import TextField from "@material-ui/core/TextField"
+import Typography from "@material-ui/core/Typography"
+import LockOutlinedIcon from "@material-ui/icons/LockOutlined"
+import * as PropTypes from "prop-types"
+import { useCallback } from "react"
+import * as React from "react"
+import { FormattedMessage } from "react-intl"
 
-import Copyright from "~/components/Copyright";
-import ErrorBox from "~/components/ErrorBox";
-import RouterLink from "~/components/RouterLink";
-import { IErrorMessage } from "~/components/use/useErrorMessage";
-import { config } from "~/config";
+import Copyright from "~/components/Copyright"
+import ErrorBox from "~/components/ErrorBox"
+import RouterLink from "~/components/RouterLink"
+import { IErrorMessage } from "~/components/use/useErrorMessage"
+import { config } from "~/config"
 
-import { useStyles } from "./styles";
+import { useStyles } from "./styles"
 
 type ISignupFormProps = {
-  email: string;
-  password: string;
-  errorMessage: IErrorMessage;
-  onEmailChange: (email: string) => void;
-  onPasswordChange: (password: string) => void;
-  onSignupClicked: () => void;
-};
+  email: string
+  password: string
+  errorMessage: IErrorMessage
+  onEmailChange: (email: string) => void
+  onPasswordChange: (password: string) => void
+  onSignupClicked: () => void
+}
 
 const SignupForm: React.FC<ISignupFormProps> = ({
   email,
@@ -37,29 +37,29 @@ const SignupForm: React.FC<ISignupFormProps> = ({
   onPasswordChange,
   onSignupClicked,
 }) => {
-  const classes = useStyles();
+  const classes = useStyles()
 
   const handleEmailChange = useCallback(
     event => {
-      onEmailChange(event.target.value);
+      onEmailChange(event.target.value)
     },
     [onEmailChange],
-  );
+  )
 
   const handlePasswordChange = useCallback(
     event => {
-      onPasswordChange(event.target.value);
+      onPasswordChange(event.target.value)
     },
     [onPasswordChange],
-  );
+  )
 
   const handleSignupClick = useCallback(
     event => {
-      event.preventDefault();
-      onSignupClicked();
+      event.preventDefault()
+      onSignupClicked()
     },
     [onSignupClicked],
-  );
+  )
 
   return (
     <Container component="main" maxWidth="xs">
@@ -116,8 +116,8 @@ const SignupForm: React.FC<ISignupFormProps> = ({
         <Copyright />
       </Box>
     </Container>
-  );
-};
+  )
+}
 
 SignupForm.propTypes = {
   email: PropTypes.string.isRequired,
@@ -126,6 +126,6 @@ SignupForm.propTypes = {
   onEmailChange: PropTypes.func.isRequired,
   onPasswordChange: PropTypes.func.isRequired,
   onSignupClicked: PropTypes.func.isRequired,
-};
+}
 
-export default SignupForm;
+export default SignupForm

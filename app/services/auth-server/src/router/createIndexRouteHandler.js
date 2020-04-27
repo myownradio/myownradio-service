@@ -1,5 +1,5 @@
 module.exports = function createIndexRouteHandler() {
   return ctx => {
-    ctx.status = 200;
-  };
-};
+    ctx.status = 200
+  }
+}

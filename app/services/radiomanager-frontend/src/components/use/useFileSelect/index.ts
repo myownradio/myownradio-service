@@ -1,1 +1,1 @@
-export { default } from "./useFileSelect";
+export { default } from "./useFileSelect"

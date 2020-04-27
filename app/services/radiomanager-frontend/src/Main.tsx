@@ -1,20 +1,20 @@
-import { Suspense } from "react";
-import * as React from "react";
-import { BrowserRouter, Switch, Route, Redirect, Link } from "react-router-dom";
+import { Suspense } from "react"
+import * as React from "react"
+import { BrowserRouter, Switch, Route, Redirect, Link } from "react-router-dom"
 
-import { config } from "~/config";
-import { Provider as AudioPlayerProvider } from "~/modules/AudioPlayer";
-import Localization from "~/modules/Localization";
-import LoggedInUser from "~/modules/LoggedInUser";
+import { config } from "~/config"
+import { Provider as AudioPlayerProvider } from "~/modules/AudioPlayer"
+import Localization from "~/modules/Localization"
+import LoggedInUser from "~/modules/LoggedInUser"
 
-const { routes } = config;
+const { routes } = config
 
-const LoginPage = React.lazy(() => import("./routes/LoginPage"));
-const SignupPage = React.lazy(() => import("./routes/SignupPage"));
-const LogoutPage = React.lazy(() => import("./routes/LogoutPage"));
-const ProfilePage = React.lazy(() => import("./routes/ProfilePage"));
-const CreateChannelPage = React.lazy(() => import("./routes/CreateChannelPage"));
-const ChannelPage = React.lazy(() => import("./routes/ChannelPage"));
+const LoginPage = React.lazy(() => import("./routes/LoginPage"))
+const SignupPage = React.lazy(() => import("./routes/SignupPage"))
+const LogoutPage = React.lazy(() => import("./routes/LogoutPage"))
+const ProfilePage = React.lazy(() => import("./routes/ProfilePage"))
+const CreateChannelPage = React.lazy(() => import("./routes/CreateChannelPage"))
+const ChannelPage = React.lazy(() => import("./routes/ChannelPage"))
 
 const Main: React.FC = () => {
   return (
@@ -43,7 +43,7 @@ const Main: React.FC = () => {
         </BrowserRouter>
       </Suspense>
     </Localization.Provider>
-  );
-};
+  )
+}
 
-export default Main;
+export default Main

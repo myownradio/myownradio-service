@@ -1,1 +1,1 @@
-export { default } from "./AudioUploader";
+export { default } from "./AudioUploader"

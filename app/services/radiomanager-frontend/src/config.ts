@@ -1,21 +1,21 @@
 if (!process.env.REACT_APP_SITE_URL) {
-  throw new Error("Environment variable REACT_APP_SITE_URL is required");
+  throw new Error("Environment variable REACT_APP_SITE_URL is required")
 }
 
 if (!process.env.REACT_APP_AUTH_API_URL) {
-  throw new Error("Environment variable REACT_APP_AUTH_API_URL is required");
+  throw new Error("Environment variable REACT_APP_AUTH_API_URL is required")
 }
 
 if (!process.env.REACT_APP_AUDIO_UPLOADER_URL) {
-  throw new Error("Environment variable REACT_APP_AUDIO_UPLOADER_URL is required");
+  throw new Error("Environment variable REACT_APP_AUDIO_UPLOADER_URL is required")
 }
 
 if (!process.env.REACT_APP_RADIO_MANAGER_URL) {
-  throw new Error("Environment variable REACT_APP_RADIO_MANAGER_URL is required");
+  throw new Error("Environment variable REACT_APP_RADIO_MANAGER_URL is required")
 }
 
 if (!process.env.REACT_APP_AUDIO_PLAYER_URL) {
-  throw new Error("Environment variable REACT_APP_AUDIO_PLAYER_URL is required");
+  throw new Error("Environment variable REACT_APP_AUDIO_PLAYER_URL is required")
 }
 
 export const config = Object.freeze({
@@ -34,6 +34,6 @@ export const config = Object.freeze({
     createChannel: "/radiomanager/channels/new",
     channel: "/radiomanager/channels/:channelId",
   },
-});
+})
 
-export type IConfig = typeof config;
+export type IConfig = typeof config

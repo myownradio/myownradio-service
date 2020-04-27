@@ -1,17 +1,17 @@
-import * as React from "react";
-import { useState } from "react";
+import * as React from "react"
+import { useState } from "react"
 
-import useErrorMessage from "~/components/use/useErrorMessage";
+import useErrorMessage from "~/components/use/useErrorMessage"
 
-import LoginForm from "./LoginForm";
-import useHandleSubmit from "./use/useHandleSubmit";
+import LoginForm from "./LoginForm"
+import useHandleSubmit from "./use/useHandleSubmit"
 
 const LoginFormContainer: React.FC = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useErrorMessage();
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [errorMessage, setErrorMessage] = useErrorMessage()
 
-  const handleSubmit = useHandleSubmit(email, setEmail, password, setPassword, setErrorMessage);
+  const handleSubmit = useHandleSubmit(email, setEmail, password, setPassword, setErrorMessage)
 
   return (
     <LoginForm
@@ -22,7 +22,7 @@ const LoginFormContainer: React.FC = () => {
       onLoginClicked={handleSubmit}
       errorMessage={errorMessage}
     />
-  );
-};
+  )
+}
 
-export default LoginFormContainer;
+export default LoginFormContainer

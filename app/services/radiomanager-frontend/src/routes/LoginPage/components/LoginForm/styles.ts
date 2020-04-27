@@ -1,4 +1,4 @@
-import { makeStyles, Theme } from "@material-ui/core/styles";
+import { makeStyles, Theme } from "@material-ui/core/styles"
 
 export const useStyles = makeStyles((theme: Theme) => ({
   paper: {
@@ -18,4 +18,4 @@ export const useStyles = makeStyles((theme: Theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
-}));
+}))
