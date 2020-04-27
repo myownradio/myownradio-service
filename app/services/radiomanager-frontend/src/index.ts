@@ -1,5 +1,5 @@
 import bootstrap from "~/bootstrap"
 
-import Main from "./Main"
+import App from "./root/App"
 
-bootstrap(Main)
+bootstrap(App)
