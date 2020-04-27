@@ -1,14 +1,22 @@
-import React, { useEffect } from "react"
-import useDebug from "../../hooks/useDebug"
+import { ThemeProvider, CssBaseline } from "@material-ui/core"
+// import { makeStyles } from "@material-ui/styles"
+import React from "react"
+import AppLayout from "~/root/components/AppLayout"
+import Sidebar from "./Sidebar"
+// import styles from "./styles"
+import { morTheme } from "./themes"
+
+// const useStyles = makeStyles(styles)
 
 const RadioChannelPage: React.FC = () => {
-  const debug = useDebug(RadioChannelPage)
+  // const styles = useStyles()
 
-  useEffect(() => {
-    debug("Page Loaded")
-  }, [debug])
-
-  return null
+  return (
+    <ThemeProvider theme={morTheme}>
+      <CssBaseline />
+      <AppLayout aside={<Sidebar />} content={<></>} />
+    </ThemeProvider>
+  )
 }
 
 export default RadioChannelPage
