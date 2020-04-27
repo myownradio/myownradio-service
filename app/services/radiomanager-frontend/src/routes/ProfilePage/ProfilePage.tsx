@@ -1,13 +1,13 @@
-import * as React from "react";
-import { Suspense } from "react";
-import { useDependencies } from "~/bootstrap/dependencies";
-import { wrapPromise } from "~/utils/concurrent";
-import ProfileView from "./components/ProfileView";
+import * as React from "react"
+import { Suspense } from "react"
+import { useDependencies } from "~/bootstrap/dependencies"
+import { wrapPromise } from "~/utils/concurrent"
+import ProfileView from "./components/ProfileView"
 
 const ProfilePage: React.FC = () => {
-  const { radioManagerService } = useDependencies();
+  const { radioManagerService } = useDependencies()
 
-  const radioChannelListResource = wrapPromise(radioManagerService.getChannels());
+  const radioChannelListResource = wrapPromise(radioManagerService.getChannels())
 
   // const { audioUploaderService } = useDependencies();
 
@@ -29,7 +29,7 @@ const ProfilePage: React.FC = () => {
     <Suspense fallback={null}>
       <ProfileView radioChannelListResource={radioChannelListResource} />
     </Suspense>
-  );
-};
+  )
+}
 
-export default ProfilePage;
+export default ProfilePage

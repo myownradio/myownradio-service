@@ -1,4 +1,4 @@
-const jwt = require("jsonwebtoken");
+const jwt = require("jsonwebtoken")
 
 /**
  * @param {string} tokenSecret
@@ -7,6 +7,6 @@ const jwt = require("jsonwebtoken");
  * @return {Promise<string>}
  */
 module.exports = async function createAccessToken(tokenSecret, tokenLifetime, userId) {
-  const exp = Math.floor(Date.now() / 1000) + tokenLifetime;
-  return jwt.sign({ exp, uid: userId }, tokenSecret, {});
-};
+  const exp = Math.floor(Date.now() / 1000) + tokenLifetime
+  return jwt.sign({ exp, uid: userId }, tokenSecret, {})
+}

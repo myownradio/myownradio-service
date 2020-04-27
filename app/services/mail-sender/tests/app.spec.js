@@ -1,6 +1,6 @@
 const testTransport = {
   sendMail: jest.fn(),
-};
+}
 
 test("Should work", async () => {
   await testTransport.sendMail({
@@ -9,5 +9,5 @@ test("Should work", async () => {
     subject: "Nodemailer is unicode friendly ✔",
     text: "Hello to myself!",
     html: "<p><b>Hello</b> to myself!</p>",
-  });
-});
+  })
+})

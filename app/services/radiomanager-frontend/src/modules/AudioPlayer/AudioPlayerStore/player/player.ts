@@ -1,5 +1,5 @@
-import { Observable, Subject } from "rxjs";
-import { Command } from "./commands";
+import { Observable, Subject } from "rxjs"
+import { Command } from "./commands"
 import {
   createAudioUnsupportedEvent,
   createMediaErrorEvent,
@@ -10,66 +10,66 @@ import {
   createAudioInitializationErrorEvent,
   createLoadingEvent,
   Event,
-} from "./events";
+} from "./events"
 
 export function createAudioPlayer(command$: Observable<Command>, event$: Subject<Event>): () => void {
-  let audioElement: HTMLAudioElement;
+  let audioElement: HTMLAudioElement
   try {
-    audioElement = new Audio();
+    audioElement = new Audio()
   } catch (error) {
-    event$.next(createAudioInitializationErrorEvent(error.message));
+    event$.next(createAudioInitializationErrorEvent(error.message))
     return (): void => {
       /* NOP */
-    };
+    }
   }
 
   if (typeof audioElement.canPlayType !== "function") {
-    event$.next(createAudioUnsupportedEvent());
+    event$.next(createAudioUnsupportedEvent())
   } else {
-    event$.next(createAudioInitialized());
+    event$.next(createAudioInitialized())
   }
 
   const timeUpdateListener = (): void => {
-    event$.next(createOnProgressEvent(audioElement.currentTime));
-  };
+    event$.next(createOnProgressEvent(audioElement.currentTime))
+  }
 
   const playListener = (): void => {
-    event$.next(createLoadingEvent());
-  };
+    event$.next(createLoadingEvent())
+  }
 
-  audioElement.addEventListener("timeupdate", timeUpdateListener);
+  audioElement.addEventListener("timeupdate", timeUpdateListener)
 
-  audioElement.addEventListener("play", playListener);
+  audioElement.addEventListener("play", playListener)
 
   const subscription = command$.subscribe(command => {
     switch (command.type) {
       case "PLAY":
         Promise.resolve()
           .then(() => {
-            audioElement.setAttribute("src", command.payload.url);
-            return audioElement.play();
+            audioElement.setAttribute("src", command.payload.url)
+            return audioElement.play()
           })
           .then(
             () => event$.next(createPlayingEvent()),
             error => event$.next(createMediaErrorEvent(error.message, command.payload.url)),
-          );
-        break;
+          )
+        break
 
       case "STOP":
-        audioElement.pause();
-        audioElement.currentTime = 0;
-        audioElement.removeAttribute("src");
-        event$.next(createStoppedEvent());
-        break;
+        audioElement.pause()
+        audioElement.currentTime = 0
+        audioElement.removeAttribute("src")
+        event$.next(createStoppedEvent())
+        break
 
       default:
     }
-  });
+  })
 
   return function destroy(): void {
-    audioElement.removeEventListener("timeupdate", timeUpdateListener);
-    audioElement.removeEventListener("play", playListener);
-    audioElement.remove();
-    subscription.unsubscribe();
-  };
+    audioElement.removeEventListener("timeupdate", timeUpdateListener)
+    audioElement.removeEventListener("play", playListener)
+    audioElement.remove()
+    subscription.unsubscribe()
+  }
 }

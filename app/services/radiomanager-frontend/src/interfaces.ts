@@ -1,1 +1,1 @@
-export type ISetter<T> = (t: T) => void;
+export type ISetter<T> = (t: T) => void

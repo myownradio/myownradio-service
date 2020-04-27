@@ -1,5 +1,5 @@
-import bootstrap from "~/bootstrap";
+import bootstrap from "~/bootstrap"
 
-import Main from "./Main";
+import Main from "./Main"
 
-bootstrap(Main);
+bootstrap(Main)

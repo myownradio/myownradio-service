@@ -1,3 +1,3 @@
-const hashToPath = require("./hashToPath");
+const hashToPath = require("./hashToPath")
 
-module.exports = { hashToPath };
+module.exports = { hashToPath }

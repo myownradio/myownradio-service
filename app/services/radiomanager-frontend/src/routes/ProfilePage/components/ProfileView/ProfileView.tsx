@@ -1,16 +1,16 @@
-import * as React from "react";
-import { Link } from "react-router-dom";
-import { config } from "~/config";
-import { RadioChannel } from "~/services/RadioManagerService";
-import { IResource, resource } from "~/utils/concurrent";
-import { createUrlFromRoute } from "~/utils/router";
+import * as React from "react"
+import { Link } from "react-router-dom"
+import { config } from "~/config"
+import { RadioChannel } from "~/services/RadioManagerService"
+import { IResource, resource } from "~/utils/concurrent"
+import { createUrlFromRoute } from "~/utils/router"
 
 interface ProfileViewProps {
-  radioChannelListResource: IResource<RadioChannel[]>;
+  radioChannelListResource: IResource<RadioChannel[]>
 }
 
 const ProfileView: React.FC<ProfileViewProps> = ({ radioChannelListResource }) => {
-  const radioChannelsList = radioChannelListResource.read();
+  const radioChannelsList = radioChannelListResource.read()
 
   return (
     <section>
@@ -28,11 +28,11 @@ const ProfileView: React.FC<ProfileViewProps> = ({ radioChannelListResource }) =
       <br />
       <Link to={config.routes.createChannel}>Create new radio channel</Link>
     </section>
-  );
-};
+  )
+}
 
 ProfileView.propTypes = {
   radioChannelListResource: resource.isRequired,
-};
+}
 
-export default ProfileView;
+export default ProfileView

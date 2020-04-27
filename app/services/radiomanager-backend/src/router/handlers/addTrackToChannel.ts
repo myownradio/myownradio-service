@@ -1,8 +1,8 @@
-import * as t from "io-ts";
-import * as knex from "knex";
-import { Context } from "koa";
-import { Config } from "../../config";
-import { verifyMetadataSignature } from "../../utils";
+import * as t from "io-ts"
+import * as knex from "knex"
+import { Context } from "koa"
+import { Config } from "../../config"
+import { verifyMetadataSignature } from "../../utils"
 
 const AddTrackToChannelRequestContract = t.type({
   name: t.string,
@@ -15,47 +15,47 @@ const AddTrackToChannelRequestContract = t.type({
   bitrate: t.number,
   duration: t.number,
   format: t.string,
-});
+})
 
 export default function addTrackToChannel(config: Config, knexConnection: knex) {
   return async (ctx: Context): Promise<void> => {
-    const userId = ctx.state.user.uid;
-    const { channelId } = ctx.params;
+    const userId = ctx.state.user.uid
+    const { channelId } = ctx.params
 
-    const rawMetadata = ctx.request.rawBody;
-    const signature = ctx.get("signature");
+    const rawMetadata = ctx.request.rawBody
+    const signature = ctx.get("signature")
 
     if (!verifyMetadataSignature(rawMetadata, signature, config.metadataSecret, config.metadataSignatureTtl)) {
-      ctx.throw(400);
+      ctx.throw(400)
     }
 
     const channel = await knexConnection("radio_channels")
       .where({ id: channelId })
-      .first();
+      .first()
 
     if (!channel) {
-      ctx.throw(404);
+      ctx.throw(404)
     }
 
     if (channel.user_id !== userId) {
-      ctx.throw(401);
+      ctx.throw(401)
     }
 
-    const decodedRequest = AddTrackToChannelRequestContract.decode(ctx.request.body);
+    const decodedRequest = AddTrackToChannelRequestContract.decode(ctx.request.body)
 
     if (decodedRequest._tag === "Left") {
-      ctx.throw(400);
+      ctx.throw(400)
     }
 
-    const requestBody = decodedRequest.right;
+    const requestBody = decodedRequest.right
 
     const [trackId, orderId] = await knexConnection.transaction(async trx => {
       const countQueryResult = await trx("audio_tracks")
         .where({ channel_id: channelId })
-        .count<[{ count: string }]>("id as count");
+        .count<[{ count: string }]>("id as count")
 
-      const count = +countQueryResult[0]["count"];
-      const nextOrderId = count + 1;
+      const count = +countQueryResult[0]["count"]
+      const nextOrderId = count + 1
 
       const [trackId] = await trx("audio_tracks")
         .insert({
@@ -73,10 +73,10 @@ export default function addTrackToChannel(config: Config, knexConnection: knex) 
           format: requestBody.format,
           order_id: nextOrderId,
         })
-        .returning("id");
+        .returning("id")
 
-      return [trackId, nextOrderId];
-    });
+      return [trackId, nextOrderId]
+    })
 
     ctx.body = ctx.body = {
       id: trackId,
@@ -87,6 +87,6 @@ export default function addTrackToChannel(config: Config, knexConnection: knex) 
       bitrate: requestBody.bitrate,
       duration: requestBody.duration,
       order_id: orderId,
-    };
-  };
+    }
+  }
 }

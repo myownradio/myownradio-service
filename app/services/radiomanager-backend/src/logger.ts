@@ -1,5 +1,5 @@
-import { hostname } from "os";
-import * as winston from "winston";
+import { hostname } from "os"
+import * as winston from "winston"
 
 const logger = winston.createLogger({
   level: "debug", // process.env.NODE_ENV === "production" ? "info" : "debug",
@@ -9,6 +9,6 @@ const logger = winston.createLogger({
       format: winston.format.json(),
     }),
   ],
-});
+})
 
-export default logger;
+export default logger

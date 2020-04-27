@@ -1,52 +1,52 @@
-import * as PropTypes from "prop-types";
-import * as React from "react";
-import { useEffect } from "react";
+import * as PropTypes from "prop-types"
+import * as React from "react"
+import { useEffect } from "react"
 
-import { useDependencies } from "~/bootstrap/dependencies";
-import { SuccessfulMeResponse } from "~/services/AuthService";
+import { useDependencies } from "~/bootstrap/dependencies"
+import { SuccessfulMeResponse } from "~/services/AuthService"
 
-import useAuthState from "./use/useAuthState";
+import useAuthState from "./use/useAuthState"
 
-type IUserState = SuccessfulMeResponse;
+type IUserState = SuccessfulMeResponse
 
 interface LoggedInUserProviderProps {
-  fallback?: React.ReactNode;
-  loader?: React.ReactNode;
-  children?: React.ReactNode;
+  fallback?: React.ReactNode
+  loader?: React.ReactNode
+  children?: React.ReactNode
 }
 
-export const loggedInUserContext = React.createContext<IUserState | null>(null);
+export const loggedInUserContext = React.createContext<IUserState | null>(null)
 
 const LoggedInUserProvider: React.FC<LoggedInUserProviderProps> = ({ fallback, children, loader }) => {
-  const [authState, setAuthState] = useAuthState();
-  const { authApiService } = useDependencies();
+  const [authState, setAuthState] = useAuthState()
+  const { authApiService } = useDependencies()
 
   useEffect(() => {
     authApiService.me().then(
       userState => {
-        setAuthState({ authenticated: true, userState });
+        setAuthState({ authenticated: true, userState })
       },
       () => {
-        setAuthState({ authenticated: false });
+        setAuthState({ authenticated: false })
       },
-    );
-  }, [authApiService, setAuthState]);
+    )
+  }, [authApiService, setAuthState])
 
   if (authState.authenticated === true) {
-    return <loggedInUserContext.Provider value={authState.userState}>{children}</loggedInUserContext.Provider>;
+    return <loggedInUserContext.Provider value={authState.userState}>{children}</loggedInUserContext.Provider>
   }
 
   if (authState.authenticated === false) {
-    return <>{fallback}</>;
+    return <>{fallback}</>
   }
 
-  return <>{loader || null}</>;
-};
+  return <>{loader || null}</>
+}
 
 LoggedInUserProvider.propTypes = {
   fallback: PropTypes.node,
   children: PropTypes.node,
   loader: PropTypes.node,
-};
+}
 
-export default LoggedInUserProvider;
+export default LoggedInUserProvider

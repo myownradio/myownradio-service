@@ -1,57 +1,57 @@
 export interface StorageService {
-  get<T>(key: string): T | null;
-  put<T>(key: string, value: T): void;
-  delete(key: string): void;
+  get<T>(key: string): T | null
+  put<T>(key: string, value: T): void
+  delete(key: string): void
 }
 
 class LocalStorageService implements StorageService {
   public get<T>(key: string): T | null {
-    const rawValue = window.localStorage.getItem(key);
+    const rawValue = window.localStorage.getItem(key)
     if (rawValue !== null) {
       try {
-        return JSON.parse(rawValue);
+        return JSON.parse(rawValue)
       } catch {}
     }
-    return null;
+    return null
   }
 
   public put<T>(key: string, value: T): void {
-    const stringifiedValue = JSON.stringify(value);
-    window.localStorage.setItem(key, stringifiedValue);
+    const stringifiedValue = JSON.stringify(value)
+    window.localStorage.setItem(key, stringifiedValue)
   }
 
   delete(key: string): void {
-    window.localStorage.removeItem(key);
+    window.localStorage.removeItem(key)
   }
 }
 
 class MemoryStorageService implements StorageService {
-  private storage = new Map();
+  private storage = new Map()
 
   public get<T>(key: string): T | null {
-    return this.storage.has(key) ? this.storage.get(key) : null;
+    return this.storage.has(key) ? this.storage.get(key) : null
   }
 
   public put<T>(key: string, value: T): void {
-    this.storage.set(key, value);
+    this.storage.set(key, value)
   }
 
   delete(key: string): void {
-    this.storage.delete(key);
+    this.storage.delete(key)
   }
 }
 
 function isLocalStorageAvailable(): boolean {
   try {
-    const test = "__storage_test__";
-    localStorage.setItem(test, test);
-    localStorage.removeItem(test);
-    return true;
+    const test = "__storage_test__"
+    localStorage.setItem(test, test)
+    localStorage.removeItem(test)
+    return true
   } catch {
-    return false;
+    return false
   }
 }
 
 export function createStorageService(): StorageService {
-  return isLocalStorageAvailable() ? new LocalStorageService() : new MemoryStorageService();
+  return isLocalStorageAvailable() ? new LocalStorageService() : new MemoryStorageService()
 }

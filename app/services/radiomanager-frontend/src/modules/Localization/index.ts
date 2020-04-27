@@ -1,5 +1,5 @@
-import Provider from "./LocalizationProvider";
+import Provider from "./LocalizationProvider"
 
-export { Provider };
+export { Provider }
 
-export default { Provider };
+export default { Provider }

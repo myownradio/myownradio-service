@@ -22,4 +22,4 @@ export default {
   ui_common_password: "Password",
   ui_common_copyright: "Copyright",
   ui_create_channel_validator_empty_title: "You should specify title for radio channel.",
-};
+}

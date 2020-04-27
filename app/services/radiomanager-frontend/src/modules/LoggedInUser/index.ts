@@ -1,5 +1,5 @@
-import Provider from "./LoggedInUserProvider";
+import Provider from "./LoggedInUserProvider"
 
-export { Provider };
+export { Provider }
 
-export default { Provider };
+export default { Provider }

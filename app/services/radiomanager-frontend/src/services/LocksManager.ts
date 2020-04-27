@@ -1,7 +1,7 @@
-import { LoggerService } from "~/services/logger/LoggerService";
+import { LoggerService } from "~/services/logger/LoggerService"
 
 export interface LocksManager {
-  lock(fn: () => Promise<void>): Promise<void>;
+  lock(fn: () => Promise<void>): Promise<void>
 }
 
 /**
@@ -10,8 +10,8 @@ export interface LocksManager {
  * @see https://developer.mozilla.org/en-US/docs/Web/API/LockManager
  */
 export class NaiveLocksManager implements LocksManager {
-  private locked = false;
-  private waitList: Array<(error?: Error) => void> = [];
+  private locked = false
+  private waitList: Array<(error?: Error) => void> = []
 
   constructor(private lockId: string, private loggerService: LoggerService) {}
 
@@ -19,37 +19,37 @@ export class NaiveLocksManager implements LocksManager {
     if (this.locked) {
       this.loggerService.info("Sensitive operation already in progress. Waiting for finish.", {
         lockId: this.lockId,
-      });
+      })
       return new Promise((resolve, reject) => {
-        this.waitList.push(error => (error ? reject(error) : resolve()));
-      });
+        this.waitList.push(error => (error ? reject(error) : resolve()))
+      })
     }
 
-    this.locked = true;
+    this.locked = true
     this.loggerService.info("Performing sensitive operation.", {
       lockId: this.lockId,
-    });
+    })
     try {
-      await fn();
+      await fn()
       this.loggerService.info("Sensitive operation finished.", {
         lockId: this.lockId,
         waitListSize: this.waitList.length,
-      });
-      this.waitList.forEach(cb => cb());
+      })
+      this.waitList.forEach(cb => cb())
     } catch (error) {
       this.loggerService.error("Sensitive operation failed.", {
         error,
         lockId: this.lockId,
         waitListSize: this.waitList.length,
-      });
-      this.waitList.forEach(cb => cb(error));
+      })
+      this.waitList.forEach(cb => cb(error))
     } finally {
-      this.waitList = [];
-      this.locked = false;
+      this.waitList = []
+      this.locked = false
     }
   }
 }
 
 export function createLocksManager(lockId: string, loggerService: LoggerService): LocksManager {
-  return new NaiveLocksManager(lockId, loggerService);
+  return new NaiveLocksManager(lockId, loggerService)
 }

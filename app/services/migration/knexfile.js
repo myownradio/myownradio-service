@@ -6,4 +6,4 @@ module.exports = {
       directory: "/usr/app/migrations",
     },
   },
-};
+}

@@ -1,9 +1,9 @@
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react"
 
-import { ILocaleKey } from "~/locales";
+import { ILocaleKey } from "~/locales"
 
-export type IErrorMessage = ILocaleKey | null;
+export type IErrorMessage = ILocaleKey | null
 
 export default function useErrorMessage(): [IErrorMessage, Dispatch<SetStateAction<IErrorMessage>>] {
-  return useState<IErrorMessage>(null);
+  return useState<IErrorMessage>(null)
 }

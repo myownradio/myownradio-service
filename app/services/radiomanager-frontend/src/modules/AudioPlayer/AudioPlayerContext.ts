@@ -1,6 +1,6 @@
-import { createContext } from "react";
-import { AudioPlayerStore } from "./AudioPlayerStore";
+import { createContext } from "react"
+import { AudioPlayerStore } from "./AudioPlayerStore"
 
-const AudioPlayerContext = createContext<AudioPlayerStore | null>(null);
+const AudioPlayerContext = createContext<AudioPlayerStore | null>(null)
 
-export default AudioPlayerContext;
+export default AudioPlayerContext

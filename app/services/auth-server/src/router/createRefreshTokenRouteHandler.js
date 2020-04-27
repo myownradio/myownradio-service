@@ -1,49 +1,49 @@
-const createAccessToken = require("../utils/createAccessToken");
-const generateTokenForUser = require("../utils/generateTokenForUser");
+const createAccessToken = require("../utils/createAccessToken")
+const generateTokenForUser = require("../utils/generateTokenForUser")
 
 function calculateExpirationThreshold(config) {
-  const thresholdMillis = new Date().getTime() - config.AUTH_SERVER_REFRESH_TOKEN_LIFETIME * 1000;
-  return new Date(thresholdMillis).toISOString();
+  const thresholdMillis = new Date().getTime() - config.AUTH_SERVER_REFRESH_TOKEN_LIFETIME * 1000
+  return new Date(thresholdMillis).toISOString()
 }
 
 module.exports = function createRefreshTokenRouteHandler(config, knexConnection) {
   return async ctx => {
-    const { refresh_token: oldRefreshToken } = ctx.request.body;
+    const { refresh_token: oldRefreshToken } = ctx.request.body
 
     if (!oldRefreshToken) {
-      ctx.throw(400);
+      ctx.throw(400)
     }
 
-    const newRefreshToken = await generateTokenForUser();
-    const now = new Date().toISOString();
+    const newRefreshToken = await generateTokenForUser()
+    const now = new Date().toISOString()
 
     const newAccessToken = await knexConnection.transaction(async trx => {
-      const threshold = calculateExpirationThreshold(config);
+      const threshold = calculateExpirationThreshold(config)
 
       const updatedRows = await trx("refresh_tokens")
         .update({ refresh_token: newRefreshToken, updated_at: now })
         .where("updated_at", ">", threshold)
         .where({ refresh_token: oldRefreshToken })
-        .count();
+        .count()
 
       if (updatedRows === 0) {
-        ctx.throw(401);
+        ctx.throw(401)
       }
 
       const updatedRow = await trx("refresh_tokens")
         .where({ refresh_token: newRefreshToken })
-        .first();
+        .first()
 
       return createAccessToken(
         config.AUTH_SERVER_TOKEN_SECRET,
         config.AUTH_SERVER_ACCESS_TOKEN_LIFETIME,
         updatedRow.user_id,
-      );
-    });
+      )
+    })
 
     ctx.body = {
       refresh_token: newRefreshToken,
       access_token: newAccessToken,
-    };
-  };
-};
+    }
+  }
+}

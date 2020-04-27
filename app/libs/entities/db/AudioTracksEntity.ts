@@ -1,4 +1,4 @@
-import * as t from "io-ts";
+import * as t from "io-ts"
 
 export const AudioTracksEntityContract = t.interface({
   bitrate: t.number, // integer nullable: NO
@@ -17,9 +17,9 @@ export const AudioTracksEntityContract = t.interface({
   name: t.string, // character varying nullable: NO
   order_id: t.number, // integer nullable: NO
   id: t.number, // integer nullable: NO
-});
+})
 
-export type IAudioTracksEntity = t.TypeOf<typeof AudioTracksEntityContract>;
+export type IAudioTracksEntity = t.TypeOf<typeof AudioTracksEntityContract>
 
 export enum AudioTracksProps {
   Bitrate = "bitrate",

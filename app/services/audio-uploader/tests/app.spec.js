@@ -1,17 +1,17 @@
-const request = require("supertest");
+const request = require("supertest")
 
-const createApp = require("../src/app");
-const { Config } = require("../src/config");
-const { verifySignatureOfMetadata } = require("../src/utils");
-const withTempDirectory = require("./with/withTempDirectory");
+const createApp = require("../src/app")
+const { Config } = require("../src/config")
+const { verifySignatureOfMetadata } = require("../src/utils")
+const withTempDirectory = require("./with/withTempDirectory")
 
 const authenticationToken =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwZXJtIjpbInVwbG9hZCJdLCJpYXQiOjE1MTYyMzkwMjJ9.6YVvCcjFSaHFw8HgbiUd-sVUQQxmcf8LaNGE7GXIQ6w";
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwZXJtIjpbInVwbG9hZCJdLCJpYXQiOjE1MTYyMzkwMjJ9.6YVvCcjFSaHFw8HgbiUd-sVUQQxmcf8LaNGE7GXIQ6w"
 
-const tempDirectory = withTempDirectory();
+const tempDirectory = withTempDirectory()
 
-let app;
-let config;
+let app
+let config
 
 beforeEach(() => {
   config = new Config({
@@ -21,13 +21,13 @@ beforeEach(() => {
     AUDIO_UPLOADER_TEMP_DIR: tempDirectory,
     AUDIO_UPLOADER_ALLOWED_ORIGIN: "*",
     PORT: 8080,
-  });
+  })
 
-  app = createApp(config);
-});
+  app = createApp(config)
+})
 
 test("POST /upload - upload new audio file", async () => {
-  const filepath = `${__dirname}/__fixtures__/sine.mp3`;
+  const filepath = `${__dirname}/__fixtures__/sine.mp3`
 
   const { headers, text } = await request(app.callback())
     .post("/upload")
@@ -46,24 +46,24 @@ test("POST /upload - upload new audio file", async () => {
       bitrate: 242824,
       duration: 1074.75,
       format: "MP2/3 (MPEG audio layer 2/3)",
-    });
+    })
 
-  expect(verifySignatureOfMetadata(text, headers.signature, config.metadataSecret, 30000)).toBeTruthy();
-});
+  expect(verifySignatureOfMetadata(text, headers.signature, config.metadataSecret, 30000)).toBeTruthy()
+})
 
 test("POST /upload - should fail if no file attached", async () => {
   await request(app.callback())
     .post("/upload")
     .set("Authorization", `Bearer ${authenticationToken}`)
-    .expect(400);
-});
+    .expect(400)
+})
 
 test("POST /upload - should fail if attached file in wrong format", async () => {
-  const filepath = `${__dirname}/__fixtures__/non-audio.txt`;
+  const filepath = `${__dirname}/__fixtures__/non-audio.txt`
 
   await request(app.callback())
     .post("/upload")
     .attach("source", filepath)
     .set("Authorization", `Bearer ${authenticationToken}`)
-    .expect(415);
-});
+    .expect(415)
+})
