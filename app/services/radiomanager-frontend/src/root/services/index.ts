@@ -1,31 +1,25 @@
 import { createContext, useContext } from "react"
-import { IConfig } from "~/config"
-import { createAudioUploaderService, AudioUploaderService } from "~/root/services/api/AudioUploaderService"
-import { createAuthService, AuthService } from "~/root/services/api/AuthService"
-import { createLockManager } from "~/root/services/utils/LockManager"
+import { config } from "~/config"
+import { AudioUploaderService, createAudioUploaderService } from "~/root/services/api/AudioUploaderService"
+import { AuthService, createAuthService } from "~/root/services/api/AuthService"
 import { createRadioManagerService, RadioManagerService } from "~/root/services/api/RadioManagerService"
+import { createTokenService, TokenService } from "~/root/services/api/TokenService"
 import { createSessionService, SessionService } from "~/root/services/session/SessionService"
 import { createStorageService, StorageService } from "~/root/services/storage/StorageService"
-import { createTokenService, TokenService } from "~/root/services/api/TokenService"
+import { createLockManager } from "~/root/services/utils/LockManager"
 import { createLoggerService, LoggerService } from "~/services/logger/LoggerService"
 
-export type AppDependencies = {
-  authApiService: AuthService
-  storageService: StorageService
-  sessionService: SessionService
-  tokenService: TokenService
-  audioUploaderService: AudioUploaderService
-  radioManagerService: RadioManagerService
-  loggerService: LoggerService
+export interface Services {
+  readonly authApiService: AuthService
+  readonly storageService: StorageService
+  readonly sessionService: SessionService
+  readonly tokenService: TokenService
+  readonly audioUploaderService: AudioUploaderService
+  readonly radioManagerService: RadioManagerService
+  readonly loggerService: LoggerService
 }
 
-class AppDependenciesError extends Error {}
-
-const appDependenciesContext = createContext<AppDependencies | null>(null)
-
-export const AppDependenciesProvider = appDependenciesContext.Provider
-
-export function createDependencies(config: IConfig): AppDependencies {
+export function createServices(): Services {
   const loggerService = createLoggerService()
   const refreshTokenLockManager = createLockManager("refreshToken", loggerService)
   const storageService = createStorageService()
@@ -46,10 +40,14 @@ export function createDependencies(config: IConfig): AppDependencies {
   }
 }
 
-export function useDependencies(): AppDependencies {
-  const value = useContext(appDependenciesContext)
-  if (value === null) {
-    throw new AppDependenciesError("You probably forgot to put <AppDependenciesProvider>.")
+export const ServicesContext = createContext<Services | null>(null)
+
+export function useServices(): Services {
+  const services = useContext(ServicesContext)
+
+  if (services === null) {
+    throw new TypeError("You probable forgot to put <ServiceContext.Provider> into your application")
   }
-  return value
+
+  return services
 }

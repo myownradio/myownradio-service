@@ -1,5 +1,4 @@
 import { AbstractApiWithSessionService } from "~/root/services/api/AbstractApiWithSessionService"
-import { BadRequestError, EmailExistsError, UnauthorizedError } from "~/services/errors"
 import { SessionService } from "../session/SessionService"
 
 export interface AuthService {
@@ -23,31 +22,17 @@ export class BaseAuthService extends AbstractApiWithSessionService implements Au
   }
 
   public async login(email: string, password: string): Promise<SuccessfulLoginResponse> {
-    return this.makeRequest<SuccessfulLoginResponse>(
-      "login",
-      {
-        method: "post",
-        data: { email, password },
-      },
-      {
-        400: () => new BadRequestError("Some request parameters are wrong", "api_login_error400"),
-        401: () => new UnauthorizedError("Wrong login or password", "api_login_error401"),
-      },
-    )
+    return this.makeRequest<SuccessfulLoginResponse>("login", {
+      method: "post",
+      data: { email, password },
+    })
   }
 
   public async signup(email: string, password: string): Promise<void> {
-    await this.makeRequest<void>(
-      "signup",
-      {
-        method: "post",
-        data: { email, password },
-      },
-      {
-        400: () => new BadRequestError("Some request parameters are wrong", "api_signup_error400"),
-        409: () => new EmailExistsError("Email already used", "api_signup_error409"),
-      },
-    )
+    await this.makeRequest<void>("signup", {
+      method: "post",
+      data: { email, password },
+    })
   }
 
   public async me(): Promise<SuccessfulMeResponse> {

@@ -1,8 +1,8 @@
 import { AxiosRequestConfig } from "axios"
 import { AbstractApiService } from "~/root/services/api/AbstractApiService"
+import { UnauthorizedAPIError } from "~/root/services/api/errors/UnauthorizedAPIError"
 import isAccessTokenValid from "~/services/utils/isAccessTokenValid"
 import { SessionService } from "../session/SessionService"
-import { UnauthorizedError } from "../../../services/errors"
 
 export abstract class AbstractApiWithSessionService extends AbstractApiService {
   protected constructor(urlPrefix: string, private sessionService: SessionService) {
@@ -13,7 +13,7 @@ export abstract class AbstractApiWithSessionService extends AbstractApiService {
     try {
       return await this.makeRequestWithAuthorization(path, requestConfig)
     } catch (e) {
-      if (e instanceof UnauthorizedError) {
+      if (e instanceof UnauthorizedAPIError) {
         await this.sessionService.refreshToken()
         return this.makeRequestWithAuthorization(path, requestConfig)
       }
@@ -24,16 +24,20 @@ export abstract class AbstractApiWithSessionService extends AbstractApiService {
   private async makeRequestWithAuthorization<T>(path: string, requestConfig: AxiosRequestConfig): Promise<T> {
     const accessToken = this.sessionService.getAccessToken()
     if (accessToken === null) {
-      throw new UnauthorizedError(`No access token found`, "api_error401")
+      throw new UnauthorizedAPIError()
     }
+
     if (!isAccessTokenValid(accessToken)) {
-      throw new UnauthorizedError(`Invalid access token`, "api_error401")
+      throw new UnauthorizedAPIError()
     }
+
     const mergedHeaders = {
       Authorization: `Bearer ${accessToken}`,
       ...(requestConfig.headers || {}),
     }
+
     const mergedConfig = { ...requestConfig, headers: mergedHeaders }
+
     return this.makeRequest(path, mergedConfig)
   }
 }
