@@ -16,7 +16,7 @@
     "noFallthroughCasesInSwitch": true
   },
   "include": [
-    "./libs",
-    "./services"
+    "libs",
+    "services"
   ]
 }
