@@ -3,7 +3,7 @@ import { CancelTokenSource } from "axios"
 import * as PropTypes from "prop-types"
 import * as React from "react"
 import { useCallback, useMemo } from "react"
-import { AudioTrack } from "~/services/RadioManagerService"
+import { AudioTrack } from "~/root/services/api/RadioManagerService"
 import useUpload from "./use/useUpload"
 
 const CancelToken = axios.CancelToken

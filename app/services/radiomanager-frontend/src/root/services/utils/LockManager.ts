@@ -1,6 +1,6 @@
 import { LoggerService } from "~/services/logger/LoggerService"
 
-export interface LocksManager {
+export interface LockManager {
   lock(fn: () => Promise<void>): Promise<void>
 }
 
@@ -9,7 +9,7 @@ export interface LocksManager {
  * I implemented my own because this technology is experimental yet.
  * @see https://developer.mozilla.org/en-US/docs/Web/API/LockManager
  */
-export class NaiveLocksManager implements LocksManager {
+export class NaiveLockManager implements LockManager {
   private locked = false
   private waitList: Array<(error?: Error) => void> = []
 
@@ -50,6 +50,6 @@ export class NaiveLocksManager implements LocksManager {
   }
 }
 
-export function createLocksManager(lockId: string, loggerService: LoggerService): LocksManager {
-  return new NaiveLocksManager(lockId, loggerService)
+export function createLockManager(lockId: string, loggerService: LoggerService): LockManager {
+  return new NaiveLockManager(lockId, loggerService)
 }

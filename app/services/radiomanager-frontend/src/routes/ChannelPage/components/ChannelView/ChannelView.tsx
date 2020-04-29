@@ -5,7 +5,7 @@ import { useDependencies } from "~/bootstrap/dependencies"
 import useResource from "~/components/use/useResource"
 import { config } from "~/config"
 import { useAudioPlayerControls } from "~/modules/AudioPlayer"
-import { AudioTrack, RadioChannel } from "~/services/RadioManagerService"
+import { AudioTrack, RadioChannel } from "~/root/services/api/RadioManagerService"
 import { IResource, resource } from "~/utils/concurrent"
 import AudioUploader from "./components/AudioUploader"
 

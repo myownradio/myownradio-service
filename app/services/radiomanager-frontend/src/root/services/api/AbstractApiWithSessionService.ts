@@ -1,8 +1,8 @@
 import { AxiosRequestConfig } from "axios"
-import { AbstractApiService } from "~/services/AbstractApiService"
+import { AbstractApiService } from "~/root/services/api/AbstractApiService"
 import isAccessTokenValid from "~/services/utils/isAccessTokenValid"
-import { SessionService } from "./SessionService"
-import { UnauthorizedError } from "./errors"
+import { SessionService } from "../session/SessionService"
+import { UnauthorizedError } from "../../../services/errors"
 
 export abstract class AbstractApiWithSessionService extends AbstractApiService {
   protected constructor(urlPrefix: string, private sessionService: SessionService) {

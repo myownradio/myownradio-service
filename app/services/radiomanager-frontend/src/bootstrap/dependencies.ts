@@ -1,12 +1,12 @@
 import { createContext, useContext } from "react"
 import { IConfig } from "~/config"
-import { createAudioUploaderService, AudioUploaderService } from "~/services/AudioUploaderService"
-import { createAuthService, AuthService } from "~/services/AuthService"
-import { createLocksManager } from "~/services/LocksManager"
-import { createRadioManagerService, RadioManagerService } from "~/services/RadioManagerService"
-import { createSessionService, SessionService } from "~/services/SessionService"
-import { createStorageService, StorageService } from "~/services/StorageService"
-import { createTokenService, TokenService } from "~/services/TokenService"
+import { createAudioUploaderService, AudioUploaderService } from "~/root/services/api/AudioUploaderService"
+import { createAuthService, AuthService } from "~/root/services/api/AuthService"
+import { createLockManager } from "~/root/services/utils/LockManager"
+import { createRadioManagerService, RadioManagerService } from "~/root/services/api/RadioManagerService"
+import { createSessionService, SessionService } from "~/root/services/session/SessionService"
+import { createStorageService, StorageService } from "~/root/services/storage/StorageService"
+import { createTokenService, TokenService } from "~/root/services/api/TokenService"
 import { createLoggerService, LoggerService } from "~/services/logger/LoggerService"
 
 export type AppDependencies = {
@@ -27,7 +27,7 @@ export const AppDependenciesProvider = appDependenciesContext.Provider
 
 export function createDependencies(config: IConfig): AppDependencies {
   const loggerService = createLoggerService()
-  const refreshTokenLockManager = createLocksManager("refreshToken", loggerService)
+  const refreshTokenLockManager = createLockManager("refreshToken", loggerService)
   const storageService = createStorageService()
   const tokenService = createTokenService(config.authApiUrl)
   const sessionService = createSessionService(storageService, tokenService, loggerService, refreshTokenLockManager)

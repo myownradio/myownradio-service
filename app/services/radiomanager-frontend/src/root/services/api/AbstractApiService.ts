@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig } from "axios"
 import AbstractErrorWithLocaleKey from "~/services/errors/AbstractErrorWithLocaleKey"
-import { BadRequestError, UnknownError, UnauthorizedError } from "./errors"
+import { BadRequestError, UnknownError, UnauthorizedError } from "../../../services/errors"
 
 interface StatusCodeToLocaleKeyMap {
   [statusCode: number]: <T>(body: T) => AbstractErrorWithLocaleKey

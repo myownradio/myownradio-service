@@ -1,8 +1,8 @@
-import { LocksManager } from "~/services/LocksManager"
-import { TokenService } from "~/services/TokenService"
+import { LockManager } from "~/root/services/utils/LockManager"
+import { TokenService } from "~/root/services/api/TokenService"
 import { LoggerService } from "~/services/logger/LoggerService"
 import nop from "~/services/utils/nop"
-import { StorageService } from "./StorageService"
+import { StorageService } from "../storage/StorageService"
 
 export interface SessionService {
   getAccessToken(): string | null
@@ -19,7 +19,7 @@ export class BaseSessionService implements SessionService {
     private storageService: StorageService,
     private tokenService: TokenService,
     private loggerService: LoggerService,
-    private locksManager: LocksManager,
+    private locksManager: LockManager,
   ) {}
 
   public getAccessToken(): string | null {
@@ -59,7 +59,7 @@ export function createSessionService(
   storageService: StorageService,
   tokenService: TokenService,
   loggerService: LoggerService,
-  locksManager: LocksManager,
+  locksManager: LockManager,
 ): SessionService {
   return new BaseSessionService(storageService, tokenService, loggerService, locksManager)
 }

@@ -1,7 +1,7 @@
 import * as React from "react"
 import { Link } from "react-router-dom"
 import { config } from "~/config"
-import { RadioChannel } from "~/services/RadioManagerService"
+import { RadioChannel } from "~/root/services/api/RadioManagerService"
 import { IResource, resource } from "~/utils/concurrent"
 import { createUrlFromRoute } from "~/utils/router"
 

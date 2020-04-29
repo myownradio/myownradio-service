@@ -1,6 +1,6 @@
-import { AbstractApiWithSessionService } from "~/services/AbstractApiWithSessionService"
+import { AbstractApiWithSessionService } from "~/root/services/api/AbstractApiWithSessionService"
 import { BadRequestError, EmailExistsError, UnauthorizedError } from "~/services/errors"
-import { SessionService } from "./SessionService"
+import { SessionService } from "../session/SessionService"
 
 export interface AuthService {
   login(email: string, password: string): Promise<SuccessfulLoginResponse>

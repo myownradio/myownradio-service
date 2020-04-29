@@ -1,5 +1,5 @@
-import { AbstractApiWithSessionService } from "~/services/AbstractApiWithSessionService"
-import { SessionService } from "~/services/SessionService"
+import { AbstractApiWithSessionService } from "~/root/services/api/AbstractApiWithSessionService"
+import { SessionService } from "~/root/services/session/SessionService"
 
 export interface RadioManagerService {
   getChannels(): Promise<RadioChannel[]>
