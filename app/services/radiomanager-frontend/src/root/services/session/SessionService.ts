@@ -1,7 +1,7 @@
-import { LockManager } from "~/root/services/utils/LockManager"
 import { TokenService } from "~/root/services/api/TokenService"
+import { LockManager } from "~/root/services/utils/LockManager"
 import { LoggerService } from "~/services/logger/LoggerService"
-import nop from "~/services/utils/nop"
+import { nop } from "~/utils/fn"
 import { StorageService } from "../storage/StorageService"
 
 export interface SessionService {

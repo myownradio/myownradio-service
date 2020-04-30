@@ -1,5 +1,8 @@
 import ConsoleLoggerService from "~/services/logger/impl/ConsoleLoggerService"
 
+/**
+ * @deprecated use debug instead
+ */
 export interface LoggerService {
   info(message: string): void
   info(message: string, metadata: {}): void

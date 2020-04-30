@@ -1,7 +1,7 @@
 import { AxiosRequestConfig } from "axios"
 import { AbstractApiService } from "~/root/services/api/AbstractApiService"
 import { UnauthorizedAPIError } from "~/root/services/api/errors/UnauthorizedAPIError"
-import isAccessTokenValid from "~/services/utils/isAccessTokenValid"
+import { isValidAccessToken } from "~/utils/jwt"
 import { SessionService } from "../session/SessionService"
 
 export abstract class AbstractApiWithSessionService extends AbstractApiService {
@@ -27,7 +27,7 @@ export abstract class AbstractApiWithSessionService extends AbstractApiService {
       throw new UnauthorizedAPIError()
     }
 
-    if (!isAccessTokenValid(accessToken)) {
+    if (!isValidAccessToken(accessToken)) {
       throw new UnauthorizedAPIError()
     }
 
