@@ -1,4 +1,4 @@
-import { AbstractApiWithSessionService } from "~/root/services/api/AbstractApiWithSessionService"
+import { AbstractApiWithSessionService } from "~/services/api/AbstractApiWithSessionService"
 import { SessionService } from "../session/SessionService"
 
 export interface AuthService {

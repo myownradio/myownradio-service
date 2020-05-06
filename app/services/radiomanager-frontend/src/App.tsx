@@ -1,6 +1,6 @@
 import React, { Suspense } from "react"
-import { Provider as LocalizationProvider } from "../modules/Localization"
 import Router from "./Router"
+import { Provider as LocalizationProvider } from "./modules/Localization"
 
 const App: React.FC = () => (
   <LocalizationProvider>

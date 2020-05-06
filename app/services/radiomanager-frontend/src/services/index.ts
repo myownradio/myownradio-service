@@ -1,13 +1,12 @@
 import { createContext, useContext } from "react"
 import { config } from "~/config"
-import { AudioUploaderService, createAudioUploaderService } from "~/root/services/api/AudioUploaderService"
-import { AuthService, createAuthService } from "~/root/services/api/AuthService"
-import { createRadioManagerService, RadioManagerService } from "~/root/services/api/RadioManagerService"
-import { createTokenService, TokenService } from "~/root/services/api/TokenService"
-import { createSessionService, SessionService } from "~/root/services/session/SessionService"
-import { createStorageService, StorageService } from "~/root/services/storage/StorageService"
-import { createLockManager } from "~/root/services/utils/LockManager"
-import { createLoggerService, LoggerService } from "~/services/logger/LoggerService"
+import { AudioUploaderService, createAudioUploaderService } from "~/services/api/AudioUploaderService"
+import { AuthService, createAuthService } from "~/services/api/AuthService"
+import { createRadioManagerService, RadioManagerService } from "~/services/api/RadioManagerService"
+import { createTokenService, TokenService } from "~/services/api/TokenService"
+import { createSessionService, SessionService } from "~/services/session/SessionService"
+import { createStorageService, StorageService } from "~/services/storage/StorageService"
+import { createLockManager } from "~/services/utils/LockManager"
 
 export interface Services {
   readonly authApiService: AuthService
@@ -16,15 +15,13 @@ export interface Services {
   readonly tokenService: TokenService
   readonly audioUploaderService: AudioUploaderService
   readonly radioManagerService: RadioManagerService
-  readonly loggerService: LoggerService
 }
 
 export function createServices(): Services {
-  const loggerService = createLoggerService()
-  const refreshTokenLockManager = createLockManager("refreshToken", loggerService)
+  const refreshTokenLockManager = createLockManager("refreshToken")
   const storageService = createStorageService()
   const tokenService = createTokenService(config.authApiUrl)
-  const sessionService = createSessionService(storageService, tokenService, loggerService, refreshTokenLockManager)
+  const sessionService = createSessionService(storageService, tokenService, refreshTokenLockManager)
   const authApiService = createAuthService(config.authApiUrl, sessionService)
   const audioUploaderService = createAudioUploaderService(config.audioUploaderUrl, sessionService)
   const radioManagerService = createRadioManagerService(config.radioManagerUrl, sessionService)
@@ -36,7 +33,6 @@ export function createServices(): Services {
     tokenService,
     audioUploaderService,
     radioManagerService,
-    loggerService,
   }
 }
 

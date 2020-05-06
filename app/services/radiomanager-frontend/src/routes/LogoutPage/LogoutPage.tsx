@@ -2,12 +2,12 @@ import * as React from "react"
 import { useEffect } from "react"
 import { useHistory } from "react-router-dom"
 
-import { useDependencies } from "~/bootstrap/dependencies"
 import { config } from "~/config"
+import { useServices } from "~/services"
 
 const LogoutPage: React.FC = () => {
   const history = useHistory()
-  const { sessionService } = useDependencies()
+  const { sessionService } = useServices()
 
   useEffect(() => {
     sessionService.clearTokens()

@@ -1,4 +1,4 @@
-import { AbstractAPIError } from "~/root/services/api/errors/AbstractAPIError"
+import { AbstractAPIError } from "~/services/api/errors/AbstractAPIError"
 
 export class UnknownAPIError extends AbstractAPIError {
   constructor(status: number) {

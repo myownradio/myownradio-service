@@ -1,11 +1,11 @@
 import * as React from "react"
 import { Suspense } from "react"
-import { useDependencies } from "~/bootstrap/dependencies"
-import { wrapPromise } from "~/utils/concurrent"
+import { useServices } from "~/services"
+import { wrapPromise } from "~/utils/suspense"
 import ProfileView from "./components/ProfileView"
 
 const ProfilePage: React.FC = () => {
-  const { radioManagerService } = useDependencies()
+  const { radioManagerService } = useServices()
 
   const radioChannelListResource = wrapPromise(radioManagerService.getChannels())
 

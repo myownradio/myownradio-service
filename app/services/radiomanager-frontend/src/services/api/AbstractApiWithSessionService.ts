@@ -1,6 +1,6 @@
 import { AxiosRequestConfig } from "axios"
-import { AbstractApiService } from "~/root/services/api/AbstractApiService"
-import { UnauthorizedAPIError } from "~/root/services/api/errors/UnauthorizedAPIError"
+import { AbstractApiService } from "~/services/api/AbstractApiService"
+import { UnauthorizedAPIError } from "~/services/api/errors/UnauthorizedAPIError"
 import { isValidAccessToken } from "~/utils/jwt"
 import { SessionService } from "../session/SessionService"
 

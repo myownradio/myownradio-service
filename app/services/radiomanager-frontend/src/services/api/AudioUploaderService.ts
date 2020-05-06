@@ -1,6 +1,6 @@
 import { CancelToken } from "axios"
-import { AbstractApiWithSessionService } from "~/root/services/api/AbstractApiWithSessionService"
-import { SessionService } from "~/root/services/session/SessionService"
+import { AbstractApiWithSessionService } from "~/services/api/AbstractApiWithSessionService"
+import { SessionService } from "~/services/session/SessionService"
 
 export interface AudioUploaderService {
   uploadAudioFile(source: File): Promise<SuccessfulUploadResponse>

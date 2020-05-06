@@ -1,6 +1,5 @@
-import { TokenService } from "~/root/services/api/TokenService"
-import { LockManager } from "~/root/services/utils/LockManager"
-import { LoggerService } from "~/services/logger/LoggerService"
+import { TokenService } from "~/services/api/TokenService"
+import { LockManager } from "~/services/utils/LockManager"
 import { nop } from "~/utils/fn"
 import { StorageService } from "../storage/StorageService"
 
@@ -18,7 +17,6 @@ export class BaseSessionService implements SessionService {
   constructor(
     private storageService: StorageService,
     private tokenService: TokenService,
-    private loggerService: LoggerService,
     private locksManager: LockManager,
   ) {}
 
@@ -27,7 +25,7 @@ export class BaseSessionService implements SessionService {
   }
 
   public async refreshToken(): Promise<void> {
-    this.loggerService.info("Going to refresh token")
+    // this.loggerService.info("Going to refresh token")
     await this.locksManager.lock(async () => {
       const refreshToken = this.storageService.get<string>(REFRESH_TOKEN_STORAGE_KEY)
       if (refreshToken) {
@@ -58,8 +56,7 @@ export class BaseSessionService implements SessionService {
 export function createSessionService(
   storageService: StorageService,
   tokenService: TokenService,
-  loggerService: LoggerService,
   locksManager: LockManager,
 ): SessionService {
-  return new BaseSessionService(storageService, tokenService, loggerService, locksManager)
+  return new BaseSessionService(storageService, tokenService, locksManager)
 }

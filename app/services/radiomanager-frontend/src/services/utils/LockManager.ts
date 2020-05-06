@@ -1,5 +1,3 @@
-import { LoggerService } from "~/services/logger/LoggerService"
-
 export interface LockManager {
   lock(fn: () => Promise<void>): Promise<void>
 }
@@ -13,35 +11,36 @@ export class NaiveLockManager implements LockManager {
   private locked = false
   private waitList: Array<(error?: Error) => void> = []
 
-  constructor(private lockId: string, private loggerService: LoggerService) {}
+  // @ts-ignore
+  constructor(private lockId: string) {}
 
   async lock(fn: () => Promise<void>): Promise<void> {
     if (this.locked) {
-      this.loggerService.info("Sensitive operation already in progress. Waiting for finish.", {
-        lockId: this.lockId,
-      })
+      // this.loggerService.info("Sensitive operation already in progress. Waiting for finish.", {
+      //   lockId: this.lockId,
+      // })
       return new Promise((resolve, reject) => {
         this.waitList.push(error => (error ? reject(error) : resolve()))
       })
     }
 
     this.locked = true
-    this.loggerService.info("Performing sensitive operation.", {
-      lockId: this.lockId,
-    })
+    // this.loggerService.info("Performing sensitive operation.", {
+    //   lockId: this.lockId,
+    // })
     try {
       await fn()
-      this.loggerService.info("Sensitive operation finished.", {
-        lockId: this.lockId,
-        waitListSize: this.waitList.length,
-      })
+      // this.loggerService.info("Sensitive operation finished.", {
+      //   lockId: this.lockId,
+      //   waitListSize: this.waitList.length,
+      // })
       this.waitList.forEach(cb => cb())
     } catch (error) {
-      this.loggerService.error("Sensitive operation failed.", {
-        error,
-        lockId: this.lockId,
-        waitListSize: this.waitList.length,
-      })
+      // this.loggerService.error("Sensitive operation failed.", {
+      //   error,
+      //   lockId: this.lockId,
+      //   waitListSize: this.waitList.length,
+      // })
       this.waitList.forEach(cb => cb(error))
     } finally {
       this.waitList = []
@@ -50,6 +49,6 @@ export class NaiveLockManager implements LockManager {
   }
 }
 
-export function createLockManager(lockId: string, loggerService: LoggerService): LockManager {
-  return new NaiveLockManager(lockId, loggerService)
+export function createLockManager(lockId: string): LockManager {
+  return new NaiveLockManager(lockId)
 }

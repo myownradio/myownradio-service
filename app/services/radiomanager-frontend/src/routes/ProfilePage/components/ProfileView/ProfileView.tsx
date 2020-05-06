@@ -1,12 +1,12 @@
 import * as React from "react"
 import { Link } from "react-router-dom"
 import { config } from "~/config"
-import { RadioChannel } from "~/root/services/api/RadioManagerService"
-import { IResource, resource } from "~/utils/concurrent"
+import { RadioManagerRadioChannel } from "~/services/api/RadioManagerService"
+import { Resource, resource } from "~/utils/suspense"
 import { createUrlFromRoute } from "~/utils/router"
 
 interface ProfileViewProps {
-  radioChannelListResource: IResource<RadioChannel[]>
+  radioChannelListResource: Resource<RadioManagerRadioChannel[]>
 }
 
 const ProfileView: React.FC<ProfileViewProps> = ({ radioChannelListResource }) => {

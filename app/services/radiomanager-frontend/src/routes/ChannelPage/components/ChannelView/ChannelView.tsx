@@ -5,13 +5,13 @@ import { useDependencies } from "~/bootstrap/dependencies"
 import useResource from "~/components/use/useResource"
 import { config } from "~/config"
 import { useAudioPlayerControls } from "~/modules/AudioPlayer"
-import { AudioTrack, RadioChannel } from "~/root/services/api/RadioManagerService"
-import { IResource, resource } from "~/utils/concurrent"
+import { RadioManagerAudioTrack, RadioManagerRadioChannel } from "~/services/api/RadioManagerService"
+import { Resource, resource } from "~/utils/suspense"
 import AudioUploader from "./components/AudioUploader"
 
 interface ChannelViewProps {
-  channelResource: IResource<RadioChannel>
-  audioTracksResource: IResource<AudioTrack[]>
+  channelResource: Resource<RadioManagerRadioChannel>
+  audioTracksResource: Resource<RadioManagerAudioTrack[]>
 }
 
 const ChannelView: React.FC<ChannelViewProps> = ({ channelResource, audioTracksResource }) => {

@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig } from "axios"
-import { UnauthorizedAPIError } from "~/root/services/api/errors/UnauthorizedAPIError"
-import { UnknownAPIError } from "~/root/services/api/errors/UnknownAPIError"
+import { UnauthorizedAPIError } from "~/services/api/errors/UnauthorizedAPIError"
+import { UnknownAPIError } from "~/services/api/errors/UnknownAPIError"
 
 export abstract class AbstractApiService {
   protected constructor(private urlPrefix: string) {}

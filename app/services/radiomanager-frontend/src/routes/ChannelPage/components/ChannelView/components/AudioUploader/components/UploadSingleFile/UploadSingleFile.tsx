@@ -3,7 +3,7 @@ import { CancelTokenSource } from "axios"
 import * as PropTypes from "prop-types"
 import * as React from "react"
 import { useCallback, useMemo } from "react"
-import { AudioTrack } from "~/root/services/api/RadioManagerService"
+import { RadioManagerAudioTrack } from "~/services/api/RadioManagerService"
 import useUpload from "./use/useUpload"
 
 const CancelToken = axios.CancelToken
@@ -11,7 +11,7 @@ const CancelToken = axios.CancelToken
 interface UploadSingleFileProps {
   channelId: number
   file: File
-  onSuccess: (audioTrack: AudioTrack) => void
+  onSuccess: (audioTrack: RadioManagerAudioTrack) => void
   onFailure: (error: Error, file: File) => void
 }
 
