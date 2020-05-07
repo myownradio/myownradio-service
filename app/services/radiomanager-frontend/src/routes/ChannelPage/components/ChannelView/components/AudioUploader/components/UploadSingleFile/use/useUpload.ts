@@ -1,7 +1,7 @@
 import { CancelTokenSource } from "axios"
 import { useEffect, useState } from "react"
 import { useDependencies } from "~/bootstrap/dependencies"
-import { RadioManagerAudioTrack } from "~/services/api/RadioManagerService"
+import { RadioManagerAudioTrack } from "~/services/api/RadioManagerApiService"
 
 export default function useUpload(
   channelId: number,

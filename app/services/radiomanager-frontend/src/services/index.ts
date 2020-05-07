@@ -1,8 +1,8 @@
 import { createContext, useContext } from "react"
 import { config } from "~/config"
-import { AudioUploaderService, createAudioUploaderService } from "~/services/api/AudioUploaderService"
+import { AudioUploaderApiService, createAudioUploaderService } from "~/services/api/AudioUploaderApiService"
 import { AuthService, createAuthService } from "~/services/api/AuthService"
-import { createRadioManagerService, RadioManagerService } from "~/services/api/RadioManagerService"
+import { createRadioManagerService, RadioManagerApiService } from "~/services/api/RadioManagerApiService"
 import { createTokenService, TokenService } from "~/services/api/TokenService"
 import { createSessionService, SessionService } from "~/services/session/SessionService"
 import { createStorageService, StorageService } from "~/services/storage/StorageService"
@@ -13,8 +13,8 @@ export interface Services {
   readonly storageService: StorageService
   readonly sessionService: SessionService
   readonly tokenService: TokenService
-  readonly audioUploaderService: AudioUploaderService
-  readonly radioManagerService: RadioManagerService
+  readonly audioUploaderService: AudioUploaderApiService
+  readonly radioManagerService: RadioManagerApiService
 }
 
 export function createServices(): Services {

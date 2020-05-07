@@ -5,7 +5,7 @@ import { FormattedMessage } from "react-intl"
 import { useDependencies } from "~/bootstrap/dependencies"
 import useFileSelect from "~/components/use/useFileSelect"
 import { SUPPORTED_AUDIO_EXTENSIONS } from "~/constants"
-import { RadioManagerAudioTrack } from "~/services/api/RadioManagerService"
+import { RadioManagerAudioTrack } from "~/services/api/RadioManagerApiService"
 import { getLocaleErrorKey } from "~/utils/error"
 import UploadSingleFile from "./components/UploadSingleFile"
 

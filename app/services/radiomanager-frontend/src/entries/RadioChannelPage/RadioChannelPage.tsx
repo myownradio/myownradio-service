@@ -11,7 +11,14 @@ const RadioChannelPage: React.FC = () => {
   const { channelId } = useParams<RouteParams>()
   const channelStore = useChannelStore(channelId)
 
-  return <RadioChannelPlaylist channelStore={channelStore} />
+  return (
+    <>
+      <h1>Items</h1>
+      {/*<RadioChannelPlaylist channelStore={channelStore} />*/}
+      {/*<button onClick={() => channelStore.uploadTrack()}>Add</button>*/}
+      {/*<button onClick={() => channelStore.deleteTrack()}>Clear</button>*/}
+    </>
+  )
 }
 
 export default RadioChannelPage

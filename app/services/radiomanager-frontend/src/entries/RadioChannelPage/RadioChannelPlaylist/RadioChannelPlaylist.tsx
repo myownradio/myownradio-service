@@ -1,5 +1,5 @@
-import React from "react"
-import useResource from "~/components/use/useResource"
+import React, { Suspense } from "react"
+import { useResource } from "~/utils/suspense"
 import { ChannelStore } from "../use/useChannelStore"
 
 interface Props {
@@ -9,7 +9,11 @@ interface Props {
 const RadioChannelPlaylist: React.FC<Props> = ({ channelStore }) => {
   const tracks = useResource(channelStore.tracksResource)
 
-  return <div>{JSON.stringify(tracks)}</div>
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <div>{JSON.stringify(tracks)}</div>
+    </Suspense>
+  )
 }
 
 export default RadioChannelPlaylist

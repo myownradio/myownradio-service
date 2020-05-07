@@ -2,7 +2,7 @@ import { CancelToken } from "axios"
 import { AbstractApiWithSessionService } from "~/services/api/AbstractApiWithSessionService"
 import { SessionService } from "~/services/session/SessionService"
 
-export interface AudioUploaderService {
+export interface AudioUploaderApiService {
   uploadAudioFile(source: File): Promise<SuccessfulUploadResponse>
   uploadAudioFile(source: File, options: UploadAudioOptions): Promise<SuccessfulUploadResponse>
 }
@@ -31,7 +31,7 @@ export interface UploadAudioOptions {
   onProgress?: (loaded: number, total: number) => void
 }
 
-export class BaseAudioUploaderService extends AbstractApiWithSessionService implements AudioUploaderService {
+export class BaseAudioUploaderService extends AbstractApiWithSessionService implements AudioUploaderApiService {
   constructor(audioUploaderUrl: string, sessionService: SessionService) {
     super(audioUploaderUrl, sessionService)
   }
@@ -59,6 +59,6 @@ export class BaseAudioUploaderService extends AbstractApiWithSessionService impl
 export function createAudioUploaderService(
   audioUploaderUrl: string,
   sessionService: SessionService,
-): AudioUploaderService {
+): AudioUploaderApiService {
   return new BaseAudioUploaderService(audioUploaderUrl, sessionService)
 }
