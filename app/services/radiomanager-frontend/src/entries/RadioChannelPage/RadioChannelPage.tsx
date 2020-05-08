@@ -1,7 +1,6 @@
 import React from "react"
 import { useParams } from "react-router-dom"
-import RadioChannelPlaylist from "./RadioChannelPlaylist"
-import useChannelStore from "./use/useChannelStore"
+import { useRootModel } from "~/model"
 
 interface RouteParams {
   channelId: string
@@ -9,7 +8,7 @@ interface RouteParams {
 
 const RadioChannelPage: React.FC = () => {
   const { channelId } = useParams<RouteParams>()
-  const channelStore = useChannelStore(channelId)
+  const { radioManagerService } = useRootModel()
 
   return (
     <>

@@ -1,9 +1,9 @@
 import { Subscription } from "rxjs"
 import { filter } from "rxjs/operators"
 import { RadioManagerApiService } from "~/services/api/RadioManagerApiService"
-import { AudioFileUploaderService } from "~/services/radioManager/AudioFileUploaderService"
 import debug from "~/utils/debug"
 import { wrapPromise } from "~/utils/suspense"
+import { AudioFileUploaderService } from "./AudioFileUploaderService"
 
 export class RadioChannelService {
   readonly audioTracksResource = wrapPromise(this.radioManagerApiService.getAudioTracks(this.channelId))

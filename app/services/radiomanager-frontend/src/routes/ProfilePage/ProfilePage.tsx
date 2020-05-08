@@ -5,9 +5,9 @@ import { wrapPromise } from "~/utils/suspense"
 import ProfileView from "./components/ProfileView"
 
 const ProfilePage: React.FC = () => {
-  const { radioManagerService } = useServices()
+  const { radioManagerApiService } = useServices()
 
-  const radioChannelListResource = wrapPromise(radioManagerService.getChannels())
+  const radioChannelListResource = wrapPromise(radioManagerApiService.getChannels())
 
   // const { audioUploaderService } = useDependencies();
 

@@ -6,7 +6,7 @@ import { RadioManagerApiService } from "~/services/api/RadioManagerApiService"
 import { isCancelledRequest } from "~/utils/axios"
 import debug from "~/utils/debug"
 import { nop } from "~/utils/fn"
-import { doWithResource, wrapValue } from "~/utils/suspense"
+import { unwrapResource, wrapValue } from "~/utils/suspense"
 
 export interface UploadQueueItem {
   channelId: string
@@ -54,45 +54,47 @@ export class AudioFileUploaderService {
   }
 
   private uploadNextFile(): void {
-    doWithResource(this.uploadQueue, async uploadQueue => {
-      if (uploadQueue.length === 0) {
-        this.cancelTokenSource = null
-        this.busy = false
-        this.debug("Audio upload queue is empty")
-        return
-      }
+    unwrapResource(this.uploadQueue)
+      .then(async uploadQueue => {
+        if (uploadQueue.length === 0) {
+          this.cancelTokenSource = null
+          this.busy = false
+          this.debug("Audio upload queue is empty")
+          return
+        }
 
-      this.busy = true
+        this.busy = true
 
-      const [{ audioFile, channelId }, ...restFiles] = uploadQueue
-      this.uploadQueue.mutate(() => restFiles)
+        const [{ audioFile, channelId }, ...restFiles] = uploadQueue
+        this.uploadQueue.mutate(() => restFiles)
 
-      return this.audioUploaderApiService
-        .uploadAudioFile(audioFile, {
-          cancelToken: this.cancelTokenSource?.token,
-        })
-        .then(({ rawMetadata, signature }) =>
-          this.radioManagerApiService.addTrackToChannel(channelId, signature, rawMetadata),
-        )
-        .then(() => this.uploadNextFile())
-        .catch(error => {
-          if (isCancelledRequest(error)) {
-            this.debug("Upload cancelled by user request")
-            this.uploadQueue.mutate(() => [])
-            this.uploadErrors.mutate(() => [])
-            this.cancelTokenSource = null
-          } else {
-            this.debug("Error occurred while uploading audio file: %O", { error, audioFile, channelId })
-            const errorItem: UploadErrorItem = {
-              audioFile,
-              channelId,
-              reason: error.message,
+        return this.audioUploaderApiService
+          .uploadAudioFile(audioFile, {
+            cancelToken: this.cancelTokenSource?.token,
+          })
+          .then(({ rawMetadata, signature }) =>
+            this.radioManagerApiService.addTrackToChannel(channelId, signature, rawMetadata),
+          )
+          .then(() => this.uploadNextFile())
+          .catch(error => {
+            if (isCancelledRequest(error)) {
+              this.debug("Upload cancelled by user request")
+              this.uploadQueue.mutate(() => [])
+              this.uploadErrors.mutate(() => [])
+              this.cancelTokenSource = null
+            } else {
+              this.debug("Error occurred while uploading audio file: %O", { error, audioFile, channelId })
+              const errorItem: UploadErrorItem = {
+                audioFile,
+                channelId,
+                reason: error.message,
+              }
+              this.uploadErrors.mutate(errors => [...errors, errorItem])
+              this.uploadNextFile()
             }
-            this.uploadErrors.mutate(errors => [...errors, errorItem])
-            this.uploadNextFile()
-          }
-        })
-    }).catch(nop)
+          })
+      })
+      .catch(nop)
   }
 
   public abort(): void {
@@ -102,4 +104,11 @@ export class AudioFileUploaderService {
       this.debug("Abort signal was sent")
     }
   }
+}
+
+export function createAudioFileUploaderService(
+  radioManagerApiService: RadioManagerApiService,
+  audioUploaderApiService: AudioUploaderApiService,
+): AudioFileUploaderService {
+  return new AudioFileUploaderService(radioManagerApiService, audioUploaderApiService)
 }

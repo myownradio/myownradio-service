@@ -13,8 +13,8 @@ export interface Services {
   readonly storageService: StorageService
   readonly sessionService: SessionService
   readonly tokenService: TokenService
-  readonly audioUploaderService: AudioUploaderApiService
-  readonly radioManagerService: RadioManagerApiService
+  readonly audioUploaderApiService: AudioUploaderApiService
+  readonly radioManagerApiService: RadioManagerApiService
 }
 
 export function createServices(): Services {
@@ -31,8 +31,8 @@ export function createServices(): Services {
     storageService,
     sessionService,
     tokenService,
-    audioUploaderService,
-    radioManagerService,
+    audioUploaderApiService: audioUploaderService,
+    radioManagerApiService: radioManagerService,
   }
 }
 

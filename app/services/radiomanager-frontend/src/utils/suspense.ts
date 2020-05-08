@@ -107,15 +107,14 @@ export function wrapPromise<T>(promise: Promise<T>): MutableResource<T> {
   return { read, mutate, subscribe }
 }
 
-export function doWithResource<T, R>(resource: Resource<T>, cb: (t: T) => Promise<R>): Promise<R> {
+export async function unwrapResource<T>(resource: Resource<T>): Promise<T> {
   try {
-    const value = resource.read()
-    return cb(value)
+    return resource.read()
   } catch (error) {
     if (!(error instanceof Promise)) {
       throw error
     }
-    return error.then(() => doWithResource(resource, cb))
+    return error.then(() => unwrapResource(resource))
   }
 }
 
