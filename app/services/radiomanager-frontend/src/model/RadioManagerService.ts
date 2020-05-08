@@ -2,7 +2,7 @@ import { AudioFileUploaderService } from "~/model/AudioFileUploaderService"
 import { RadioChannelService } from "~/model/RadioChannelService"
 import { RadioManagerApiService } from "~/services/api/RadioManagerApiService"
 import debug from "~/utils/debug"
-import { unwrapResource, wrapPromise } from "~/utils/suspense"
+import { wrapPromise } from "~/utils/suspense"
 
 export class RadioManagerError extends Error {}
 
@@ -18,21 +18,9 @@ export class RadioManagerService {
     private audioFileUploaderService: AudioFileUploaderService,
   ) {
     this.debug("Initialized")
-
-    unwrapResource(this.channelsResource).then(async channels => {
-      if (channels.length > 0) {
-        await this.loadChannel(channels[0].id)
-      }
-    })
   }
 
-  private async getOrCreateRadioChannelService(channelId: string): Promise<RadioChannelService> {
-    const channels = await unwrapResource(this.channelsResource)
-
-    if (channels.every(({ id }) => id !== channelId)) {
-      throw new RadioManagerError(`Channel ${channelId} not found`)
-    }
-
+  public getOrCreateRadioChannelService(channelId: string): RadioChannelService {
     if (!this.radioChannelServices.has(channelId)) {
       this.debug("Creating RadioChannelService", { channelId })
       const channelService = new RadioChannelService(
@@ -46,10 +34,6 @@ export class RadioManagerService {
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     return this.radioChannelServices.get(channelId)!
-  }
-
-  public async loadChannel(channelId: string): Promise<void> {
-    await this.getOrCreateRadioChannelService(channelId)
   }
 
   public async deleteChannel(channelId: string): Promise<void> {
