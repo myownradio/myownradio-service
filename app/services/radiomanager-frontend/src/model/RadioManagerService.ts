@@ -6,7 +6,7 @@ import { unwrapResource, wrapPromise } from "~/utils/suspense"
 export class RadioManagerError extends Error {}
 
 export class RadioManagerService {
-  private channelsResource = wrapPromise(this.radioManagerApiService.getChannels())
+  readonly channelsResource = wrapPromise(this.radioManagerApiService.getChannels())
 
   private radioChannelServices = new Map<string, RadioChannelService>()
 
