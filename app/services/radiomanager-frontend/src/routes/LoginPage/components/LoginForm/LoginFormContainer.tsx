@@ -11,7 +11,7 @@ const LoginFormContainer: React.FC = () => {
   const [password, setPassword] = useState("")
   const [errorMessage, setErrorMessage] = useErrorMessage()
 
-  const handleSubmit = useHandleSubmit(email, setEmail, password, setPassword, setErrorMessage)
+  const handleSubmit = useHandleSubmit(email, password, setErrorMessage)
 
   return (
     <LoginForm

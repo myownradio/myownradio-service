@@ -2,7 +2,7 @@ import * as PropTypes from "prop-types"
 import * as React from "react"
 import { useEffect } from "react"
 
-import { useDependencies } from "~/bootstrap/dependencies"
+import { useServices } from "~/services"
 import { SuccessfulMeResponse } from "~/services/api/AuthService"
 
 import useAuthState from "./use/useAuthState"
@@ -19,7 +19,7 @@ export const loggedInUserContext = React.createContext<IUserState | null>(null)
 
 const LoggedInUserProvider: React.FC<LoggedInUserProviderProps> = ({ fallback, children, loader }) => {
   const [authState, setAuthState] = useAuthState()
-  const { authApiService } = useDependencies()
+  const { authApiService } = useServices()
 
   useEffect(() => {
     authApiService.me().then(

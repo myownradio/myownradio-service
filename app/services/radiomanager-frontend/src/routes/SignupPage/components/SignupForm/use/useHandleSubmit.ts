@@ -2,20 +2,17 @@ import { validate as isValidEmail } from "email-validator"
 import { useCallback } from "react"
 import { useHistory } from "react-router-dom"
 
-import { useDependencies } from "~/bootstrap/dependencies"
 import { IErrorMessage } from "~/components/use/useErrorMessage"
 import { config } from "~/config"
 import { ISetter } from "~/interfaces"
-import AbstractErrorWithLocaleKey from "~/services/errors/AbstractErrorWithLocaleKey"
+import { useServices } from "~/services"
 
 export default function useHandleSubmit(
   email: string,
-  setEmail: ISetter<string>,
   password: string,
-  setPassword: ISetter<string>,
   setErrorMessage: ISetter<IErrorMessage>,
 ): () => Promise<void> {
-  const { authApiService } = useDependencies()
+  const { authApiService } = useServices()
   const history = useHistory()
 
   return useCallback(async () => {
@@ -35,11 +32,7 @@ export default function useHandleSubmit(
       await authApiService.signup(email, password)
       history.push(config.routes.login)
     } catch (e) {
-      if (e instanceof AbstractErrorWithLocaleKey) {
-        setErrorMessage(e.localeKey)
-      } else {
-        setErrorMessage("api_error")
-      }
+      setErrorMessage("api_error")
     }
   }, [email, password, authApiService, setErrorMessage, history])
 }
