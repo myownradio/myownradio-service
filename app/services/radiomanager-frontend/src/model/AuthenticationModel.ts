@@ -36,6 +36,8 @@ export class AuthenticationModel {
   }
 
   public async login(email: string, password: string): Promise<void> {
+    if (this.authenticationState === AuthenticationState.AUTHENTICATED) return
+
     const { access_token, refresh_token } = await this.authApiService.login(email, password)
     this.sessionService.saveTokens(access_token, refresh_token)
     this.user.replaceValue(this.authApiService.me())

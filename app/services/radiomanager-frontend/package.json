@@ -14,14 +14,16 @@
     "@types/react-dom": "^16.9.6",
     "@types/react-router-dom": "^5.1.3",
     "parcel-bundler": "^1.12.4",
+    "postcss-modules": "^2.0.0",
+    "sass": "^1.26.5",
     "typescript": "^3.8.3"
   },
   "dependencies": {
-    "@myownradio/domain": "1.0.0",
     "@material-ui/core": "^4.9.0",
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.45",
     "@material-ui/styles": "^4.9.0",
+    "@myownradio/domain": "1.0.0",
     "debug": "^4.1.1",
     "email-validator": "^2.0.4",
     "fp-ts": "^2.5.3",
