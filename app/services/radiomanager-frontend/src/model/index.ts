@@ -50,3 +50,9 @@ export function useRadioChannel(): RadioChannelModel {
 
   return radioChannel
 }
+
+export function useAuthenticationModel(): AuthenticationModel {
+  const { authenticationModel } = useRootModel()
+
+  return authenticationModel
+}

@@ -12,15 +12,15 @@ export enum AuthenticationState {
 
 export class AuthenticationModel {
   public authenticationState = AuthenticationState.PENDING
-  public user = fromValue<UserResource | null>(this.authApiService.me())
+  public user = fromValue<UserResource | null>(null)
 
   private debug = debug.extend("AuthenticationModel")
 
-  constructor(private authApiService: AuthApiService, private sessionService: SessionService) {
-    this.tryAuthentication()
-  }
+  constructor(private authApiService: AuthApiService, private sessionService: SessionService) {}
 
   private tryAuthentication(): void {
+    this.debug("Authenticating...")
+    this.user.replaceValue(this.authApiService.me())
     this.user
       .promise()
       .then(
@@ -40,7 +40,6 @@ export class AuthenticationModel {
 
     const { access_token, refresh_token } = await this.authApiService.login(email, password)
     this.sessionService.saveTokens(access_token, refresh_token)
-    this.user.replaceValue(this.authApiService.me())
     this.tryAuthentication()
   }
 
