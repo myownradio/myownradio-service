@@ -4,9 +4,9 @@ import Debug from "~/utils/debug"
 const debug = Debug.extend("Resource")
 
 export enum SuspendableState {
-  PENDING,
-  RESOLVED,
-  REJECTED,
+  PENDING = "PENDING",
+  RESOLVED = "RESOLVED",
+  REJECTED = "REJECTED",
 }
 
 export type Unsubscribe = () => void
@@ -33,7 +33,7 @@ export function fromValue<T>(initialValue: T | PromiseLike<T>): Resource<T> {
 
   const wrapValue = (valueToWrap: T | PromiseLike<T>): void => {
     state = SuspendableState.PENDING
-    debug("Changed state", { state })
+    debug(`Changed state to ${state}`)
     suspender = Promise.resolve(valueToWrap).then(
       async val => {
         value = val
@@ -43,11 +43,11 @@ export function fromValue<T>(initialValue: T | PromiseLike<T>): Resource<T> {
           value = await mutator(value)
         }
         state = SuspendableState.RESOLVED
-        debug("Changed state", { state })
+        debug(`Changed state to ${state}`)
       },
       err => {
         state = SuspendableState.REJECTED
-        debug("Changed state", { state })
+        debug(`Changed state to ${state}`)
         error = err
       },
     )
@@ -95,5 +95,16 @@ export function fromValue<T>(initialValue: T | PromiseLike<T>): Resource<T> {
     subscribe,
     replaceValue,
     enqueueMutation,
+  }
+}
+
+export async function unwrapValue<T>(resource: Resource<T>): Promise<T> {
+  try {
+    return resource.read()
+  } catch (error) {
+    if (!("then" in error)) {
+      throw error
+    }
+    return error.then(() => unwrapValue(resource))
   }
 }

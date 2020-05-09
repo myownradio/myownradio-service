@@ -4,7 +4,7 @@ import { Subject } from "rxjs"
 import { AudioUploaderApiService } from "~/services/api/AudioUploaderApiService"
 import { RadioManagerApiService } from "~/services/api/RadioManagerApiService"
 import { isCancelledRequest } from "~/utils/axios"
-import debug from "~/utils/debug"
+// import debug from "~/utils/debug"
 import { nop } from "~/utils/fn"
 import { unwrapResource, wrapValue } from "~/utils/suspense"
 
@@ -27,13 +27,13 @@ export interface AudioFileUploadedEvent {
 
 const CancelToken = axios.CancelToken
 
-export class AudioFileUploaderService {
+export class AudioFileUploaderModel {
   readonly uploadQueue = wrapValue<UploadQueueItem[]>([])
   readonly uploadErrors = wrapValue<UploadErrorItem[]>([])
   readonly uploaderEvents = new Subject<AudioFileUploadedEvent>()
 
   private busy = false
-  private debug = debug.extend("AudioFileUploaderService")
+  // private debug = debug.extend("AudioFileUploaderModel")
   private cancelTokenSource: CancelTokenSource | null = null
 
   constructor(
@@ -49,7 +49,6 @@ export class AudioFileUploaderService {
     if (!this.busy) {
       this.cancelTokenSource = CancelToken.source()
       this.uploadNextFile()
-      this.debug("Starting audio upload queue")
     }
   }
 
@@ -59,7 +58,6 @@ export class AudioFileUploaderService {
         if (uploadQueue.length === 0) {
           this.cancelTokenSource = null
           this.busy = false
-          this.debug("Audio upload queue is empty")
           return
         }
 
@@ -78,12 +76,10 @@ export class AudioFileUploaderService {
           .then(() => this.uploadNextFile())
           .catch(error => {
             if (isCancelledRequest(error)) {
-              this.debug("Upload cancelled by user request")
               this.uploadQueue.mutate(() => [])
               this.uploadErrors.mutate(() => [])
               this.cancelTokenSource = null
             } else {
-              this.debug("Error occurred while uploading audio file: %O", { error, audioFile, channelId })
               const errorItem: UploadErrorItem = {
                 audioFile,
                 channelId,
@@ -101,14 +97,13 @@ export class AudioFileUploaderService {
     if (this.cancelTokenSource) {
       this.cancelTokenSource.cancel()
       this.cancelTokenSource = null
-      this.debug("Abort signal was sent")
     }
   }
 }
 
-export function createAudioFileUploaderService(
+export function createAudioFileUploaderModel(
   radioManagerApiService: RadioManagerApiService,
   audioUploaderApiService: AudioUploaderApiService,
-): AudioFileUploaderService {
-  return new AudioFileUploaderService(radioManagerApiService, audioUploaderApiService)
+): AudioFileUploaderModel {
+  return new AudioFileUploaderModel(radioManagerApiService, audioUploaderApiService)
 }
