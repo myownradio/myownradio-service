@@ -33,3 +33,11 @@ export class RadioChannelModel {
     this.uploaderSubscription.unsubscribe()
   }
 }
+
+export function createRadioChannelModel(
+  channelId: string,
+  radioManagerApiService: RadioManagerApiService,
+  audioFileUploaderService: AudioFileUploaderModel,
+): RadioChannelModel {
+  return new RadioChannelModel(channelId, radioManagerApiService, audioFileUploaderService)
+}

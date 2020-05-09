@@ -8,6 +8,8 @@ export default function bootstrap(Component: React.ComponentType): void {
   const services = createServices()
   const rootModel = createRootModel(services)
 
+  Object.assign(window, { rootModel })
+
   const rootElement = document.getElementById("root") as HTMLElement
 
   ReactDOM.createRoot(rootElement).render(

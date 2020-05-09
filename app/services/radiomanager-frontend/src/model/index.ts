@@ -1,21 +1,30 @@
 import { createContext, useContext } from "react"
 import { AudioFileUploaderModel, createAudioFileUploaderModel } from "~/model/AudioFileUploaderModel"
-import { RadioChannelModel } from "~/model/RadioChannelModel"
+import { AuthenticationModel } from "~/model/AuthenticationModel"
+import { createRadioChannelModel, RadioChannelModel } from "~/model/RadioChannelModel"
 import { createRadioManagerModel, RadioManagerModel } from "~/model/RadioManagerModel"
 import { Services } from "~/services"
 
 export interface Model {
-  readonly radioManagerService: RadioManagerModel
-  readonly audioFileUploaderService: AudioFileUploaderModel
+  readonly authenticationModel: AuthenticationModel
+  readonly radioManagerModel: RadioManagerModel
+  readonly audioFileUploaderModel: AudioFileUploaderModel
 }
 
 export function createRootModel(services: Services): Model {
-  const audioFileUploaderService = createAudioFileUploaderModel(
+  const authenticationModel = new AuthenticationModel(services.authApiService, services.sessionService)
+
+  const audioFileUploaderModel = createAudioFileUploaderModel(
     services.radioManagerApiService,
     services.audioUploaderApiService,
   )
-  const radioManagerService = createRadioManagerModel(services.radioManagerApiService, audioFileUploaderService)
-  return { radioManagerService, audioFileUploaderService }
+
+  const getRadioChannelModel = (channelId: string): RadioChannelModel =>
+    createRadioChannelModel(channelId, services.radioManagerApiService, audioFileUploaderModel)
+
+  const radioManagerModel = createRadioManagerModel(services.radioManagerApiService, getRadioChannelModel)
+
+  return { radioManagerModel, audioFileUploaderModel, authenticationModel }
 }
 
 export const RootModelContext = createContext<Model | null>(null)

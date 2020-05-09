@@ -3,7 +3,7 @@ import * as React from "react"
 import { useEffect } from "react"
 
 import { useServices } from "~/services"
-import { SuccessfulMeResponse } from "~/services/api/AuthService"
+import { SuccessfulMeResponse } from "~/services/api/AuthApiService"
 
 import useAuthState from "./use/useAuthState"
 

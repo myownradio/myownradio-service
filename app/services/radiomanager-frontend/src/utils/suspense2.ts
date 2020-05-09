@@ -1,7 +1,4 @@
 import { EventEmitter } from "events"
-import Debug from "~/utils/debug"
-
-const debug = Debug.extend("Resource")
 
 export enum SuspendableState {
   PENDING = "PENDING",
@@ -15,6 +12,7 @@ export type AsyncMutator<T> = (t: T) => Promise<T>
 export type Subscriber = () => void
 
 export interface Resource<T> {
+  promise(): Promise<T>
   read(): T
   subscribe(fn: Subscriber): Unsubscribe
   enqueueMutation(mutator: Mutator<T> | AsyncMutator<T>): void
@@ -22,7 +20,6 @@ export interface Resource<T> {
 }
 
 export function fromValue<T>(initialValue: T | PromiseLike<T>): Resource<T> {
-  debug("Initialize resource object")
   const emitter = new EventEmitter()
   const mutators: Array<Mutator<T> | AsyncMutator<T>> = []
 
@@ -33,7 +30,6 @@ export function fromValue<T>(initialValue: T | PromiseLike<T>): Resource<T> {
 
   const wrapValue = (valueToWrap: T | PromiseLike<T>): void => {
     state = SuspendableState.PENDING
-    debug(`Changed state to ${state}`)
     suspender = Promise.resolve(valueToWrap).then(
       async val => {
         value = val
@@ -43,11 +39,9 @@ export function fromValue<T>(initialValue: T | PromiseLike<T>): Resource<T> {
           value = await mutator(value)
         }
         state = SuspendableState.RESOLVED
-        debug(`Changed state to ${state}`)
       },
       err => {
         state = SuspendableState.REJECTED
-        debug(`Changed state to ${state}`)
         error = err
       },
     )
@@ -90,7 +84,20 @@ export function fromValue<T>(initialValue: T | PromiseLike<T>): Resource<T> {
     }
   }
 
+  const promise = async (): Promise<T> => {
+    try {
+      return read()
+    } catch (error) {
+      if ("then" in error) {
+        await error
+        return read()
+      }
+      throw error
+    }
+  }
+
   return {
+    promise,
     read,
     subscribe,
     replaceValue,

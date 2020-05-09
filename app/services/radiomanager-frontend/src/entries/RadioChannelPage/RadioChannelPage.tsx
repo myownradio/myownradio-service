@@ -8,7 +8,7 @@ interface RouteParams {
 
 const RadioChannelPage: React.FC = () => {
   const { channelId } = useParams<RouteParams>()
-  const { radioManagerService } = useRootModel()
+  const { radioManagerModel } = useRootModel()
 
   return (
     <>

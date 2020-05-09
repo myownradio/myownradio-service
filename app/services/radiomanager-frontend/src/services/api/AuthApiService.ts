@@ -1,7 +1,7 @@
 import { AbstractApiWithSessionService } from "~/services/api/AbstractApiWithSessionService"
 import { SessionService } from "../session/SessionService"
 
-export interface AuthService {
+export interface AuthApiService {
   login(email: string, password: string): Promise<SuccessfulLoginResponse>
   signup(email: string, password: string): Promise<void>
   me(): Promise<SuccessfulMeResponse>
@@ -16,7 +16,7 @@ export interface SuccessfulMeResponse {
   email: string
 }
 
-export class BaseAuthService extends AbstractApiWithSessionService implements AuthService {
+export class BaseAuthService extends AbstractApiWithSessionService implements AuthApiService {
   constructor(authApiUrl: string, sessionService: SessionService) {
     super(authApiUrl, sessionService)
   }
@@ -42,6 +42,6 @@ export class BaseAuthService extends AbstractApiWithSessionService implements Au
   }
 }
 
-export function createAuthService(authApiUrl: string, sessionService: SessionService): AuthService {
+export function createAuthService(authApiUrl: string, sessionService: SessionService): AuthApiService {
   return new BaseAuthService(authApiUrl, sessionService)
 }

@@ -1,4 +1,3 @@
-import { AudioFileUploaderModel } from "~/model/AudioFileUploaderModel"
 import { RadioChannelModel } from "~/model/RadioChannelModel"
 import { RadioManagerApiService } from "~/services/api/RadioManagerApiService"
 // import Debug from "~/utils/debug"
@@ -14,7 +13,7 @@ export class RadioManagerModel {
 
   constructor(
     private radioManagerApiService: RadioManagerApiService,
-    private audioFileUploaderService: AudioFileUploaderModel,
+    private getRadioChannelModel: (channelId: string) => RadioChannelModel,
   ) {}
 
   public reloadService(): void {
@@ -29,11 +28,7 @@ export class RadioManagerModel {
         throw new RadioManagerError(`Channel ${channelId} not found`)
       }
 
-      const channelService = new RadioChannelModel(
-        channelId,
-        this.radioManagerApiService,
-        this.audioFileUploaderService,
-      )
+      const channelService = this.getRadioChannelModel(channelId)
 
       this.radioChannelServices.set(channelId, channelService)
     }
@@ -66,7 +61,7 @@ export class RadioManagerModel {
 
 export function createRadioManagerModel(
   radioManagerApiService: RadioManagerApiService,
-  audioFileUploaderService: AudioFileUploaderModel,
+  getRadioChannelModel: (channelId: string) => RadioChannelModel,
 ): RadioManagerModel {
-  return new RadioManagerModel(radioManagerApiService, audioFileUploaderService)
+  return new RadioManagerModel(radioManagerApiService, getRadioChannelModel)
 }
