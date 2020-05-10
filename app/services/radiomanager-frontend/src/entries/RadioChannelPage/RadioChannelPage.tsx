@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom"
 import useFileSelect from "~/components/use/useFileSelect"
 import { useAuthenticatedUser } from "~/modules/Authentication"
 import { useRadioChannelModel } from "~/modules/RadioManager"
+import { nop } from "~/utils/fn"
 import { useResource } from "~/utils/suspense2"
 
 interface RouteParams {
@@ -14,8 +15,8 @@ const RadioChannelPage: React.FC = () => {
   const { email } = useAuthenticatedUser()
   const radioChannelModel = useRadioChannelModel(channelId)
   const audioTracks = useResource(radioChannelModel.audioTracks)
-  const selectFile = useFileSelect("audio/mp3", ([file]) => {
-    radioChannelModel.uploadAudioFile(file)
+  const selectFile = useFileSelect("audio/mp3", files => {
+    files.forEach(file => radioChannelModel.uploadAudioFile(file).catch(nop))
   })
 
   return (
@@ -26,6 +27,14 @@ const RadioChannelPage: React.FC = () => {
       <div>{channelId}</div>
       <div>Tracks Count</div>
       <div>{audioTracks.length}</div>
+      <div>Tracks</div>
+      <div>
+        <ul>
+          {audioTracks.map(({ name, id }) => (
+            <li key={id}>{name}</li>
+          ))}
+        </ul>
+      </div>
       <button onClick={selectFile}>Upload</button>
     </>
   )

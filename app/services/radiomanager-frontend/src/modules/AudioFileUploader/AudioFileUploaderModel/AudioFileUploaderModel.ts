@@ -65,6 +65,7 @@ export class AudioFileUploaderModel {
     this.uploadQueue.enqueueMutation(items => [...items, newQueueItem])
 
     if (!this.busy) {
+      this.busy = true
       this.cancelTokenSource = CancelToken.source()
       this.uploadNextFile()
     }
@@ -83,8 +84,6 @@ export class AudioFileUploaderModel {
         }
 
         this.debug("Uploading next file...")
-
-        this.busy = true
 
         const [{ audioFile, channelId }, ...restFiles] = uploadQueue
 
