@@ -2,7 +2,7 @@ import React from "react"
 import { BrowserRouter, /* Link, Redirect, */ Route, Switch } from "react-router-dom"
 import { config } from "~/config"
 import LoginPage from "~/entries/LoginPage"
-import Authenticated from "~/entries/guards/Authenticated"
+import { AuthenticatedUserProvider } from "~/modules/Authentication"
 // import { Provider as AudioPlayerProvider } from "../modules/AudioPlayer"
 // import { Provider as LoggedInUserProvider } from "../modules/LoggedInUser"
 
@@ -21,11 +21,11 @@ const Router: React.FC = () => (
       <Route exact path={config.routes.login} component={LoginPage} />
 
       <Route exact path={[config.routes.channel]}>
-        <Authenticated>
+        <AuthenticatedUserProvider>
           <Switch>
             <Route exact path={config.routes.channel} component={RadioChannelPage} />
           </Switch>
-        </Authenticated>
+        </AuthenticatedUserProvider>
       </Route>
       {/*<Route exact path={config.routes.signup} component={SignupPage} />*/}
       {/*<Route exact path={config.routes.logout} component={LogoutPage} />*/}

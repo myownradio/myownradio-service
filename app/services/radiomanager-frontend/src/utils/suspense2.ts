@@ -133,11 +133,9 @@ export function useResource<T>(resource: Resource<T>): T {
 
   useEffect(() => {
     return resource.subscribe(() => {
-      console.log("update")
       update()
     })
   }, [resource])
 
-  console.log("read")
   return resource.read()
 }

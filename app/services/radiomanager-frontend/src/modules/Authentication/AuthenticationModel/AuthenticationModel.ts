@@ -25,7 +25,7 @@ export class AuthenticationModel {
     this.debug("Authenticating...")
     const mePromise = this.authApiService.me()
 
-    this.user.replaceValue(mePromise)
+    this.user.replaceValue(mePromise.catch(() => null))
     this.authenticationState.replaceValue(
       mePromise.then(
         () => {

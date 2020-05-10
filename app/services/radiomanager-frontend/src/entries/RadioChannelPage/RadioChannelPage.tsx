@@ -1,6 +1,6 @@
 import React from "react"
 import { useParams } from "react-router-dom"
-import { useRootModel } from "~/model"
+import { useAuthenticatedUser } from "~/modules/Authentication"
 
 interface RouteParams {
   channelId: string
@@ -8,11 +8,14 @@ interface RouteParams {
 
 const RadioChannelPage: React.FC = () => {
   const { channelId } = useParams<RouteParams>()
-  const { radioManagerModel } = useRootModel()
+  const { email } = useAuthenticatedUser()
 
   return (
     <>
-      <h1>Items</h1>
+      <div>You</div>
+      <div>{email}</div>
+      <div>Channel</div>
+      <div>{channelId}</div>
       {/*<RadioChannelPlaylist channelStore={channelStore} />*/}
       {/*<button onClick={() => channelStore.uploadTrack()}>Add</button>*/}
       {/*<button onClick={() => channelStore.deleteTrack()}>Clear</button>*/}
