@@ -2,7 +2,7 @@ import React from "react"
 import { BrowserRouter, /* Link, Redirect, */ Route, Switch } from "react-router-dom"
 import { config } from "~/config"
 import LoginPage from "~/entries/LoginPage"
-import Authenticated from "~/modules/Authenticated"
+import Authenticated from "~/entries/guards/Authenticated"
 // import { Provider as AudioPlayerProvider } from "../modules/AudioPlayer"
 // import { Provider as LoggedInUserProvider } from "../modules/LoggedInUser"
 
