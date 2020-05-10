@@ -15,9 +15,11 @@ export class RadioChannelModel {
     private audioFileUploaderService: AudioFileUploaderModel,
   ) {
     this.debug(`Initialized channel ${channelId}`)
-    this.unsubscribe = this.audioFileUploaderService.on("AUDIO_FILE_UPLOADED", ({ audioTrackResource }) => {
+    this.unsubscribe = this.audioFileUploaderService.on("AUDIO_FILE_UPLOADED", ({ channelId, audioTrack }) => {
+      if (channelId !== this.channelId) return
+
       this.audioTracks.enqueueMutation(audioTracks => {
-        return [...audioTracks, audioTrackResource]
+        return [...audioTracks, audioTrack]
       })
     })
   }

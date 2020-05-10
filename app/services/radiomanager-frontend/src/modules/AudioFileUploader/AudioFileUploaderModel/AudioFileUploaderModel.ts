@@ -24,7 +24,7 @@ export interface UploadErrorItem {
 export interface AudioFileUploadedEvent {
   type: "AUDIO_FILE_UPLOADED"
   channelId: string
-  audioTrackResource: AudioTrackResource
+  audioTrack: AudioTrackResource
 }
 
 const CancelToken = axios.CancelToken
@@ -97,6 +97,9 @@ export class AudioFileUploaderModel {
           .then(({ rawMetadata, signature }) =>
             this.radioManagerApiService.addTrackToChannel(channelId, signature, rawMetadata),
           )
+          .then(audioTrack => {
+            this.emitter.emit("AUDIO_FILE_UPLOADED", { channelId, audioTrack })
+          })
           .then(() => this.uploadNextFile())
           .catch(error => {
             if (isCancelledRequest(error)) {
