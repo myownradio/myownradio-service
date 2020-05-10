@@ -1,6 +1,8 @@
 import React from "react"
 import { useParams } from "react-router-dom"
 import { useAuthenticatedUser } from "~/modules/Authentication"
+import { useRadioChannelModel } from "~/modules/RadioManager"
+import { useResource } from "~/utils/suspense2"
 
 interface RouteParams {
   channelId: string
@@ -9,6 +11,8 @@ interface RouteParams {
 const RadioChannelPage: React.FC = () => {
   const { channelId } = useParams<RouteParams>()
   const { email } = useAuthenticatedUser()
+  const radioChannelModel = useRadioChannelModel(channelId)
+  const audioTracks = useResource(radioChannelModel.audioTracks)
 
   return (
     <>
@@ -16,9 +20,8 @@ const RadioChannelPage: React.FC = () => {
       <div>{email}</div>
       <div>Channel</div>
       <div>{channelId}</div>
-      {/*<RadioChannelPlaylist channelStore={channelStore} />*/}
-      {/*<button onClick={() => channelStore.uploadTrack()}>Add</button>*/}
-      {/*<button onClick={() => channelStore.deleteTrack()}>Clear</button>*/}
+      <div>Tracks Count</div>
+      <div>{audioTracks.length}</div>
     </>
   )
 }

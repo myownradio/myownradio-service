@@ -1,4 +1,4 @@
 import { createContext } from "react"
-import { AuthenticationModel } from "~/modules/Authentication"
+import { AuthenticationModel } from "./AuthenticationModel"
 
 export const AuthenticationModelContext = createContext<AuthenticationModel | null>(null)

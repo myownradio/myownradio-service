@@ -1,3 +1,4 @@
+import { EventEmitter } from "events"
 import { UserResource } from "@myownradio/domain/resources/UserResource"
 import { AuthApiService } from "~/services/api/AuthApiService"
 import { SessionService } from "~/services/session/SessionService"
@@ -10,6 +11,11 @@ export enum AuthenticationState {
   UNAUTHENTICATED = "UNAUTHENTICATED",
 }
 
+export enum AuthenticationEvent {
+  AUTHENTICATED = "AUTHENTICATED",
+  LOGGED_OUT = "LOGGED_OUT",
+}
+
 export class AuthenticationModel {
   public authenticationState = fromValue<AuthenticationState>(AuthenticationState.UNAUTHENTICATED)
   public authenticationError = fromValue<Error | null>(null)
@@ -17,8 +23,17 @@ export class AuthenticationModel {
 
   private debug = debug.extend("AuthenticationModel")
 
+  private emitter = new EventEmitter()
+
   constructor(private authApiService: AuthApiService, private sessionService: SessionService) {
     this.debug("Initialized")
+  }
+
+  public on(event: AuthenticationEvent, listener: () => void): () => void {
+    this.emitter.addListener(event, listener)
+    return (): void => {
+      this.emitter.removeListener(event, listener)
+    }
   }
 
   public tryAuthentication(): void {
@@ -27,17 +42,17 @@ export class AuthenticationModel {
 
     this.user.replaceValue(mePromise.catch(() => null))
     this.authenticationState.replaceValue(
-      mePromise.then(
-        () => {
-          this.debug(`Authentication state changed to ${AuthenticationState.AUTHENTICATED}`)
-          return AuthenticationState.AUTHENTICATED
-        },
-        () => {
-          this.debug(`Authentication state changed to ${AuthenticationState.UNAUTHENTICATED}`)
-          return AuthenticationState.UNAUTHENTICATED
-        },
-      ),
+      mePromise
+        .then(
+          () => AuthenticationState.AUTHENTICATED,
+          () => AuthenticationState.UNAUTHENTICATED,
+        )
+        .then(newState => {
+          this.debug(`Authentication state changed to ${newState}`)
+          return newState
+        }),
     )
+
     this.authenticationError.replaceValue(
       mePromise.then(
         () => null,
@@ -47,6 +62,8 @@ export class AuthenticationModel {
         },
       ),
     )
+
+    mePromise.then(() => this.emitter.emit(AuthenticationEvent.AUTHENTICATED))
   }
 
   public async login(email: string, password: string): Promise<void> {
@@ -64,5 +81,7 @@ export class AuthenticationModel {
     this.authenticationState.replaceValue(AuthenticationState.UNAUTHENTICATED)
     this.user.replaceValue(null)
     this.debug(`Authentication state changed to ${this.authenticationState}`)
+
+    this.emitter.emit(AuthenticationEvent.LOGGED_OUT)
   }
 }

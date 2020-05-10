@@ -1,2 +1,2 @@
-export { AuthenticationModel, AuthenticationState } from "./AuthenticationModel"
+export { AuthenticationModel, AuthenticationState, AuthenticationEvent } from "./AuthenticationModel"
 export { AuthenticationModelContext } from "./AuthenticationModelContext"

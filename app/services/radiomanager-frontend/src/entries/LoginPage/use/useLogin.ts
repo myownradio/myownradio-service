@@ -1,7 +1,7 @@
 import { FormEvent, useState } from "react"
 import { useHistory } from "react-router-dom"
 import { config } from "~/config"
-import { useAuthenticationModel } from "~/model"
+import { useAuthenticationModel } from "~/modules/Authentication"
 import gettext from "~/utils/gettext"
 
 type EventHandler = (event: FormEvent<HTMLFormElement>) => void

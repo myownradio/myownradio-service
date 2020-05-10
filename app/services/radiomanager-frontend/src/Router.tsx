@@ -23,7 +23,9 @@ const Router: React.FC = () => (
       <Route exact path={[config.routes.channel]}>
         <AuthenticatedUserProvider>
           <Switch>
-            <Route exact path={config.routes.channel} component={RadioChannelPage} />
+            <Route exact path={config.routes.channel}>
+              <RadioChannelPage />
+            </Route>
           </Switch>
         </AuthenticatedUserProvider>
       </Route>
