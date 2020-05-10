@@ -4,13 +4,11 @@ import gettext from "~/utils/gettext"
 import styles from "./LoginPage.scss"
 import { useLogin } from "./use/useLogin"
 
-// interface Props {}
-
 const LoginPage: React.FC<{}> = ({}) => {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
 
-  const [handleLoginClick, error] = useLogin(email, password)
+  const [handleLoginClick, error, busy] = useLogin(email, password)
 
   const handleEmailChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value)
@@ -27,6 +25,7 @@ const LoginPage: React.FC<{}> = ({}) => {
         <fieldset>
           <label htmlFor={"email"}>{gettext("Email")}</label>
           <input
+            disabled={busy}
             value={email}
             onChange={handleEmailChange}
             required
@@ -39,6 +38,7 @@ const LoginPage: React.FC<{}> = ({}) => {
         <fieldset>
           <label htmlFor={"password"}>{gettext("Password")}</label>
           <input
+            disabled={busy}
             value={password}
             onChange={handlePasswordChange}
             required
@@ -49,7 +49,9 @@ const LoginPage: React.FC<{}> = ({}) => {
           />
         </fieldset>
         <fieldset>
-          <button type={"submit"}>Login</button>
+          <button disabled={busy} type={"submit"}>
+            Login
+          </button>
           {error && <span>{error}</span>}
         </fieldset>
       </form>

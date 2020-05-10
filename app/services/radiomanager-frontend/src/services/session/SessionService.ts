@@ -25,7 +25,6 @@ export class BaseSessionService implements SessionService {
   }
 
   public async refreshToken(): Promise<void> {
-    // this.loggerService.info("Going to refresh token")
     await this.locksManager.lock(async () => {
       const refreshToken = this.storageService.get<string>(REFRESH_TOKEN_STORAGE_KEY)
       if (refreshToken) {

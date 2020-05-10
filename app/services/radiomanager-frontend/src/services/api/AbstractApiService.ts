@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig } from "axios"
-import { UnauthorizedAPIError } from "~/services/api/errors/UnauthorizedAPIError"
-import { UnknownAPIError } from "~/services/api/errors/UnknownAPIError"
+import UnauthorizedApiError from "./errors/UnauthorizedApiError"
+import UnknownAPIError from "./errors/UnknownAPIError"
 
 export abstract class AbstractApiService {
   protected constructor(private urlPrefix: string) {}
@@ -19,7 +19,7 @@ export abstract class AbstractApiService {
     if (status >= 400) {
       switch (status) {
         case 401:
-          throw new UnauthorizedAPIError()
+          throw new UnauthorizedApiError()
 
         default:
           throw new UnknownAPIError(status)

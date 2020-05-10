@@ -1,8 +1,8 @@
 import { AxiosRequestConfig } from "axios"
 import { AbstractApiService } from "~/services/api/AbstractApiService"
-import { UnauthorizedAPIError } from "~/services/api/errors/UnauthorizedAPIError"
 import { isValidAccessToken } from "~/utils/jwt"
 import { SessionService } from "../session/SessionService"
+import UnauthorizedApiError from "./errors/UnauthorizedApiError"
 
 export abstract class AbstractApiWithSessionService extends AbstractApiService {
   protected constructor(urlPrefix: string, private sessionService: SessionService) {
@@ -12,23 +12,23 @@ export abstract class AbstractApiWithSessionService extends AbstractApiService {
   protected async makeRequestWithRefresh<T>(path: string, requestConfig: AxiosRequestConfig): Promise<T> {
     try {
       return await this.makeRequestWithAuthorization(path, requestConfig)
-    } catch (e) {
-      if (e instanceof UnauthorizedAPIError) {
+    } catch (error) {
+      if (error instanceof UnauthorizedApiError) {
         await this.sessionService.refreshToken()
         return this.makeRequestWithAuthorization(path, requestConfig)
       }
-      throw e
+      throw error
     }
   }
 
   private async makeRequestWithAuthorization<T>(path: string, requestConfig: AxiosRequestConfig): Promise<T> {
     const accessToken = this.sessionService.getAccessToken()
     if (accessToken === null) {
-      throw new UnauthorizedAPIError()
+      throw new UnauthorizedApiError()
     }
 
     if (!isValidAccessToken(accessToken)) {
-      throw new UnauthorizedAPIError()
+      throw new UnauthorizedApiError()
     }
 
     const mergedHeaders = {

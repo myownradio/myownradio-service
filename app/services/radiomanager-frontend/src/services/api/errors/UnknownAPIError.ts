@@ -1,7 +1,8 @@
-import { AbstractAPIError } from "~/services/api/errors/AbstractAPIError"
+import AbstractApiError from "./AbstractApiError"
 
-export class UnknownAPIError extends AbstractAPIError {
+export default class UnknownAPIError extends AbstractApiError {
   constructor(status: number) {
     super(status)
+    Object.setPrototypeOf(this, UnknownAPIError.prototype)
   }
 }

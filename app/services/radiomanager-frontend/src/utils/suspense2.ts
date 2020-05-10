@@ -1,4 +1,5 @@
 import { EventEmitter } from "events"
+import { useEffect, useReducer } from "react"
 
 export enum SuspendableState {
   PENDING = "PENDING",
@@ -19,6 +20,8 @@ export interface Resource<T> {
   replaceValue(value: T | PromiseLike<T>): void
 }
 
+export function fromValue<T>(initialValue: null): Resource<T>
+export function fromValue<T>(initialValue: T | PromiseLike<T>): Resource<T>
 export function fromValue<T>(initialValue: T | PromiseLike<T>): Resource<T> {
   const emitter = new EventEmitter()
   const mutators: Array<Mutator<T> | AsyncMutator<T>> = []
@@ -27,11 +30,16 @@ export function fromValue<T>(initialValue: T | PromiseLike<T>): Resource<T> {
   let value: T
   let error: unknown
   let suspender: Promise<void>
+  let transaction = 0
 
   const wrapValue = (valueToWrap: T | PromiseLike<T>): void => {
+    transaction += 1
+    const currentTransaction = transaction
+
     state = SuspendableState.PENDING
     suspender = Promise.resolve(valueToWrap).then(
       async val => {
+        if (transaction > currentTransaction) return
         value = val
         while (mutators.length > 0) {
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -41,6 +49,7 @@ export function fromValue<T>(initialValue: T | PromiseLike<T>): Resource<T> {
         state = SuspendableState.RESOLVED
       },
       err => {
+        if (transaction > currentTransaction) return
         state = SuspendableState.REJECTED
         error = err
       },
@@ -105,6 +114,9 @@ export function fromValue<T>(initialValue: T | PromiseLike<T>): Resource<T> {
   }
 }
 
+/**
+ * @deprecated
+ */
 export async function unwrapValue<T>(resource: Resource<T>): Promise<T> {
   try {
     return resource.read()
@@ -114,4 +126,18 @@ export async function unwrapValue<T>(resource: Resource<T>): Promise<T> {
     }
     return error.then(() => unwrapValue(resource))
   }
+}
+
+export function useResource<T>(resource: Resource<T>): T {
+  const [, update] = useReducer(it => it + 1, 0)
+
+  useEffect(() => {
+    return resource.subscribe(() => {
+      console.log("update")
+      update()
+    })
+  }, [resource])
+
+  console.log("read")
+  return resource.read()
 }

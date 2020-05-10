@@ -11,32 +11,46 @@ export enum AuthenticationState {
 }
 
 export class AuthenticationModel {
-  public authenticationState = AuthenticationState.PENDING
+  public authenticationState = fromValue<AuthenticationState>(AuthenticationState.UNAUTHENTICATED)
+  public authenticationError = fromValue<Error | null>(null)
   public user = fromValue<UserResource | null>(null)
 
   private debug = debug.extend("AuthenticationModel")
 
-  constructor(private authApiService: AuthApiService, private sessionService: SessionService) {}
+  constructor(private authApiService: AuthApiService, private sessionService: SessionService) {
+    this.debug("Initialized")
+  }
 
-  private tryAuthentication(): void {
+  public tryAuthentication(): void {
     this.debug("Authenticating...")
-    this.user.replaceValue(this.authApiService.me())
-    this.user
-      .promise()
-      .then(
-        () => (this.authenticationState = AuthenticationState.AUTHENTICATED),
+    const mePromise = this.authApiService.me()
+
+    this.user.replaceValue(mePromise)
+    this.authenticationState.replaceValue(
+      mePromise.then(
         () => {
-          this.user.replaceValue(null)
-          this.authenticationState = AuthenticationState.UNAUTHENTICATED
+          this.debug(`Authentication state changed to ${AuthenticationState.AUTHENTICATED}`)
+          return AuthenticationState.AUTHENTICATED
         },
-      )
-      .then(() => {
-        this.debug(`Authentication state changed to ${this.authenticationState}`)
-      })
+        () => {
+          this.debug(`Authentication state changed to ${AuthenticationState.UNAUTHENTICATED}`)
+          return AuthenticationState.UNAUTHENTICATED
+        },
+      ),
+    )
+    this.authenticationError.replaceValue(
+      mePromise.then(
+        () => null,
+        error => {
+          this.debug(`Authentication failed`, { error })
+          return error
+        },
+      ),
+    )
   }
 
   public async login(email: string, password: string): Promise<void> {
-    if (this.authenticationState === AuthenticationState.AUTHENTICATED) return
+    if ((await this.authenticationState.promise()) === AuthenticationState.AUTHENTICATED) return
 
     const { access_token, refresh_token } = await this.authApiService.login(email, password)
     this.sessionService.saveTokens(access_token, refresh_token)
@@ -44,10 +58,10 @@ export class AuthenticationModel {
   }
 
   public async logout(): Promise<void> {
-    if (this.authenticationState === AuthenticationState.UNAUTHENTICATED) return
+    if ((await this.authenticationState.promise()) === AuthenticationState.UNAUTHENTICATED) return
 
     this.sessionService.clearTokens()
-    this.authenticationState = AuthenticationState.UNAUTHENTICATED
+    this.authenticationState.replaceValue(AuthenticationState.UNAUTHENTICATED)
     this.user.replaceValue(null)
     this.debug(`Authentication state changed to ${this.authenticationState}`)
   }

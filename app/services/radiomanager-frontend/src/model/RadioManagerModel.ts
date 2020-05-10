@@ -1,3 +1,4 @@
+import { RadioChannelResource } from "@myownradio/domain/resources"
 import { RadioChannelModel } from "~/model/RadioChannelModel"
 import { RadioManagerApiService } from "~/services/api/RadioManagerApiService"
 // import Debug from "~/utils/debug"
@@ -6,7 +7,7 @@ import { fromValue, unwrapValue } from "~/utils/suspense2"
 export class RadioManagerError extends Error {}
 
 export class RadioManagerModel {
-  readonly channelsResource = fromValue(this.radioManagerApiService.getChannels())
+  readonly channelsResource = fromValue<RadioChannelResource[]>(null)
 
   private radioChannelServices = new Map<string, RadioChannelModel>()
   // private debug = Debug.extend("RadioManagerModel")
@@ -14,7 +15,9 @@ export class RadioManagerModel {
   constructor(
     private radioManagerApiService: RadioManagerApiService,
     private getRadioChannelModel: (channelId: string) => RadioChannelModel,
-  ) {}
+  ) {
+    this.reloadService()
+  }
 
   public reloadService(): void {
     this.channelsResource.replaceValue(this.radioManagerApiService.getChannels())
