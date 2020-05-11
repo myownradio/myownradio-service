@@ -11,9 +11,6 @@ export class NaiveLockManager implements LockManager {
   private locked = false
   private waitList: Array<(error?: Error) => void> = []
 
-  // @ts-ignore
-  constructor(private lockId: string) {}
-
   async lock(fn: () => Promise<void>): Promise<void> {
     if (this.locked) {
       // this.loggerService.info("Sensitive operation already in progress. Waiting for finish.", {
@@ -49,6 +46,6 @@ export class NaiveLockManager implements LockManager {
   }
 }
 
-export function createLockManager(lockId: string): LockManager {
-  return new NaiveLockManager(lockId)
+export function createLockManager(): LockManager {
+  return new NaiveLockManager()
 }

@@ -18,7 +18,8 @@ export interface Services {
 }
 
 export function createServices(): Services {
-  const refreshTokenLockManager = createLockManager("refreshToken")
+  const refreshTokenLockManager = createLockManager()
+
   const storageService = createStorageService()
   const tokenService = createTokenService(config.authApiUrl)
   const sessionService = createSessionService(storageService, tokenService, refreshTokenLockManager)
