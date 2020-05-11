@@ -3,16 +3,21 @@ import * as React from "react"
 
 interface CatchErrorProps {
   children: React.ReactNode
-  fallback: React.ReactNode
+  fallback: (error: Error) => React.ReactNode
 }
 
-interface CatchErrorState {
-  failure: boolean
-  error: null | Error
-}
+type CatchErrorState =
+  | {
+      failure: true
+      error: Error
+    }
+  | {
+      failure: false
+      error: null
+    }
 
 export default class CatchError extends React.Component<CatchErrorProps, CatchErrorState> {
-  state = {
+  state: CatchErrorState = {
     failure: false,
     error: null,
   }
@@ -27,6 +32,6 @@ export default class CatchError extends React.Component<CatchErrorProps, CatchEr
   }
 
   public render(): React.ReactElement {
-    return <>{this.state.failure ? this.props.fallback : this.props.children}</>
+    return <>{this.state.failure ? this.props.fallback(this.state.error) : this.props.children}</>
   }
 }

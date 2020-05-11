@@ -1,8 +1,10 @@
 import React from "react"
 import { BrowserRouter, /* Link, Redirect, */ Route, Switch } from "react-router-dom"
+import { ErrorBoundary } from "~/components/ErrorBoundary"
 import { config } from "~/config"
 import LoginPage from "~/entries/LoginPage"
 import { AuthenticatedUserProvider } from "~/modules/Authentication"
+import { ChannelNotFoundError } from "~/modules/RadioManager"
 // import { Provider as AudioPlayerProvider } from "../modules/AudioPlayer"
 // import { Provider as LoggedInUserProvider } from "../modules/LoggedInUser"
 
@@ -24,7 +26,9 @@ const Router: React.FC = () => (
         <AuthenticatedUserProvider>
           <Switch>
             <Route exact path={config.routes.channel}>
-              <RadioChannelPage />
+              <ErrorBoundary cases={[{ when: ChannelNotFoundError, then: <>Channel not found</> }]}>
+                <RadioChannelPage />
+              </ErrorBoundary>
             </Route>
           </Switch>
         </AuthenticatedUserProvider>

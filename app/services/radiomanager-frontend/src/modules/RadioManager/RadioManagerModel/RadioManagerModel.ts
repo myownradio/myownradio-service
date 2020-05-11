@@ -1,5 +1,5 @@
 import { RadioChannelResource } from "@myownradio/domain/resources"
-import { AuthenticationModel, AuthenticationEvent } from "~/modules/Authentication"
+import { AuthenticationEvent, AuthenticationModel } from "~/modules/Authentication"
 import { RadioManagerApiService } from "~/services/api/RadioManagerApiService"
 import Debug from "~/utils/debug"
 import { nop } from "~/utils/fn"
@@ -40,6 +40,8 @@ export class RadioManagerModel {
 
   public loadChannels(): void {
     this.debug("Loading channels...")
+
+    this.cleanupBrokenRadioChannelModels()
 
     const channelsPromise = this.radioManagerApiService.getChannels()
 
@@ -111,10 +113,10 @@ export class RadioManagerModel {
   }
 
   public async deleteChannel(channelId: string): Promise<void> {
-    this.cleanupBrokenRadioChannelModels()
     const probablyChannelService = this.radioChannelModels.get(channelId)
     if (probablyChannelService) {
       await probablyChannelService.promise().then(that => that.shutdown(), nop)
+      this.radioChannelModels.delete(channelId)
       // todo Implement channel deletion logic.
     } else {
       throw new ChannelNotFoundError(`Channel ${channelId} not found`)
@@ -123,7 +125,13 @@ export class RadioManagerModel {
 
   public async createChannel(title: string): Promise<void> {
     this.cleanupBrokenRadioChannelModels()
+
     const channel = await this.radioManagerApiService.createChannel(title)
     this.channels.enqueueMutation(channels => [...channels, channel])
+
+    const probablyChannelService = this.radioChannelModels.get(channel.id)
+    if (probablyChannelService) {
+      await probablyChannelService.promise().catch(() => this.radioChannelModels.delete(channel.id))
+    }
   }
 }
