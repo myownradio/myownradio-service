@@ -15,12 +15,14 @@ export enum RadioManagerState {
 }
 
 export class RadioManagerModel {
+  private debug = Debug.extend("RadioManagerModel")
+
   readonly radioManagerState = fromValue<RadioManagerState>(RadioManagerState.STANDBY)
-  readonly radioChannels = fromValue<RadioChannelResource[]>([])
   readonly radioManagerError = fromValue<Error | null>(null)
 
+  readonly radioChannels = fromValue<RadioChannelResource[]>([])
+
   private radioChannelModels = new Map<string, Resource<RadioChannelModel>>()
-  private debug = Debug.extend("RadioManagerModel")
 
   constructor(
     private radioManagerApiService: RadioManagerApiService,
@@ -88,21 +90,22 @@ export class RadioManagerModel {
 
   public getRadioChannelModel(channelId: string): Resource<RadioChannelModel> {
     if (!this.radioChannelModels.has(channelId)) {
-      const probablyRadioChannelModel = Promise.all([this.radioChannels.promise(), this.radioManagerState.promise()]).then(
-        async ([channels, state]) => {
-          if (state !== RadioManagerState.READY) {
-            this.debug("Channels not loaded")
-            throw new ChannelsNotLoadedError(`Channels not loaded`)
-          }
+      const probablyRadioChannelModel = Promise.all([
+        this.radioChannels.promise(),
+        this.radioManagerState.promise(),
+      ]).then(async ([radioChannels, state]) => {
+        if (state !== RadioManagerState.READY) {
+          this.debug("Channels not loaded")
+          throw new ChannelsNotLoadedError(`Channels not loaded`)
+        }
 
-          if (channels.every(({ id }) => id != channelId)) {
-            this.debug(`Channel ${channelId} not found`)
-            throw new ChannelNotFoundError(`Channel ${channelId} not found`)
-          }
+        if (radioChannels.every(({ id }) => id != channelId)) {
+          this.debug(`Channel ${channelId} not found`)
+          throw new ChannelNotFoundError(`Channel ${channelId} not found`)
+        }
 
-          return this.provideRadioChannelModel(channelId)
-        },
-      )
+        return this.provideRadioChannelModel(channelId)
+      })
 
       this.debug("Adding Radio Channel Model in pending state...")
       this.radioChannelModels.set(channelId, fromValue(probablyRadioChannelModel))
