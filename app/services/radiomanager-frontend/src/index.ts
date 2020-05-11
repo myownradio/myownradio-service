@@ -1,5 +1,5 @@
-import bootstrap from "~/bootstrap"
+import App from "./App"
+import bootstrap from "./bootstrap"
+import "./index.scss"
 
-import Main from "./Main"
-
-bootstrap(Main)
+bootstrap(App)

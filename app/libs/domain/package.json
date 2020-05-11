@@ -1,0 +1,10 @@
+{
+  "name": "@myownradio/domain",
+  "version": "1.0.0",
+  "private": true,
+  "devDependencies": {
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {
+  }
+}

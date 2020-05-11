@@ -1,10 +1,20 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
     "jsx": "react",
     "baseUrl": ".",
     "paths": {
       "~/*": ["src/*"]
-    }
-  }
+    },
+    "lib": [
+      "dom",
+      "es5",
+      "scripthost",
+      "es2015.collection"
+    ]
+  },
+  "include": [
+    "src"
+  ]
 }
