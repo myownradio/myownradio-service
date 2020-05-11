@@ -66,11 +66,17 @@ export class AuthenticationModel {
   }
 
   public async login(email: string, password: string): Promise<void> {
-    if ((await this.authenticationState.promise()) === AuthenticationState.AUTHENTICATED) return
+    if ((await this.authenticationState.promise()) === AuthenticationState.AUTHENTICATED) {
+      await this.logout()
+    }
 
     const { access_token, refresh_token } = await this.authApiService.login(email, password)
     this.sessionService.saveTokens(access_token, refresh_token)
     this.tryAuthentication()
+  }
+
+  public async signup(email: string, password: string): Promise<void> {
+    await this.authApiService.signup(email, password)
   }
 
   public async logout(): Promise<void> {

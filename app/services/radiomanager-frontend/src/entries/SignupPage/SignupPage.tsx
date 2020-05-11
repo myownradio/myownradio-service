@@ -1,14 +1,14 @@
 import React, { ChangeEvent, useCallback, useState } from "react"
 import BlueLayout from "~/layouts/BlueLayout"
 import gettext from "~/utils/gettext"
-import styles from "./LoginPage.scss"
-import { useLogin } from "./use/useLogin"
+import styles from "./SignupPage.scss"
+import { useSignup } from "./use/useSignup"
 
-export const LoginPage: React.FC<{}> = ({}) => {
+export const SignupPage: React.FC<{}> = ({}) => {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
 
-  const [handleLoginClick, error, busy] = useLogin(email, password)
+  const [handleLoginClick, error, busy] = useSignup(email, password)
 
   const handleEmailChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value)
@@ -21,7 +21,7 @@ export const LoginPage: React.FC<{}> = ({}) => {
   return (
     <BlueLayout>
       <form className={styles.form} noValidate onSubmit={handleLoginClick}>
-        <h1>Login</h1>
+        <h1>Signup</h1>
         <fieldset>
           <label htmlFor={"email"}>{gettext("Email")}</label>
           <input
@@ -50,7 +50,7 @@ export const LoginPage: React.FC<{}> = ({}) => {
         </fieldset>
         <fieldset>
           <button disabled={busy} type={"submit"}>
-            Login
+            Signup
           </button>
           {error && <span>{error}</span>}
         </fieldset>
