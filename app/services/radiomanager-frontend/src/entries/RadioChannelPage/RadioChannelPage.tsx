@@ -1,6 +1,6 @@
 import React from "react"
 import { useParams } from "react-router-dom"
-import useFileSelect from "~/components/use/useFileSelect"
+import useFileSelect from "~/hooks/useFileSelect"
 import { useAuthenticatedUser } from "~/modules/Authentication"
 import { useRadioChannelModel } from "~/modules/RadioManager"
 import { nop } from "~/utils/fn"
