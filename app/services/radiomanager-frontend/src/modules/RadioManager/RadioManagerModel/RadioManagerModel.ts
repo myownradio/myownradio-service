@@ -45,10 +45,10 @@ export class RadioManagerModel {
 
     this.cleanupBrokenRadioChannelModels()
 
-    const channelsPromise = this.radioManagerApiService.getChannels()
+    const radioChannelsPromise = this.radioManagerApiService.getChannels()
 
     this.radioManagerState.replaceValue(
-      channelsPromise
+      radioChannelsPromise
         .then(
           () => RadioManagerState.READY,
           () => RadioManagerState.FAILURE,
@@ -60,13 +60,13 @@ export class RadioManagerModel {
     )
 
     this.radioManagerError.replaceValue(
-      channelsPromise.then(
+      radioChannelsPromise.then(
         () => null,
         error => error,
       ),
     )
 
-    this.radioChannels.replaceValue(channelsPromise)
+    this.radioChannels.replaceValue(radioChannelsPromise)
   }
 
   public unloadChannels(): void {
