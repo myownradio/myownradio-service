@@ -6,7 +6,6 @@ import debug from "~/utils/debug"
 import { fromValue } from "~/utils/suspense2"
 
 export enum AuthenticationState {
-  PENDING = "PENDING",
   AUTHENTICATED = "AUTHENTICATED",
   UNAUTHENTICATED = "UNAUTHENTICATED",
 }
