@@ -1,0 +1,1 @@
+export { ChannelsListSidebar } from "./ChannelsListSidebar"

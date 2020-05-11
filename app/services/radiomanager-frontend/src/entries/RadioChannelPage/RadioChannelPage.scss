@@ -1,0 +1,13 @@
+.root {
+  display: flex;
+  justify-content: space-between;
+}
+
+.sidebar {
+  flex-shrink: 0;
+  width: 200px;
+}
+
+.content {
+  width: 100%;
+}
