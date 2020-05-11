@@ -15,12 +15,14 @@ export enum RadioManagerState {
 }
 
 export class RadioManagerModel {
+  private debug = Debug.extend("RadioManagerModel")
+
   readonly radioManagerState = fromValue<RadioManagerState>(RadioManagerState.STANDBY)
-  readonly channels = fromValue<RadioChannelResource[]>([])
   readonly radioManagerError = fromValue<Error | null>(null)
 
+  readonly radioChannels = fromValue<RadioChannelResource[]>([])
+
   private radioChannelModels = new Map<string, Resource<RadioChannelModel>>()
-  private debug = Debug.extend("RadioManagerModel")
 
   constructor(
     private radioManagerApiService: RadioManagerApiService,
@@ -43,10 +45,10 @@ export class RadioManagerModel {
 
     this.cleanupBrokenRadioChannelModels()
 
-    const channelsPromise = this.radioManagerApiService.getChannels()
+    const radioChannelsPromise = this.radioManagerApiService.getChannels()
 
     this.radioManagerState.replaceValue(
-      channelsPromise
+      radioChannelsPromise
         .then(
           () => RadioManagerState.READY,
           () => RadioManagerState.FAILURE,
@@ -58,13 +60,13 @@ export class RadioManagerModel {
     )
 
     this.radioManagerError.replaceValue(
-      channelsPromise.then(
+      radioChannelsPromise.then(
         () => null,
         error => error,
       ),
     )
 
-    this.channels.replaceValue(channelsPromise)
+    this.radioChannels.replaceValue(radioChannelsPromise)
   }
 
   public unloadChannels(): void {
@@ -77,7 +79,7 @@ export class RadioManagerModel {
 
     this.radioManagerState.replaceValue(RadioManagerState.STANDBY)
     this.radioManagerError.replaceValue(null)
-    this.channels.replaceValue([])
+    this.radioChannels.replaceValue([])
   }
 
   private cleanupBrokenRadioChannelModels(): void {
@@ -88,21 +90,22 @@ export class RadioManagerModel {
 
   public getRadioChannelModel(channelId: string): Resource<RadioChannelModel> {
     if (!this.radioChannelModels.has(channelId)) {
-      const probablyRadioChannelModel = Promise.all([this.channels.promise(), this.radioManagerState.promise()]).then(
-        async ([channels, state]) => {
-          if (state !== RadioManagerState.READY) {
-            this.debug("Channels not loaded")
-            throw new ChannelsNotLoadedError(`Channels not loaded`)
-          }
+      const probablyRadioChannelModel = Promise.all([
+        this.radioChannels.promise(),
+        this.radioManagerState.promise(),
+      ]).then(async ([radioChannels, state]) => {
+        if (state !== RadioManagerState.READY) {
+          this.debug("Channels not loaded")
+          throw new ChannelsNotLoadedError(`Channels not loaded`)
+        }
 
-          if (channels.every(({ id }) => id != channelId)) {
-            this.debug(`Channel ${channelId} not found`)
-            throw new ChannelNotFoundError(`Channel ${channelId} not found`)
-          }
+        if (radioChannels.every(({ id }) => id != channelId)) {
+          this.debug(`Channel ${channelId} not found`)
+          throw new ChannelNotFoundError(`Channel ${channelId} not found`)
+        }
 
-          return this.provideRadioChannelModel(channelId)
-        },
-      )
+        return this.provideRadioChannelModel(channelId)
+      })
 
       this.debug("Adding Radio Channel Model in pending state...")
       this.radioChannelModels.set(channelId, fromValue(probablyRadioChannelModel))
@@ -127,7 +130,7 @@ export class RadioManagerModel {
     this.cleanupBrokenRadioChannelModels()
 
     const channel = await this.radioManagerApiService.createChannel(title)
-    this.channels.enqueueMutation(channels => [...channels, channel])
+    this.radioChannels.enqueueMutation(channels => [...channels, channel])
 
     const probablyChannelService = this.radioChannelModels.get(channel.id)
     if (probablyChannelService) {
