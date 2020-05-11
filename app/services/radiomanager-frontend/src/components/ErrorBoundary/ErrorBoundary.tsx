@@ -6,7 +6,7 @@ interface Newable<T> {
 
 interface Case<T> {
   when: Newable<T>
-  then: React.ReactNode
+  then: React.ComponentType<{ error: T }>
 }
 
 interface Props {
@@ -44,6 +44,8 @@ export class ErrorBoundary extends React.Component<Props, State> {
       throw this.state.error
     }
 
-    return this.props.cases[caseIndex].then
+    const Component = this.props.cases[caseIndex].then
+
+    return <Component error={this.state.error} />
   }
 }

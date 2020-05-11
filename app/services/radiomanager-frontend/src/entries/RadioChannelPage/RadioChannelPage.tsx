@@ -10,7 +10,7 @@ interface RouteParams {
   channelId: string
 }
 
-const RadioChannelPage: React.FC = () => {
+export const RadioChannelPage: React.FC = () => {
   const { channelId } = useParams<RouteParams>()
   const { email } = useAuthenticatedUser()
   const radioChannelModel = useRadioChannelModel(channelId)
@@ -39,5 +39,3 @@ const RadioChannelPage: React.FC = () => {
     </>
   )
 }
-
-export default RadioChannelPage

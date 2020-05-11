@@ -1,1 +1,1 @@
-export { default } from "./RadioChannelPage"
+export { RadioChannelPageContainer as default } from "./RadioChannelPageContainer"
