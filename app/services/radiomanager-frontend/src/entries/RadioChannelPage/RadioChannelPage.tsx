@@ -1,11 +1,11 @@
 import React from "react"
 import { useParams } from "react-router-dom"
-import { ChannelsListSidebar } from "~/entries/RadioChannelPage/ChannelsListSidebar"
 import useFileSelect from "~/hooks/useFileSelect"
 import { useAuthenticatedUser } from "~/modules/Authentication"
 import { useRadioChannelModel } from "~/modules/RadioManager"
 import { nop } from "~/utils/fn"
 import { useResource } from "~/utils/suspense2"
+import { ChannelsListSidebar } from "./ChannelsListSidebar"
 import styles from "./RadioChannelPage.scss"
 
 interface RouteParams {
