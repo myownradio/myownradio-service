@@ -2,7 +2,7 @@ import { FormEvent, useState } from "react"
 import { useHistory } from "react-router-dom"
 import { config } from "~/config"
 import { useAuthenticationModel } from "~/modules/Authentication"
-import gettext from "~/utils/gettext"
+import getText from "~/utils/getText"
 
 type EventHandler = (event: FormEvent<HTMLFormElement>) => void
 
@@ -17,12 +17,12 @@ export function useLogin(email: string, password: string): [EventHandler, string
     event.preventDefault()
 
     if (!email) {
-      setError(gettext("Email should be specified."))
+      setError(getText("Email should be specified."))
       return
     }
 
     if (!password) {
-      setError(gettext("Password should be specified."))
+      setError(getText("Password should be specified."))
       return
     }
 
@@ -36,7 +36,7 @@ export function useLogin(email: string, password: string): [EventHandler, string
           history.push(config.routes.home)
         },
         error => {
-          setError(gettext(error.message))
+          setError(getText(error.message))
         },
       )
       .finally(() => {

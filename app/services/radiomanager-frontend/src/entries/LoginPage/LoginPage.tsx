@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useCallback, useState } from "react"
-import gettext from "~/utils/gettext"
+import getText from "~/utils/getText"
 import styles from "./LoginPage.scss"
 import { useLogin } from "./use/useLogin"
 
@@ -21,7 +21,7 @@ export const LoginPage: React.FC<{}> = ({}) => {
     <form className={styles.form} noValidate onSubmit={handleLoginClick}>
       <h1>Login</h1>
       <fieldset>
-        <label htmlFor={"email"}>{gettext("Email")}</label>
+        <label htmlFor={"email"}>{getText("Email")}</label>
         <input
           disabled={busy}
           value={email}
@@ -34,7 +34,7 @@ export const LoginPage: React.FC<{}> = ({}) => {
         />
       </fieldset>
       <fieldset>
-        <label htmlFor={"password"}>{gettext("Password")}</label>
+        <label htmlFor={"password"}>{getText("Password")}</label>
         <input
           disabled={busy}
           value={password}

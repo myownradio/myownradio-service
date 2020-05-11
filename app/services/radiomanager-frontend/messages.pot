@@ -1,0 +1,27 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+
+#: src/entries/LoginPage/LoginPage.tsx:24
+#: src/entries/SignupPage/SignupPage.tsx:24
+msgid "Email"
+msgstr ""
+
+#: src/entries/LoginPage/use/useLogin.ts:20
+#: src/entries/SignupPage/use/useSignup.ts:20
+msgid "Email should be specified."
+msgstr ""
+
+#: src/entries/LoginPage/LoginPage.tsx:37
+#: src/entries/SignupPage/SignupPage.tsx:37
+msgid "Password"
+msgstr ""
+
+#: src/entries/LoginPage/use/useLogin.ts:25
+#: src/entries/SignupPage/use/useSignup.ts:25
+msgid "Password should be specified."
+msgstr ""
+
+#: src/entries/SignupPage/use/useSignup.ts:30
+msgid "Your password should be at least 6 characters long."
+msgstr ""
