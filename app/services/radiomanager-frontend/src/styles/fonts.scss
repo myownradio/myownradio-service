@@ -1,3 +1,19 @@
-$primary-font: "Open Sans", sans-serif;
+@font-face {
+    font-family: "Myriad Pro";
+    src: url("./styles/fonts/MYRIAD-STD.otf") format("opentype");
+}
+
+@font-face {
+    font-family: "Myriad Pro Thin";
+    src: url("./styles/fonts/MYRIAD-THIN.otf") format("opentype");
+}
+
+@font-face {
+    font-family: "Myriad Pro Cond";
+    src: url("./styles/fonts/MYRIAD.otf") format("opentype");
+}
+
+$primary-font: "Myriad Pro", sans-serif;
 $secondary-font: "Myriad Pro Thin", sans-serif;
 
+$base-font-size: 13pt;
