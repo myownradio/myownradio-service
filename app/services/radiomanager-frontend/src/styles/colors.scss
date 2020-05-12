@@ -1,0 +1,11 @@
+$mor-colors: (
+    'primary': #E37171,
+    'accent': #9BCC5A,
+    'secondary': #ffb826,
+    'foreground': #E9EAEB,
+    'background': #202434,
+);
+
+@function mor-color($key: 'primary') {
+    @return map-get($mor-colors, $key);
+}
