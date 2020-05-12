@@ -2,6 +2,7 @@ import { FormEvent, useState } from "react"
 import { useHistory } from "react-router-dom"
 import { config } from "~/config"
 import { useAuthenticationModel } from "~/modules/Authentication"
+import { mapLoginErrorToUserMessage } from "~/services/api/errors/mapErrorToUserMessage"
 import getText from "~/utils/getText"
 
 type EventHandler = (event: FormEvent<HTMLFormElement>) => void
@@ -45,7 +46,8 @@ export function useLogin(email: string, password: string): [EventHandler, Errors
           history.push(config.routes.home)
         },
         error => {
-          setErrors({ root: getText(error.message) })
+          const userMessage = mapLoginErrorToUserMessage(error)
+          setErrors({ root: userMessage })
         },
       )
       .finally(() => {
