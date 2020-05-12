@@ -1,6 +1,21 @@
 @import "styles/fonts";
 @import "styles/colors";
 
+@font-face {
+  font-family: "Myriad Pro";
+  src: url("./styles/fonts/MYRIAD-STD.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "Myriad Pro Thin";
+  src: url("./styles/fonts/MYRIAD-THIN.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "Myriad Pro Cond";
+  src: url("./styles/fonts/MYRIAD.otf") format("opentype");
+}
+
 html, body {
   font-family: $primary-font;
 

@@ -9,6 +9,7 @@
     "gettext": "node gettext-extract.js"
   },
   "devDependencies": {
+    "@types/classnames": "^2.2.10",
     "@types/debug": "^4.1.5",
     "@types/jwt-decode": "^2.2.1",
     "@types/react": "^16.9.23",
@@ -27,6 +28,7 @@
     "@material-ui/lab": "^4.0.0-alpha.45",
     "@material-ui/styles": "^4.9.0",
     "@myownradio/domain": "1.0.0",
+    "classnames": "^2.2.6",
     "debug": "^4.1.1",
     "email-validator": "^2.0.4",
     "fp-ts": "^2.5.3",

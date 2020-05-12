@@ -1,3 +1,8 @@
+@import "../../styles/mixins";
+@import "../../styles/spacings";
+@import "../../styles/colors";
+@import "../../styles/fonts";
+
 .root {
   width: 100%;
   height: 100%;
@@ -8,4 +13,101 @@
 
 .form {
   width: 300px;
+  padding: $base-spacing * 4;
+  background-color: lighten(mor-color('background'), 3%);
+  @include box-shadow;
+  @include border-radius;
 }
+
+.title {
+  margin: 0;
+  padding-bottom: $base-spacing;
+  font-family: $secondary-font;
+  text-transform: uppercase;
+  text-align: center;
+  font-size: $base-font-size + 14pt;
+}
+
+.fieldset {
+  border: none;
+  padding: $base-spacing 0;
+}
+
+.email-input, .password-input {
+  @include border-radius;
+  display: block;
+  width: 100%;
+  border: 1px solid #141723;
+  background-color: mor-color('background');
+  outline: none;
+  padding: $base-spacing;
+  box-sizing: border-box;
+  color: mor-color('foreground');
+  font-size: $base-font-size;
+
+  transition: border-color ease-in .3s;
+
+  &:focus {
+    border-color: mor-color('primary');
+  }
+
+  &.invalid {
+    border-color: mor-color('warn');
+  }
+}
+
+.field-reason {
+  padding: $base-spacing / 2 0 0 0;
+  display: block;
+  color: mor-color('warn');
+  text-align: left;
+  font-size: $base-font-size - 3pt;
+
+  &:empty:before {
+    content: "\200b";
+  }
+}
+
+.root-reason {
+  padding: 0 0 $base-spacing 0;
+  display: block;
+  color: mor-color('warn');
+  text-align: center;
+  font-size: $base-font-size - 3pt;
+
+  &:empty:before {
+    content: "\200b";
+  }
+}
+
+.submit {
+  @include border-radius;
+  display: block;
+  border: 1px solid #141723;
+  background-color: mor-color('primary');
+  outline: none;
+  padding: $base-spacing;
+  box-sizing: border-box;
+  width: 100%;
+  color: #fff;
+  text-transform: uppercase;
+  transition: background-color ease-in .15s;
+  cursor: pointer;
+
+  &:active {
+    background-color: darken(mor-color('primary'), 10%);
+  }
+}
+
+.fieldset > .submit {
+  margin-top: $base-spacing;
+}
+
+.label {
+  display: block;
+  margin-bottom: $base-spacing;
+  font-size: $base-font-size - 3pt;
+}
+
+// #141723;
+// #3a4363

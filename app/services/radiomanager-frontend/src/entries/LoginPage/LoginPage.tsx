@@ -1,3 +1,4 @@
+import cn from "classnames"
 import React, { ChangeEvent, useCallback, useState } from "react"
 import getText from "~/utils/getText"
 import styles from "./LoginPage.scss"
@@ -7,8 +8,9 @@ export const LoginPage: React.FC<{}> = ({}) => {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
 
-  const [handleLoginClick, error, busy] = useLogin(email, password)
+  const [handleLoginClick, errors, busy] = useLogin(email, password)
 
+  console.log(errors)
   const handleEmailChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value)
   }, [])
@@ -19,11 +21,15 @@ export const LoginPage: React.FC<{}> = ({}) => {
 
   return (
     <div className={styles.root}>
-      <form className={styles.form} noValidate onSubmit={handleLoginClick}>
-        <h1>Login</h1>
-        <fieldset>
-          <label htmlFor={"email"}>{getText("Email")}</label>
+      <form className={styles.form} noValidate onSubmit={handleLoginClick} autoComplete="off">
+        <h1 className={styles.title}>Login</h1>
+        <div className={styles["root-reason"]}>{errors.root}</div>
+        <fieldset className={styles.fieldset}>
+          <label className={styles.label} htmlFor={"email"}>
+            {getText("Email")}
+          </label>
           <input
+            className={cn(styles["email-input"], errors.email && styles.invalid)}
             disabled={busy}
             value={email}
             onChange={handleEmailChange}
@@ -33,10 +39,14 @@ export const LoginPage: React.FC<{}> = ({}) => {
             type="email"
             autoFocus
           />
+          <div className={styles["field-reason"]}>{errors.email}</div>
         </fieldset>
-        <fieldset>
-          <label htmlFor={"password"}>{getText("Password")}</label>
+        <fieldset className={styles.fieldset}>
+          <label className={styles.label} htmlFor={"password"}>
+            {getText("Password")}
+          </label>
           <input
+            className={cn(styles["password-input"], errors.password && styles.invalid)}
             disabled={busy}
             value={password}
             onChange={handlePasswordChange}
@@ -46,12 +56,12 @@ export const LoginPage: React.FC<{}> = ({}) => {
             autoComplete="password"
             type="password"
           />
+          <div className={styles["field-reason"]}>{errors.password}</div>
         </fieldset>
-        <fieldset>
-          <button disabled={busy} type={"submit"}>
-            Login
+        <fieldset className={styles.fieldset}>
+          <button className={styles.submit} disabled={busy} type={"submit"}>
+            {getText("Sign In")}
           </button>
-          {error && <span>{error}</span>}
         </fieldset>
       </form>
     </div>
