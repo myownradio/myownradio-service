@@ -18,40 +18,42 @@ export const LoginPage: React.FC<{}> = ({}) => {
   }, [])
 
   return (
-    <form className={styles.form} noValidate onSubmit={handleLoginClick}>
-      <h1>Login</h1>
-      <fieldset>
-        <label htmlFor={"email"}>{getText("Email")}</label>
-        <input
-          disabled={busy}
-          value={email}
-          onChange={handleEmailChange}
-          required
-          name="email"
-          autoComplete="email"
-          type="email"
-          autoFocus
-        />
-      </fieldset>
-      <fieldset>
-        <label htmlFor={"password"}>{getText("Password")}</label>
-        <input
-          disabled={busy}
-          value={password}
-          onChange={handlePasswordChange}
-          required
-          id="password"
-          name="password"
-          autoComplete="password"
-          type="password"
-        />
-      </fieldset>
-      <fieldset>
-        <button disabled={busy} type={"submit"}>
-          Login
-        </button>
-        {error && <span>{error}</span>}
-      </fieldset>
-    </form>
+    <div className={styles.root}>
+      <form className={styles.form} noValidate onSubmit={handleLoginClick}>
+        <h1>Login</h1>
+        <fieldset>
+          <label htmlFor={"email"}>{getText("Email")}</label>
+          <input
+            disabled={busy}
+            value={email}
+            onChange={handleEmailChange}
+            required
+            name="email"
+            autoComplete="email"
+            type="email"
+            autoFocus
+          />
+        </fieldset>
+        <fieldset>
+          <label htmlFor={"password"}>{getText("Password")}</label>
+          <input
+            disabled={busy}
+            value={password}
+            onChange={handlePasswordChange}
+            required
+            id="password"
+            name="password"
+            autoComplete="password"
+            type="password"
+          />
+        </fieldset>
+        <fieldset>
+          <button disabled={busy} type={"submit"}>
+            Login
+          </button>
+          {error && <span>{error}</span>}
+        </fieldset>
+      </form>
+    </div>
   )
 }
