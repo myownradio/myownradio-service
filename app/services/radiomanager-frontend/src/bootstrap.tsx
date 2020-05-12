@@ -1,13 +1,12 @@
 import * as React from "react"
 import * as ReactDOM from "react-dom"
-import {} from "react-dom/experimental"
 import { AudioFileUploaderModel, AudioFileUploaderModelContext } from "~/modules/AudioFileUploader"
 import { AuthenticationModel, AuthenticationModelContext } from "~/modules/Authentication"
 import { RadioManagerModel, RadioManagerModelContext } from "~/modules/RadioManager"
 import { RadioChannelModel } from "~/modules/RadioManager/RadioChannelModel/RadioChannelModel"
 import { createServices, ServicesContext } from "./services"
 
-export default function bootstrap(Component: React.ComponentType): void {
+export default function bootstrap(Component: React.ComponentType, rootClass?: string): void {
   const services = createServices()
 
   const authenticationModel = new AuthenticationModel(services.authApiService, services.sessionService)
@@ -28,6 +27,8 @@ export default function bootstrap(Component: React.ComponentType): void {
   Object.assign(window, { model })
 
   const rootElement = document.getElementById("root") as HTMLElement
+
+  rootClass && rootElement.classList.add(rootClass)
 
   ReactDOM.createRoot(rootElement).render(
     <AuthenticationModelContext.Provider value={authenticationModel}>

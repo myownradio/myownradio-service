@@ -2,12 +2,17 @@ import { FormEvent, useState } from "react"
 import { useHistory } from "react-router-dom"
 import { config } from "~/config"
 import { useAuthenticationModel } from "~/modules/Authentication"
+import { mapLoginErrorToUserMessage } from "~/services/api/errors/mapErrorToUserMessage"
 import getText from "~/utils/getText"
 
 type EventHandler = (event: FormEvent<HTMLFormElement>) => void
 
-export function useLogin(email: string, password: string): [EventHandler, string | null, boolean] {
-  const [error, setError] = useState<null | string>(null)
+interface Errors {
+  [key: string]: string
+}
+
+export function useLogin(email: string, password: string): [EventHandler, Errors, boolean] {
+  const [errors, setErrors] = useState<Errors>({})
   const [busy, setBusy] = useState(false)
 
   const authenticationModel = useAuthenticationModel()
@@ -16,17 +21,22 @@ export function useLogin(email: string, password: string): [EventHandler, string
   function handleLoginClick(event: FormEvent<HTMLFormElement>): void {
     event.preventDefault()
 
+    const errors: Errors = {}
+
     if (!email) {
-      setError(getText("Email should be specified."))
-      return
+      errors.email = getText("Email should be specified.")
     }
 
     if (!password) {
-      setError(getText("Password should be specified."))
+      errors.password = getText("Password should be specified.")
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setErrors(errors)
       return
     }
 
-    setError(null)
+    setErrors({})
     setBusy(true)
 
     authenticationModel
@@ -36,7 +46,8 @@ export function useLogin(email: string, password: string): [EventHandler, string
           history.push(config.routes.home)
         },
         error => {
-          setError(getText(error.message))
+          const userMessage = mapLoginErrorToUserMessage(error)
+          setErrors({ root: userMessage })
         },
       )
       .finally(() => {
@@ -44,5 +55,5 @@ export function useLogin(email: string, password: string): [EventHandler, string
       })
   }
 
-  return [handleLoginClick, error, busy]
+  return [handleLoginClick, errors, busy]
 }

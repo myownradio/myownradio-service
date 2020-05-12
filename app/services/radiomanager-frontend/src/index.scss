@@ -1,9 +1,36 @@
+@import "styles/fonts";
+@import "styles/colors";
+
+@font-face {
+  font-family: "Myriad Pro";
+  src: url("./styles/fonts/MYRIAD-STD.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "Myriad Pro Thin";
+  src: url("./styles/fonts/MYRIAD-THIN.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "Myriad Pro Cond";
+  src: url("./styles/fonts/MYRIAD.otf") format("opentype");
+}
+
 html, body {
-  //font-family: $font;
+  font-family: $primary-font;
 
   padding: 0;
   margin: 0;
 
-  //background-color: $blue-color;
-  //color: $primary-text;
+  width: 100%;
+  height: 100%;
+
+  background-color: mor-color('background');
+  color: mor-color('foreground');
+  font-size: $base-font-size;
+
+  & > .root {
+    width: 100%;
+    height: 100%;
+  }
 }
