@@ -55,3 +55,48 @@
     font-size: fonts.$base-font-size + 14pt;
     letter-spacing: 1.2pt;
 }
+
+@mixin front-form {
+    @include mixins.box-shadow;
+    @include mixins.border-radius;
+    width: 300px;
+    padding: spacings.$base-spacing * 4;
+    background-color: lighten(colors.mor-color('background'), 3%);
+
+    .general-error-message {
+        padding: 0 0 spacings.$base-spacing 0;
+        display: block;
+        color: colors.mor-color('warn');
+        text-align: center;
+        font-size: fonts.$base-font-size - 3pt;
+
+        &:empty:before {
+            content: "\200b";
+        }
+    }
+
+    .fieldset {
+        border: none;
+        padding: spacings.$base-spacing 0;
+    }
+
+    .fieldset .text-field {
+        @include text-field;
+    }
+
+    .fieldset > .button {
+        margin-top: spacings.$base-spacing;
+    }
+
+    .fieldset .error-message {
+        padding: spacings.$base-spacing / 2 0 0 0;
+        display: block;
+        color: colors.mor-color('warn');
+        text-align: left;
+        font-size: fonts.$base-font-size - 3pt;
+
+        &:empty:before {
+            content: "\200b";
+        }
+    }
+}

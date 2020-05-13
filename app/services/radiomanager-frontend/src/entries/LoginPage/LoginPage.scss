@@ -16,56 +16,15 @@
 }
 
 .form {
-  width: 300px;
-  padding: $base-spacing * 4;
-  background-color: lighten(mor-color('background'), 3%);
-  @include box-shadow;
-  @include border-radius;
+  @include controls.front-form;
 }
 
 .title {
   @include controls.h1;
 }
 
-.fieldset {
-  border: none;
-  padding: $base-spacing 0;
-}
-
-.email-input, .password-input {
-  @include controls.text-field;
-}
-
-.field-reason {
-  padding: $base-spacing / 2 0 0 0;
-  display: block;
-  color: mor-color('warn');
-  text-align: left;
-  font-size: $base-font-size - 3pt;
-
-  &:empty:before {
-    content: "\200b";
-  }
-}
-
-.root-reason {
-  padding: 0 0 $base-spacing 0;
-  display: block;
-  color: mor-color('warn');
-  text-align: center;
-  font-size: $base-font-size - 3pt;
-
-  &:empty:before {
-    content: "\200b";
-  }
-}
-
-.submit {
+.button {
   @include controls.button;
-}
-
-.fieldset > .submit {
-  margin-top: $base-spacing;
 }
 
 .label {

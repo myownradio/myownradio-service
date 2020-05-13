@@ -23,13 +23,13 @@ export const LoginPage: React.FC<{}> = ({}) => {
     <div className={styles.root}>
       <form className={styles.form} noValidate onSubmit={handleLoginClick} autoComplete="off">
         <h1 className={styles.title}>Login</h1>
-        <div className={styles["root-reason"]}>{errors.root}</div>
+        <div className={styles["general-error-message"]}>{errors.root}</div>
         <fieldset className={styles.fieldset}>
           <label className={styles.label} htmlFor={"email"}>
             {getText("Email")}
           </label>
           <input
-            className={cn(styles["email-input"], errors.email && styles.invalid)}
+            className={cn(styles["text-field"], errors.email && styles.invalid)}
             disabled={busy}
             value={email}
             onChange={handleEmailChange}
@@ -39,14 +39,14 @@ export const LoginPage: React.FC<{}> = ({}) => {
             type="email"
             autoFocus
           />
-          <div className={styles["field-reason"]}>{errors.email}</div>
+          <div className={styles["error-message"]}>{errors.email}</div>
         </fieldset>
         <fieldset className={styles.fieldset}>
           <label className={styles.label} htmlFor={"password"}>
             {getText("Password")}
           </label>
           <input
-            className={cn(styles["password-input"], errors.password && styles.invalid)}
+            className={cn(styles["text-field"], errors.password && styles.invalid)}
             disabled={busy}
             value={password}
             onChange={handlePasswordChange}
@@ -56,10 +56,10 @@ export const LoginPage: React.FC<{}> = ({}) => {
             autoComplete="password"
             type="password"
           />
-          <div className={styles["field-reason"]}>{errors.password}</div>
+          <div className={styles["error-message"]}>{errors.password}</div>
         </fieldset>
         <fieldset className={styles.fieldset}>
-          <button className={styles.submit} disabled={busy} type={"submit"}>
+          <button className={styles.button} disabled={busy} type={"submit"}>
             {getText("Sign In")}
           </button>
         </fieldset>
