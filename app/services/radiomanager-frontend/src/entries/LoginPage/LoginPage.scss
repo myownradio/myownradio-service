@@ -1,13 +1,12 @@
 @use "../../styles/controls";
 
-@import "../../styles/mixins";
-@import "../../styles/spacings";
-@import "../../styles/colors";
-@import "../../styles/fonts";
+@use "../../styles/spacings";
+@use "../../styles/fonts";
 
 .root {
   background-image: url("./images/radio.jfif");
   background-size: cover;
+  background-position: center center;
   width: 100%;
   height: 100%;
   display: flex;
@@ -29,6 +28,6 @@
 
 .label {
   display: block;
-  margin-bottom: $base-spacing;
-  font-size: $base-font-size - 3pt;
+  margin-bottom: spacings.$base-spacing;
+  font-size: fonts.$base-font-size - 3pt;
 }
