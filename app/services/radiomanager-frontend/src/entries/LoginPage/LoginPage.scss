@@ -24,13 +24,7 @@
 }
 
 .title {
-  margin: 0;
-  padding-bottom: $base-spacing;
-  font-family: $secondary-font;
-  text-transform: uppercase;
-  text-align: center;
-  font-size: $base-font-size + 14pt;
-  letter-spacing: 1.2pt;
+  @include controls.h1;
 }
 
 .fieldset {

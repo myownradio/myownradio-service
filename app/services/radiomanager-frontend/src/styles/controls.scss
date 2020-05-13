@@ -46,3 +46,12 @@
         background-color: darken(colors.mor-color('primary'), 10%);
     }
 }
+
+@mixin h1 {
+    padding-bottom: spacings.$base-spacing;
+    font-family: fonts.$secondary-font;
+    text-transform: uppercase;
+    text-align: center;
+    font-size: fonts.$base-font-size + 14pt;
+    letter-spacing: 1.2pt;
+}
