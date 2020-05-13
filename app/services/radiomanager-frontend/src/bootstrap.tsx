@@ -1,5 +1,5 @@
-import * as React from "react"
-import * as ReactDOM from "react-dom"
+import React from "react"
+import { unstable_createRoot } from "react-dom"
 import { AudioFileUploaderModel, AudioFileUploaderModelContext } from "~/modules/AudioFileUploader"
 import { AuthenticationModel, AuthenticationModelContext } from "~/modules/Authentication"
 import { RadioManagerModel, RadioManagerModelContext } from "~/modules/RadioManager"
@@ -30,7 +30,7 @@ export default function bootstrap(Component: React.ComponentType, rootClass?: st
 
   rootClass && rootElement.classList.add(rootClass)
 
-  ReactDOM.createRoot(rootElement).render(
+  unstable_createRoot(rootElement).render(
     <AuthenticationModelContext.Provider value={authenticationModel}>
       <AudioFileUploaderModelContext.Provider value={audioFileUploaderModel}>
         <RadioManagerModelContext.Provider value={radioManagerModel}>
