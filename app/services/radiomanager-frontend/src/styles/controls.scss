@@ -1,0 +1,48 @@
+@use "./spacings";
+@use "./mixins";
+@use "./colors";
+@use "./fonts";
+
+@mixin text-field {
+    @include mixins.border-radius;
+    display: block;
+    width: 100%;
+    border: 1px solid #141723;
+    background-color: colors.mor-color('background');
+    outline: none;
+    padding: spacings.$base-spacing;
+    box-sizing: border-box;
+    color: colors.mor-color('foreground');
+    font-size: fonts.$base-font-size;
+
+    transition: border-color ease-in .3s;
+
+    &:focus {
+        border-color: colors.mor-color('primary');
+    }
+
+    &.invalid {
+        border-color: colors.mor-color('warn');
+    }
+}
+
+@mixin button {
+    @include mixins.border-radius;
+    border: 0 solid #141723;
+    background-color: colors.mor-color('primary');
+    outline: none;
+    padding: spacings.$base-spacing;
+    box-sizing: border-box;
+    width: 100%;
+    color: #fff;
+    text-transform: uppercase;
+    transition: background-color ease-in .15s;
+    cursor: pointer;
+    letter-spacing: 1.2pt;
+    font-family: fonts.$primary-font;
+    font-weight: 600;
+
+    &:active {
+        background-color: darken(colors.mor-color('primary'), 10%);
+    }
+}
