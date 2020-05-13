@@ -10,7 +10,6 @@ export const LoginPage: React.FC<{}> = ({}) => {
 
   const [handleLoginClick, errors, busy] = useLogin(email, password)
 
-  console.log(errors)
   const handleEmailChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value)
   }, [])

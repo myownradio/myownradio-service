@@ -7,7 +7,7 @@ export const SignupPage: React.FC<{}> = ({}) => {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
 
-  const [handleLoginClick, error, busy] = useSignup(email, password)
+  const [handleSignupClick, errors, busy] = useSignup(email, password)
 
   const handleEmailChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value)
@@ -18,40 +18,50 @@ export const SignupPage: React.FC<{}> = ({}) => {
   }, [])
 
   return (
-    <form className={styles.form} noValidate onSubmit={handleLoginClick}>
-      <h1>Signup</h1>
-      <fieldset>
-        <label htmlFor={"email"}>{getText("Email")}</label>
-        <input
-          disabled={busy}
-          value={email}
-          onChange={handleEmailChange}
-          required
-          name="email"
-          autoComplete="email"
-          type="email"
-          autoFocus
-        />
-      </fieldset>
-      <fieldset>
-        <label htmlFor={"password"}>{getText("Password")}</label>
-        <input
-          disabled={busy}
-          value={password}
-          onChange={handlePasswordChange}
-          required
-          id="password"
-          name="password"
-          autoComplete="password"
-          type="password"
-        />
-      </fieldset>
-      <fieldset>
-        <button disabled={busy} type={"submit"}>
-          Signup
-        </button>
-        {error && <span>{error}</span>}
-      </fieldset>
-    </form>
+    <div className={styles.root}>
+      <form className={styles.form} noValidate onSubmit={handleSignupClick}>
+        <h1 className={styles.title}>Signup</h1>
+        <div className={styles["general-error-message"]}>{errors.root}</div>
+        <fieldset className={styles.fieldset}>
+          <label className={styles.label} htmlFor={"email"}>
+            {getText("Email")}
+          </label>
+          <input
+            className={styles["text-field"]}
+            disabled={busy}
+            value={email}
+            onChange={handleEmailChange}
+            required
+            name="email"
+            autoComplete="email"
+            type="email"
+            autoFocus
+          />
+          <div className={styles["error-message"]}>{errors.email}</div>
+        </fieldset>
+        <fieldset className={styles.fieldset}>
+          <label className={styles.label} htmlFor={"password"}>
+            {getText("Password")}
+          </label>
+          <input
+            className={styles["text-field"]}
+            disabled={busy}
+            value={password}
+            onChange={handlePasswordChange}
+            required
+            id="password"
+            name="password"
+            autoComplete="password"
+            type="password"
+          />
+          <div className={styles["error-message"]}>{errors.password}</div>
+        </fieldset>
+        <fieldset className={styles.fieldset}>
+          <button className={styles.button} disabled={busy} type={"submit"}>
+            Signup
+          </button>
+        </fieldset>
+      </form>
+    </div>
   )
 }

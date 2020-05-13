@@ -1,5 +1,32 @@
+@use "../../styles/controls";
+@use "../../styles/spacings";
+@use "../../styles/fonts";
+
 .root {
+  background-image: url("../LoginPage/images/radio.jfif");
+  background-size: cover;
+  background-position: center center;
   width: 100%;
   height: 100%;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.form {
+  @include controls.front-form;
+}
+
+.title {
+  @include controls.h1;
+}
+
+.button {
+  @include controls.button;
+}
+
+.label {
+  display: block;
+  margin-bottom: spacings.$base-spacing;
+  font-size: fonts.$base-font-size - 3pt;
 }

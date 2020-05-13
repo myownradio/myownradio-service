@@ -6,8 +6,12 @@ import getText from "~/utils/getText"
 
 type EventHandler = (event: FormEvent<HTMLFormElement>) => void
 
-export function useSignup(email: string, password: string): [EventHandler, string | null, boolean] {
-  const [error, setError] = useState<null | string>(null)
+interface Errors {
+  [key: string]: string
+}
+
+export function useSignup(email: string, password: string): [EventHandler, Errors, boolean] {
+  const [errors, setErrors] = useState<Errors>({})
   const [busy, setBusy] = useState(false)
 
   const authenticationModel = useAuthenticationModel()
@@ -16,21 +20,24 @@ export function useSignup(email: string, password: string): [EventHandler, strin
   function handleSignupClick(event: FormEvent<HTMLFormElement>): void {
     event.preventDefault()
 
+    const errors: Errors = {}
+
     if (!email) {
-      setError(getText("Email should be specified."))
-      return
+      errors.email = getText("Email should be specified.")
     }
 
     if (!password) {
-      setError(getText("Password should be specified."))
+      errors.password = getText("Password should be specified.")
+    } else if (password.length < 6) {
+      errors.password = getText("Your password should be at least 6 characters long.")
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setErrors(errors)
       return
     }
 
-    if (password.length < 6) {
-      setError(getText("Your password should be at least 6 characters long."))
-    }
-
-    setError(null)
+    setErrors({})
     setBusy(true)
 
     authenticationModel
@@ -40,7 +47,7 @@ export function useSignup(email: string, password: string): [EventHandler, strin
           history.push(config.routes.login)
         },
         error => {
-          setError(getText(error.message))
+          setErrors({ root: getText(error.message) })
         },
       )
       .finally(() => {
@@ -48,5 +55,5 @@ export function useSignup(email: string, password: string): [EventHandler, strin
       })
   }
 
-  return [handleSignupClick, error, busy]
+  return [handleSignupClick, errors, busy]
 }
