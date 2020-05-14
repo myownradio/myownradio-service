@@ -18,6 +18,6 @@ jobs:
           git_repo_url: https://pldin601:${{ secrets.GITHUB_TOKEN }}@github.com/myownradio/myownradio-env
           committer_name: Roman Lakhtadyr
           committer_email: roman.lakhtadyr@gmail.com
-          commit_message: Update image to {{ github.sha }}
+          commit_message: Update image to ${{ github.sha }}
           yaml_file: swarm/docker-compose.yml
-          patch_expression: services.radiomanager-frontend.image=myregistry.com/radiomanager-frontend#{{ github.sha }}
+          patch_expression: services.radiomanager-frontend.image=myregistry.com/radiomanager-frontend#${{ github.sha }}
