@@ -1,0 +1,55 @@
+name: 'Deploy Single Application Service'
+
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - "*/*"
+
+jobs:
+  main:
+    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'master'
+    name: Deploy Single Application Service
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+      - name: Setup Linter and Tests
+        run: |
+          make install
+      - name: Run Linter
+        run: make run-linter
+      - name: Run Tests
+        run: make run-tests
+      - name: Extract service name from github_ref
+        id: service_name
+        shell: bash
+        run: |
+          BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/})
+          SERVICE_NAME=$(echo ${BRANCH_NAME%/*})
+          echo "##[set-output name=service_name;]$(echo ${SERVICE_NAME})"
+      - name: Build myownradio/${{ steps.service_name.outputs.service_name }}#${{ github.sha }}
+        uses: docker/build-push-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          registry: ${{ secrets.DOCKER_REGISTRY }}
+          repository: myownradio/${{ steps.service_name.outputs.service_name }}
+          path: app
+          dockerfile: app/services/${{ steps.service_name.outputs.service_name }}/Dockerfile
+          tags: ${{ github.sha }},latest
+      - name: Prepare update of environment repository
+        id: prepare_update
+        shell: bash
+        run: |
+          echo "##[set-output name=image_url;]$(echo ${{ secrets.DOCKER_REGISTRY }}/myownradio/${{ steps.service_name.outputs.service_name }}#${{ github.sha }})"
+      - name: Update environment repository
+        uses: pldin601/patch-yaml-through-commit@master
+        with:
+          git_repo_url: https://pldin601:${{ secrets.GIT_PUSH_TOKEN }}@github.com/myownradio/myownradio-env.git
+          committer_name: Roman Lakhtadyr
+          committer_email: roman.lakhtadyr@gmail.com
+          commit_message: Bump ${{ steps.service_name.outputs.service_name }} service image to ${{ steps.prepare_update.outputs.image_url }}
+          yaml_file: swarm/docker-compose.yml
+          patch_expression: services.${{ steps.service_name.outputs.service_name }}.image=${{ steps.prepare_update.outputs.image_url }}

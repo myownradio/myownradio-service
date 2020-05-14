@@ -1,4 +1,4 @@
-import { createMuiTheme } from "@material-ui/core"
+// import { createMuiTheme } from "@material-ui/core"
 
 // const _morPalette = {
 //   black: "#1c1c20",
@@ -34,21 +34,21 @@ import { createMuiTheme } from "@material-ui/core"
 //   red9: "#FEBEBE",
 // }
 
-const morTheme = createMuiTheme({
-  palette: {
-    type: "dark",
-    primary: {
-      main: "#292E3F",
-    },
-    secondary: {
-      main: "#7CA348",
-    },
-    background: {
-      default: "#292E3F",
-    },
-  },
-})
-
-export type MorTheme = typeof morTheme
-
-export default morTheme
+// const morTheme = createMuiTheme({
+//   palette: {
+//     type: "dark",
+//     primary: {
+//       main: "#292E3F",
+//     },
+//     secondary: {
+//       main: "#7CA348",
+//     },
+//     background: {
+//       default: "#292E3F",
+//     },
+//   },
+// })
+//
+// export type MorTheme = typeof morTheme
+//
+// export default {}
