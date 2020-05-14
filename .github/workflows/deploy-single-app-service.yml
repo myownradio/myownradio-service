@@ -2,10 +2,10 @@ name: 'Deploy Single Application Service'
 
 on:
   pull_request:
-    types:
-      - closed
     branches:
       - "*/*"
+    types:
+      - closed
 
 jobs:
   main:
