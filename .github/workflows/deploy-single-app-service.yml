@@ -1,17 +1,27 @@
 name: 'Deploy Single Application Service'
 
 on:
-  push:
+  pull_request:
+    types:
+      - closed
     branches:
       - "*/*"
 
 jobs:
-  init:
-    name: Test image bump
+  main:
+    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'master'
+    name: Deploy Single Application Service
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@master
+      - name: Setup Linter and Tests
+        run: |
+          make install
+      - name: Run Linter
+        run: make run-linter
+      - name: Run Tests
+        run: make run-tests
       - name: Extract service name from github_ref
         id: service_name
         shell: bash
