@@ -39,6 +39,7 @@ export class NaiveLockManager implements LockManager {
       //   waitListSize: this.waitList.length,
       // })
       this.waitList.forEach(cb => cb(error))
+      throw error
     } finally {
       this.waitList = []
       this.locked = false

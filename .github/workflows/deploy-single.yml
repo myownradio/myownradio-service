@@ -1,0 +1,14 @@
+name: 'Deploy Single Service'
+
+on:
+  push:
+    branches:
+      - "*/*"
+
+jobs:
+  init:
+    name: Test image bump
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
