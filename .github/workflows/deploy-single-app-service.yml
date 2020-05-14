@@ -2,8 +2,6 @@ name: 'Deploy Single Application Service'
 
 on:
   pull_request:
-    branches:
-      - "*/*"
 #    types:
 #      - closed
 
@@ -13,6 +11,15 @@ jobs:
     name: Deploy Single Application Service
     runs-on: ubuntu-latest
     steps:
+      - name: Extract service name from github_ref
+        id: service_name
+        shell: bash
+        run: |
+          BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/})
+          SERVICE_NAME=$(echo ${BRANCH_NAME%/*})
+          BRANCH_SUFFIX_NAME=$(echo ${BRANCH_NAME#*/})
+          [ -z "$BRANCH_SUFFIX_NAME" ] && echo "Incorrent source service branch" && exit 1
+          echo "##[set-output name=service_name;]$(echo ${SERVICE_NAME})"
       - name: Checkout
         uses: actions/checkout@master
       - name: Setup Linter and Tests
@@ -22,13 +29,6 @@ jobs:
         run: make run-linter
       - name: Run Tests
         run: make run-tests
-      - name: Extract service name from github_ref
-        id: service_name
-        shell: bash
-        run: |
-          BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/})
-          SERVICE_NAME=$(echo ${BRANCH_NAME%/*})
-          echo "##[set-output name=service_name;]$(echo ${SERVICE_NAME})"
       - name: Build myownradio/${{ steps.service_name.outputs.service_name }}#${{ github.sha }}
         uses: docker/build-push-action@v1
         with:
