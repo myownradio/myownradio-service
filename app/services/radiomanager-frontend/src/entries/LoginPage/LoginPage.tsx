@@ -34,7 +34,6 @@ export const LoginPage: React.FC<{}> = ({}) => {
             onChange={handleEmailChange}
             required
             name="email"
-            autoComplete="email"
             type="email"
             autoFocus
           />
@@ -52,7 +51,6 @@ export const LoginPage: React.FC<{}> = ({}) => {
             required
             id="password"
             name="password"
-            autoComplete="password"
             type="password"
           />
           <div className={styles["error-message"]}>{errors.password}</div>
