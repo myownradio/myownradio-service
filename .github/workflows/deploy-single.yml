@@ -13,7 +13,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@master
       - name: Bump service image tag
-        uses: pldin601/patch-yaml-through-commit
+        uses: pldin601/patch-yaml-through-commit@master
         with:
           git_repo_url: https://pldin601:${{ secrets.GITHUB_TOKEN }}@github.com/myownradio/myownradio-env
           committer_name: Roman Lakhtadyr
