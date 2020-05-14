@@ -1,25 +1,24 @@
-import { Link, LinkProps } from "@material-ui/core"
 import * as PropTypes from "prop-types"
 import * as React from "react"
 import { useCallback } from "react"
 import { useHistory } from "react-router-dom"
 
-interface RouterLinkProps extends Omit<LinkProps, "onClick"> {
-  href: string
-}
+type Props = Omit<React.DetailedHTMLProps<React.AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>, "onClick">
 
-const RouterLink: React.FC<RouterLinkProps> = ({ href, ...otherProps }) => {
+const RouterLink: React.FC<Props> = ({ href, ...otherProps }) => {
   const history = useHistory()
 
   const handleClick = useCallback(
-    (e: React.MouseEvent) => {
-      history.push(href)
+    (e: React.MouseEvent<HTMLAnchorElement>) => {
+      if (href) {
+        history.push(href)
+      }
       e.preventDefault()
     },
     [href, history],
   )
 
-  return <Link {...otherProps} href={href} onClick={handleClick} />
+  return <a {...otherProps} href={href} onClick={handleClick} />
 }
 
 RouterLink.propTypes = {
