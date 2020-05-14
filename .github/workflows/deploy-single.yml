@@ -29,21 +29,21 @@ jobs:
         run: |
           BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/})
           echo ${BRANCH_NAME}
-          SERVICE_NAME=$(echo ${BRANCH_NAME%#/*})
+          SERVICE_NAME=$(echo ${BRANCH_NAME%/*})
           echo ${SERVICE_NAME}
-#         echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-#      - name: Checkout
-#        uses: actions/checkout@master
-#      - name: Build myownradio/radiomanager-frontend
-#        uses: docker/build-push-action@v1
-#        with:
-#          username: ${{ secrets.DOCKER_USERNAME }}
-#          password: ${{ secrets.DOCKER_PASSWORD }}
-#          registry: ${{ secrets.DOCKER_REGISTRY }}
-#          repository: myownradio/radiomanager-frontend
-#          path: app
-#          dockerfile: app/services/radiomanager-frontend/Dockerfile
-#          tags: ${{ github.sha }},latest
+          echo "##[set-output name=service_name;]$(echo ${SERVICE_NAME})"
+      - name: Checkout
+        uses: actions/checkout@master
+      - name: Build myownradio/${{ steps.service_name.outputs.service_name }}
+        uses: docker/build-push-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          registry: ${{ secrets.DOCKER_REGISTRY }}
+          repository: myownradio/${{ steps.service_name.outputs.service_name }}
+          path: app
+          dockerfile: app/services/${{ steps.service_name.outputs.service_name }}/Dockerfile
+          tags: ${{ github.sha }},latest
 #      - name: Bump service image tag
 #        uses: pldin601/patch-yaml-through-commit@master
 #        with:
