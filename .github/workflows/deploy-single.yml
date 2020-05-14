@@ -5,18 +5,18 @@ on:
     branches:
       - "radiomanager-frontend/*"
 
-  build-radiomanager-frontend:
-    needs: terraform
-    name: Build "radiomanager-frontend" image
-    runs-on: ubuntu-latest
-    env:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      SERVICE: radiomanager-frontend
-    steps:
-      - name: Checkout
-        uses: actions/checkout@master
+#  build-radiomanager-frontend:
+#    needs: terraform
+#    name: Build "radiomanager-frontend" image
+#    runs-on: ubuntu-latest
+#    env:
+#      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#      SERVICE: radiomanager-frontend
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@master
 
 jobs:
   init:
