@@ -27,9 +27,7 @@ jobs:
         shell: bash
         run: |
           BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/})
-          echo ${BRANCH_NAME}
           SERVICE_NAME=$(echo ${BRANCH_NAME%/*})
-          echo ${SERVICE_NAME}
           echo "##[set-output name=service_name;]$(echo ${SERVICE_NAME})"
       - name: Build myownradio/${{ steps.service_name.outputs.service_name }}#${{ github.sha }}
         uses: docker/build-push-action@v1
@@ -41,12 +39,17 @@ jobs:
           path: app
           dockerfile: app/services/${{ steps.service_name.outputs.service_name }}/Dockerfile
           tags: ${{ github.sha }},latest
+      - name: Prepare update of environment repository
+        id: prepare_update
+        shell: bash
+        run: |
+          echo "##[set-output name=image_url;]$(echo ${{ secrets.DOCKER_REGISTRY }}/myownradio/${{ steps.service_name.outputs.service_name }}#${{ github.sha }})"
       - name: Update environment repository
         uses: pldin601/patch-yaml-through-commit@master
         with:
           git_repo_url: https://pldin601:${{ secrets.GIT_PUSH_TOKEN }}@github.com/myownradio/myownradio-env.git
           committer_name: Roman Lakhtadyr
           committer_email: roman.lakhtadyr@gmail.com
-          commit_message: Update image to ${{ steps.service_name.outputs.service_name }}#${{ github.sha }}
+          commit_message: Bump ${{ steps.service_name.outputs.service_name }} service image to ${{ steps.prepare_update.outputs.image_url }}
           yaml_file: swarm/docker-compose.yml
-          patch_expression: services.${{ steps.service_name.outputs.service_name }}.image=${{ secrets.DOCKER_REGISTRY }}/myownradio/${{ steps.service_name.outputs.service_name }}#${{ github.sha }}
+          patch_expression: services.${{ steps.service_name.outputs.service_name }}.image=${{ steps.prepare_update.outputs.image_url }}
