@@ -7,7 +7,7 @@ on:
 
 jobs:
   init:
-    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'master'
+    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'master2'
     name: Run linter and tests
     runs-on: ubuntu-latest
     steps:
