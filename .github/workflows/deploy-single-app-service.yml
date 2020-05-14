@@ -29,7 +29,7 @@ jobs:
         run: make run-linter
       - name: Run Tests
         run: make run-tests
-      - name: Build myownradio/${{ steps.service_name.outputs.service_name }}#${{ github.sha }}
+      - name: Build myownradio/${{ steps.service_name.outputs.service_name }}:${{ github.sha }}
         uses: docker/build-push-action@v1
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
@@ -43,7 +43,7 @@ jobs:
         id: prepare_update
         shell: bash
         run: |
-          echo "##[set-output name=image_url;]$(echo ${{ secrets.DOCKER_REGISTRY }}/myownradio/${{ steps.service_name.outputs.service_name }}#${{ github.sha }})"
+          echo "##[set-output name=image_url;]$(echo ${{ secrets.DOCKER_REGISTRY }}/myownradio/${{ steps.service_name.outputs.service_name }}:${{ github.sha }})"
       - name: Update environment repository
         uses: pldin601/patch-yaml-through-commit@master
         with:
