@@ -3,7 +3,7 @@ name: 'Deploy Single Service'
 on:
   push:
     branches:
-      - "*/*"
+      - "radiomanager-frontend/*"
 
 jobs:
   init:
@@ -12,3 +12,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@master
+      - name: Bump service image tag
+        uses: pldin601/patch-yaml-through-commit
+        with:
+          git_repo_url: https://pldin601:${{ secrets.GITHUB_TOKEN }}@github.com/myownradio/myownradio-env
+          committer_name: Roman Lakhtadyr
+          committer_email: roman.lakhtadyr@gmail.com
+          commit_message: Update image to {{ github.sha }}
+          yaml_file: swarm/docker-compose.yml
+          patch_expression: services.radiomanager-frontend.image=myregistry.com/radiomanager-frontend#{{ github.sha }}
