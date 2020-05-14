@@ -4,8 +4,8 @@ on:
   pull_request:
     branches:
       - "*/*"
-    types:
-      - closed
+#    types:
+#      - closed
 
 jobs:
   main:
