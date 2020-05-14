@@ -15,9 +15,10 @@ jobs:
       - name: Bump service image tag
         uses: pldin601/patch-yaml-through-commit@master
         with:
-          git_repo_url: https://pldin601:${{ secrets.GITHUB_TOKEN }}@github.com/myownradio/myownradio-env.git
+          git_repo_url: https://pldin601:${{ secrets.GIT_PUSH_TOKEN }}@github.com/myownradio/myownradio-env.git
           committer_name: Roman Lakhtadyr
           committer_email: roman.lakhtadyr@gmail.com
           commit_message: Update image to ${{ github.sha }}
           yaml_file: swarm/docker-compose.yml
           patch_expression: services.radiomanager-frontend.image=myregistry.com/radiomanager-frontend#${{ github.sha }}
+          dry_run: 1
