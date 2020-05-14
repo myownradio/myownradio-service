@@ -39,5 +39,5 @@ jobs:
           committer_email: roman.lakhtadyr@gmail.com
           commit_message: Update image to ${{ steps.service_name.outputs.service_name }}#${{ github.sha }}
           yaml_file: swarm/docker-compose.yml
-          patch_expression: services.radiomanager-frontend.image=${{ secrets.DOCKER_REGISTRY }}/myownradio/${{ steps.service_name.outputs.service_name }}#${{ github.sha }}
+          patch_expression: services.${{ steps.service_name.outputs.service_name }}.image=${{ secrets.DOCKER_REGISTRY }}/myownradio/${{ steps.service_name.outputs.service_name }}#${{ github.sha }}
           dry_run: 1
