@@ -11,15 +11,24 @@ jobs:
     name: Deploy Single Application Service
     runs-on: ubuntu-latest
     steps:
-      - name: Extract service name from github_ref
-        id: service_name
+      - name: Define variables
+        id: variables
         shell: bash
         run: |
+          STACK_NAME="myownradio"
+
           BRANCH_NAME=${{ github.event.pull_request.head.ref }}
           SERVICE_NAME=$(echo ${BRANCH_NAME%/*})
           BRANCH_SUFFIX_NAME=$(echo ${BRANCH_NAME#*/})
+
+          IMAGE_NAME=$(echo ${STACK_NAME}/${SERVICE_NAME}:${{ github.sha }})
+          IMAGE_URL=$(echo ${{ secrets.DOCKER_REGISTRY }}/${IMAGE_NAME})
+
           [ -z "$BRANCH_SUFFIX_NAME" ] && echo "Incorrent source service branch" && exit 1
+
           echo "##[set-output name=service_name;]$(echo ${SERVICE_NAME})"
+          echo "##[set-output name=image_name;]$(echo ${IMAGE_NAME})"
+          echo "##[set-output name=image_url;]$(echo ${IMAGE_URL})"
       - name: Checkout
         uses: actions/checkout@master
       - name: Setup Linter and Tests
@@ -29,27 +38,22 @@ jobs:
         run: make run-linter
       - name: Run Tests
         run: make run-tests
-      - name: Build myownradio/${{ steps.service_name.outputs.service_name }}:${{ github.sha }}
+      - name: Build myownradio/${{ steps.variables.outputs.image_name }}
         uses: docker/build-push-action@v1
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
           registry: ${{ secrets.DOCKER_REGISTRY }}
-          repository: myownradio/${{ steps.service_name.outputs.service_name }}
+          repository: ${{ steps.variables.outputs.image_name }}
           path: app
-          dockerfile: app/services/${{ steps.service_name.outputs.service_name }}/Dockerfile
+          dockerfile: app/services/${{ steps.variables.outputs.service_name }}/Dockerfile
           tags: ${{ github.sha }},latest
-      - name: Prepare update of environment repository
-        id: prepare_update
-        shell: bash
-        run: |
-          echo "##[set-output name=image_url;]$(echo ${{ secrets.DOCKER_REGISTRY }}/myownradio/${{ steps.service_name.outputs.service_name }}:${{ github.sha }})"
       - name: Update environment repository
         uses: pldin601/patch-yaml-through-commit@master
         with:
           git_repo_url: https://pldin601:${{ secrets.GIT_PUSH_TOKEN }}@github.com/myownradio/myownradio-env.git
           committer_name: Roman Lakhtadyr
           committer_email: roman.lakhtadyr@gmail.com
-          commit_message: Bump ${{ steps.service_name.outputs.service_name }} service image to ${{ steps.prepare_update.outputs.image_url }}
+          commit_message: Update image for ${{ steps.variables.outputs.service_name }}
           yaml_file: swarm/docker-compose.yml
-          patch_expression: services.${{ steps.service_name.outputs.service_name }}.image=${{ steps.prepare_update.outputs.image_url }}
+          patch_expression: services.${{ steps.variables.outputs.service_name }}.image=${{ steps.variables.outputs.image_url }}
