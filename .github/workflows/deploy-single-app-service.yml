@@ -21,13 +21,15 @@ jobs:
           SERVICE_NAME=$(echo ${BRANCH_NAME%/*})
           BRANCH_SUFFIX_NAME=$(echo ${BRANCH_NAME#*/})
 
-          IMAGE_NAME=$(echo ${STACK_NAME}/${SERVICE_NAME}:${{ github.sha }})
+          IMAGE_NAME=$(echo ${STACK_NAME}/${SERVICE_NAME})
           IMAGE_URL=$(echo ${{ secrets.DOCKER_REGISTRY }}/${IMAGE_NAME})
+          IMAGE_TAG=$(echo ${{ github.sha }})
 
           [ -z "$BRANCH_SUFFIX_NAME" ] && echo "Incorrent source service branch" && exit 1
 
           echo "##[set-output name=service_name;]$(echo ${SERVICE_NAME})"
           echo "##[set-output name=image_name;]$(echo ${IMAGE_NAME})"
+          echo "##[set-output name=image_tag;]$(echo ${IMAGE_TAG})"
           echo "##[set-output name=image_url;]$(echo ${IMAGE_URL})"
       - name: Checkout
         uses: actions/checkout@master
@@ -47,7 +49,7 @@ jobs:
           repository: ${{ steps.variables.outputs.image_name }}
           path: app
           dockerfile: app/services/${{ steps.variables.outputs.service_name }}/Dockerfile
-          tags: ${{ github.sha }},latest
+          tags: ${{ steps.variables.outputs.image_tag }},latest
       - name: Update environment repository
         uses: pldin601/patch-yaml-through-commit@master
         with:
