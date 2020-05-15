@@ -37,11 +37,8 @@ jobs:
       - name: Preflight Checks
         shell: bash
         run: |
-          [ -d "app/services/${{ steps.variables.outputs.service_name }}" ] || \
-                echo "Service ${{ steps.variables.outputs.service_name }} does not exist" && exit 1
-
-          [ -f "app/services/${{ steps.variables.outputs.service_name }}/Dockerfile" ] || \
-                echo "Dockerfile not found" && exit 1
+          [ -d "app/services/${{ steps.variables.outputs.service_name }}" ] || echo "Service ${{ steps.variables.outputs.service_name }} does not exist" && exit 1
+          [ -f "app/services/${{ steps.variables.outputs.service_name }}/Dockerfile" ] || echo "Dockerfile not found" && exit 1
       - name: Setup Linter and Tests
         run: |
           make install
