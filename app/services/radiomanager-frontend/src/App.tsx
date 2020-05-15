@@ -1,8 +1,7 @@
 import React, { Suspense } from "react"
 import Router from "./Router"
 import { ErrorBoundary } from "./components/ErrorBoundary"
-
-const SomethingWentWrong = (): React.ReactElement => <h1>Something went wrong...</h1>
+import SomethingWentWrong from "./entries/ErrorPage"
 
 const App: React.FC = () => (
   <ErrorBoundary cases={[{ when: Error, then: SomethingWentWrong }]}>
