@@ -11,9 +11,12 @@ jobs:
     name: Deploy Single Application Service
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@master
       - name: Define variables
         id: variables
         shell: bash
+        # Move here all variables from secrets that aren't secrets.
         run: |
           STACK_NAME="myownradio"
 
@@ -22,17 +25,23 @@ jobs:
           BRANCH_SUFFIX_NAME=$(echo ${BRANCH_NAME#*/})
 
           IMAGE_NAME=$(echo ${STACK_NAME}/${SERVICE_NAME})
-          IMAGE_URL=$(echo ${{ secrets.DOCKER_REGISTRY }}/${IMAGE_NAME})
           IMAGE_TAG=$(echo ${{ github.sha }})
+          IMAGE_URL=$(echo ${{ secrets.DOCKER_REGISTRY }}/${IMAGE_NAME}):${IMAGE_TAG}
 
-          [ -z "$BRANCH_SUFFIX_NAME" ] && echo "Incorrent source service branch" && exit 1
+          [ -z "$BRANCH_SUFFIX_NAME" ] && echo "Incorrent branch name" && exit 1
 
           echo "##[set-output name=service_name;]$(echo ${SERVICE_NAME})"
           echo "##[set-output name=image_name;]$(echo ${IMAGE_NAME})"
           echo "##[set-output name=image_tag;]$(echo ${IMAGE_TAG})"
           echo "##[set-output name=image_url;]$(echo ${IMAGE_URL})"
-      - name: Checkout
-        uses: actions/checkout@master
+      - name: Preflight Checks
+        shell: bash
+        run: |
+          [ -d "app/services/${{ steps.variables.outputs.service_name }}" ] || \
+                echo "Service ${{ steps.variables.outputs.service_name }} does not exist" && exit 1
+
+          [ -f "app/services/${{ steps.variables.outputs.service_name }}/Dockerfile" ] || \
+                echo "Dockerfile not found" && exit 1
       - name: Setup Linter and Tests
         run: |
           make install
