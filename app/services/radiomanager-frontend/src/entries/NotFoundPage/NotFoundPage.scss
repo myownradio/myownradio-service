@@ -1,0 +1,26 @@
+@use "../../styles/fonts";
+@use "../../styles/colors";
+
+.root {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.message {
+    width: 320px;
+    text-align: center;
+    font-family: fonts.$primary-font;
+}
+
+.title {
+    color: lighten(colors.mor-color('background'), 50%);
+    font-size: 120pt;
+}
+
+.description {
+    color: lighten(colors.mor-color('background'), 75%);
+    font-size: 16pt;
+}

@@ -1,0 +1,118 @@
+@use "./spacings";
+@use "./mixins";
+@use "./colors";
+@use "./fonts";
+
+@mixin form {
+    @include mixins.box-shadow;
+    @include mixins.border-radius;
+
+    width: 300px;
+    padding: spacings.$base-spacing * 4;
+    background-color: lighten(colors.mor-color('background'), 3%);
+
+    h1 {
+        padding-bottom: spacings.$base-spacing;
+        font-family: fonts.$secondary-font;
+        text-transform: uppercase;
+        text-align: center;
+        font-size: fonts.$base-font-size + 14pt;
+        letter-spacing: 1.2pt;
+    }
+
+    a {
+        color: colors.mor-color('primary');
+
+        &:visited {
+            color: colors.mor-color('primary');
+        }
+    }
+
+    .top-alert {
+        padding: 0 0 spacings.$base-spacing 0;
+        display: block;
+        color: colors.mor-color('warn');
+        text-align: center;
+        font-size: fonts.$base-font-size - 3pt;
+
+        &:empty:before {
+            content: "\200b";
+        }
+    }
+
+    .fieldset {
+        border: none;
+        padding: spacings.$base-spacing 0;
+    }
+
+    .fieldset .label {
+        display: block;
+        margin-bottom: spacings.$base-spacing;
+        font-size: fonts.$base-font-size - 3pt;
+    }
+
+    .fieldset .text-field {
+        @include mixins.border-radius;
+        display: block;
+        width: 100%;
+        border: 1px solid #141723;
+        background-color: colors.mor-color('background');
+        outline: none;
+        padding: spacings.$base-spacing;
+        box-sizing: border-box;
+        color: colors.mor-color('foreground');
+        font-size: fonts.$base-font-size;
+
+        transition: border-color ease-in .3s;
+
+        &:focus {
+            border-color: colors.mor-color('primary');
+        }
+
+        &.invalid {
+            border-color: colors.mor-color('warn');
+        }
+    }
+
+    .fieldset .submit-button {
+        @include mixins.border-radius;
+
+        border: 0 solid #141723;
+        background-color: colors.mor-color('primary');
+        outline: none;
+        padding: spacings.$base-spacing;
+        box-sizing: border-box;
+        width: 100%;
+        color: #fff;
+        text-transform: uppercase;
+        transition: background-color ease-in .15s;
+        cursor: pointer;
+        letter-spacing: 1.2pt;
+        font-family: fonts.$primary-font;
+        font-weight: 600;
+
+        &:active {
+            background-color: darken(colors.mor-color('primary'), 10%);
+        }
+    }
+
+    .fieldset.buttons {
+        margin-top: spacings.$base-spacing;
+    }
+
+    .fieldset .inline-alert {
+        padding: spacings.$base-spacing / 2 0 0 0;
+        display: block;
+        color: colors.mor-color('warn');
+        text-align: left;
+        font-size: fonts.$base-font-size - 3pt;
+
+        &:empty:before {
+            content: "\200b";
+        }
+    }
+
+    .fieldset .inline-hint {
+        font-size: fonts.$base-font-size - 3pt;
+    }
+}

@@ -10,3 +10,5 @@ $mor-colors: (
 @function mor-color($key: 'primary') {
     @return map-get($mor-colors, $key);
 }
+
+$white: #E9EAEB;

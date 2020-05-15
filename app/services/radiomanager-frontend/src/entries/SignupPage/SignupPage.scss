@@ -1,4 +1,4 @@
-@use "../../styles/controls";
+@use "../../styles/darkForm";
 @use "../../styles/spacings";
 @use "../../styles/fonts";
 
@@ -14,19 +14,5 @@
 }
 
 .form {
-  @include controls.front-form;
-}
-
-.title {
-  @include controls.h1;
-}
-
-.button {
-  @include controls.button;
-}
-
-.label {
-  display: block;
-  margin-bottom: spacings.$base-spacing;
-  font-size: fonts.$base-font-size - 3pt;
+  @include darkForm.form;
 }

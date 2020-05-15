@@ -1,5 +1,7 @@
 import cn from "classnames"
 import React, { ChangeEvent, useCallback, useState } from "react"
+import RouterLink from "~/components/RouterLink"
+import { config } from "~/config"
 import getText from "~/utils/getText"
 import styles from "./LoginPage.scss"
 import { useLogin } from "./use/useLogin"
@@ -21,8 +23,8 @@ export const LoginPage: React.FC<{}> = ({}) => {
   return (
     <div className={styles.root}>
       <form className={styles.form} noValidate onSubmit={handleLoginClick} autoComplete="off">
-        <h1 className={styles.title}>Login</h1>
-        <div className={styles["general-error-message"]}>{errors.root}</div>
+        <h1>Login</h1>
+        <div className={styles["top-alert"]}>{errors.root}</div>
         <fieldset className={styles.fieldset}>
           <label className={styles.label} htmlFor={"email"}>
             {getText("Email")}
@@ -37,7 +39,7 @@ export const LoginPage: React.FC<{}> = ({}) => {
             type="email"
             autoFocus
           />
-          <div className={styles["error-message"]}>{errors.email}</div>
+          <div className={styles["inline-alert"]}>{errors.email}</div>
         </fieldset>
         <fieldset className={styles.fieldset}>
           <label className={styles.label} htmlFor={"password"}>
@@ -53,10 +55,16 @@ export const LoginPage: React.FC<{}> = ({}) => {
             name="password"
             type="password"
           />
-          <div className={styles["error-message"]}>{errors.password}</div>
+          <div className={styles["inline-alert"]}>{errors.password}</div>
         </fieldset>
         <fieldset className={styles.fieldset}>
-          <button className={styles.button} disabled={busy} type={"submit"}>
+          <div className={styles["inline-hint"]}>
+            {getText("Don't have an account yet?")}{" "}
+            <RouterLink href={config.routes.signup}>{getText("Sign Up")}</RouterLink>
+          </div>
+        </fieldset>
+        <fieldset className={styles.fieldset}>
+          <button className={styles["submit-button"]} disabled={busy} type={"submit"}>
             {getText("Sign In")}
           </button>
         </fieldset>

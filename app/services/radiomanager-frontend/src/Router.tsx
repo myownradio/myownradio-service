@@ -11,6 +11,7 @@ import { AuthenticatedUserProvider } from "~/modules/Authentication"
 // const CreateChannelPage = React.lazy(() => import("../routes/CreateChannelPage"))
 // const ChannelPage = React.lazy(() => import("../routes/ChannelPage"))
 
+const NotFoundPage = React.lazy(() => import("./entries/NotFoundPage"))
 const LoginPage = React.lazy(() => import("./entries/LoginPage"))
 const SignupPage = React.lazy(() => import("./entries/SignupPage"))
 const RadioChannelPage = React.lazy(() => import("./entries/RadioChannelPage"))
@@ -30,7 +31,8 @@ const Router: React.FC = () => (
           </Switch>
         </AuthenticatedUserProvider>
       </Route>
-      <Route>404 Not Found</Route>
+
+      <Route component={NotFoundPage} />
     </Switch>
   </BrowserRouter>
 )
