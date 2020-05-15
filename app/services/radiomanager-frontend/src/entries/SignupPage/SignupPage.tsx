@@ -1,10 +1,10 @@
+import cn from "classnames"
 import React, { ChangeEvent, useCallback, useState } from "react"
 import RouterLink from "~/components/RouterLink"
 import { config } from "~/config"
 import getText from "~/utils/getText"
 import styles from "./SignupPage.scss"
 import { useSignup } from "./use/useSignup"
-import cn from "classnames"
 
 export const SignupPage: React.FC<{}> = ({}) => {
   const [email, setEmail] = useState("")
