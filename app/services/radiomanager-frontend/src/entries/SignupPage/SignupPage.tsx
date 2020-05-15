@@ -1,7 +1,10 @@
 import React, { ChangeEvent, useCallback, useState } from "react"
+import RouterLink from "~/components/RouterLink"
+import { config } from "~/config"
 import getText from "~/utils/getText"
 import styles from "./SignupPage.scss"
 import { useSignup } from "./use/useSignup"
+import cn from "classnames"
 
 export const SignupPage: React.FC<{}> = ({}) => {
   const [email, setEmail] = useState("")
@@ -20,14 +23,14 @@ export const SignupPage: React.FC<{}> = ({}) => {
   return (
     <div className={styles.root}>
       <form className={styles.form} noValidate onSubmit={handleSignupClick}>
-        <h1 className={styles.title}>Signup</h1>
-        <div className={styles["general-error-message"]}>{errors.root}</div>
+        <h1>Signup</h1>
+        <div className={styles["top-alert"]}>{errors.root}</div>
         <fieldset className={styles.fieldset}>
           <label className={styles.label} htmlFor={"email"}>
             {getText("Email")}
           </label>
           <input
-            className={styles["text-field"]}
+            className={cn(styles["text-field"], errors.email && styles.invalid)}
             disabled={busy}
             value={email}
             onChange={handleEmailChange}
@@ -36,14 +39,14 @@ export const SignupPage: React.FC<{}> = ({}) => {
             type="email"
             autoFocus
           />
-          <div className={styles["error-message"]}>{errors.email}</div>
+          <div className={styles["inline-alert"]}>{errors.email}</div>
         </fieldset>
         <fieldset className={styles.fieldset}>
           <label className={styles.label} htmlFor={"password"}>
             {getText("Password")}
           </label>
           <input
-            className={styles["text-field"]}
+            className={cn(styles["text-field"], errors.password && styles.invalid)}
             disabled={busy}
             value={password}
             onChange={handlePasswordChange}
@@ -52,10 +55,15 @@ export const SignupPage: React.FC<{}> = ({}) => {
             name="password"
             type="password"
           />
-          <div className={styles["error-message"]}>{errors.password}</div>
+          <div className={styles["inline-alert"]}>{errors.password}</div>
         </fieldset>
         <fieldset className={styles.fieldset}>
-          <button className={styles.button} disabled={busy} type={"submit"}>
+          <div className={styles["inline-hint"]}>
+            {getText("Already registered?")} <RouterLink href={config.routes.login}>{getText("Login")}</RouterLink>
+          </div>
+        </fieldset>
+        <fieldset className={styles.fieldset}>
+          <button className={styles["submit-button"]} disabled={busy} type={"submit"}>
             Signup
           </button>
         </fieldset>
