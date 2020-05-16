@@ -2,12 +2,35 @@ import { FormEvent, useState } from "react"
 import { useHistory } from "react-router-dom"
 import { config } from "~/config"
 import { useAuthenticationModel } from "~/modules/Authentication"
+import { mapSignupErrorToUserMessage } from "~/services/api/errors/mapErrorToUserMessage"
+import { isEmptyObject } from "~/utils/fn"
 import getText from "~/utils/getText"
 
 type EventHandler = (event: FormEvent<HTMLFormElement>) => void
 
-interface Errors {
-  [key: string]: string
+interface SignupFormFields {
+  email: string
+  password: string
+}
+
+type Errors = {
+  [K in keyof SignupFormFields]?: string
+}
+
+function validateFields(fields: SignupFormFields): [boolean, Errors] {
+  const errors: Errors = {}
+
+  if (!fields.email) {
+    errors.email = getText("Email should be specified.")
+  }
+
+  if (!fields.password) {
+    errors.password = getText("Password should be specified.")
+  } else if (fields.password.length < 6) {
+    errors.password = getText("Your password should be at least 6 characters long.")
+  }
+
+  return [isEmptyObject(errors), errors]
 }
 
 export function useSignup(email: string, password: string): [EventHandler, Errors, boolean] {
@@ -20,19 +43,9 @@ export function useSignup(email: string, password: string): [EventHandler, Error
   function handleSignupClick(event: FormEvent<HTMLFormElement>): void {
     event.preventDefault()
 
-    const errors: Errors = {}
+    const [isValid, errors] = validateFields({ email, password })
 
-    if (!email) {
-      errors.email = getText("Email should be specified.")
-    }
-
-    if (!password) {
-      errors.password = getText("Password should be specified.")
-    } else if (password.length < 6) {
-      errors.password = getText("Your password should be at least 6 characters long.")
-    }
-
-    if (Object.keys(errors).length > 0) {
+    if (!isValid) {
       setErrors(errors)
       return
     }
@@ -47,7 +60,7 @@ export function useSignup(email: string, password: string): [EventHandler, Error
           history.push(config.routes.login)
         },
         error => {
-          setErrors({ root: getText(error.message) })
+          setErrors(mapSignupErrorToUserMessage(error))
         },
       )
       .finally(() => {

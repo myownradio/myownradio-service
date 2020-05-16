@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig } from "axios"
 import UnauthorizedApiError from "./errors/UnauthorizedApiError"
-import UnknownAPIError from "./errors/UnknownAPIError"
+import UnexpectedApiResponseError from "./errors/UnexpectedApiResponseError"
 
 export abstract class AbstractApiService {
   protected constructor(private urlPrefix: string) {}
@@ -22,7 +22,7 @@ export abstract class AbstractApiService {
           throw new UnauthorizedApiError()
 
         default:
-          throw new UnknownAPIError(status)
+          throw new UnexpectedApiResponseError(status)
       }
     }
 

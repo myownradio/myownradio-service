@@ -9,3 +9,7 @@ export function notImplemented(): void {
 export async function notImplementedAsync(): Promise<void> {
   throw new Error("Not implemented")
 }
+
+export function isEmptyObject(object: object): boolean {
+  return Object.keys(object).length === 0
+}
