@@ -3,12 +3,32 @@ import { useHistory } from "react-router-dom"
 import { config } from "~/config"
 import { useAuthenticationModel } from "~/modules/Authentication"
 import { mapLoginErrorToUserMessage } from "~/services/api/errors/mapErrorToUserMessage"
+import { isEmptyObject } from "~/utils/fn"
 import getText from "~/utils/getText"
+
+interface LoginFormFields {
+  email: string
+  password: string
+}
+
+type Errors = {
+  [K in keyof LoginFormFields]?: string
+}
 
 type EventHandler = (event: FormEvent<HTMLFormElement>) => void
 
-interface Errors {
-  [key: string]: string
+function validateFields(fields: LoginFormFields): [boolean, Errors] {
+  const errors: Errors = {}
+
+  if (!fields.email) {
+    errors.email = getText("Email should be specified.")
+  }
+
+  if (!fields.password) {
+    errors.password = getText("Password should be specified.")
+  }
+
+  return [isEmptyObject(errors), errors]
 }
 
 export function useLogin(email: string, password: string): [EventHandler, Errors, boolean] {
@@ -21,7 +41,7 @@ export function useLogin(email: string, password: string): [EventHandler, Errors
   function handleLoginClick(event: FormEvent<HTMLFormElement>): void {
     event.preventDefault()
 
-    const errors: Errors = {}
+    const [isValid, errors] = validateFields({ email, password })
 
     if (!email) {
       errors.email = getText("Email should be specified.")
@@ -31,7 +51,7 @@ export function useLogin(email: string, password: string): [EventHandler, Errors
       errors.password = getText("Password should be specified.")
     }
 
-    if (Object.keys(errors).length > 0) {
+    if (!isValid) {
       setErrors(errors)
       return
     }
@@ -46,8 +66,7 @@ export function useLogin(email: string, password: string): [EventHandler, Errors
           history.push(config.routes.home)
         },
         error => {
-          const userMessage = mapLoginErrorToUserMessage(error)
-          setErrors({ root: userMessage })
+          setErrors(mapLoginErrorToUserMessage(error))
         },
       )
       .finally(() => {
