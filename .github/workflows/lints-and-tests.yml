@@ -1,4 +1,4 @@
-name: 'Check'
+name: 'Lints and Tests'
 
 on:
   - pull_request
@@ -11,12 +11,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@master
-      - name: Setup
-        run: |
-          make install
-      - name: Linter
+      - name: Run Setup
+        run: make install
+      - name: Lint Code
         run: make run-linter
-      - name: Tests
+      - name: Run Tests
         run: make run-tests
 
   terraform:
