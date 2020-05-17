@@ -3,8 +3,10 @@
   "version": "1.0.0",
   "private": true,
   "devDependencies": {
+    "@types/hashids": "^1.0.30",
     "typescript": "^3.8.3"
   },
   "dependencies": {
+    "hashids": "2.2.1"
   }
 }
