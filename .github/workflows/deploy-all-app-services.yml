@@ -3,7 +3,7 @@ name: 'Deploy All Application Services'
 on:
   push:
     branches:
-      - 'all'
+      - 'all/**'
 
 #  pull_request:
 #    types:
