@@ -2,8 +2,8 @@ name: 'Deploy All Application Services'
 
 on:
   pull_request:
-    types:
-      - closed
+#    types:
+#      - closed
     branches:
       - 'all/**'
 
