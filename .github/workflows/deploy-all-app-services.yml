@@ -1,11 +1,15 @@
 name: 'Deploy All Application Services'
 
 on:
-  pull_request:
+  push:
+    branches:
+      - 'all'
+
+#  pull_request:
 #    types:
 #      - closed
-    branches:
-      - 'all/**'
+#    branches:
+#      - 'all**'
 
 jobs:
   main:
