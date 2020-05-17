@@ -6,16 +6,7 @@ import { mapLoginErrorToUserMessage } from "~/services/api/errors/mapErrorToUser
 import { isEmptyObject } from "~/utils/fn"
 import getText from "~/utils/getText"
 
-interface LoginFormFields {
-  email: string
-  password: string
-}
-
-type Errors = {
-  [K in keyof LoginFormFields]?: string
-}
-
-type EventHandler = (event: FormEvent<HTMLFormElement>) => void
+const REDIRECT_SUCCESS_TO = config.routes.myChannels
 
 function validateFields(fields: LoginFormFields): [boolean, Errors] {
   const errors: Errors = {}
@@ -63,7 +54,7 @@ export function useLogin(email: string, password: string): [EventHandler, Errors
       .login(email, password)
       .then(
         () => {
-          history.push(config.routes.home)
+          history.push(REDIRECT_SUCCESS_TO)
         },
         error => {
           setErrors(mapLoginErrorToUserMessage(error))
@@ -76,3 +67,14 @@ export function useLogin(email: string, password: string): [EventHandler, Errors
 
   return [handleLoginClick, errors, busy]
 }
+
+interface LoginFormFields {
+  email: string
+  password: string
+}
+
+type Errors = {
+  [K in keyof LoginFormFields | "root"]?: string
+}
+
+type EventHandler = (event: FormEvent<HTMLFormElement>) => void
