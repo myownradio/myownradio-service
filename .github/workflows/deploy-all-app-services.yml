@@ -2,13 +2,13 @@ name: 'Deploy All Application Services'
 
 on:
   pull_request:
-#    types:
-#      - closed
+    types:
+      - closed
 
 jobs:
   main:
-    if: github.event.pull_request.merged == true \
-     && github.event.pull_request.base.ref == 'master' \
+    if: github.event.pull_request.merged == true
+     && github.event.pull_request.base.ref == 'master'
      && startsWith(github.event.pull_request.head.ref, 'app/')
     name: Deploy All Application Services
     runs-on: ubuntu-latest
