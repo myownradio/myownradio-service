@@ -1,19 +1,15 @@
 name: 'Deploy All Application Services'
 
 on:
-  push:
-    branches:
-      - 'all/**'
-
-#  pull_request:
+  pull_request:
 #    types:
 #      - closed
-#    branches:
-#      - 'all**'
 
 jobs:
   main:
-    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'master'
+    if: github.event.pull_request.merged == true \
+     && github.event.pull_request.base.ref == 'master' \
+     && startsWith(github.event.pull_request.head.ref, 'app/')
     name: Deploy All Application Services
     runs-on: ubuntu-latest
     strategy:
