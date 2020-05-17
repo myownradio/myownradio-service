@@ -16,7 +16,9 @@
     "noFallthroughCasesInSwitch": true
   },
   "include": [
-    "libs",
-    "services"
+    "libs"
+  ],
+  "exclude": [
+    "**/*.spec.ts"
   ]
 }
