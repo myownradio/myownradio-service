@@ -24,6 +24,7 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
+    "@myownradio/domain": "1.0.0",
     "@koa/cors": "^3.0.0",
     "fp-ts": "^2.5.3",
     "io-ts": "^2.1.2",

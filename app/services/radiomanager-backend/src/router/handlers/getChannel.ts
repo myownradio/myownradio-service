@@ -1,9 +1,11 @@
+import { encodeId } from "@myownradio/common/ids"
+import { RadioChannelResource } from "@myownradio/domain/resources"
 import * as knex from "knex"
-import { Context } from "koa"
 import { Config } from "../../config"
+import { TypedContext } from "../../interfaces"
 
 export default function getChannel(_: Config, knexConnection: knex) {
-  return async (ctx: Context): Promise<void> => {
+  return async (ctx: TypedContext<RadioChannelResource>): Promise<void> => {
     const { channelId } = ctx.params
     const userId = ctx.state.user.uid
     const channel = await knexConnection
@@ -20,7 +22,7 @@ export default function getChannel(_: Config, knexConnection: knex) {
     }
 
     ctx.body = {
-      id: channel.id,
+      id: encodeId(channel.id),
       title: channel.title,
     }
   }

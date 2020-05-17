@@ -1,14 +1,16 @@
+import { encodeId } from "@myownradio/common/ids"
+import { RadioChannelResource } from "@myownradio/domain/resources"
 import * as t from "io-ts"
 import * as knex from "knex"
-import { Context } from "koa"
 import { Config } from "../../config"
+import { TypedContext } from "../../interfaces"
 
 const CreateChannelRequestContract = t.type({
   title: t.string,
 })
 
 export default function createChannel(_: Config, knexConnection: knex) {
-  return async (ctx: Context): Promise<void> => {
+  return async (ctx: TypedContext<RadioChannelResource>): Promise<void> => {
     const userId = ctx.state.user.uid
 
     const decodedResult = CreateChannelRequestContract.decode(ctx.request.body)
@@ -29,7 +31,7 @@ export default function createChannel(_: Config, knexConnection: knex) {
         .returning("id")
 
       ctx.body = {
-        id: channelId,
+        id: encodeId(channelId),
         title: requestBody.title,
       }
     } catch (e) {

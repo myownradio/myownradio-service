@@ -1,9 +1,11 @@
+import { encodeId } from "@myownradio/common/ids"
+import { AudioTrackResource } from "@myownradio/domain/resources"
 import * as knex from "knex"
-import { Context } from "koa"
 import { Config } from "../../config"
+import { TypedContext } from "../../interfaces"
 
 export default function getRadioChannelTracks(_: Config, knexConnection: knex) {
-  return async (ctx: Context): Promise<void> => {
+  return async (ctx: TypedContext<AudioTrackResource[]>): Promise<void> => {
     const { channelId } = ctx.params
     const userId = ctx.state.user.uid
 
@@ -26,7 +28,7 @@ export default function getRadioChannelTracks(_: Config, knexConnection: knex) {
       .orderBy("order_id", "ASC")
 
     ctx.body = audioTracks.map(audioTrack => ({
-      id: audioTrack.id,
+      id: encodeId(audioTrack.id),
       name: audioTrack.name,
       artist: audioTrack.artist,
       title: audioTrack.title,
@@ -34,6 +36,9 @@ export default function getRadioChannelTracks(_: Config, knexConnection: knex) {
       bitrate: audioTrack.bitrate,
       duration: audioTrack.duration,
       order_id: audioTrack.order_id,
+      size: audioTrack.size,
+      format: audioTrack.format,
+      genre: audioTrack.genre,
     }))
   }
 }

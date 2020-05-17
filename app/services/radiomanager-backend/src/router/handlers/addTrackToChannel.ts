@@ -1,7 +1,9 @@
+import { encodeId } from "@myownradio/common/ids"
+import { AudioTrackResource } from "@myownradio/domain/resources"
 import * as t from "io-ts"
 import * as knex from "knex"
-import { Context } from "koa"
 import { Config } from "../../config"
+import { TypedContext } from "../../interfaces"
 import { verifyMetadataSignature } from "../../utils"
 
 const AddTrackToChannelRequestContract = t.type({
@@ -18,7 +20,7 @@ const AddTrackToChannelRequestContract = t.type({
 })
 
 export default function addTrackToChannel(config: Config, knexConnection: knex) {
-  return async (ctx: Context): Promise<void> => {
+  return async (ctx: TypedContext<AudioTrackResource>): Promise<void> => {
     const userId = ctx.state.user.uid
     const { channelId } = ctx.params
 
@@ -78,14 +80,17 @@ export default function addTrackToChannel(config: Config, knexConnection: knex) 
       return [trackId, nextOrderId]
     })
 
-    ctx.body = ctx.body = {
-      id: trackId,
+    ctx.body = {
+      id: encodeId(trackId),
       name: requestBody.name,
       artist: requestBody.artist,
       title: requestBody.title,
       album: requestBody.album,
       bitrate: requestBody.bitrate,
       duration: requestBody.duration,
+      genre: requestBody.genre,
+      format: requestBody.format,
+      size: requestBody.size,
       order_id: orderId,
     }
   }

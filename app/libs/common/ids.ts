@@ -1,4 +1,4 @@
-import Hashids from "hashids"
+import Hashids = require("hashids/cjs")
 
 const SALT = "8OnD2szBqKoo5sET6P2M"
 
