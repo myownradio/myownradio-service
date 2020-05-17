@@ -4,12 +4,12 @@ on:
   pull_request:
     types:
       - closed
-    branches:
-      - 'all/**'
 
 jobs:
   main:
-    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'master'
+    if: github.event.pull_request.merged == true
+     && github.event.pull_request.base.ref == 'master'
+     && startsWith(github.event.pull_request.head.ref, 'all/')
     name: Deploy All Application Services
     runs-on: ubuntu-latest
     strategy:
