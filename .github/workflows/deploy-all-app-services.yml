@@ -1,15 +1,22 @@
-name: 'Deploy Single Application Service'
+name: 'Deploy All Application Services'
 
 on:
   pull_request:
     types:
       - closed
+    branches:
+      - all/*
 
 jobs:
   main:
     if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'master'
-    name: Deploy Single Application Service
+    name: Deploy All Application Services
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service_name:
+          - radiomanager-frontend
+          - radiomanager-backend
     steps:
       - name: Checkout
         uses: actions/checkout@master
@@ -19,16 +26,11 @@ jobs:
         # Move here all variables from secrets that aren't secrets.
         run: |
           STACK_NAME="myownradio"
-
-          BRANCH_NAME=${{ github.event.pull_request.head.ref }}
-          SERVICE_NAME=$(echo ${BRANCH_NAME%/*})
-          BRANCH_SUFFIX_NAME=$(echo ${BRANCH_NAME#*/})
+          SERVICE_NAME=$(echo ${{ matrix.service_name }})
 
           IMAGE_NAME=$(echo ${STACK_NAME}/${SERVICE_NAME})
           IMAGE_TAG=$(echo ${{ github.sha }})
           IMAGE_URL=$(echo ${{ secrets.DOCKER_REGISTRY }}/${IMAGE_NAME}):${IMAGE_TAG}
-
-          [ -z "$BRANCH_SUFFIX_NAME" ] && echo "Incorrent branch name" && exit 1
 
           echo "##[set-output name=service_name;]$(echo ${SERVICE_NAME})"
           echo "##[set-output name=image_name;]$(echo ${IMAGE_NAME})"
