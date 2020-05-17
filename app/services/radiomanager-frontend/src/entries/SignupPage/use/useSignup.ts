@@ -6,16 +6,7 @@ import { mapSignupErrorToUserMessage } from "~/services/api/errors/mapErrorToUse
 import { isEmptyObject } from "~/utils/fn"
 import getText from "~/utils/getText"
 
-type EventHandler = (event: FormEvent<HTMLFormElement>) => void
-
-interface SignupFormFields {
-  email: string
-  password: string
-}
-
-type Errors = {
-  [K in keyof SignupFormFields]?: string
-}
+const REDIRECT_SUCCESS_TO = config.routes.login
 
 function validateFields(fields: SignupFormFields): [boolean, Errors] {
   const errors: Errors = {}
@@ -57,7 +48,7 @@ export function useSignup(email: string, password: string): [EventHandler, Error
       .signup(email, password)
       .then(
         () => {
-          history.push(config.routes.login)
+          history.push(REDIRECT_SUCCESS_TO)
         },
         error => {
           setErrors(mapSignupErrorToUserMessage(error))
@@ -69,4 +60,15 @@ export function useSignup(email: string, password: string): [EventHandler, Error
   }
 
   return [handleSignupClick, errors, busy]
+}
+
+type EventHandler = (event: FormEvent<HTMLFormElement>) => void
+
+interface SignupFormFields {
+  email: string
+  password: string
+}
+
+type Errors = {
+  [K in keyof SignupFormFields | "root"]?: string
 }

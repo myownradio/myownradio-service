@@ -26,13 +26,12 @@ export const config = Object.freeze({
   audioPlayerUrl: process.env.REACT_APP_AUDIO_PLAYER_URL,
   routes: {
     home: "/",
-    test: "/test",
     login: "/login",
     signup: "/signup",
     logout: "/logout",
-    profile: "/radiomanager",
-    createChannel: "/radiomanager/channels/new",
-    channel: "/radiomanager/channels/:channelId",
+    myChannels: "/my-channels",
+    createChannel: "/my-channels/new",
+    channel: "/my-channels/:channelId",
   },
 })
 
