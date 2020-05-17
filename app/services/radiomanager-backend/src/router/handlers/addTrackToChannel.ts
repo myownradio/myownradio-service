@@ -1,4 +1,4 @@
-import { encodeId } from "@myownradio/common/ids"
+import { decodeId, encodeId } from "@myownradio/common/ids"
 import { AudioTrackResource } from "@myownradio/domain/resources"
 import * as t from "io-ts"
 import * as knex from "knex"
@@ -22,7 +22,12 @@ const AddTrackToChannelRequestContract = t.type({
 export default function addTrackToChannel(config: Config, knexConnection: knex) {
   return async (ctx: TypedContext<AudioTrackResource>): Promise<void> => {
     const userId = ctx.state.user.uid
-    const { channelId } = ctx.params
+    const { channelId: hashedChannelId } = ctx.params
+    const channelId = decodeId(hashedChannelId)
+
+    if (!channelId) {
+      ctx.throw(404)
+    }
 
     const rawMetadata = ctx.request.rawBody
     const signature = ctx.get("signature")

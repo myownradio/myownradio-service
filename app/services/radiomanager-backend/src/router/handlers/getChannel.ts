@@ -1,4 +1,4 @@
-import { encodeId } from "@myownradio/common/ids"
+import { decodeId, encodeId } from "@myownradio/common/ids"
 import { RadioChannelResource } from "@myownradio/domain/resources"
 import * as knex from "knex"
 import { Config } from "../../config"
@@ -6,7 +6,13 @@ import { TypedContext } from "../../interfaces"
 
 export default function getChannel(_: Config, knexConnection: knex) {
   return async (ctx: TypedContext<RadioChannelResource>): Promise<void> => {
-    const { channelId } = ctx.params
+    const { channelId: hashedChannelId } = ctx.params
+    const channelId = decodeId(hashedChannelId)
+
+    if (!channelId) {
+      ctx.throw(404)
+    }
+
     const userId = ctx.state.user.uid
     const channel = await knexConnection
       .from("radio_channels")
