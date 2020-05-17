@@ -9,4 +9,5 @@ export interface AudioTrackResource {
   size: number
   bitrate: number
   duration: number
+  order_id: number
 }
