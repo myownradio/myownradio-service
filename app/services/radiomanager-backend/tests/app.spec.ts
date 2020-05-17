@@ -60,7 +60,7 @@ describe("/channels/create", () => {
       .set("Authorization", `Bearer ${authorizationToken}`)
       .send({ title: "Foo Radio Me" })
       .expect(200, {
-        id: 3,
+        id: "5xGEBm",
         title: "Foo Radio Me",
       })
   })
@@ -100,7 +100,7 @@ describe("/channels/:id/tracks/add", () => {
       .set("Signature", signature)
       .send(rawMetadata)
       .expect(200, {
-        id: 3,
+        id: "5xGEBm",
         name: "sine.mp3",
         title: "Sine Title",
         artist: "Sine Artist",
@@ -108,6 +108,9 @@ describe("/channels/:id/tracks/add", () => {
         bitrate: 242824,
         duration: 1.07475,
         order_id: 2,
+        format: "MP2/3 (MPEG audio layer 2/3)",
+        genre: "Sine Genre",
+        size: 32622,
       })
   })
 
@@ -143,11 +146,11 @@ describe("/channels", () => {
       .set("Authorization", `Bearer ${authorizationToken}`)
       .expect(200, [
         {
-          id: 1,
+          id: "kOD613",
           title: "Foo Radio",
         },
         {
-          id: 2,
+          id: "RB2a1y",
           title: "Foo 2 Radio",
         },
       ])
@@ -164,7 +167,7 @@ describe("GET /channels/:id", () => {
       .get("/channels/1")
       .set("Authorization", `Bearer ${authorizationToken}`)
       .expect(200, {
-        id: 1,
+        id: "kOD613",
         title: "Foo Radio",
       })
   })
@@ -195,7 +198,7 @@ describe("GET /channels/:id/tracks", () => {
       .set("Authorization", `Bearer ${authorizationToken}`)
       .expect(200, [
         {
-          id: 1,
+          id: "kOD613",
           name: "bob_marley_this_is_love.mp3",
           artist: "Bob Marley",
           title: "This Is Love",
@@ -203,6 +206,9 @@ describe("GET /channels/:id/tracks", () => {
           bitrate: 242824,
           duration: 230074.75,
           order_id: 1,
+          format: "MP2/3 (MPEG audio layer 2/3)",
+          genre: "Reggae",
+          size: 8773803,
         },
       ])
   })
