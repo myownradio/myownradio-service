@@ -1,12 +1,18 @@
 import cn from "classnames"
 import React, { ChangeEvent, useCallback, useState } from "react"
+import { Redirect } from "react-router-dom"
 import RouterLink from "~/components/RouterLink"
 import { config } from "~/config"
+import { AuthenticationState, useAuthenticationModel } from "~/modules/Authentication"
 import getText from "~/utils/getText"
+import { useResource } from "~/utils/suspense2"
 import styles from "./SignupPage.scss"
 import { useSignup } from "./use/useSignup"
 
 export const SignupPage: React.FC<{}> = ({}) => {
+  const authenticationModel = useAuthenticationModel()
+  const authenticationState = useResource(authenticationModel.authenticationState)
+
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
 
@@ -19,6 +25,10 @@ export const SignupPage: React.FC<{}> = ({}) => {
   const handlePasswordChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
     setPassword(event.target.value)
   }, [])
+
+  if (authenticationState === AuthenticationState.AUTHENTICATED) {
+    return <Redirect to={config.routes.myChannels} />
+  }
 
   return (
     <div className={styles.root}>
