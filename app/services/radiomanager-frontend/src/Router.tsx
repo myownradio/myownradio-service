@@ -1,17 +1,18 @@
 import React from "react"
-import { BrowserRouter, /* Link, Redirect, */ Route, Switch } from "react-router-dom"
+import { BrowserRouter, Route, Switch } from "react-router-dom"
 import { config } from "~/config"
 import { AuthenticatedUserProvider } from "~/modules/Authentication"
-
-const NotFoundPage = React.lazy(() => import("./entries/NotFoundPage"))
-const LoginPage = React.lazy(() => import("./entries/LoginPage"))
-const SignupPage = React.lazy(() => import("./entries/SignupPage"))
-const RadioChannelPage = React.lazy(() => import("./entries/RadioChannelPage"))
-const MyChannelsPage = React.lazy(() => import("./entries/MyChannelsPage"))
+import HomePage from "./entries/HomePage"
+import LoginPage from "./entries/LoginPage"
+import MyChannelsPage from "./entries/MyChannelsPage"
+import NotFoundPage from "./entries/NotFoundPage"
+import RadioChannelPage from "./entries/RadioChannelPage"
+import SignupPage from "./entries/SignupPage"
 
 const Router: React.FC = () => (
   <BrowserRouter>
     <Switch>
+      <Route exact path={config.routes.home} component={HomePage} />
       <Route exact path={config.routes.login} component={LoginPage} />
       <Route exact path={config.routes.signup} component={SignupPage} />
       <Route exact path={[config.routes.channel, config.routes.myChannels]}>
