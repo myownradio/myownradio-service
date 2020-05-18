@@ -3,6 +3,7 @@ import { BrowserRouter, /* Link, Redirect, */ Route, Switch } from "react-router
 import { config } from "~/config"
 import { AuthenticatedUserProvider } from "~/modules/Authentication"
 
+const HomePage = React.lazy(() => import("./entries/HomePage"))
 const NotFoundPage = React.lazy(() => import("./entries/NotFoundPage"))
 const LoginPage = React.lazy(() => import("./entries/LoginPage"))
 const SignupPage = React.lazy(() => import("./entries/SignupPage"))
@@ -12,6 +13,7 @@ const MyChannelsPage = React.lazy(() => import("./entries/MyChannelsPage"))
 const Router: React.FC = () => (
   <BrowserRouter>
     <Switch>
+      <Route exact path={config.routes.home} component={HomePage} />
       <Route exact path={config.routes.login} component={LoginPage} />
       <Route exact path={config.routes.signup} component={SignupPage} />
       <Route exact path={[config.routes.channel, config.routes.myChannels]}>
