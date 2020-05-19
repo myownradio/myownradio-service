@@ -24,7 +24,13 @@ jobs:
             {
               "services": [
                 "radiomanager-frontend",
-                "radiomanager-backend"
+                "radiomanager-backend",
+                "auth-server",
+                "fileserver-local",
+                "audio-uploader",
+                "audio-player",
+                "scheduler",
+                "stream-composer"
               ],
               "sha": "${{ github.sha }}"
             }
