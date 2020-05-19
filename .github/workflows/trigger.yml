@@ -17,11 +17,11 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           event-type: build-package
-          client-payload: '["radiomanager-frontend", "radiomanager-backend"]'
+          client-payload: '{"services":["radiomanager-frontend","radiomanager-backend"]}'
       - if: steps.variables.outputs.service_name != 'all'
         name: Build Single
         uses: peter-evans/repository-dispatch@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           event-type: build-package
-          client-payload: '["${{ steps.variables.outputs.service_name }}"]'
+          client-payload: '{"services":["${{ steps.variables.outputs.service_name }}"]}'
