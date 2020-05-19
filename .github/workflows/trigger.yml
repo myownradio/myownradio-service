@@ -1,0 +1,26 @@
+name: Trigger Build
+on: [push]
+jobs:
+  main:
+    steps:
+      - name: Define variables
+        id: variables
+        shell: bash
+        run: |
+          BRANCH_NAME=${{ github.event.pull_request.head.ref }}
+          SERVICE_NAME=$(echo ${BRANCH_NAME%/*})
+          echo "##[set-output name=service_name;]$(echo ${SERVICE_NAME})"
+      - if: steps.variables.outputs.service_name == 'all'
+        name: Build All
+          uses: peter-evans/repository-dispatch@v1
+          with:
+            token: ${{ secrets.GITHUB_TOKEN }}
+            event-type: build-package
+            client-payload: '["radiomanager-frontend", "radiomanager-backend"]'
+      - if: steps.variables.outputs.service_name != 'all'
+        name: Build Single
+          uses: peter-evans/repository-dispatch@v1
+          with:
+            token: ${{ secrets.GITHUB_TOKEN }}
+            event-type: build-package
+            client-payload: '["${{ steps.variables.outputs.service_name }}"]'
