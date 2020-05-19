@@ -1,6 +1,8 @@
 name: Build App Service
 on:
-  - build-app-service
+  repository_dispatch:
+    types:
+      - build-app-service
 jobs:
   main:
     name: Deploy All Application Services
