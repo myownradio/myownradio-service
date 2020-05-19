@@ -30,9 +30,10 @@ jobs:
                 "audio-uploader",
                 "audio-player",
                 "scheduler",
-                "stream-composer"
+                "stream-composer",
+                "migration"
               ],
-              "sha": "${{ github.sha }}"
+              "tag": "${{ github.sha }}"
             }
       - if: steps.variables.outputs.service_name != 'all'
         name: Build Single
@@ -45,5 +46,5 @@ jobs:
               "services": [
                 "${{ steps.variables.outputs.service_name }}"
               ],
-              "sha": "${{ github.sha }}"
+              "tag": "${{ github.sha }}"
             }

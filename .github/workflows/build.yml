@@ -20,7 +20,7 @@ jobs:
           SERVICE_NAME=$(echo ${{ matrix.service_name }})
 
           IMAGE_NAME=$(echo ${STACK_NAME}/${SERVICE_NAME})
-          IMAGE_TAG=$(echo ${{ github.event.client_payload.sha }})
+          IMAGE_TAG=$(echo ${{ github.event.client_payload.tag }})
           IMAGE_URL=$(echo ${{ secrets.DOCKER_REGISTRY }}/${IMAGE_NAME}):${IMAGE_TAG}
 
           echo "##[set-output name=service_name;]$(echo ${SERVICE_NAME})"
