@@ -17,8 +17,8 @@ services:
     - queue:/var/lib/rabbitmq
     environment: {}
     ports:
-      - 15672:15672
-      - 5672:5672
+    - 15672:15672
+    - 5672:5672
 volumes:
   database:
     name: database
