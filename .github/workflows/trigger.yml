@@ -1,0 +1,43 @@
+name: Trigger Build
+on:
+  pull_request:
+    types: [closed]
+jobs:
+  main:
+    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'master'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Define variables
+        id: variables
+        shell: bash
+        run: |
+          BRANCH_NAME=${{ github.event.pull_request.head.ref }}
+          SERVICE_NAME=$(echo ${BRANCH_NAME%/*})
+          echo "##[set-output name=service_name;]$(echo ${SERVICE_NAME})"
+      - if: steps.variables.outputs.service_name == 'all'
+        name: Build All
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          event-type: build-package
+          client-payload: |
+            {
+              "services": [
+                "radiomanager-frontend",
+                "radiomanager-backend"
+              ],
+              "sha": "${{ github.sha }}"
+            }
+      - if: steps.variables.outputs.service_name != 'all'
+        name: Build Single
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          event-type: build-app-service
+          client-payload: |
+            {
+              "services": [
+                "${{ steps.variables.outputs.service_name }}"
+              ],
+              "sha": "${{ github.sha }}"
+            }
