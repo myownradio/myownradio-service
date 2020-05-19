@@ -4,15 +4,26 @@ services:
   database:
     image: postgres:12
     volumes:
-      - database:/var/lib/postgresql/data
+    - database:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: myownradio
       POSTGRES_PASSWORD: myownradio
       POSTGRES_DB: myownradio
     ports:
-      - 15432:5432
+    - 15432:5432
+  queue:
+    image: "rabbitmq:3-management"
+    hostname: queue
+    volumes:
+    - queue:/var/lib/rabbitmq
+    environment: {}
+    ports:
+      - 15672:15672
 
 volumes:
   database:
     name: database
+    driver: local
+  queue:
+    name: queue
     driver: local
