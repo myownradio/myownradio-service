@@ -4,6 +4,7 @@ export class Config {
   readonly allowedOrigin: string
   readonly databaseUrl: string
   readonly databaseClient: string
+  readonly amqpQueueUrl: string
 
   constructor(env: { [name: string]: string | undefined }) {
     if (!env.SCHEDULER_TOKEN_SECRET) {
@@ -31,5 +32,11 @@ export class Config {
     }
 
     this.databaseClient = env.SCHEDULER_DATABASE_CLIENT
+
+    if (!env.SCHEDULER_AMQP_QUEUE_URL) {
+      throw new Error("Environment variable SCHEDULER_AMQP_QUEUE_URL is required")
+    }
+
+    this.amqpQueueUrl = env.SCHEDULER_AMQP_QUEUE_URL
   }
 }

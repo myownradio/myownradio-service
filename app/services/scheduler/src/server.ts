@@ -1,7 +1,9 @@
+import * as open from "amqplib"
 import * as knex from "knex"
 import { createApp } from "./app"
 import { Config } from "./config"
 import logger from "./logger"
+import { QueueClient } from "./queue"
 import { BaseTimeService } from "./time"
 
 try {
@@ -13,6 +15,8 @@ try {
     pool: { min: 0, max: 10 },
   })
 
+  const queueService = new QueueClient(config.amqpQueueUrl)
+
   const timeService = new BaseTimeService()
 
   const app = createApp(config, knexConnection, logger, timeService)
@@ -23,7 +27,7 @@ try {
 
   let shuttingDown = false
 
-  async function shutdown(exitCode: number): Promise<void> {
+  const shutdown = async (exitCode: number): Promise<void> => {
     if (shuttingDown) {
       logger.warn("Forceful shutdown")
       process.exit(5)
@@ -38,6 +42,13 @@ try {
           error ? reject(error) : resolve()
         })
       })
+    } catch (error) {
+      const errorText = (error.stack || error) as string
+      logger.warn(`Error happened on shutdown: ${errorText}`)
+    }
+
+    try {
+      await queueService.close()
     } catch (error) {
       const errorText = (error.stack || error) as string
       logger.warn(`Error happened on shutdown: ${errorText}`)
