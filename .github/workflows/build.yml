@@ -5,7 +5,6 @@ on:
       - build-app-service
 jobs:
   main:
-    name: Deploy All Application Services
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -18,12 +17,11 @@ jobs:
         shell: bash
         run: |
           STACK_NAME="myownradio"
-          DOCKER_REGISTRY="registry.homefs.biz"
           SERVICE_NAME=$(echo ${{ matrix.service_name }})
 
           IMAGE_NAME=$(echo ${STACK_NAME}/${SERVICE_NAME})
           IMAGE_TAG=$(echo ${{ github.event.client_payload.sha }})
-          IMAGE_URL=$(echo ${DOCKER_REGISTRY}/${IMAGE_NAME}):${IMAGE_TAG}
+          IMAGE_URL=$(echo ${{ secrets.DOCKER_REGISTRY }}/${IMAGE_NAME}):${IMAGE_TAG}
 
           echo "##[set-output name=service_name;]$(echo ${SERVICE_NAME})"
           echo "##[set-output name=image_name;]$(echo ${IMAGE_NAME})"
@@ -46,8 +44,9 @@ jobs:
         uses: pldin601/patch-yaml-through-commit@master
         with:
           git_repo_url: https://pldin601:${{ secrets.GIT_PUSH_TOKEN }}@github.com/myownradio/myownradio-env.git
-          committer_name: Roman Lakhtadyr
-          committer_email: roman.lakhtadyr@gmail.com
-          commit_message: Update image for ${{ steps.variables.outputs.service_name }}
+          committer_name: Myownradio CI
+          committer_email: ci@myownradio.biz
+          commit_message: 'Bump ${{ steps.variables.outputs.service_name }}:${{ steps.variables.outputs.image_tag }}'
+          commit_branch: 'bump-${{ github.event.client_payload.sha }}'
           yaml_file: swarm/docker-compose.yml
           patch_expression: services.${{ steps.variables.outputs.service_name }}.image=${{ steps.variables.outputs.image_url }}
