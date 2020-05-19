@@ -1,7 +1,10 @@
 name: Trigger Build
-on: [push]
+on:
+  pull_request:
+    types: [closed]
 jobs:
   main:
+    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'master'
     runs-on: ubuntu-latest
     steps:
       - name: Define variables
@@ -17,11 +20,24 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           event-type: build-package
-          client-payload: '{"services":["radiomanager-frontend","radiomanager-backend"]}'
+          client-payload: |
+            {
+              "services": [
+                "radiomanager-frontend",
+                "radiomanager-backend"
+              ],
+              "sha": "${{ github.sha }}"
+            }
       - if: steps.variables.outputs.service_name != 'all'
         name: Build Single
         uses: peter-evans/repository-dispatch@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          event-type: build-package
-          client-payload: '{"services":["${{ steps.variables.outputs.service_name }}"]}'
+          event-type: build-app-service
+          client-payload: |
+            {
+              "services": [
+                "${{ steps.variables.outputs.service_name }}"
+              ],
+              "sha": "${{ github.sha }}"
+            }
