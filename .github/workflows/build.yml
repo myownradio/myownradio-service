@@ -1,36 +1,29 @@
-name: 'Deploy All Application Services'
-
+name: Build App Service
 on:
-  pull_request:
+  repository_dispatch:
     types:
-      - closed
-
+      - build-app-service
 jobs:
   main:
-    if: github.event.pull_request.merged == true
-     && github.event.pull_request.base.ref == 'master'
-     && startsWith(github.event.pull_request.head.ref, 'all/')
     name: Deploy All Application Services
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        service_name:
-          - radiomanager-frontend
-          - radiomanager-backend
+        service_name: ${{ github.event.client_payload.services }}
     steps:
       - name: Checkout
         uses: actions/checkout@master
       - name: Define variables
         id: variables
         shell: bash
-        # Move here all variables from secrets that aren't secrets.
         run: |
           STACK_NAME="myownradio"
+          DOCKER_REGISTRY="registry.homefs.biz"
           SERVICE_NAME=$(echo ${{ matrix.service_name }})
 
           IMAGE_NAME=$(echo ${STACK_NAME}/${SERVICE_NAME})
-          IMAGE_TAG=$(echo ${{ github.sha }})
-          IMAGE_URL=$(echo ${{ secrets.DOCKER_REGISTRY }}/${IMAGE_NAME}):${IMAGE_TAG}
+          IMAGE_TAG=$(echo ${{ github.event.client_payload.sha }})
+          IMAGE_URL=$(echo ${DOCKER_REGISTRY}/${IMAGE_NAME}):${IMAGE_TAG}
 
           echo "##[set-output name=service_name;]$(echo ${SERVICE_NAME})"
           echo "##[set-output name=image_name;]$(echo ${IMAGE_NAME})"
@@ -38,12 +31,7 @@ jobs:
           echo "##[set-output name=image_url;]$(echo ${IMAGE_URL})"
       - name: Preflight Checks
         shell: bash
-        run: |
-          [ -d "app/services/${{ steps.variables.outputs.service_name }}" ] || \
-                (echo "Service ${{ steps.variables.outputs.service_name }} does not exist" && exit 1)
-
-          [ -f "app/services/${{ steps.variables.outputs.service_name }}/Dockerfile" ] || \
-                (echo "Dockerfile not found" && exit 1)
+        run: '[ -f "app/services/${{ steps.variables.outputs.service_name }}/Dockerfile" ] || (echo "Dockerfile not found" && exit 1)'
       - name: Build myownradio/${{ steps.variables.outputs.image_name }}
         uses: docker/build-push-action@v1
         with:
