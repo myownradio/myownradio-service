@@ -2,6 +2,7 @@ name: Trigger Build
 on: [push]
 jobs:
   main:
+    runs-on: ubuntu-latest
     steps:
       - name: Define variables
         id: variables
