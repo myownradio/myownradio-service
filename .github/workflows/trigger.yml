@@ -12,15 +12,15 @@ jobs:
           echo "##[set-output name=service_name;]$(echo ${SERVICE_NAME})"
       - if: steps.variables.outputs.service_name == 'all'
         name: Build All
-          uses: peter-evans/repository-dispatch@v1
-          with:
-            token: ${{ secrets.GITHUB_TOKEN }}
-            event-type: build-package
-            client-payload: '["radiomanager-frontend", "radiomanager-backend"]'
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          event-type: build-package
+          client-payload: '["radiomanager-frontend", "radiomanager-backend"]'
       - if: steps.variables.outputs.service_name != 'all'
         name: Build Single
-          uses: peter-evans/repository-dispatch@v1
-          with:
-            token: ${{ secrets.GITHUB_TOKEN }}
-            event-type: build-package
-            client-payload: '["${{ steps.variables.outputs.service_name }}"]'
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          event-type: build-package
+          client-payload: '["${{ steps.variables.outputs.service_name }}"]'
