@@ -1,5 +1,4 @@
 version: "3.5"
-
 services:
   database:
     image: postgres:12
@@ -19,7 +18,7 @@ services:
     environment: {}
     ports:
       - 15672:15672
-
+      - 5672:5672
 volumes:
   database:
     name: database
