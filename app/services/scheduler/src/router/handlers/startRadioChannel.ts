@@ -1,8 +1,10 @@
+import { decodeId } from "@myownradio/common/ids"
 import * as knex from "knex"
 import { Context, Middleware } from "koa"
 import { Logger } from "winston"
 import { Config } from "../../config"
 import { TimeService } from "../../time"
+import { assertOwnChannel } from "./utils/assertOwnChannel"
 
 export default function startRadioChannel(
   _: Config,
@@ -12,25 +14,13 @@ export default function startRadioChannel(
 ): Middleware {
   return async (ctx: Context): Promise<void> => {
     const userId = ctx.state.user.uid
-
-    const { channelId } = ctx.params
-
-    const channel = await knexConnection("radio_channels")
-      .where({ id: channelId })
-      .first()
-
-    if (!channel) {
-      ctx.throw(404)
-    }
-
-    if (channel.user_id !== userId) {
-      ctx.throw(401)
-    }
+    const { channelId: encodedChannelId } = ctx.params
+    const channel = await assertOwnChannel(ctx, knexConnection, userId, decodeId(encodedChannelId))
 
     try {
       const now = timeService.now()
       await knexConnection("playing_channels").insert({
-        channel_id: channelId,
+        channel_id: channel.id,
         start_offset: 0,
         started_at: now,
         paused_at: null,

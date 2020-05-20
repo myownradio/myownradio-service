@@ -1,8 +1,10 @@
+import { decodeId, encodeId } from "@myownradio/common/ids"
 import * as knex from "knex"
 import { Context, Middleware } from "koa"
 import { Logger } from "winston"
 import { Config } from "../../config"
 import { TimeService } from "../../time"
+import { assertOwnChannel } from "./utils/assertOwnChannel"
 
 export default function pauseRadioChannel(
   _: Config,
@@ -12,25 +14,13 @@ export default function pauseRadioChannel(
 ): Middleware {
   return async (ctx: Context): Promise<void> => {
     const userId = ctx.state.user.uid
-
-    const { channelId } = ctx.params
-
-    const channel = await knexConnection("radio_channels")
-      .where({ id: channelId })
-      .first()
-
-    if (!channel) {
-      ctx.throw(404)
-    }
-
-    if (channel.user_id !== userId) {
-      ctx.throw(401)
-    }
+    const { channelId: encodedChannelId } = ctx.params
+    const channel = await assertOwnChannel(ctx, knexConnection, userId, decodeId(encodedChannelId))
 
     const now = timeService.now()
     const updatedRows = await knexConnection("playing_channels")
       .where({
-        channel_id: channelId,
+        channel_id: channel.id,
         paused_at: null,
       })
       .update({
