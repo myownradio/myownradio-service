@@ -59,7 +59,7 @@ export class BaseRadioManagerService extends AbstractApiWithSessionService imple
   }
 }
 
-export function createRadioManagerService(
+export function createRadioManagerApiService(
   radioManagerUrl: string,
   sessionService: SessionService,
 ): RadioManagerApiService {

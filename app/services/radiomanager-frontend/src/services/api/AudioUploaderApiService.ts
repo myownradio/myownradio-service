@@ -56,7 +56,7 @@ export class BaseAudioUploaderService extends AbstractApiWithSessionService impl
   }
 }
 
-export function createAudioUploaderService(
+export function createAudioUploaderApiService(
   audioUploaderUrl: string,
   sessionService: SessionService,
 ): AudioUploaderApiService {
