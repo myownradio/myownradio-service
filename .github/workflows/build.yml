@@ -49,15 +49,4 @@ jobs:
       - name: Define Patch Expression
         id: patch_expression
         shell: bash
-        run: |
-          echo $(echo ${{ toJSON(needs) }})
-#       - name: Update environment repository
-#         uses: pldin601/patch-yaml-through-commit@master
-#         with:
-#           git_repo_url: https://pldin601:${{ secrets.GIT_PUSH_TOKEN }}@github.com/myownradio/myownradio-env.git
-#           committer_name: Myownradio CI
-#           committer_email: ci@myownradio.biz
-#           commit_message: 'Bump ${{ steps.variables.outputs.service_name }}:${{ steps.variables.outputs.image_tag }}'
-#           commit_branch: 'bump-${{ github.event.client_payload.sha }}'
-#           yaml_file: swarm/docker-compose.yml
-#           patch_expression: services.${{ steps.variables.outputs.service_name }}.image=${{ steps.variables.outputs.image_url }}
+        run: echo $(echo ${{ toJSON(needs) }})
