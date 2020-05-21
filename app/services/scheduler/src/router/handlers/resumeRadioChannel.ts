@@ -1,10 +1,11 @@
+import { toIso, toMillis } from "@myownradio/common/date"
 import { decodeId } from "@myownradio/common/ids"
+import { IPlayingChannelsEntity, IRadioChannelsEntity } from "@myownradio/entities/db"
 import * as knex from "knex"
 import { Context, Middleware } from "koa"
 import { Logger } from "winston"
 import { Config } from "../../config"
 import { TimeService } from "../../time"
-import { assertOwnChannel } from "./utils/assertOwnChannel"
 
 export default function resumeRadioChannel(
   _: Config,
@@ -15,10 +16,26 @@ export default function resumeRadioChannel(
   return async (ctx: Context): Promise<void> => {
     const userId = ctx.state.user.uid
     const { channelId: encodedChannelId } = ctx.params
-    const channel = await assertOwnChannel(ctx, knexConnection, userId, decodeId(encodedChannelId))
+    const channelId = decodeId(encodedChannelId)
+
+    if (!channelId) {
+      ctx.throw(404)
+    }
+
+    const channel = await knexConnection<IRadioChannelsEntity>("radio_channels")
+      .where({ id: channelId })
+      .first()
+
+    if (!channel) {
+      ctx.throw(404)
+    }
+
+    if (channel.user_id !== userId) {
+      ctx.throw(401)
+    }
 
     await knexConnection.transaction(async trx => {
-      const playingChannel = await trx("playing_channels")
+      const playingChannel = await trx<IPlayingChannelsEntity>("playing_channels")
         .where({ channel_id: channel.id })
         .first()
 
@@ -33,7 +50,7 @@ export default function resumeRadioChannel(
           id: playingChannel.id,
         })
         .update({
-          started_at: playingChannel.started_at + (now - playingChannel.paused_at),
+          started_at: toIso(toMillis(playingChannel.started_at) + (now - toMillis(playingChannel.paused_at))),
           paused_at: null,
         })
         .count()

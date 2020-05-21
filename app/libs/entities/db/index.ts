@@ -1,13 +1,13 @@
-export * from "./AudioTracksEntity"
-export * from "./RadioChannelsEntity"
-export * from "./PlayingChannelsEntity"
-export * from "./UsersEntity"
-export * from "./RefreshTokensEntity"
+export * from "./UsersEntity";
+export * from "./PlayingChannelsEntity";
+export * from "./RadioChannelsEntity";
+export * from "./RefreshTokensEntity";
+export * from "./AudioTracksEntity";
 
 export enum TableName {
-  AudioTracks = "audio_tracks",
-  RadioChannels = "radio_channels",
-  PlayingChannels = "playing_channels",
   Users = "users",
+  PlayingChannels = "playing_channels",
+  RadioChannels = "radio_channels",
   RefreshTokens = "refresh_tokens",
+  AudioTracks = "audio_tracks",
 }

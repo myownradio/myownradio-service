@@ -1,16 +1,33 @@
+import { toMillis } from "@myownradio/common/date"
 import { decodeId, encodeId } from "@myownradio/common/ids"
+import { IPlayingChannelsEntity, IRadioChannelsEntity } from "@myownradio/entities/db"
 import * as knex from "knex"
 import { Context, Middleware } from "koa"
 import { TimeService } from "../../time"
-import { assertOwnChannel } from "./utils/assertOwnChannel"
 
 export default function getNowPlaying(knexConnection: knex, timeService: TimeService): Middleware {
   return async (ctx: Context): Promise<void> => {
     const userId = ctx.state.user.uid
     const { channelId: encodedChannelId } = ctx.params
-    const channel = await assertOwnChannel(ctx, knexConnection, userId, decodeId(encodedChannelId))
+    const channelId = decodeId(encodedChannelId)
 
-    const playingChannel = await knexConnection("playing_channels")
+    if (!channelId) {
+      ctx.throw(404)
+    }
+
+    const channel = await knexConnection<IRadioChannelsEntity>("radio_channels")
+      .where({ id: channelId })
+      .first()
+
+    if (!channel) {
+      ctx.throw(404)
+    }
+
+    if (channel.user_id !== userId) {
+      ctx.throw(401)
+    }
+
+    const playingChannel = await knexConnection<IPlayingChannelsEntity>("playing_channels")
       .where({ channel_id: channel.id })
       .first()
 
@@ -24,7 +41,7 @@ export default function getNowPlaying(knexConnection: knex, timeService: TimeSer
 
     const now = timeService.now()
     const playlistDuration = channelAudioTracks.reduce((acc, t) => acc + t.duration, 0)
-    const playlistPosition = (now - playingChannel.started_at) % playlistDuration
+    const playlistPosition = (now - toMillis(playingChannel.started_at)) % playlistDuration
 
     let currentOffset = 0
     for (const track of channelAudioTracks) {
