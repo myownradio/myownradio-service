@@ -40,6 +40,15 @@ jobs:
           path: app
           dockerfile: app/services/${{ steps.variables.outputs.service_name }}/Dockerfile
           tags: ${{ steps.variables.outputs.image_tag }},latest
+  sync:
+    needs: [main]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Define Patch Expression
+        id: patch_expression
+        shell: bash
+        run: |
+          ${{ github.event.client_payload.services }}
       - name: Update environment repository
         uses: pldin601/patch-yaml-through-commit@master
         with:
