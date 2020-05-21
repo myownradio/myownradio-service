@@ -5,6 +5,7 @@ import { AudioFileUploaderModel, AudioFileUploaderModelContext } from "~/modules
 import { AuthenticationModel, AuthenticationModelContext } from "~/modules/Authentication"
 import { RadioManagerModel, RadioManagerModelContext } from "~/modules/RadioManager"
 import { RadioChannelModel } from "~/modules/RadioManager/RadioChannelModel/RadioChannelModel"
+import { SchedulerModel } from "~/modules/RadioManager/SchedulerModel"
 import { createServices, ServicesContext } from "./services"
 
 export default function bootstrap(Component: React.ComponentType, rootClass?: string): void {
@@ -16,10 +17,13 @@ export default function bootstrap(Component: React.ComponentType, rootClass?: st
     services.audioUploaderApiService,
     authenticationModel,
   )
+  const provideSchedulerModel = (channelId: string, radioChannelModel: RadioChannelModel): SchedulerModel =>
+    new SchedulerModel(channelId, radioChannelModel, services.schedulerApiService)
   const radioManagerModel = new RadioManagerModel(
     services.radioManagerApiService,
     authenticationModel,
-    channelId => new RadioChannelModel(channelId, services.radioManagerApiService, audioFileUploaderModel),
+    channelId =>
+      new RadioChannelModel(channelId, services.radioManagerApiService, audioFileUploaderModel, provideSchedulerModel),
   )
 
   authenticationModel.tryAuthentication()

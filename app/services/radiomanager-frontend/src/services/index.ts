@@ -1,8 +1,9 @@
 import { createContext, useContext } from "react"
 import { config } from "~/config"
-import { AudioUploaderApiService, createAudioUploaderService } from "~/services/api/AudioUploaderApiService"
-import { AuthApiService, createAuthService } from "~/services/api/AuthApiService"
-import { createRadioManagerService, RadioManagerApiService } from "~/services/api/RadioManagerApiService"
+import { AudioUploaderApiService, createAudioUploaderApiService } from "~/services/api/AudioUploaderApiService"
+import { AuthApiService, createAuthApiService } from "~/services/api/AuthApiService"
+import { createRadioManagerApiService, RadioManagerApiService } from "~/services/api/RadioManagerApiService"
+import { SchedulerApiService } from "~/services/api/SchedulerApiService"
 import { createTokenService, TokenService } from "~/services/api/TokenService"
 import { createSessionService, SessionService } from "~/services/session/SessionService"
 import { createStorageService, StorageService } from "~/services/storage/StorageService"
@@ -15,6 +16,7 @@ export interface Services {
   readonly tokenService: TokenService
   readonly audioUploaderApiService: AudioUploaderApiService
   readonly radioManagerApiService: RadioManagerApiService
+  readonly schedulerApiService: SchedulerApiService
 }
 
 export function createServices(): Services {
@@ -23,17 +25,19 @@ export function createServices(): Services {
   const storageService = createStorageService()
   const tokenService = createTokenService(config.authApiUrl)
   const sessionService = createSessionService(storageService, tokenService, refreshTokenLockManager)
-  const authApiService = createAuthService(config.authApiUrl, sessionService)
-  const audioUploaderService = createAudioUploaderService(config.audioUploaderUrl, sessionService)
-  const radioManagerService = createRadioManagerService(config.radioManagerUrl, sessionService)
+  const authApiService = createAuthApiService(config.authApiUrl, sessionService)
+  const audioUploaderApiService = createAudioUploaderApiService(config.audioUploaderApiUrl, sessionService)
+  const radioManagerApiService = createRadioManagerApiService(config.radioManagerApiUrl, sessionService)
+  const schedulerApiService = new SchedulerApiService(config.schedulerApiUrl, sessionService)
 
   return {
     authApiService,
     storageService,
     sessionService,
     tokenService,
-    audioUploaderApiService: audioUploaderService,
-    radioManagerApiService: radioManagerService,
+    audioUploaderApiService,
+    radioManagerApiService,
+    schedulerApiService,
   }
 }
 

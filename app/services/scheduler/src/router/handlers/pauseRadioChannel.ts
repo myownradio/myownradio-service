@@ -1,3 +1,6 @@
+import { toIso } from "@myownradio/common/date"
+import { decodeId } from "@myownradio/common/ids"
+import { IPlayingChannelsEntity, IRadioChannelsEntity } from "@myownradio/entities/db"
 import * as knex from "knex"
 import { Context, Middleware } from "koa"
 import { Logger } from "winston"
@@ -12,10 +15,14 @@ export default function pauseRadioChannel(
 ): Middleware {
   return async (ctx: Context): Promise<void> => {
     const userId = ctx.state.user.uid
+    const { channelId: encodedChannelId } = ctx.params
+    const channelId = decodeId(encodedChannelId)
 
-    const { channelId } = ctx.params
+    if (!channelId) {
+      ctx.throw(404)
+    }
 
-    const channel = await knexConnection("radio_channels")
+    const channel = await knexConnection<IRadioChannelsEntity>("radio_channels")
       .where({ id: channelId })
       .first()
 
@@ -28,13 +35,14 @@ export default function pauseRadioChannel(
     }
 
     const now = timeService.now()
-    const updatedRows = await knexConnection("playing_channels")
+    const updatedRows = await knexConnection<IPlayingChannelsEntity>("playing_channels")
       .where({
-        channel_id: channelId,
+        channel_id: channel.id,
         paused_at: null,
       })
       .update({
-        paused_at: now,
+        updated_at: toIso(now),
+        paused_at: toIso(now),
       })
       .count()
 

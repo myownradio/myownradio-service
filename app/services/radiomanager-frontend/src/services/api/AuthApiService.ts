@@ -42,6 +42,6 @@ export class BaseAuthService extends AbstractApiWithSessionService implements Au
   }
 }
 
-export function createAuthService(authApiUrl: string, sessionService: SessionService): AuthApiService {
+export function createAuthApiService(authApiUrl: string, sessionService: SessionService): AuthApiService {
   return new BaseAuthService(authApiUrl, sessionService)
 }

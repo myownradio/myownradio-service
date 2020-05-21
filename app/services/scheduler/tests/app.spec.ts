@@ -58,66 +58,66 @@ describe("/healthcheck", () => {
 describe("POST /channels/1/start", () => {
   it("should start the channel and respond with 200 on post request", async () => {
     await request
-      .post("/channels/1/start")
+      .post("/channels/kOD613/start")
       .set("Authorization", `Bearer ${authorizationToken}`)
       .expect(200)
   })
 
   it("should fail with 409 if channel already started", async () => {
     await request
-      .post("/channels/2/start")
+      .post("/channels/RB2a1y/start")
       .set("Authorization", `Bearer ${authorizationToken}`)
       .expect(409)
   })
 
   it("should fail with 401 when unauthorized", async () => {
-    await request.post("/channels/1/start").expect(401)
+    await request.post("/channels/kOD613/start").expect(401)
   })
 
   it("should fail with 401 if authorized by someone else", async () => {
     await request
-      .post("/channels/1/start")
+      .post("/channels/kOD613/start")
       .set("Authorization", `Bearer ${otherAuthorizationToken}`)
       .expect(401)
   })
 
   it("should fail with 404 if channel does not exist", async () => {
     await request
-      .post("/channels/11/start")
+      .post("/channels/Vx7d1E/start")
       .set("Authorization", `Bearer ${otherAuthorizationToken}`)
       .expect(404)
   })
 })
 
-describe("POST /channels/1/stop", () => {
+describe("POST /channels/2/stop", () => {
   it("should stop the channel and respond with 200 on post request", async () => {
     await request
-      .post("/channels/2/stop")
+      .post("/channels/RB2a1y/stop")
       .set("Authorization", `Bearer ${authorizationToken}`)
       .expect(200)
   })
 
   it("should fail with 409 if channel isn't playing", async () => {
     await request
-      .post("/channels/1/stop")
+      .post("/channels/kOD613/stop")
       .set("Authorization", `Bearer ${authorizationToken}`)
       .expect(409)
   })
 
   it("should fail with 401 when unauthorized", async () => {
-    await request.post("/channels/1/stop").expect(401)
+    await request.post("/channels/kOD613/stop").expect(401)
   })
 
   it("should fail with 401 if authorized by someone else", async () => {
     await request
-      .post("/channels/1/stop")
+      .post("/channels/kOD613/stop")
       .set("Authorization", `Bearer ${otherAuthorizationToken}`)
       .expect(401)
   })
 
   it("should fail with 404 if channel does not exist", async () => {
     await request
-      .post("/channels/11/stop")
+      .post("/channels/Vx7d1E/stop")
       .set("Authorization", `Bearer ${otherAuthorizationToken}`)
       .expect(404)
   })
@@ -126,32 +126,32 @@ describe("POST /channels/1/stop", () => {
 describe("POST /channels/:channelId/pause", () => {
   it("should pause the channel and respond with 200 on post request", async () => {
     await request
-      .post("/channels/2/pause")
+      .post("/channels/RB2a1y/pause")
       .set("Authorization", `Bearer ${authorizationToken}`)
       .expect(200)
   })
 
   it("should fail with 409 if channel isn't playing", async () => {
     await request
-      .post("/channels/1/pause")
+      .post("/channels/kOD613/pause")
       .set("Authorization", `Bearer ${authorizationToken}`)
       .expect(409)
   })
 
   it("should fail with 401 when unauthorized", async () => {
-    await request.post("/channels/1/pause").expect(401)
+    await request.post("/channels/kOD613/pause").expect(401)
   })
 
   it("should fail with 401 if authorized by someone else", async () => {
     await request
-      .post("/channels/1/pause")
+      .post("/channels/kOD613/pause")
       .set("Authorization", `Bearer ${otherAuthorizationToken}`)
       .expect(401)
   })
 
   it("should fail with 404 if channel does not exist", async () => {
     await request
-      .post("/channels/11/pause")
+      .post("/channels/Vx7d1E/pause")
       .set("Authorization", `Bearer ${otherAuthorizationToken}`)
       .expect(404)
   })
@@ -160,44 +160,44 @@ describe("POST /channels/:channelId/pause", () => {
 describe("POST /channels/:channelId/resume", () => {
   it("should resume the channel and respond with 200 on post request", async () => {
     await request
-      .post("/channels/2/pause")
+      .post("/channels/RB2a1y/pause")
       .set("Authorization", `Bearer ${authorizationToken}`)
       .expect(200)
 
     await request
-      .post("/channels/2/resume")
+      .post("/channels/RB2a1y/resume")
       .set("Authorization", `Bearer ${authorizationToken}`)
       .expect(200)
   })
 
   it("should fail with 409 if channel isn't playing", async () => {
     await request
-      .post("/channels/1/resume")
+      .post("/channels/kOD613/resume")
       .set("Authorization", `Bearer ${authorizationToken}`)
       .expect(409)
   })
 
   it("should fail with 409 if channel isn't paused", async () => {
     await request
-      .post("/channels/2/resume")
+      .post("/channels/RB2a1y/resume")
       .set("Authorization", `Bearer ${authorizationToken}`)
       .expect(409)
   })
 
   it("should fail with 401 when unauthorized", async () => {
-    await request.post("/channels/1/pause").expect(401)
+    await request.post("/channels/kOD613/pause").expect(401)
   })
 
   it("should fail with 401 if authorized by someone else", async () => {
     await request
-      .post("/channels/1/pause")
+      .post("/channels/kOD613/pause")
       .set("Authorization", `Bearer ${otherAuthorizationToken}`)
       .expect(401)
   })
 
   it("should fail with 404 if channel does not exist", async () => {
     await request
-      .post("/channels/11/pause")
+      .post("/channels/Vx7d1E/pause")
       .set("Authorization", `Bearer ${otherAuthorizationToken}`)
       .expect(404)
   })
@@ -206,35 +206,35 @@ describe("POST /channels/:channelId/resume", () => {
 describe("GET /channels/:channelId/nowPlaying", () => {
   it("should get what's playing and respond with 200 on get request", async () => {
     await request
-      .get("/channels/2/nowPlaying")
+      .get("/channels/RB2a1y/nowPlaying")
       .set("Authorization", `Bearer ${authorizationToken}`)
       .expect(200, {
-        track_id: 2,
+        track_id: "RB2a1y",
         offset: 95136.5,
       })
   })
 
-  it("should fail with 409 if channel isn't playing", async () => {
+  it("should fail with 404 if channel isn't playing", async () => {
     await request
-      .get("/channels/1/nowPlaying")
+      .get("/channels/kOD613/nowPlaying")
       .set("Authorization", `Bearer ${authorizationToken}`)
-      .expect(409)
+      .expect(404)
   })
 
   it("should fail with 401 when unauthorized", async () => {
-    await request.get("/channels/1/nowPlaying").expect(401)
+    await request.get("/channels/kOD613/nowPlaying").expect(401)
   })
 
   it("should fail with 401 if authorized by someone else", async () => {
     await request
-      .get("/channels/1/nowPlaying")
+      .get("/channels/kOD613/nowPlaying")
       .set("Authorization", `Bearer ${otherAuthorizationToken}`)
       .expect(401)
   })
 
   it("should fail with 404 if channel does not exist", async () => {
     await request
-      .get("/channels/11/nowPlaying")
+      .get("/channels/Vx7d1E/nowPlaying")
       .set("Authorization", `Bearer ${otherAuthorizationToken}`)
       .expect(404)
   })

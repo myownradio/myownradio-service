@@ -17,20 +17,20 @@ export function createRouter(config: Config, knexConnection: knex, logger: Logge
     secret: config.tokenSecret,
   })
 
-  router.get("/channels/:channelId(\\d+)/nowPlaying", jwtMiddleware, getNowPlaying(knexConnection, timeService))
+  router.get("/channels/:channelId/nowPlaying", jwtMiddleware, getNowPlaying(knexConnection, timeService))
   router.post(
-    "/channels/:channelId(\\d+)/start",
+    "/channels/:channelId/start",
     jwtMiddleware,
     startRadioChannel(config, knexConnection, logger, timeService),
   )
-  router.post("/channels/:channelId(\\d+)/stop", jwtMiddleware, stopRadioChannel(config, knexConnection, logger))
+  router.post("/channels/:channelId/stop", jwtMiddleware, stopRadioChannel(config, knexConnection, logger))
   router.post(
-    "/channels/:channelId(\\d+)/pause",
+    "/channels/:channelId/pause",
     jwtMiddleware,
     pauseRadioChannel(config, knexConnection, logger, timeService),
   )
   router.post(
-    "/channels/:channelId(\\d+)/resume",
+    "/channels/:channelId/resume",
     jwtMiddleware,
     resumeRadioChannel(config, knexConnection, logger, timeService),
   )
