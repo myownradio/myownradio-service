@@ -9,6 +9,8 @@ jobs:
     strategy:
       matrix:
         service_name: ${{ github.event.client_payload.services }}
+    outputs:
+      patch_expressions: ${{ join(steps.service_name, ',') }}
     steps:
       - name: Checkout
         uses: actions/checkout@master
@@ -48,14 +50,14 @@ jobs:
         id: patch_expression
         shell: bash
         run: |
-          ${{ github.event.client_payload.services }}
-      - name: Update environment repository
-        uses: pldin601/patch-yaml-through-commit@master
-        with:
-          git_repo_url: https://pldin601:${{ secrets.GIT_PUSH_TOKEN }}@github.com/myownradio/myownradio-env.git
-          committer_name: Myownradio CI
-          committer_email: ci@myownradio.biz
-          commit_message: 'Bump ${{ steps.variables.outputs.service_name }}:${{ steps.variables.outputs.image_tag }}'
-          commit_branch: 'bump-${{ github.event.client_payload.sha }}'
-          yaml_file: swarm/docker-compose.yml
-          patch_expression: services.${{ steps.variables.outputs.service_name }}.image=${{ steps.variables.outputs.image_url }}
+          echo ${{ needs.main.outputs.patch_expressions }}
+#       - name: Update environment repository
+#         uses: pldin601/patch-yaml-through-commit@master
+#         with:
+#           git_repo_url: https://pldin601:${{ secrets.GIT_PUSH_TOKEN }}@github.com/myownradio/myownradio-env.git
+#           committer_name: Myownradio CI
+#           committer_email: ci@myownradio.biz
+#           commit_message: 'Bump ${{ steps.variables.outputs.service_name }}:${{ steps.variables.outputs.image_tag }}'
+#           commit_branch: 'bump-${{ github.event.client_payload.sha }}'
+#           yaml_file: swarm/docker-compose.yml
+#           patch_expression: services.${{ steps.variables.outputs.service_name }}.image=${{ steps.variables.outputs.image_url }}
