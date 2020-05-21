@@ -4,12 +4,11 @@ WORKDIR /usr/app/
 
 COPY package.json yarn.lock ./
 COPY services/scheduler/package.json services/scheduler/
-COPY libs/entities/package.json libs/entities/
+COPY libs/ libs/
 RUN ["yarn", "install", "--non-interactive", "--pure-lockfile"]
 
 COPY tsconfig.json ./
 COPY services/scheduler services/scheduler
-COPY libs/entities libs/entities
 RUN ["yarn", "workspace", "@myownradio/scheduler", "build"]
 
 FROM node:13-alpine
