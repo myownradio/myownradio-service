@@ -1,4 +1,4 @@
-import * as t from "io-ts";
+import * as t from "io-ts"
 
 export const RadioChannelsEntityContract = t.interface({
   created_at: t.union([t.null, t.string]), // timestamp with time zone nullable: YES
@@ -6,9 +6,9 @@ export const RadioChannelsEntityContract = t.interface({
   title: t.string, // character varying nullable: NO
   updated_at: t.union([t.null, t.string]), // timestamp with time zone nullable: YES
   user_id: t.number, // integer nullable: NO
-});
+})
 
-export type IRadioChannelsEntity = t.TypeOf<typeof RadioChannelsEntityContract>;
+export type IRadioChannelsEntity = t.TypeOf<typeof RadioChannelsEntityContract>
 
 export enum RadioChannelsProps {
   CreatedAt = "created_at",

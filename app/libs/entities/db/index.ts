@@ -1,8 +1,8 @@
-export * from "./UsersEntity";
-export * from "./PlayingChannelsEntity";
-export * from "./RadioChannelsEntity";
-export * from "./RefreshTokensEntity";
-export * from "./AudioTracksEntity";
+export * from "./UsersEntity"
+export * from "./PlayingChannelsEntity"
+export * from "./RadioChannelsEntity"
+export * from "./RefreshTokensEntity"
+export * from "./AudioTracksEntity"
 
 export enum TableName {
   Users = "users",

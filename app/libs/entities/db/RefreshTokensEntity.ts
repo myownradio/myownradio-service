@@ -1,4 +1,4 @@
-import * as t from "io-ts";
+import * as t from "io-ts"
 
 export const RefreshTokensEntityContract = t.interface({
   user_id: t.number, // integer nullable: NO
@@ -6,9 +6,9 @@ export const RefreshTokensEntityContract = t.interface({
   id: t.number, // integer nullable: NO
   created_at: t.union([t.null, t.string]), // timestamp with time zone nullable: YES
   refresh_token: t.string, // character varying nullable: NO
-});
+})
 
-export type IRefreshTokensEntity = t.TypeOf<typeof RefreshTokensEntityContract>;
+export type IRefreshTokensEntity = t.TypeOf<typeof RefreshTokensEntityContract>
 
 export enum RefreshTokensProps {
   UserId = "user_id",

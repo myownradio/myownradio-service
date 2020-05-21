@@ -1,4 +1,4 @@
-import * as t from "io-ts";
+import * as t from "io-ts"
 
 export const AudioTracksEntityContract = t.interface({
   updated_at: t.union([t.null, t.string]), // timestamp with time zone nullable: YES
@@ -17,9 +17,9 @@ export const AudioTracksEntityContract = t.interface({
   id: t.number, // integer nullable: NO
   size: t.number, // integer nullable: NO
   title: t.string, // character varying nullable: NO
-});
+})
 
-export type IAudioTracksEntity = t.TypeOf<typeof AudioTracksEntityContract>;
+export type IAudioTracksEntity = t.TypeOf<typeof AudioTracksEntityContract>
 
 export enum AudioTracksProps {
   UpdatedAt = "updated_at",

@@ -3,11 +3,11 @@ import { config } from "~/config"
 import { AudioUploaderApiService, createAudioUploaderApiService } from "~/services/api/AudioUploaderApiService"
 import { AuthApiService, createAuthApiService } from "~/services/api/AuthApiService"
 import { createRadioManagerApiService, RadioManagerApiService } from "~/services/api/RadioManagerApiService"
+import { SchedulerApiService } from "~/services/api/SchedulerApiService"
 import { createTokenService, TokenService } from "~/services/api/TokenService"
 import { createSessionService, SessionService } from "~/services/session/SessionService"
 import { createStorageService, StorageService } from "~/services/storage/StorageService"
 import { createLockManager } from "~/services/utils/LockManager"
-import { SchedulerApiService } from "~/services/api/SchedulerApiService"
 
 export interface Services {
   readonly authApiService: AuthApiService
