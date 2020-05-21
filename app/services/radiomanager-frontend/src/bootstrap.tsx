@@ -17,7 +17,7 @@ export default function bootstrap(Component: React.ComponentType, rootClass?: st
     services.audioUploaderApiService,
     authenticationModel,
   )
-  const provideSchedulerModel = (channelId: string, radioChannelModel: RadioChannelModel) =>
+  const provideSchedulerModel = (channelId: string, radioChannelModel: RadioChannelModel): SchedulerModel =>
     new SchedulerModel(channelId, radioChannelModel, services.schedulerApiService)
   const radioManagerModel = new RadioManagerModel(
     services.radioManagerApiService,

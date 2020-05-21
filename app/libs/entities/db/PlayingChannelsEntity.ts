@@ -1,4 +1,4 @@
-import * as t from "io-ts";
+import * as t from "io-ts"
 
 export const PlayingChannelsEntityContract = t.interface({
   updated_at: t.union([t.null, t.string]), // timestamp with time zone nullable: YES
@@ -8,9 +8,9 @@ export const PlayingChannelsEntityContract = t.interface({
   created_at: t.union([t.null, t.string]), // timestamp with time zone nullable: YES
   paused_at: t.union([t.null, t.string]), // timestamp with time zone nullable: YES
   channel_id: t.number, // integer nullable: NO
-});
+})
 
-export type IPlayingChannelsEntity = t.TypeOf<typeof PlayingChannelsEntityContract>;
+export type IPlayingChannelsEntity = t.TypeOf<typeof PlayingChannelsEntityContract>
 
 export enum PlayingChannelsProps {
   UpdatedAt = "updated_at",

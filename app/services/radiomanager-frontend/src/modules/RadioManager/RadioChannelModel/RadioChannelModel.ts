@@ -16,7 +16,7 @@ export class RadioChannelModel {
     private channelId: string,
     private radioManagerApiService: RadioManagerApiService,
     private audioFileUploaderService: AudioFileUploaderModel,
-    private provideSchedulerModel: (channelId: string, radioChannelModel: RadioChannelModel) => SchedulerModel
+    private provideSchedulerModel: (channelId: string, radioChannelModel: RadioChannelModel) => SchedulerModel,
   ) {
     this.debug(`Initialized channel ${channelId}`)
     this.unsubscribe = this.audioFileUploaderService.on("AUDIO_FILE_UPLOADED", ({ channelId, audioTrack }) => {

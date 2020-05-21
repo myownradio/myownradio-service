@@ -2,7 +2,7 @@ import { decodeId, encodeId } from "./ids"
 
 test("should encode id", () => {
   expect(encodeId(1)).toBe("kOD613")
-  expect(encodeId(11)).toBe('Vx7d1E')
+  expect(encodeId(11)).toBe("Vx7d1E")
 })
 
 test("should decode id", () => {
