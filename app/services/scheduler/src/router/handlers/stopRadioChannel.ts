@@ -1,5 +1,5 @@
 import { decodeId } from "@myownradio/common/ids"
-import { IRadioChannelsEntity } from "@myownradio/entities/db"
+import { IPlayingChannelsEntity, IRadioChannelsEntity } from "@myownradio/entities/db"
 import * as knex from "knex"
 import { Context, Middleware } from "koa"
 import { Logger } from "winston"
@@ -27,7 +27,7 @@ export default function stopRadioChannel(_: Config, knexConnection: knex, __: Lo
       ctx.throw(401)
     }
 
-    const deletedRows = await knexConnection("playing_channels")
+    const deletedRows = await knexConnection<IPlayingChannelsEntity>("playing_channels")
       .where({ channel_id: channel.id })
       .delete()
       .count()

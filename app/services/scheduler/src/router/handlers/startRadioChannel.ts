@@ -1,5 +1,6 @@
+import { toIso } from "@myownradio/common/date"
 import { decodeId } from "@myownradio/common/ids"
-import { IRadioChannelsEntity } from "@myownradio/entities/db"
+import { IPlayingChannelsEntity, IRadioChannelsEntity } from "@myownradio/entities/db"
 import * as knex from "knex"
 import { Context, Middleware } from "koa"
 import { Logger } from "winston"
@@ -35,8 +36,8 @@ export default function startRadioChannel(
 
     try {
       const now = timeService.now()
-      const nowDate = new Date(now).toISOString()
-      await knexConnection("playing_channels").insert({
+      const nowDate = toIso(now)
+      await knexConnection<IPlayingChannelsEntity>("playing_channels").insert({
         channel_id: channel.id,
         start_offset: 0,
         started_at: nowDate,

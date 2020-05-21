@@ -1,6 +1,6 @@
 import { toMillis } from "@myownradio/common/date"
 import { decodeId, encodeId } from "@myownradio/common/ids"
-import { IPlayingChannelsEntity, IRadioChannelsEntity } from "@myownradio/entities/db"
+import { IAudioTracksEntity, IPlayingChannelsEntity, IRadioChannelsEntity } from "@myownradio/entities/db"
 import * as knex from "knex"
 import { Context, Middleware } from "koa"
 import { TimeService } from "../../time"
@@ -35,17 +35,17 @@ export default function getNowPlaying(knexConnection: knex, timeService: TimeSer
       ctx.throw(409)
     }
 
-    const channelAudioTracks = await knexConnection("audio_tracks")
+    const channelAudioTracks = await knexConnection<IAudioTracksEntity>("audio_tracks")
       .where({ channel_id: channel.id })
       .orderBy("order_id", "asc")
 
     const now = timeService.now()
-    const playlistDuration = channelAudioTracks.reduce((acc, t) => acc + t.duration, 0)
+    const playlistDuration = channelAudioTracks.reduce((acc, t) => acc + +t.duration, 0)
     const playlistPosition = (now - toMillis(playingChannel.started_at)) % playlistDuration
 
     let currentOffset = 0
     for (const track of channelAudioTracks) {
-      if (currentOffset <= playlistPosition && currentOffset + track.duration > playlistPosition) {
+      if (currentOffset <= playlistPosition && currentOffset + +track.duration > playlistPosition) {
         ctx.body = {
           track_id: encodeId(track.id),
           offset: playlistPosition - currentOffset,
@@ -53,7 +53,7 @@ export default function getNowPlaying(knexConnection: knex, timeService: TimeSer
         ctx.status = 200
         return
       }
-      currentOffset += track.duration
+      currentOffset += +track.duration
     }
 
     ctx.status = 204

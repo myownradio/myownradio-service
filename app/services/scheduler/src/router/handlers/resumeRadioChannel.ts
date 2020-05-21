@@ -45,7 +45,7 @@ export default function resumeRadioChannel(
 
       const now = timeService.now()
 
-      const updatedRows = await trx("playing_channels")
+      const updatedRows = await trx<IPlayingChannelsEntity>("playing_channels")
         .where({
           id: playingChannel.id,
         })

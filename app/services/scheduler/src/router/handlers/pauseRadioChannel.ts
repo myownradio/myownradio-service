@@ -1,6 +1,6 @@
 import { toIso } from "@myownradio/common/date"
 import { decodeId } from "@myownradio/common/ids"
-import { IRadioChannelsEntity } from "@myownradio/entities/db"
+import { IPlayingChannelsEntity, IRadioChannelsEntity } from "@myownradio/entities/db"
 import * as knex from "knex"
 import { Context, Middleware } from "koa"
 import { Logger } from "winston"
@@ -35,12 +35,13 @@ export default function pauseRadioChannel(
     }
 
     const now = timeService.now()
-    const updatedRows = await knexConnection("playing_channels")
+    const updatedRows = await knexConnection<IPlayingChannelsEntity>("playing_channels")
       .where({
         channel_id: channel.id,
         paused_at: null,
       })
       .update({
+        updated_at: toIso(now),
         paused_at: toIso(now),
       })
       .count()
