@@ -8,30 +8,30 @@ export class SchedulerApiService extends AbstractApiWithSessionService {
   }
 
   public startChannel(channelId: string): Promise<void> {
-    return this.makeRequestWithRefresh(`/channels/${channelId}/start`, {
+    return this.makeRequestWithRefresh(`channels/${channelId}/start`, {
       method: "post",
     })
   }
 
   public stopChannel(channelId: string): Promise<void> {
-    return this.makeRequestWithRefresh(`/channels/${channelId}/stop`, {
+    return this.makeRequestWithRefresh(`channels/${channelId}/stop`, {
       method: "post",
     })
   }
 
   public pauseChannel(channelId: string): Promise<void> {
-    return this.makeRequestWithRefresh(`/channels/${channelId}/pause`, {
+    return this.makeRequestWithRefresh(`channels/${channelId}/pause`, {
       method: "post",
     })
   }
 
   public resumeChannel(channelId: string): Promise<void> {
-    return this.makeRequestWithRefresh(`/channels/${channelId}/resume`, {
+    return this.makeRequestWithRefresh(`channels/${channelId}/resume`, {
       method: "post",
     })
   }
 
   public getNowPlaying(channelId: string): Promise<NowPlayingResource> {
-    return this.makeRequestWithRefresh(`/channels/${channelId}/nowPlaying`, {})
+    return this.makeRequestWithRefresh(`channels/${channelId}/nowPlaying`, {})
   }
 }
