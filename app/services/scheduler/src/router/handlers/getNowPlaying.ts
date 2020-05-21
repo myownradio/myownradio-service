@@ -32,7 +32,7 @@ export default function getNowPlaying(knexConnection: knex, timeService: TimeSer
       .first()
 
     if (!playingChannel || playingChannel.paused_at !== null) {
-      ctx.throw(409)
+      ctx.throw(404)
     }
 
     const channelAudioTracks = await knexConnection<IAudioTracksEntity>("audio_tracks")

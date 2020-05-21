@@ -214,11 +214,11 @@ describe("GET /channels/:channelId/nowPlaying", () => {
       })
   })
 
-  it("should fail with 409 if channel isn't playing", async () => {
+  it("should fail with 404 if channel isn't playing", async () => {
     await request
       .get("/channels/kOD613/nowPlaying")
       .set("Authorization", `Bearer ${authorizationToken}`)
-      .expect(409)
+      .expect(404)
   })
 
   it("should fail with 401 when unauthorized", async () => {
