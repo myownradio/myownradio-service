@@ -5,7 +5,10 @@ export enum FutureState {
 }
 
 export interface Future<T> {
+  getState(): FutureState
+  isReady(): boolean
   asPromise(): Promise<T>
+  asValue(): T
   map<R>(mapFn: (val: T) => R): Future<R>
 }
 
@@ -52,6 +55,14 @@ export class PromiseBasedFuture<T> implements Future<T> {
     }
   }
 
+  public getState(): FutureState {
+    return this.futureStateObject.state
+  }
+
+  public isReady(): boolean {
+    return this.getState() === FutureState.READY
+  }
+
   public map<R>(mapFn: (v: T) => R): Future<R> {
     return new PromiseBasedFuture<R>(this.promise.then(mapFn))
   }
@@ -71,5 +82,24 @@ export class PromiseBasedFuture<T> implements Future<T> {
       case FutureState.READY:
         return this.futureStateObject.value
     }
+  }
+}
+
+export function fromPromise<T>(promise: Promise<T>): Future<T> {
+  return new PromiseBasedFuture(promise)
+}
+
+export function fromConstant<T>(value: T): Future<T> {
+  return new PromiseBasedFuture(Promise.resolve(value))
+}
+
+export function unwrap<T>(future: Future<T>): T {
+  try {
+    return future.asValue()
+  } catch (error) {
+    if (error instanceof IllegalStateError) {
+      throw error.suspender
+    }
+    throw error
   }
 }
