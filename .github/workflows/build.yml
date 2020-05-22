@@ -9,8 +9,6 @@ jobs:
     strategy:
       matrix:
         service_name: ${{ github.event.client_payload.services }}
-    outputs:
-      patch_expression: services.${{ steps.variables.outputs.service_name }}.image=foo
     steps:
       - name: Checkout
         uses: actions/checkout@master
@@ -42,11 +40,3 @@ jobs:
           path: app
           dockerfile: app/services/${{ steps.variables.outputs.service_name }}/Dockerfile
           tags: ${{ steps.variables.outputs.image_tag }},latest
-  sync:
-    needs: [main]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Define Patch Expression
-        id: patch_expression
-        shell: bash
-        run: echo $(echo ${{ toJSON(needs) }})
