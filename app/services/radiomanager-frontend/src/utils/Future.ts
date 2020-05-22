@@ -6,6 +6,7 @@ export enum FutureState {
 
 export interface Future<T> {
   asPromise(): Promise<T>
+  asValue(): T
   map<R>(mapFn: (val: T) => R): Future<R>
 }
 
@@ -72,4 +73,12 @@ export class PromiseBasedFuture<T> implements Future<T> {
         return this.futureStateObject.value
     }
   }
+}
+
+export function fromPromise<T>(promise: Promise<T>): Future<T> {
+  return new PromiseBasedFuture(promise)
+}
+
+export function fromConstant<T>(value: T): Future<T> {
+  return new PromiseBasedFuture(Promise.resolve(value))
 }
