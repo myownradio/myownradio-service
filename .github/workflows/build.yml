@@ -45,7 +45,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Generate Patch Expression
-        id: variables
+        id: patch_expression
         shell: bash
         run: |
           SERVICES_LIST=$(echo ${{ join(github.event.client_payload.services, ' ') }})
@@ -53,4 +53,11 @@ jobs:
           echo "##[set-output name=patch_expression;]$(echo ${PATCH_EXPRESSION})"
       - name: Check Patch Expression
         shell: bash
-        run: echo $(echo ${{ steps.variables.outputs.patch_expression }})
+        run: echo $(echo ${{ steps.patch_expression.outputs.patch_expression }})
+      - name: Patch stack file through commit
+        uses: pldin601/patch-yaml-through-commit@master
+        with:
+          git_repo_url: https://pldin601:${{ secrets.GIT_PUSH_TOKEN }}@github.com/myownradio/myownradio-env.git
+          commit_message: Update images for ${{ join(github.event.client_payload.services, ',') }} service(s)
+          yaml_file: swarm/docker-compose.yml
+          patch_expression: ${{ steps.patch_expression.outputs.patch_expression }}
