@@ -47,9 +47,10 @@ jobs:
       - name: Generate Patch Expression
         id: patch_expression
         shell: bash
+        # todo move global variables into special job
         run: |
           SERVICES_LIST=$(echo ${{ join(github.event.client_payload.services, ' ') }})
-          PATCH_EXPRESSION=$(echo $(for SERVICE in $SERVICES_LIST; do echo services.$SERVICE.image=${{ github.event.client_payload.tag }}; done))
+          PATCH_EXPRESSION=$(echo $(for SERVICE in $SERVICES_LIST; do echo services.$SERVICE.image=${{ secrets.DOCKER_REGISTRY }}/myownradio/$SERVICE:${{ github.event.client_payload.tag }}; done))
           echo "##[set-output name=patch_expression;]$(echo ${PATCH_EXPRESSION})"
       - name: Check Patch Expression
         shell: bash
