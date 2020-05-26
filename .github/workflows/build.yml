@@ -58,6 +58,6 @@ jobs:
         uses: pldin601/patch-yaml-through-commit@master
         with:
           git_repo_url: https://pldin601:${{ secrets.GIT_PUSH_TOKEN }}@github.com/myownradio/myownradio-env.git
-          commit_message: Update images for ${{ join(github.event.client_payload.services, ',') }} service(s)
+          commit_message: "Update services images: ${{ join(github.event.client_payload.services, ',') }}"
           yaml_file: swarm/docker-compose.yml
           patch_expression: ${{ steps.patch_expression.outputs.patch_expression }}
