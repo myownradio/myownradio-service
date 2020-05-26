@@ -44,6 +44,9 @@ jobs:
     needs: main
     runs-on: ubuntu-latest
     steps:
-      - name: Foo
+      - name: Generate Patch Expression
         shell: bash
-        run: echo Should be called after all services was build
+        run: |
+          SERVICES_LIST=$(echo ${{ join(github.event.client_payload.services, ' ') }})
+          PATCH_EXPRESSION=$(echo $(for SERVICE in $SERVICES_LIST; do echo -n services.$SERVICE.image=${{ github.event.client_payload.tag }}; done))
+          echo "##[set-output name=patch_expression;]$(echo ${PATCH_EXPRESSION})"
