@@ -30,8 +30,7 @@ jobs:
                 "audio-uploader",
                 "audio-player",
                 "scheduler",
-                "stream-composer",
-                "migration"
+                "stream-composer"
               ],
               "tag": "${{ github.sha }}"
             }
