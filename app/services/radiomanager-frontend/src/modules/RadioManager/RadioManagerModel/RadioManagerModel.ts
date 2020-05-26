@@ -9,15 +9,20 @@ import ChannelNotFoundError from "../errors/ChannelNotFoundError"
 import ChannelsNotLoadedError from "../errors/ChannelsNotLoadedError"
 
 export enum RadioManagerState {
-  STANDBY = "STANDBY",
+  INITIAL = "INITIAL",
   READY = "READY",
   FAILURE = "FAILURE",
 }
 
-export class RadioManagerModel {
+export interface RadioManagerModelInterface {
+  createChannel(title: string): Promise<void>
+  deleteChannel(channelId: string): Promise<void>
+}
+
+export class RadioManagerModel implements RadioManagerModelInterface {
   private debug = Debug.extend("RadioManagerModel")
 
-  readonly radioManagerState = fromValue<RadioManagerState>(RadioManagerState.STANDBY)
+  readonly radioManagerState = fromValue<RadioManagerState>(RadioManagerState.INITIAL)
   readonly radioManagerError = fromValue<Error | null>(null)
 
   readonly radioChannels = fromValue<RadioChannelResource[]>([])
@@ -31,10 +36,6 @@ export class RadioManagerModel {
   ) {
     this.authenticationModel.on(AuthenticationEvent.AUTHENTICATED, () => {
       this.loadChannels()
-    })
-
-    this.authenticationModel.on(AuthenticationEvent.LOGGED_OUT, () => {
-      this.unloadChannels()
     })
 
     this.debug("Initialized")
@@ -67,19 +68,6 @@ export class RadioManagerModel {
     )
 
     this.radioChannels.replaceValue(radioChannelsPromise)
-  }
-
-  public unloadChannels(): void {
-    this.debug("Unloading channels...")
-
-    this.radioChannelModels.forEach((radioChannel, key) => {
-      radioChannel.promise().then(that => that.shutdown(), nop)
-      this.radioChannelModels.delete(key)
-    })
-
-    this.radioManagerState.replaceValue(RadioManagerState.STANDBY)
-    this.radioManagerError.replaceValue(null)
-    this.radioChannels.replaceValue([])
   }
 
   private cleanupBrokenRadioChannelModels(): void {
