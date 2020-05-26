@@ -15,7 +15,7 @@ jobs:
           SERVICE_NAME=$(echo ${BRANCH_NAME%/*})
           echo "##[set-output name=service_name;]$(echo ${SERVICE_NAME})"
       - if: steps.variables.outputs.service_name == 'all'
-        name: Build All
+        name: Build All Services
         uses: peter-evans/repository-dispatch@v1
         with:
           token: ${{ secrets.GIT_PUSH_TOKEN }}
@@ -34,8 +34,8 @@ jobs:
               ],
               "tag": "${{ github.sha }}"
             }
-      - if: steps.variables.outputs.service_name != 'all'
-        name: Build Single
+      - if: steps.variables.outputs.service_name != 'all' && steps.variables.outputs.service_name != 'migration'
+        name: Build One Service
         uses: peter-evans/repository-dispatch@v1
         with:
           token: ${{ secrets.GIT_PUSH_TOKEN }}
@@ -46,4 +46,17 @@ jobs:
                 "${{ steps.variables.outputs.service_name }}"
               ],
               "tag": "${{ github.sha }}"
+            }
+      - if: steps.variables.outputs.service_name == 'migration'
+        name: Build Migration
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ secrets.GIT_PUSH_TOKEN }}
+          event-type: build-app-service
+          client-payload: |
+            {
+              "services": [
+                "${{ steps.variables.outputs.service_name }}"
+              ],
+              "tag": "latest"
             }
