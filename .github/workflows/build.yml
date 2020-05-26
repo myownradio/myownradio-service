@@ -40,3 +40,10 @@ jobs:
           path: app
           dockerfile: app/services/${{ steps.variables.outputs.service_name }}/Dockerfile
           tags: ${{ steps.variables.outputs.image_tag }},latest
+  patch:
+    needs: main
+    runs-on: ubuntu-latest
+    steps:
+      - name: Foo
+        shell: bash
+        run: echo Should be called after all services was build
