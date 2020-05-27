@@ -12,6 +12,10 @@ jobs:
       SERVICE_NAME: ${{ matrix.service_name }}
       IMAGE_TAG: ${{ github.event.client_payload.tag }}
       DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
+    outputs:
+      NAMESPACE: ${{ env.NAMESPACE }}
+      IMAGE_TAG: ${{ env.IMAGE_TAG }}
+      DOCKER_REGISTRY: ${{ env.DOCKER_REGISTRY }}
     strategy:
       matrix:
         service_name: ${{ github.event.client_payload.services }}
@@ -35,9 +39,9 @@ jobs:
     needs: main
     runs-on: ubuntu-latest
     env:
-      NAMESPACE: ${{ needs.main.env.NAMESPACE }}
-      IMAGE_TAG: ${{ needs.main.env.IMAGE_TAG }}
-      DOCKER_REGISTRY: ${{ needs.main.env.DOCKER_REGISTRY }}
+      NAMESPACE: ${{ needs.main.outputs.NAMESPACE }}
+      IMAGE_TAG: ${{ needs.main.outputs.IMAGE_TAG }}
+      DOCKER_REGISTRY: ${{ needs.main.outputs.DOCKER_REGISTRY }}
       SERVICES_LIST: ${{ join(github.event.client_payload.services, ' ') }}
     steps:
       - name: Create Patch
