@@ -11,7 +11,7 @@ jobs:
       NAMESPACE: "myownradio"
       SERVICE_NAME: ${{ matrix.service_name }}
       IMAGE_TAG: ${{ github.event.client_payload.tag }}
-      DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
+      DOCKER_REGISTRY: "docker.io"
     outputs:
       NAMESPACE: ${{ env.NAMESPACE }}
       IMAGE_TAG: ${{ env.IMAGE_TAG }}
