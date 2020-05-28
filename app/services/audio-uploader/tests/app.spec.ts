@@ -27,7 +27,7 @@ beforeEach(() => {
 test("POST /upload - upload new audio file", async () => {
   const filepath = `${__dirname}/__fixtures__/sine.mp3`
 
-  const { headers, text } = await request(app.callback())
+  const response = await request(app.callback())
     .post("/upload")
     .set("Authorization", `Bearer ${authenticationToken}`)
     .attach("source", filepath)
@@ -46,7 +46,7 @@ test("POST /upload - upload new audio file", async () => {
       format: "MP2/3 (MPEG audio layer 2/3)",
     })
 
-  expect(verifySignature(text, headers.signature, config.metadataSecret, 30000)).toBeTruthy()
+  expect(verifySignature(response.text, response.get("signature"), config.metadataSecret, 30000)).toBeTruthy()
 })
 
 test("POST /upload - should fail if no file attached", async () => {
