@@ -1,4 +1,5 @@
 import { verifySignature } from "@mor/common/crypto/signature"
+import * as Application from "koa"
 import * as request from "supertest"
 import { createApp } from "../src/app"
 import { Config } from "../src/config"
@@ -9,8 +10,8 @@ const authenticationToken =
 
 const tempDirectory = withTempDirectory()
 
-let app
-let config
+let app: Application
+let config: Config
 
 beforeEach(() => {
   config = new Config({
