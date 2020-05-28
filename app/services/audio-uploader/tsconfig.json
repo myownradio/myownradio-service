@@ -4,8 +4,13 @@
     "target": "es6",
     "module": "commonjs",
     "moduleResolution": "node",
-    "rootDir": "src",
-    "outDir": "dist",
-    "allowJs": false
-  }
+    "outDir": "dist"
+  },
+  "include": [
+    "src/server.ts",
+    "../../libs"
+  ],
+  "exclude": [
+    "tests"
+  ]
 }

@@ -11,7 +11,7 @@ try {
 
   let shutdownStarted = false
 
-  const shutdown = async exitCode => {
+  const shutdown = async (exitCode: number): Promise<void> => {
     if (shutdownStarted) {
       logger.warn("Forceful shutdown")
       process.exit(5)

@@ -4,6 +4,7 @@ WORKDIR /usr/app/
 
 COPY package.json yarn.lock ./
 COPY services/audio-uploader/package.json services/audio-uploader/
+COPY libs/ libs/
 RUN ["yarn", "install", "--non-interactive", "--pure-lockfile"]
 
 COPY tsconfig.json ./

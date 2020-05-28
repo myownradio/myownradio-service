@@ -23,6 +23,8 @@
     "winston": "^3.2.1"
   },
   "devDependencies": {
+    "@types/ffprobe-static": "^2.0.0",
+    "@types/fluent-ffmpeg": "^2.1.14",
     "@types/supertest": "^2.0.9",
     "@zeit/ncc": "^0.22.0",
     "jest": "^25.1.0",

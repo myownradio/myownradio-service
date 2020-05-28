@@ -4,17 +4,31 @@ import { createSignature } from "@myownradio/common/crypto/signature"
 import { convertFileHashToFilePath } from "@myownradio/common/fileserver"
 import { fileExists } from "@myownradio/common/fs"
 import { Middleware } from "koa"
+import { Config } from "../config"
 import { supportedAudioExtensions, supportedAudioFormats } from "../constants"
 import { getMediaFileMetadata } from "../utils"
 
-export function createUploadHandler(config): Middleware {
+export function createUploadHandler(config: Config): Middleware {
   return async (ctx): Promise<void> => {
-    if (!(ctx.request.files || {}).source) {
+    if (!ctx.request.files) {
       ctx.throw(400)
+      return
     }
 
     const { source } = ctx.request.files
+
+    if (!source) {
+      ctx.throw(400)
+      return
+    }
+
     const { name, hash } = source
+
+    if (!hash) {
+      ctx.throw(500)
+      return
+    }
+
     const extension = path.extname(name).toLowerCase()
 
     if (!supportedAudioExtensions.has(extension)) {
