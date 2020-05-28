@@ -1,5 +1,5 @@
-import { toIso } from "@myownradio/common/date"
-import { decodeId } from "@myownradio/common/ids"
+import { toIso } from "@mor/common/date"
+import { decodeId } from "@mor/common/ids"
 import { IPlayingChannelsEntity, IRadioChannelsEntity } from "@myownradio/entities/db"
 import * as knex from "knex"
 import { Context, Middleware } from "koa"

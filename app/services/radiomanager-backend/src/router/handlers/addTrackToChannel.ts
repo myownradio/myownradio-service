@@ -1,4 +1,4 @@
-import { decodeId, encodeId } from "@myownradio/common/ids"
+import { decodeId, encodeId } from "@mor/common/ids"
 import { AudioTrackResource } from "@myownradio/domain/resources"
 import * as t from "io-ts"
 import * as knex from "knex"

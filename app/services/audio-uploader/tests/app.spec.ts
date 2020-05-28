@@ -1,4 +1,4 @@
-import { verifySignature } from "@myownradio/common/crypto/signature"
+import { verifySignature } from "@mor/common/crypto/signature"
 import * as request from "supertest"
 import { createApp } from "../src/app"
 import { Config } from "../src/config"

@@ -1,8 +1,8 @@
 import fs = require("fs")
 import path = require("path")
-import { createSignature } from "@myownradio/common/crypto/signature"
-import { convertFileHashToFilePath } from "@myownradio/common/fileserver"
-import { fileExists } from "@myownradio/common/fs"
+import { createSignature } from "@mor/common/crypto/signature"
+import { convertFileHashToFilePath } from "@mor/common/fileserver"
+import { fileExists } from "@mor/common/fs"
 import { Middleware } from "koa"
 import { Config } from "../config"
 import { supportedAudioExtensions, supportedAudioFormats } from "../constants"
