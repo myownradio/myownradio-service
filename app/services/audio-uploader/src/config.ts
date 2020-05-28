@@ -1,17 +1,14 @@
-const os = require("os")
+import * as os from "os"
 
-class Config {
-  /**
-   * @param env {{
-   *   PORT?: string,
-   *   AUDIO_UPLOADER_ROOT_DIR?: string,
-   *   AUDIO_UPLOADER_TOKEN_SECRET?: string,
-   *   AUDIO_UPLOADER_METADATA_SECRET?: string,
-   *   AUDIO_UPLOADER_TEMP_DIR?: string,
-   *   AUDIO_UPLOADER_ALLOWED_ORIGIN?: string,
-   * }}
-   */
-  constructor(env) {
+export class Config {
+  readonly httpServerPort: number
+  readonly rootDir: string
+  readonly tokenSecret: string
+  readonly metadataSecret: string
+  readonly tempDir: string
+  readonly allowedOrigin: string
+
+  constructor(env: { [name: string]: string | undefined }) {
     this.httpServerPort = env.PORT ? parseInt(env.PORT, 10) : 8080
 
     if (!env.AUDIO_UPLOADER_ROOT_DIR) {

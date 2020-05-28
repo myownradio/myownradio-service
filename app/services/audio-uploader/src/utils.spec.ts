@@ -1,4 +1,4 @@
-const { getMediaFileMetadata } = require("./utils")
+import { getMediaFileMetadata } from "./utils"
 
 describe("getMediaFileMetadata", () => {
   it("should get metadata from mp3 audio file", async () => {

@@ -1,10 +1,10 @@
-const body = require("koa-body")
-const jwtMiddleware = require("koa-jwt")
-const Router = require("koa-router")
-const cleanupUploads = require("./middleware/cleanupUploads")
-const createUploadHandler = require("./upload")
+import body = require("koa-body")
+import jwtMiddleware = require("koa-jwt")
+import Router = require("koa-router")
+import { cleanupUploads } from "./middleware/cleanupUploads"
+import { createUploadHandler } from "./upload"
 
-module.exports = function createRouter(config) {
+export function createRouter(config): Router {
   const router = new Router()
 
   router.post(

@@ -1,11 +1,14 @@
-const fs = require("fs")
-const path = require("path")
-const { supportedAudioExtensions, supportedAudioFormats } = require("../constants")
+import fs = require("fs")
+import path = require("path")
+import { createSignature } from "@myownradio/common/crypto/signature"
+import { convertFileHashToFilePath } from "@myownradio/common/fileserver"
+import { fileExists } from "@myownradio/common/fs"
+import { Middleware } from "koa"
+import { supportedAudioExtensions, supportedAudioFormats } from "../constants"
+import { getMediaFileMetadata } from "../utils"
 
-const { fileExists, hashToPath, getMediaFileMetadata, createSignatureForMetadata } = require("../utils")
-
-module.exports = function createUploadHandler(config) {
-  return async ctx => {
+export function createUploadHandler(config): Middleware {
+  return async (ctx): Promise<void> => {
     if (!(ctx.request.files || {}).source) {
       ctx.throw(400)
     }
@@ -24,7 +27,7 @@ module.exports = function createUploadHandler(config) {
       ctx.throw(415)
     }
 
-    const hashPath = hashToPath(hash)
+    const hashPath = convertFileHashToFilePath(hash)
     const filepath = path.join(config.rootDir, `${hashPath}${extension}`)
 
     if (!(await fileExists(filepath))) {
@@ -34,7 +37,7 @@ module.exports = function createUploadHandler(config) {
 
     const body = { hash, size, name, ...metadata }
     const rawBody = JSON.stringify(body)
-    const signature = createSignatureForMetadata(rawBody, config.metadataSecret)
+    const signature = createSignature(rawBody, config.metadataSecret)
 
     ctx.set("signature", signature)
     ctx.set("content-type", "application/json")

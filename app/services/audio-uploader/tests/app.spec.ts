@@ -1,9 +1,8 @@
-const request = require("supertest")
-
-const createApp = require("../src/app")
-const { Config } = require("../src/config")
-const { verifySignatureOfMetadata } = require("../src/utils")
-const withTempDirectory = require("./with/withTempDirectory")
+import { verifySignature } from "@myownradio/common/crypto/signature"
+import * as request from "supertest"
+import { createApp } from "../src/app"
+import { Config } from "../src/config"
+import { withTempDirectory } from "./with/withTempDirectory"
 
 const authenticationToken =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwZXJtIjpbInVwbG9hZCJdLCJpYXQiOjE1MTYyMzkwMjJ9.6YVvCcjFSaHFw8HgbiUd-sVUQQxmcf8LaNGE7GXIQ6w"
@@ -18,9 +17,8 @@ beforeEach(() => {
     AUDIO_UPLOADER_ROOT_DIR: `${__dirname}/__fixtures__/uploadDir`,
     AUDIO_UPLOADER_TOKEN_SECRET: "secret",
     AUDIO_UPLOADER_METADATA_SECRET: "secret",
-    AUDIO_UPLOADER_TEMP_DIR: tempDirectory,
+    AUDIO_UPLOADER_TEMP_DIR: tempDirectory.current,
     AUDIO_UPLOADER_ALLOWED_ORIGIN: "*",
-    PORT: 8080,
   })
 
   app = createApp(config)
@@ -48,7 +46,7 @@ test("POST /upload - upload new audio file", async () => {
       format: "MP2/3 (MPEG audio layer 2/3)",
     })
 
-  expect(verifySignatureOfMetadata(text, headers.signature, config.metadataSecret, 30000)).toBeTruthy()
+  expect(verifySignature(text, headers.signature, config.metadataSecret, 30000)).toBeTruthy()
 })
 
 test("POST /upload - should fail if no file attached", async () => {

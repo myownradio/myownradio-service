@@ -1,6 +1,6 @@
-const createApp = require("./app")
-const { Config } = require("./config")
-const logger = require("./logger")
+import { createApp } from "./app"
+import { Config } from "./config"
+import { logger } from "./logger"
 
 try {
   const config = new Config(process.env)

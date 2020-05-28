@@ -1,7 +1,7 @@
-const fs = require("fs")
-const os = require("os")
+import fs = require("fs")
+import os = require("os")
 
-module.exports = function withTempDirectory() {
+export function withTempDirectory(): { current: string } {
   const tempDirectory = { current: null }
 
   beforeAll(async () => {
@@ -14,4 +14,6 @@ module.exports = function withTempDirectory() {
       await fs.promises.rmdir(tempDirectory.current, { recursive: true })
     }
   })
+
+  return tempDirectory
 }

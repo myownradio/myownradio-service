@@ -1,6 +1,7 @@
-const fs = require("fs")
+import fs = require("fs")
+import { Context } from "koa"
 
-async function cleanupUploads(ctx, next) {
+export async function cleanupUploads(ctx: Context, next: () => Promise<void>): Promise<void> {
   try {
     await next()
   } finally {
@@ -10,5 +11,3 @@ async function cleanupUploads(ctx, next) {
     }
   }
 }
-
-module.exports = cleanupUploads

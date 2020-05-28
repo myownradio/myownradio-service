@@ -1,9 +1,8 @@
-const cors = require("@koa/cors")
-const Application = require("koa")
+import Application = require("koa")
+import cors = require("@koa/cors")
+import { createRouter } from "./router"
 
-const createRouter = require("./router")
-
-module.exports = function createApp(config) {
+export function createApp(config): Application {
   const app = new Application()
   const router = createRouter(config)
 
