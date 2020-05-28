@@ -18,7 +18,7 @@ beforeEach(() => {
     AUDIO_UPLOADER_ROOT_DIR: `${__dirname}/__fixtures__/uploadDir`,
     AUDIO_UPLOADER_TOKEN_SECRET: "secret",
     AUDIO_UPLOADER_METADATA_SECRET: "secret",
-    AUDIO_UPLOADER_TEMP_DIR: tempDirectory.current,
+    AUDIO_UPLOADER_TEMP_DIR: tempDirectory.current ?? "/tmp",
     AUDIO_UPLOADER_ALLOWED_ORIGIN: "*",
   })
 

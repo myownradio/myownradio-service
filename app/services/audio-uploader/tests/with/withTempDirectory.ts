@@ -1,8 +1,8 @@
 import fs = require("fs")
 import os = require("os")
 
-export function withTempDirectory(): { current: string } {
-  const tempDirectory = { current: null }
+export function withTempDirectory(): { current: string | null } {
+  const tempDirectory: { current: null | string } = { current: null }
 
   beforeAll(async () => {
     tempDirectory.current = `${os.tmpdir()}/${Date.now()}-${Math.random()}}`
