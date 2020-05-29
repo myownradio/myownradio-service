@@ -1,6 +1,6 @@
-const createApp = require("./app")
-const { Config } = require("./config")
-const logger = require("./logger")
+import { createApp } from "./app"
+import { Config } from "./config"
+import { logger } from "./logger"
 
 try {
   const config = new Config(process.env)
@@ -11,7 +11,7 @@ try {
 
   let shutdownStarted = false
 
-  const shutdown = async exitCode => {
+  const shutdown = async (exitCode: number): Promise<void> => {
     if (shutdownStarted) {
       logger.warn("Forceful shutdown")
       process.exit(5)

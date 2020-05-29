@@ -1,17 +1,34 @@
-const fs = require("fs")
-const path = require("path")
-const { supportedAudioExtensions, supportedAudioFormats } = require("../constants")
+import fs = require("fs")
+import path = require("path")
+import { createSignature } from "@mor/common/crypto/signature"
+import { convertFileHashToFilePath } from "@mor/common/fileserver"
+import { fileExists } from "@mor/common/fs"
+import { Middleware } from "koa"
+import { Config } from "../config"
+import { supportedAudioExtensions, supportedAudioFormats } from "../constants"
+import { getMediaFileMetadata } from "../utils"
 
-const { fileExists, hashToPath, getMediaFileMetadata, createSignatureForMetadata } = require("../utils")
-
-module.exports = function createUploadHandler(config) {
-  return async ctx => {
-    if (!(ctx.request.files || {}).source) {
+export function createUploadHandler(config: Config): Middleware {
+  return async (ctx): Promise<void> => {
+    if (!ctx.request.files) {
       ctx.throw(400)
+      return
     }
 
     const { source } = ctx.request.files
+
+    if (!source) {
+      ctx.throw(400)
+      return
+    }
+
     const { name, hash } = source
+
+    if (!hash) {
+      ctx.throw(500)
+      return
+    }
+
     const extension = path.extname(name).toLowerCase()
 
     if (!supportedAudioExtensions.has(extension)) {
@@ -24,7 +41,7 @@ module.exports = function createUploadHandler(config) {
       ctx.throw(415)
     }
 
-    const hashPath = hashToPath(hash)
+    const hashPath = convertFileHashToFilePath(hash)
     const filepath = path.join(config.rootDir, `${hashPath}${extension}`)
 
     if (!(await fileExists(filepath))) {
@@ -34,7 +51,7 @@ module.exports = function createUploadHandler(config) {
 
     const body = { hash, size, name, ...metadata }
     const rawBody = JSON.stringify(body)
-    const signature = createSignatureForMetadata(rawBody, config.metadataSecret)
+    const signature = createSignature(rawBody, config.metadataSecret)
 
     ctx.set("signature", signature)
     ctx.set("content-type", "application/json")

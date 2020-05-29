@@ -1,4 +1,4 @@
-import { decodeId, encodeId } from "@myownradio/common/ids"
+import { decodeId, encodeId } from "@mor/common/ids"
 import { RadioChannelResource } from "@myownradio/domain/resources"
 import * as knex from "knex"
 import { Config } from "../../config"

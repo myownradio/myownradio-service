@@ -1,7 +1,7 @@
-const os = require("os")
-const winston = require("winston")
+import * as os from "os"
+import * as winston from "winston"
 
-const logger = winston.createLogger({
+export const logger = winston.createLogger({
   level: "debug",
   defaultMeta: { hostname: os.hostname() },
   transports: [
@@ -10,5 +10,3 @@ const logger = winston.createLogger({
     }),
   ],
 })
-
-module.exports = logger
