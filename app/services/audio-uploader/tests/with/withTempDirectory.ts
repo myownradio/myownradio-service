@@ -1,18 +1,15 @@
 import fs = require("fs")
 import os = require("os")
 
-export function withTempDirectory(): { current: string | null } {
-  const tempDirectory: { current: null | string } = { current: null }
+export function withTempDirectory(): string {
+  const tempDirectory = `${os.tmpdir()}/${Date.now()}-${Math.random()}}`
 
   beforeAll(async () => {
-    tempDirectory.current = `${os.tmpdir()}/${Date.now()}-${Math.random()}}`
-    await fs.promises.mkdir(tempDirectory.current, { recursive: true })
+    await fs.promises.mkdir(tempDirectory, { recursive: true })
   })
 
   afterAll(async () => {
-    if (tempDirectory.current) {
-      await fs.promises.rmdir(tempDirectory.current, { recursive: true })
-    }
+    await fs.promises.rmdir(tempDirectory, { recursive: true })
   })
 
   return tempDirectory
