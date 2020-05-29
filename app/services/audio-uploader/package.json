@@ -25,6 +25,9 @@
   "devDependencies": {
     "@types/ffprobe-static": "^2.0.0",
     "@types/fluent-ffmpeg": "^2.1.14",
+    "@types/koa": "^2.11.3",
+    "@types/koa-router": "^7.4.1",
+    "@types/koa__cors": "^3.0.1",
     "@types/supertest": "^2.0.9",
     "@zeit/ncc": "^0.22.0",
     "jest": "^25.1.0",
