@@ -1,6 +1,9 @@
 {
   "name": "@myownradio/myownradio-service",
   "version": "1.0.0",
+  "engines": {
+    "node": ">=14"
+  },
   "scripts": {
     "dev:fileserver-local": "env-cmd -f env/fileserver-local.env -- yarn --cwd services/fileserver-local run dev",
     "dev:audio-uploader": "env-cmd -f env/audio-uploader.env -- yarn --cwd services/audio-uploader run dev",
