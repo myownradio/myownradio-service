@@ -1,4 +1,4 @@
-FROM node:13.10
+FROM node:14
 
 COPY ./ /usr/app/
 
