@@ -6,7 +6,9 @@
     "moduleResolution": "node",
     "outDir": "dist"
   },
-  "exclude": [
-    "tests"
+  "include": [
+    "src/server.ts",
+    "tests/app.spec.ts",
+    "../../libs"
   ]
 }

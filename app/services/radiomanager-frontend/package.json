@@ -9,6 +9,7 @@
     "gettext": "node gettext-extract.js"
   },
   "devDependencies": {
+    "@types/axios": "^0.14.0",
     "@types/classnames": "^2.2.10",
     "@types/debug": "^4.1.5",
     "@types/jwt-decode": "^2.2.1",
@@ -24,6 +25,7 @@
   },
   "dependencies": {
     "@myownradio/domain": "1.0.0",
+    "axios": "^0.19.2",
     "classnames": "^2.2.6",
     "debug": "^4.1.1",
     "email-validator": "^2.0.4",

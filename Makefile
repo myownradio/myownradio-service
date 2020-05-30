@@ -41,7 +41,9 @@ build-all-services:
 	$(foreach SERVICE,$(SERVICES),$(MAKE) SERVICE=$(SERVICE) build-service && ) true
 
 build-all-apps:
-	$(foreach APP,$(APPS),$(MAKE) SERVICE=$(APP) build-app && ) true
+	for service in $(shell ls app/services); do \
+		$(MAKE) SERVICE=$${service} build-app || exit 1; \
+	done
 
 build-all: build-all-services build-all-apps
 
