@@ -4,9 +4,12 @@
     "target": "es6",
     "module": "commonjs",
     "moduleResolution": "node",
-    "outDir": "dist"
+    "outDir": "dist",
+    "typeRoots": [
+      "node_modules/@types"
+    ]
   },
-  "exclude": [
-    "tests"
+  "include": [
+    "src/server.ts"
   ]
 }
