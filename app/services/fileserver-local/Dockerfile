@@ -11,7 +11,7 @@ COPY services/fileserver-local services/fileserver-local
 COPY libs/shared libs/shared
 RUN ["yarn", "install", "--production"]
 
-FROM node:13-alpine
+FROM node:14-alpine
 
 ENV NODE_ENV=production
 

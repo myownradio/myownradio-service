@@ -11,7 +11,7 @@ COPY tsconfig.json ./
 COPY services/stream-composer services/stream-composer
 RUN ["yarn", "workspace", "@myownradio/stream-composer", "build"]
 
-FROM node:13-alpine
+FROM node:14-alpine
 ENV NODE_ENV=production
 
 COPY --from=0 /usr/app/services/stream-composer/dist/ /usr/app/

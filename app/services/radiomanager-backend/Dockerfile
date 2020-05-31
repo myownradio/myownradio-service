@@ -13,7 +13,7 @@ COPY services/radiomanager-backend services/radiomanager-backend
 RUN ["yarn", "workspace", "@myownradio/radiomanager-backend", "build"]
 
 
-FROM node:13-alpine
+FROM node:14-alpine
 
 ENV NODE_ENV=production
 
