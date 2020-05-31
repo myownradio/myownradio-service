@@ -1,8 +1,13 @@
-const bcrypt = require("bcryptjs")
-const { validate: isValidEmail } = require("email-validator")
+import { hash } from "bcryptjs"
+import { validate as isValidEmail } from "email-validator"
+import * as Router from "koa-router"
+import { Config } from "../config"
+import { Knex } from "../knex"
 
-module.exports = function createSignupRouteHandler(config, knexConnection) {
-  return async ctx => {
+export function postSignup(config: Config, knex: Knex): Router.IMiddleware {
+  void config
+
+  return async (ctx): Promise<void> => {
     const { email, password } = ctx.request.body
 
     if (!email || !password) {
@@ -17,11 +22,11 @@ module.exports = function createSignupRouteHandler(config, knexConnection) {
       ctx.throw(400)
     }
 
-    const passwordHash = await bcrypt.hash(password, 10)
+    const passwordHash = await hash(password, 10)
     const now = new Date().toISOString()
 
     try {
-      await knexConnection("users").insert({
+      await knex("users").insert({
         email,
         password: passwordHash,
         created_at: now,

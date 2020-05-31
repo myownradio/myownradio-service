@@ -4,14 +4,13 @@ WORKDIR /usr/app/
 
 COPY package.json yarn.lock ./
 COPY services/auth-server/package.json services/auth-server/
-COPY libs/shared/package.json libs/shared/
+COPY libs/ libs/
 RUN ["yarn", "install", "--non-interactive", "--pure-lockfile"]
 
 COPY services/auth-server services/auth-server
-COPY libs/shared libs/shared
 RUN ["yarn", "install", "--production"]
 
-FROM node:13-alpine
+FROM node:14-alpine
 
 ENV NODE_ENV=production
 
