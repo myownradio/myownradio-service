@@ -10,7 +10,7 @@ COPY services/migration/knexfile.js services/migration/
 RUN ["yarn", "install", "--production"]
 
 
-FROM node:13-alpine
+FROM node:14-alpine
 
 ENV NODE_ENV=production
 
