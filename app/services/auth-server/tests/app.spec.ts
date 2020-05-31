@@ -1,8 +1,10 @@
-const knex = require("knex")
-const supertest = require("supertest")
-const { createLogger } = require("winston")
-
-const createApp = require("../src/app")
+import knex = require("knex")
+import supertest = require("supertest")
+import { createLogger } from "winston"
+import { createApp } from "../src/app"
+import { Config } from "../src/config"
+import { Knex } from "../src/knex"
+import { Logger } from "../src/logger"
 
 const migrationsDir = `${__dirname}/../../../migrations`
 const seedsDir = `${__dirname}/../../../seeds`
@@ -10,19 +12,19 @@ const seedsDir = `${__dirname}/../../../seeds`
 const accessToken =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjEsImlhdCI6MTUxNjIzOTAyMn0.Fknsf_nSFNdqS9JkFJABEEtMVffv9zR1_nrI2mAVx60"
 
-const config = {
+const config = new Config({
   AUTH_SERVER_TOKEN_SECRET: "secret",
   AUTH_SERVER_DATABASE_URL: ":memory:",
   AUTH_SERVER_DATABASE_CLIENT: "sqlite3",
-  AUTH_SERVER_ACCESS_TOKEN_LIFETIME: 30,
-  AUTH_SERVER_REFRESH_TOKEN_LIFETIME: 2592000,
+  AUTH_SERVER_ACCESS_TOKEN_LIFETIME: "30",
+  AUTH_SERVER_REFRESH_TOKEN_LIFETIME: "2592000",
   AUTH_SERVER_ALLOWED_ORIGIN: "*",
-  PORT: 8080,
-}
+  PORT: "8080",
+})
 
-let request
-let knexConnection
-let logger
+let request: supertest.SuperTest<supertest.Test>
+let knexConnection: Knex
+let logger: Logger
 
 beforeEach(async () => {
   logger = createLogger({
@@ -30,8 +32,8 @@ beforeEach(async () => {
   })
 
   knexConnection = knex({
-    connection: config.AUTH_SERVER_DATABASE_URL,
-    client: config.AUTH_SERVER_DATABASE_CLIENT,
+    connection: config.databaseUrl,
+    client: config.databaseClient,
     useNullAsDefault: false,
   })
 
@@ -44,11 +46,6 @@ beforeEach(async () => {
   })
 
   request = supertest(createApp(config, knexConnection, logger).callback())
-})
-
-// eslint-disable-next-line jest/expect-expect
-test("GET / - should respond with OK", async () => {
-  await request.get("/").expect(200)
 })
 
 describe("on POST /signup", () => {
@@ -222,22 +219,6 @@ describe("/me", () => {
       .get("/me")
       .set("Authorization", "Bearer Wrong")
       .expect(401)
-  })
-})
-
-describe("/auth", () => {
-  // eslint-disable-next-line jest/expect-expect
-  test("GET /auth - should set authorized User-Id in header", async () => {
-    await request
-      .get("/auth")
-      .set("Authorization", `Bearer ${accessToken}`)
-      .expect("User-Id", "1")
-      .expect(200)
-  })
-
-  // eslint-disable-next-line jest/expect-expect
-  test("GET /auth - should fail if unauthorized", async () => {
-    await request.get("/auth").expect(401)
   })
 })
 

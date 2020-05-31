@@ -1,10 +1,13 @@
+import { Middleware } from "koa"
+import { Logger } from "../logger"
+
 /**
  * @see https://github.com/koajs/koa/blob/d48d88ee17b780c02123e6d657274cab456e943e/lib/context.js#L150
  */
 const DEFAULT_KOAJS_ERROR_STATUS_CODE = 500
 
-module.exports = function requestLogger(logger) {
-  return async (ctx, next) => {
+export function requestLogger(logger: Logger): Middleware {
+  return async (ctx, next): Promise<void> => {
     try {
       await next()
     } catch (error) {

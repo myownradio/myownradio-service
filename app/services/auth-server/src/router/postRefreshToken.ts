@@ -1,13 +1,16 @@
-const createAccessToken = require("../utils/createAccessToken")
-const generateTokenForUser = require("../utils/generateTokenForUser")
+import * as Router from "koa-router"
+import { Config } from "../config"
+import { Knex } from "../knex"
+import { createAccessToken } from "../utils/createAccessToken"
+import { generateTokenForUser } from "../utils/generateTokenForUser"
 
-function calculateExpirationThreshold(config) {
-  const thresholdMillis = new Date().getTime() - config.AUTH_SERVER_REFRESH_TOKEN_LIFETIME * 1000
+function calculateExpirationThreshold(config: Config): string {
+  const thresholdMillis = new Date().getTime() - config.refreshTokenLifeTime * 1000
   return new Date(thresholdMillis).toISOString()
 }
 
-module.exports = function createRefreshTokenRouteHandler(config, knexConnection) {
-  return async ctx => {
+export function postRefreshToken(config: Config, knex: Knex): Router.IMiddleware {
+  return async (ctx): Promise<void> => {
     const { refresh_token: oldRefreshToken } = ctx.request.body
 
     if (!oldRefreshToken) {
@@ -17,14 +20,14 @@ module.exports = function createRefreshTokenRouteHandler(config, knexConnection)
     const newRefreshToken = await generateTokenForUser()
     const now = new Date().toISOString()
 
-    const newAccessToken = await knexConnection.transaction(async trx => {
+    const newAccessToken = await knex.transaction(async trx => {
       const threshold = calculateExpirationThreshold(config)
 
       const updatedRows = await trx("refresh_tokens")
         .update({ refresh_token: newRefreshToken, updated_at: now })
         .where("updated_at", ">", threshold)
         .where({ refresh_token: oldRefreshToken })
-        .count()
+        .count<number>()
 
       if (updatedRows === 0) {
         ctx.throw(401)
@@ -34,11 +37,7 @@ module.exports = function createRefreshTokenRouteHandler(config, knexConnection)
         .where({ refresh_token: newRefreshToken })
         .first()
 
-      return createAccessToken(
-        config.AUTH_SERVER_TOKEN_SECRET,
-        config.AUTH_SERVER_ACCESS_TOKEN_LIFETIME,
-        updatedRow.user_id,
-      )
+      return createAccessToken(config.tokenSecret, config.accessTokenLifetime, updatedRow.user_id)
     })
 
     ctx.body = {
