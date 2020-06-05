@@ -16,4 +16,4 @@ ENV NODE_ENV=production
 
 COPY --from=0 /usr/app /usr/app
 
-CMD ["node", "/usr/app/services/auth-server/src/server.js"]
+CMD ["node", "/usr/app/services/auth-server/dist/index.js"]
