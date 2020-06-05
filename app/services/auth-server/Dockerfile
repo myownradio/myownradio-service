@@ -7,13 +7,16 @@ COPY services/auth-server/package.json services/auth-server/
 COPY libs/ libs/
 RUN ["yarn", "install", "--non-interactive", "--pure-lockfile"]
 
+COPY tsconfig.json ./
 COPY services/auth-server services/auth-server
-RUN ["yarn", "install", "--production"]
+
+RUN ["yarn", "workspace", "@myownradio/auth-server", "build"]
+
 
 FROM node:14-alpine
 
 ENV NODE_ENV=production
 
-COPY --from=0 /usr/app /usr/app
+COPY --from=0 /usr/app/services/auth-server/dist/ /usr/app/
 
-CMD ["node", "/usr/app/services/auth-server/dist/index.js"]
+CMD ["node", "/usr/app/index.js"]
