@@ -30,7 +30,9 @@
       "libs/*"
     ],
     "nohoist": [
-      "**/@types/**"
+      "**/@types/**",
+      "**/koa-jwt",
+      "**/koa-body"
     ]
   },
   "devDependencies": {

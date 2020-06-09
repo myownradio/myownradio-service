@@ -12,9 +12,7 @@ export function createRouter(knexConnection: knex, config: Config, logger: Logge
 
   router.get(
     "/audio/preview/:trackId(\\d+)",
-    jwtMiddleware({
-      secret: config.tokenSecret,
-    }),
+    jwtMiddleware({ secret: config.tokenSecret }),
     audioPreview(knexConnection, config, logger),
   )
 
