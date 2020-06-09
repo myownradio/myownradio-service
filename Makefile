@@ -6,6 +6,9 @@ APPS := radiomanager-frontend migration auth-server fileserver-local audio-uploa
 SERVICES := frontend-proxy
 LATEST_TAG_ONLY := migration
 
+cleanup:
+	git clean -dfX
+
 install:
 	(cd app && yarn install)
 	(cd app && docker-compose pull)

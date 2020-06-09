@@ -24,10 +24,17 @@
     "url": "git+https://github.com/pldin601/myownradio-service.git"
   },
   "private": true,
-  "workspaces": [
-    "services/*",
-    "libs/*"
-  ],
+  "workspaces": {
+    "packages": [
+      "services/*",
+      "libs/*"
+    ],
+    "nohoist": [
+      "**/@types/**",
+      "**/koa-jwt",
+      "**/koa-body"
+    ]
+  },
   "devDependencies": {
     "@types/jest": "^25.2.2",
     "@typescript-eslint/eslint-plugin": "^2.23.0",
