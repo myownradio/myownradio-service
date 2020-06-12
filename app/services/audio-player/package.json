@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build": "rm -rf dist && ncc build src/server.ts -o dist -s",
-    "dev": "ts-node-dev --respawn src/server.ts",
+    "dev": "nodemon src/server.ts",
     "start": "node dist/index.js"
   },
   "devDependencies": {
@@ -19,9 +19,10 @@
     "@types/node": "^13.9.3",
     "@types/supertest": "^2.0.8",
     "@zeit/ncc": "^0.21.1",
+    "nodemon": "^2.0.4",
     "supertest": "^4.0.2",
-    "ts-node-dev": "^1.0.0-pre.44",
-    "typescript": "^3.8.3"
+    "ts-node": "^8.10.2",
+    "typescript": "^3.9.5"
   },
   "dependencies": {
     "@koa/cors": "^3.0.0",
