@@ -1,11 +1,15 @@
 FROM node:14
 
-COPY ./ /usr/app/
+WORKDIR /usr/app
 
-WORKDIR /usr/app/services/radiomanager-frontend
+COPY package.json yarn.lock ./
+COPY services/radiomanager-frontend/package.json services/radiomanager-frontend/
+COPY libs/ libs/
+RUN ["yarn", "install", "--non-interactive", "--pure-lockfile"]
 
-RUN ["yarn", "install"]
-RUN ["yarn", "build"]
+COPY tsconfig.json ./
+COPY services/radiomanager-frontend services/radiomanager-frontend
+RUN ["yarn", "workspace", "@myownradio/radiomanager-frontend", "build"]
 
 FROM nginx:1.17
 
