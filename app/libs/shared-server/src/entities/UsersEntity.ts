@@ -9,3 +9,11 @@ export const UsersEntityContract = t.interface({
 });
 
 export type IUsersEntity = t.TypeOf<typeof UsersEntityContract>;
+
+export enum UsersProps {
+  UpdatedAt = "updated_at",
+  Email = "email",
+  Password = "password",
+  CreatedAt = "created_at",
+  Id = "id",
+}

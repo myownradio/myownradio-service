@@ -38,7 +38,7 @@ build-service:
 
 build-app:
 	@echo "Building image for application service: $(SERVICE)..."
-	docker build -t $(LOCAL_PREFIX)$(SERVICE) --file app/services/$(SERVICE)/Dockerfile app/
+	docker build -t $(LOCAL_PREFIX)$(SERVICE) --no-cache --file app/services/$(SERVICE)/Dockerfile app/
 
 build-all-services:
 	$(foreach SERVICE,$(SERVICES),$(MAKE) SERVICE=$(SERVICE) build-service && ) true

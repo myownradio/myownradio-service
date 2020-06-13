@@ -9,3 +9,11 @@ export const RefreshTokensEntityContract = t.interface({
 });
 
 export type IRefreshTokensEntity = t.TypeOf<typeof RefreshTokensEntityContract>;
+
+export enum RefreshTokensProps {
+  Id = "id",
+  CreatedAt = "created_at",
+  RefreshToken = "refresh_token",
+  UserId = "user_id",
+  UpdatedAt = "updated_at",
+}

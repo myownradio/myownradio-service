@@ -1,4 +1,14 @@
-node_modules
-dist
-.cache
-.git*
+*
+!package.json
+!yarn.lock
+!tsconfig.json
+
+# todo Investigate, why it is not possible to specify explicitly include files and need to include everything and exclude others.
+!libs/
+libs/*/node_modules
+libs/*/dist
+libs/*/jest.config.js
+
+!services/*/package.json
+!services/*/tsconfig.json
+!services/*/src

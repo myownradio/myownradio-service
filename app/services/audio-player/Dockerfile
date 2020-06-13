@@ -2,12 +2,11 @@ FROM node:14
 
 WORKDIR /usr/app/
 
-COPY package.json yarn.lock ./
+COPY package.json yarn.lock tsconfig.json ./
 COPY services/audio-player/package.json services/audio-player/
 COPY libs/ libs/
 RUN ["yarn", "install", "--non-interactive", "--pure-lockfile"]
 
-COPY tsconfig.json ./
 COPY services/audio-player services/audio-player
 RUN ["yarn", "workspace", "@myownradio/audio-player", "build"]
 

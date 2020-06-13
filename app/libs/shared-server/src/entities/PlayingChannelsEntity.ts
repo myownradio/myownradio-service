@@ -11,3 +11,13 @@ export const PlayingChannelsEntityContract = t.interface({
 });
 
 export type IPlayingChannelsEntity = t.TypeOf<typeof PlayingChannelsEntityContract>;
+
+export enum PlayingChannelsProps {
+  CreatedAt = "created_at",
+  UpdatedAt = "updated_at",
+  StartOffset = "start_offset",
+  Id = "id",
+  StartedAt = "started_at",
+  ChannelId = "channel_id",
+  PausedAt = "paused_at",
+}
