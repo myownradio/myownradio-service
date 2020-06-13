@@ -1,5 +1,6 @@
 import fs = require("fs")
 import path = require("path")
+import {} from "@myownradio/shared-server"
 import { createSignature } from "@mor/common/crypto/signature"
 import { convertFileHashToFilePath } from "@mor/common/fileserver"
 import { fileExists } from "@mor/common/fs"
