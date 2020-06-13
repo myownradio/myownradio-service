@@ -2,7 +2,10 @@
   "name": "@myownradio/shared-server",
   "version": "1.0.0",
   "private": true,
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
+    "clean": "rimraf dist",
     "build": "tsc -p tsconfig.json",
     "watch": "tsc -w -p tsconfig.json",
     "test": "jest"
@@ -14,7 +17,6 @@
     "typescript": "^3.9.5"
   },
   "dependencies": {
-    "@myownradio/domain": "1.0.0",
     "hashids": "2.2.1"
   }
 }
