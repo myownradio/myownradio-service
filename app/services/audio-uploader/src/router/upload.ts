@@ -1,9 +1,6 @@
 import fs = require("fs")
 import path = require("path")
-import {} from "@myownradio/shared-server"
-import { createSignature } from "@mor/common/crypto/signature"
-import { convertFileHashToFilePath } from "@mor/common/fileserver"
-import { fileExists } from "@mor/common/fs"
+import { signature as signatureUtils, pathUtils, fsUtils } from "@myownradio/shared-server"
 import { Middleware } from "koa"
 import { Config } from "../config"
 import { supportedAudioExtensions, supportedAudioFormats } from "../constants"
@@ -42,17 +39,17 @@ export function createUploadHandler(config: Config): Middleware {
       ctx.throw(415)
     }
 
-    const hashPath = convertFileHashToFilePath(hash)
+    const hashPath = pathUtils.convertFileHashToFilePath(hash)
     const filepath = path.join(config.rootDir, `${hashPath}${extension}`)
 
-    if (!(await fileExists(filepath))) {
+    if (!(await fsUtils.fileExists(filepath))) {
       await fs.promises.mkdir(path.dirname(filepath), { recursive: true })
       await fs.promises.copyFile(source.path, filepath)
     }
 
     const body = { hash, size, name, ...metadata }
     const rawBody = JSON.stringify(body)
-    const signature = createSignature(rawBody, config.metadataSecret)
+    const signature = signatureUtils.createSignature(rawBody, config.metadataSecret)
 
     ctx.set("signature", signature)
     ctx.set("content-type", "application/json")
