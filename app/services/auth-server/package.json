@@ -28,10 +28,6 @@
   },
   "dependencies": {
     "@koa/cors": "^3.0.0",
-    "@mor/common": "1.0.0",
-    "@myownradio/domain": "1.0.0",
-    "@myownradio/entities": "1.0.0",
-    "@myownradio/shared": "1.0.0",
     "bcryptjs": "^2.4.3",
     "email-validator": "^2.0.4",
     "jsonwebtoken": "^8.5.1",

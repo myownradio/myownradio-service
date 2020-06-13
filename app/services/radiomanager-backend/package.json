@@ -29,7 +29,6 @@
   },
   "dependencies": {
     "@koa/cors": "^3.0.0",
-    "@myownradio/domain": "1.0.0",
     "fp-ts": "^2.5.3",
     "io-ts": "^2.1.2",
     "knex": "^0.20.13",

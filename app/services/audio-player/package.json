@@ -30,8 +30,6 @@
   },
   "dependencies": {
     "@koa/cors": "^3.0.0",
-    "@mor/common": "1.0.0",
-    "@myownradio/entities": "1.0.0",
     "ffmpeg-static": "^4.1.1",
     "fluent-ffmpeg": "^2.1.2",
     "jsonwebtoken": "^8.5.1",
