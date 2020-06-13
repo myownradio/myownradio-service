@@ -11,4 +11,5 @@ libs/*/jest.config.js
 
 !services/*/package.json
 !services/*/tsconfig.json
+!services/*/yarn.lock
 !services/*/src
