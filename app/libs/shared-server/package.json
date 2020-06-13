@@ -10,7 +10,6 @@
     "build": "tsc -p tsconfig.json",
     "watch": "tsc -w -p tsconfig.json",
     "test": "jest",
-    "postinstall": "yon run build",
     "generate:entities": "npx postgres-iots-codegen --host=localhost --port=15432 --username=myownradio --password=myownradio --database=myownradio --outdir=src/entities --index --enum --capital --nosuffix --ignore=knex_migrations,knex_migrations_lock",
     "pregenerate:entities": "npx rimraf src/entities/**",
     "postgenerate:entities": "yon run build"
