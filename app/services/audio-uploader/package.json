@@ -10,6 +10,7 @@
   "private": true,
   "dependencies": {
     "@koa/cors": "^3.0.0",
+    "@myownradio/shared-server": "file:../../libs/shared-server",
     "@sentry/node": "5.11.2",
     "ffprobe-static": "^3.0.0",
     "fluent-ffmpeg": "^2.1.2",
