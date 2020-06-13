@@ -8,7 +8,8 @@
     "clean": "rimraf dist",
     "build": "tsc -p tsconfig.json",
     "watch": "tsc -w -p tsconfig.json",
-    "test": "jest"
+    "test": "jest",
+    "generate:entities": "npx rimraf src/entities/** && npx postgres-iots-codegen --host=localhost --port=15432 --username=myownradio --password=myownradio --database=myownradio --outdir=src/entities --index --enum --capital --nosuffix --ignore=knex_migrations,knex_migrations_lock"
   },
   "devDependencies": {
     "@types/jest": "^26.0.0",
