@@ -1,10 +1,12 @@
-import { decodeId, encodeId } from "@mor/common/ids"
-import { AudioTrackResource } from "@myownradio/domain/resources"
+import { AudioTrackResource } from "@myownradio/shared-types"
+import { hashUtils } from "@myownradio/shared-server"
 import * as t from "io-ts"
 import * as knex from "knex"
 import { Config } from "../../config"
 import { TypedContext } from "../../interfaces"
 import { verifyMetadataSignature } from "../../utils"
+
+const { encodeId, decodeId } = hashUtils
 
 const AddTrackToChannelRequestContract = t.type({
   name: t.string,
