@@ -1,5 +1,5 @@
-import { AudioTrackResource } from "@myownradio/shared-types"
 import { hashUtils } from "@myownradio/shared-server"
+import { AudioTrackResource } from "@myownradio/shared-types"
 import * as t from "io-ts"
 import * as knex from "knex"
 import { Config } from "../../config"

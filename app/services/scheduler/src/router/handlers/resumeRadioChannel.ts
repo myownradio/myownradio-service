@@ -48,7 +48,10 @@ export default function resumeRadioChannel(
           id: playingChannel.id,
         })
         .update({
-          started_at: dateUtils.convertDateToIso(dateUtils.convertDateToMillis(playingChannel.started_at) + (now - dateUtils.convertDateToMillis(playingChannel.paused_at))),
+          started_at: dateUtils.convertDateToIso(
+            dateUtils.convertDateToMillis(playingChannel.started_at) +
+              (now - dateUtils.convertDateToMillis(playingChannel.paused_at)),
+          ),
           paused_at: null,
         })
         .count()

@@ -1,0 +1,56 @@
+{
+  "name": "@myownradio/myownradio-service",
+  "version": "1.0.0",
+  "engines": {
+    "node": ">=14"
+  },
+  "scripts": {
+    "test:audio-uploader": "yarn --cwd services/audio-uploader test",
+    "test:fileserver-local": "yarn --cwd services/fileserver-local test",
+    "test:auth-server": "yarn --cwd services/auth-server test",
+    "test:radiomanager-frontend": "yarn --cwd services/radiomanager-frontend test",
+    "test:radiomanager-backend": "yarn --cwd services/radiomanager-backend test",
+    "test:scheduler": "yarn --cwd services/scheduler test",
+    "test:audio-player": "yarn --cwd services/audio-player test",
+    "test": "run-s test:*",
+    "dev:fileserver-local": "env-cmd -f env/fileserver-local.env -- yarn --cwd services/fileserver-local run dev",
+    "dev:audio-uploader": "env-cmd -f env/audio-uploader.env -- yarn --cwd services/audio-uploader run dev",
+    "dev:auth-server": "env-cmd -f env/auth-server.env -- yarn --cwd services/auth-server run dev",
+    "dev:radiomanager-frontend": "env-cmd -f env/radiomanager-frontend.env -- yarn --cwd services/radiomanager-frontend start",
+    "dev:radiomanager-backend": "env-cmd -f env/radiomanager-backend.env -- yarn --cwd services/radiomanager-backend run dev",
+    "dev:scheduler": "env-cmd -f env/scheduler.env -- yarn --cwd services/scheduler run dev",
+    "dev:audio-player": "env-cmd -f env/audio-player.env -- yarn --cwd services/audio-player run dev",
+    "dev": "concurrently -n w: npm:dev:*",
+    "migrate": "knex migrate:latest",
+    "lint": "eslint services libs --ext .js,.jsx,.ts,.tsx",
+    "lint:fix": "eslint services libs --ext .js,.jsx,.ts,.tsx --fix"
+  },
+  "private": true,
+  "lint": "eslint services libs --ext .js,.jsx,.ts,.tsx",
+  "lint:fix": "eslint services libs --ext .js,.jsx,.ts,.tsx --fix",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pldin601/myownradio-service.git"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^2.23.0",
+    "@typescript-eslint/parser": "^2.23.0",
+    "concurrently": "^5.1.0",
+    "env-cmd": "^10.0.1",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb": "^18.1.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-config-prettier": "^6.10.0",
+    "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-jest": "^23.7.0",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-prettier": "^3.1.2",
+    "eslint-plugin-react": "^7.19.0",
+    "eslint-plugin-react-hooks": "^2.5.0",
+    "knex": "^0.20.9",
+    "npm-run-all": "^4.1.5",
+    "pg": "^8.2.1",
+    "prettier": "^1.19.1",
+    "typescript": "^3.8.3"
+  }
+}

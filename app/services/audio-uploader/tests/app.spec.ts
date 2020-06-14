@@ -1,4 +1,4 @@
-import { verifySignature } from "@mor/common/crypto/signature"
+import { signature } from "@myownradio/shared-server"
 import * as Application from "koa"
 import * as request from "supertest"
 import { createApp } from "../src/app"
@@ -47,7 +47,7 @@ test("POST /upload - upload new audio file", async () => {
       format: "MP2/3 (MPEG audio layer 2/3)",
     })
 
-  expect(verifySignature(response.text, response.get("signature"), config.metadataSecret, 30000)).toBeTruthy()
+  expect(signature.verifySignature(response.text, response.get("signature"), config.metadataSecret, 30000)).toBeTruthy()
 })
 
 test("POST /upload - should fail if no file attached", async () => {
