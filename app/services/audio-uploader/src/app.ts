@@ -1,5 +1,5 @@
-import Application = require("koa")
 import cors = require("@koa/cors")
+import Application = require("koa")
 import { Config } from "./config"
 import { createRouter } from "./router"
 

@@ -1,4 +1,4 @@
-import { RadioChannelResource } from "@myownradio/domain/resources"
+import { RadioChannelResource } from "@myownradio/shared-types"
 import { AuthenticationEvent, AuthenticationModel } from "~/modules/Authentication"
 import { RadioManagerApiService } from "~/services/api/RadioManagerApiService"
 import Debug from "~/utils/debug"

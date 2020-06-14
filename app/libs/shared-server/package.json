@@ -1,0 +1,29 @@
+{
+  "name": "@myownradio/shared-server",
+  "version": "1.0.0",
+  "private": true,
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "clean": "rimraf dist",
+    "prebuild": "yon run clean",
+    "build": "tsc -p tsconfig.json",
+    "watch": "tsc -w -p tsconfig.json",
+    "test": "jest",
+    "generate:entities": "npx postgres-iots-codegen --host=localhost --port=15432 --username=myownradio --password=myownradio --database=myownradio --outdir=src/entities --index --enum --capital --nosuffix --ignore=knex_migrations,knex_migrations_lock",
+    "pregenerate:entities": "npx rimraf src/entities/**",
+    "postgenerate:entities": "yon run build"
+  },
+  "devDependencies": {
+    "@types/jest": "^26.0.0",
+    "jest": "^26.0.1",
+    "ts-jest": "^26.1.0",
+    "typescript": "^3.9.5",
+    "yarn-or-npm": "^3.0.1"
+  },
+  "dependencies": {
+    "fp-ts": "^2.6.5",
+    "hashids": "2.2.1",
+    "io-ts": "^2.2.4"
+  }
+}

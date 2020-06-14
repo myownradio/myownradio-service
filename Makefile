@@ -2,7 +2,7 @@ LOCAL_PREFIX := myownradio/
 IMAGE_URL := registry.homefs.biz/$(SERVICE)
 GIT_COMMIT = $(shell git log -n 1 --pretty=format:'%H')
 
-APPS := radiomanager-frontend migration auth-server fileserver-local audio-uploader radiomanager-backend scheduler stream-composer audio-player
+APPS := radiomanager-frontend migration auth-server audio-uploader radiomanager-backend scheduler stream-composer audio-player
 SERVICES := frontend-proxy
 LATEST_TAG_ONLY := migration
 

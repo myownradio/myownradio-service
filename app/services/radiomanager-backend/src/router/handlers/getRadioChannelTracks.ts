@@ -1,8 +1,10 @@
-import { decodeId, encodeId } from "@mor/common/ids"
-import { AudioTrackResource } from "@myownradio/domain/resources"
+import { hashUtils } from "@myownradio/shared-server"
+import { AudioTrackResource } from "@myownradio/shared-types"
 import * as knex from "knex"
 import { Config } from "../../config"
 import { TypedContext } from "../../interfaces"
+
+const { decodeId, encodeId } = hashUtils
 
 export default function getRadioChannelTracks(_: Config, knexConnection: knex) {
   return async (ctx: TypedContext<AudioTrackResource[]>): Promise<void> => {

@@ -1,5 +1,5 @@
 import { EventEmitter } from "events"
-import { UserResource } from "@myownradio/domain/resources/UserResource"
+import { UserResource } from "@myownradio/shared-types"
 import { AuthApiService } from "~/services/api/AuthApiService"
 import { SessionService } from "~/services/session/SessionService"
 import debug from "~/utils/debug"

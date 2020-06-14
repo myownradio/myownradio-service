@@ -1,0 +1,16 @@
+{
+  "name": "@myownradio/shared-types",
+  "version": "1.0.0",
+  "private": true,
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "clean": "rimraf dist",
+    "build": "tsc -p tsconfig.json",
+    "watch": "tsc -w -p tsconfig.json",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "typescript": "^3.9.5"
+  }
+}

@@ -1,8 +1,10 @@
-import { encodeId } from "@mor/common/ids"
-import { RadioChannelResource } from "@myownradio/domain/resources"
+import { hashUtils } from "@myownradio/shared-server"
+import { RadioChannelResource } from "@myownradio/shared-types"
 import * as knex from "knex"
 import { Config } from "../../config"
 import { TypedContext } from "../../interfaces"
+
+const { encodeId } = hashUtils
 
 export default function getChannels(_: Config, knexConnection: knex) {
   return async (ctx: TypedContext<RadioChannelResource[]>): Promise<void> => {

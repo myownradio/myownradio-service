@@ -5,7 +5,8 @@
   "scripts": {
     "build": "rm -rf dist && ncc build src/server.ts -o dist -s",
     "dev": "ts-node-dev --respawn src/server.ts",
-    "start": "node dist/index.js"
+    "start": "node dist/index.js",
+    "test": "jest"
   },
   "devDependencies": {
     "@types/jest": "^25.1.4",
@@ -16,8 +17,9 @@
     "@types/supertest": "^2.0.8",
     "@zeit/ncc": "^0.21.1",
     "supertest": "^4.0.2",
+    "ts-jest": "^26.1.0",
     "ts-node-dev": "^1.0.0-pre.44",
-    "typescript": "^3.8.3"
+    "typescript": "^3.9.5"
   },
   "dependencies": {
     "@koa/cors": "^3.0.0",

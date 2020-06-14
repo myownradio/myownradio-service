@@ -26,7 +26,6 @@ jobs:
                 "radiomanager-frontend",
                 "radiomanager-backend",
                 "auth-server",
-                "fileserver-local",
                 "audio-uploader",
                 "audio-player",
                 "scheduler",

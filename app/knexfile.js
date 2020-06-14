@@ -1,15 +1,15 @@
 module.exports = {
   development: {
-    client: "postgresql",
+    client: "pg",
     connection: {
       database: "myownradio",
       user: "myownradio",
       password: "myownradio",
-      port: 15432
+      port: 15432,
     },
     pool: {
-      min: 2,
-      max: 10
-    }
-  }
-};
+      min: 1,
+      max: 10,
+    },
+  },
+}

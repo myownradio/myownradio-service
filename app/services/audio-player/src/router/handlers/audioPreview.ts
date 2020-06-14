@@ -1,17 +1,10 @@
 import * as path from "path"
-import {
-  IAudioTracksEntity,
-  AudioTracksProps,
-  RadioChannelsProps,
-  TableName,
-  IRadioChannelsEntity,
-} from "@myownradio/entities/db"
+import { pathUtils, entities as e } from "@myownradio/shared-server"
 import * as knex from "knex"
 import { IMiddleware } from "koa-router"
 import { Logger } from "winston"
 import { makeMp3Preview } from "../../audio"
 import { Config } from "../../config"
-import { hashToPath } from "../../utils"
 
 export default function audioPreview(knexConnection: knex, config: Config, logger: Logger): IMiddleware {
   return async (ctx): Promise<void> => {
@@ -19,17 +12,17 @@ export default function audioPreview(knexConnection: knex, config: Config, logge
     const { trackId } = ctx.params
 
     const result = await knexConnection
-      .from<IAudioTracksEntity>(TableName.AudioTracks)
-      .innerJoin<IRadioChannelsEntity>(
-        TableName.RadioChannels,
-        `${TableName.AudioTracks}.${AudioTracksProps.ChannelId}`,
-        `${TableName.RadioChannels}.${RadioChannelsProps.Id}`,
+      .from<e.IAudioTracksEntity>(e.TableName.AudioTracks)
+      .innerJoin<e.IRadioChannelsEntity>(
+        e.TableName.RadioChannels,
+        `${e.TableName.AudioTracks}.${e.AudioTracksProps.ChannelId}`,
+        `${e.TableName.RadioChannels}.${e.RadioChannelsProps.Id}`,
       )
-      .where(`${TableName.AudioTracks}.${AudioTracksProps.Id}`, trackId)
-      .select<Pick<IAudioTracksEntity, "hash" | "name"> & Pick<IRadioChannelsEntity, "user_id">>(
-        `${TableName.AudioTracks}.hash`,
-        `${TableName.AudioTracks}.name`,
-        `${TableName.RadioChannels}.user_id`,
+      .where(`${e.TableName.AudioTracks}.${e.AudioTracksProps.Id}`, trackId)
+      .select<Pick<e.IAudioTracksEntity, "hash" | "name"> & Pick<e.IRadioChannelsEntity, "user_id">>(
+        `${e.TableName.AudioTracks}.hash`,
+        `${e.TableName.AudioTracks}.name`,
+        `${e.TableName.RadioChannels}.user_id`,
       )
       .first()
 
@@ -42,7 +35,7 @@ export default function audioPreview(knexConnection: knex, config: Config, logge
     }
 
     const extension = path.extname(result.name)
-    const audioFileUrl = `${config.fileServerUrl}/${hashToPath(result.hash)}${extension}`
+    const audioFileUrl = `${pathUtils.convertFileHashToFileUrl(result.hash, config.fileServerUrl)}${extension}`
 
     ctx.set("Content-Type", "audio/mpeg")
     ctx.body = makeMp3Preview(audioFileUrl, logger.child({ lib: "ffmpeg" }))

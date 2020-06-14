@@ -1,4 +1,4 @@
-import { UserResource } from "@myownradio/domain/resources/UserResource"
+import { UserResource } from "@myownradio/shared-types"
 import { useContext } from "react"
 import { UnauthorizedError } from "~/modules/Authentication"
 import { AuthenticatedUserContext } from "~/modules/Authentication/AuthenticatedUserProvider"

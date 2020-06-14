@@ -53,7 +53,7 @@
   ],
   "settings": {
     "react": {
-      "version": "detect"
+      "version": "16.3.1"
     }
   }
 }

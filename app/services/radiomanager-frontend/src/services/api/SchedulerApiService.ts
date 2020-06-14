@@ -1,4 +1,4 @@
-import { NowPlayingResource } from "@myownradio/domain/resources/NowPlayingResource"
+import { NowPlayingResource } from "@myownradio/shared-types"
 import { AbstractApiWithSessionService } from "~/services/api/AbstractApiWithSessionService"
 import { SessionService } from "~/services/session/SessionService"
 
