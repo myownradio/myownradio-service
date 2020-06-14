@@ -5,6 +5,16 @@
     "node": ">=14"
   },
   "scripts": {
+    "install:shared-server": "yarn  --cwd libs/shared-server install",
+    "install:audio-uploader": "yarn --cwd services/audio-uploader install",
+    "install:fileserver-local": "yarn --cwd services/fileserver-local install",
+    "install:auth-server": "yarn --cwd services/auth-server install",
+    "install:radiomanager-frontend": "yarn --cwd services/radiomanager-frontend install",
+    "install:radiomanager-backend": "yarn --cwd services/radiomanager-backend install",
+    "install:scheduler": "yarn --cwd services/scheduler install",
+    "install:audio-player": "yarn --cwd services/audio-player install",
+    "postinstall": "run-s install:*",
+    "test:shared-server": "yarn  --cwd libs/shared-server test",
     "test:audio-uploader": "yarn --cwd services/audio-uploader test",
     "test:fileserver-local": "yarn --cwd services/fileserver-local test",
     "test:auth-server": "yarn --cwd services/auth-server test",

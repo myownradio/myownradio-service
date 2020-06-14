@@ -5,6 +5,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
+    "postinstall": "yarn run build",
     "clean": "rimraf dist",
     "prebuild": "yon run clean",
     "build": "tsc -p tsconfig.json",
