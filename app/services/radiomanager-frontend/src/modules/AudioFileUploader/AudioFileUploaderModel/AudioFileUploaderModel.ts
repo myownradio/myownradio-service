@@ -1,5 +1,5 @@
 import { EventEmitter } from "events"
-import { AudioTrackResource } from "@myownradio/domain/resources/AudioTrackResource"
+import { AudioTrackResource } from "@myownradio/shared-types"
 import axios, { CancelTokenSource } from "axios"
 import { AuthenticationModel } from "~/modules/Authentication"
 import { AuthenticationEvent } from "~/modules/Authentication/AuthenticationModel/AuthenticationModel"

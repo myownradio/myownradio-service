@@ -1,10 +1,9 @@
-import { UserResource } from "@myownradio/domain/resources/UserResource"
+import { UserResource } from "@myownradio/shared-types"
 import React, { createContext } from "react"
 import { Redirect } from "react-router-dom"
 import { config } from "~/config"
-import { AuthenticationState } from "~/modules/Authentication"
+import { AuthenticationState, useAuthenticationModel } from "~/modules/Authentication"
 import { useResource } from "~/utils/suspense2"
-import { useAuthenticationModel } from "../use/useAuthenticationModel"
 
 export const AuthenticatedUserContext = createContext<null | UserResource>(null)
 

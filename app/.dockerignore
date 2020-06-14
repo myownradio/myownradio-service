@@ -13,3 +13,4 @@ libs/*/jest.config.js
 !services/*/tsconfig.json
 !services/*/yarn.lock
 !services/*/src
+!services/*/docker

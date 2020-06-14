@@ -1,4 +1,4 @@
-import { AudioTrackResource, RadioChannelResource } from "@myownradio/domain/resources"
+import { AudioTrackResource, RadioChannelResource } from "@myownradio/shared-types"
 import { AbstractApiWithSessionService } from "~/services/api/AbstractApiWithSessionService"
 import { SessionService } from "~/services/session/SessionService"
 
