@@ -1,18 +1,30 @@
-FROM node:14
+FROM node:14 as libs
 
-WORKDIR /usr/app/
-
-COPY package.json yarn.lock ./
-COPY services/scheduler/package.json services/scheduler/
-COPY libs/ libs/
-RUN ["yarn", "install", "--non-interactive", "--pure-lockfile"]
+WORKDIR /code
 
 COPY tsconfig.json ./
+COPY libs/shared-server libs/shared-server
+RUN yarn --cwd libs/shared-server install --non-interactive --pure-lockfile
+RUN yarn --cwd libs/shared-server build
+
+
+FROM node:14 as service
+
+WORKDIR /code
+
+COPY tsconfig.json ./
+COPY services/scheduler/package.json services/scheduler/
+COPY services/scheduler/yarn.lock services/scheduler/
+COPY services/scheduler/tsconfig.json services/scheduler/
+COPY --from=libs /code/libs libs
+RUN yarn --cwd services/scheduler install --non-interactive --pure-lockfile
 COPY services/scheduler services/scheduler
-RUN ["yarn", "workspace", "@myownradio/scheduler", "build"]
+RUN yarn --cwd services/scheduler build
+
 
 FROM node:14-alpine
+
 ENV NODE_ENV=production
 
-COPY --from=0 /usr/app/services/scheduler/dist/ /usr/app/
-CMD ["node", "/usr/app/index.js"]
+COPY --from=service /code/services/scheduler/dist/ /code/
+CMD node /code/index.js
