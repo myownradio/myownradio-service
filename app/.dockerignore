@@ -13,8 +13,10 @@ libs/*/jest.config.js
 !services/*/tsconfig.json
 !services/*/yarn.lock
 !services/*/src
+
 !services/radiomanager-frontend/docker
 !services/radiomanager-frontend/.env
-!services/migration/knexfile.js
+!services/radiomanager-frontend/.postcssrc.json
 
+!services/migration/knexfile.js
 !migrations/
