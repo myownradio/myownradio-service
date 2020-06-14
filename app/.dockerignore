@@ -14,6 +14,7 @@ libs/*/jest.config.js
 !services/*/yarn.lock
 !services/*/src
 !services/radiomanager-frontend/docker
+!services/radiomanager-frontend/.env
 !services/migration/knexfile.js
 
 !migrations/
