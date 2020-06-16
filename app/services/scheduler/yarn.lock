@@ -464,7 +464,7 @@
   dependencies:
     vary "^1.1.2"
 
-"@myownradio/shared-server@file:../../libs/shared-server":
+"@myownradio/shared-server@link:../../libs/shared-server":
   version "1.0.0"
   dependencies:
     fp-ts "^2.6.5"

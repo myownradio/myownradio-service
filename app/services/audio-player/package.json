@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "@koa/cors": "^3.0.0",
-    "@myownradio/shared-server": "file:../../libs/shared-server",
+    "@myownradio/shared-server": "link:../../libs/shared-server",
     "ffmpeg-static": "^4.1.1",
     "fluent-ffmpeg": "^2.1.2",
     "jsonwebtoken": "^8.5.1",
