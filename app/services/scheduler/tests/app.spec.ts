@@ -204,13 +204,24 @@ describe("POST /channels/:channelId/resume", () => {
 })
 
 describe("GET /channels/:channelId/nowPlaying", () => {
+  // todo write test for multiple tracks in playlist
   it("should get what's playing and respond with 200 on get request", async () => {
     await request
       .get("/channels/RB2a1y/nowPlaying")
       .set("Authorization", `Bearer ${authorizationToken}`)
       .expect(200, {
-        track_id: "RB2a1y",
-        offset: 95136.5,
+        position: 0,
+        current: {
+          id: "RB2a1y",
+          offset: 95136.5,
+          title: "Bob Marley - This Is Love",
+          url: "todo",
+        },
+        next: {
+          id: "RB2a1y",
+          title: "Bob Marley - This Is Love",
+          url: "todo",
+        },
       })
   })
 
