@@ -7,6 +7,10 @@ COPY libs/shared-server libs/shared-server
 RUN yarn --cwd libs/shared-server install --non-interactive --pure-lockfile
 RUN yarn --cwd libs/shared-server build
 
+COPY libs/shared-types libs/shared-types
+RUN yarn --cwd libs/shared-types install --non-interactive --pure-lockfile
+RUN yarn --cwd libs/shared-types build
+
 
 FROM node:14 as service
 
