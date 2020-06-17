@@ -90,6 +90,7 @@ export default function getNowPlaying(knexConnection: knex, timeService: TimeSer
     const currentTrack = channelAudioTracks[probablyIndexAndOffset.index]
     const nextTrack = channelAudioTracks[nextTrackIndex]
 
+    // todo add currect urls
     ctx.body = {
       position: probablyIndexAndOffset.index,
       current: {
