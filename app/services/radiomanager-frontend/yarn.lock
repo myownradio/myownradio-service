@@ -1070,7 +1070,7 @@
     call-me-maybe "^1.0.1"
     glob-to-regexp "^0.3.0"
 
-"@myownradio/shared-types@file:../../libs/shared-types":
+"@myownradio/shared-types@link:../../libs/shared-types":
   version "1.0.0"
 
 "@nodelib/fs.stat@^1.1.2":

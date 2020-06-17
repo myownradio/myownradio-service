@@ -22,6 +22,8 @@
     "test:scheduler": "yarn --cwd services/scheduler test",
     "test:audio-player": "yarn --cwd services/audio-player test",
     "test": "run-s test:*",
+    "dev:shared-server": "yarn --cwd libs/shared-server run watch",
+    "dev:shared-types": "yarn --cwd libs/shared-types run watch",
     "dev:audio-uploader": "env-cmd -f env/audio-uploader.env -- yarn --cwd services/audio-uploader run dev",
     "dev:auth-server": "env-cmd -f env/auth-server.env -- yarn --cwd services/auth-server run dev",
     "dev:radiomanager-frontend": "env-cmd -f env/radiomanager-frontend.env -- yarn --cwd services/radiomanager-frontend start",

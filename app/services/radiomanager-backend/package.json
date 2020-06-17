@@ -29,8 +29,8 @@
   },
   "dependencies": {
     "@koa/cors": "^3.0.0",
-    "@myownradio/shared-server": "file:../../libs/shared-server",
-    "@myownradio/shared-types": "file:../../libs/shared-types",
+    "@myownradio/shared-server": "link:../../libs/shared-server",
+    "@myownradio/shared-types": "link:../../libs/shared-types",
     "fp-ts": "^2.5.3",
     "io-ts": "^2.1.2",
     "knex": "^0.20.13",

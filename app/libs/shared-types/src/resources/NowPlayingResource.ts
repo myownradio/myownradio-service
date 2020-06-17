@@ -1,4 +1,14 @@
 export interface NowPlayingResource {
-  track_id: string
-  offset: number
+  position: number
+  current: {
+    id: string
+    offset: number
+    title: string
+    url: string
+  }
+  next: {
+    id: string
+    title: string
+    url: string
+  }
 }
