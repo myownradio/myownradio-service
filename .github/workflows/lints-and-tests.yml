@@ -5,12 +5,12 @@ on:
 
 jobs:
   init:
-    if: github.event.pull_request.base.ref == 'master'
+    if: github.event.pull_request.base.ref == 'main'
     name: Run linter and tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@master
+        uses: actions/checkout@main
       - uses: actions/setup-node@v2-beta
         with:
           node-version: '14'
@@ -34,22 +34,22 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Checkout
-        uses: actions/checkout@master
+        uses: actions/checkout@main
       - name: 'Terraform: Init'
-        uses: hashicorp/terraform-github-actions@master
+        uses: hashicorp/terraform-github-actions@main
         with:
           tf_actions_version: 0.12.20
           tf_actions_subcommand: 'init'
           tf_actions_working_dir: 'terraform'
       - name: 'Terraform: Validate'
-        uses: hashicorp/terraform-github-actions@master
+        uses: hashicorp/terraform-github-actions@main
         with:
           tf_actions_version: 0.12.20
           tf_actions_subcommand: 'validate'
           tf_actions_working_dir: 'terraform'
       - name: 'Terraform: Plan'
         id: plan
-        uses: hashicorp/terraform-github-actions@master
+        uses: hashicorp/terraform-github-actions@main
         with:
           tf_actions_version: 0.12.20
           tf_actions_subcommand: 'plan'

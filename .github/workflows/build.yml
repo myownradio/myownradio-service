@@ -21,7 +21,7 @@ jobs:
         service_name: ${{ github.event.client_payload.services }}
     steps:
       - name: Checkout
-        uses: actions/checkout@master
+        uses: actions/checkout@main
       - name: Preflight
         run: '[ -f "app/services/${SERVICE_NAME}/Dockerfile" ] || (echo "Dockerfile not found" && exit 1)'
       - name: Build
@@ -52,7 +52,7 @@ jobs:
           done))
           echo "##[set-output name=patch_expression;]$(echo ${PATCH_EXPRESSION})"
       - name: Apply Patch
-        uses: pldin601/patch-yaml-through-commit@master
+        uses: pldin601/patch-yaml-through-commit@main
         with:
           git_repo_url: https://pldin601:${{ secrets.GIT_PUSH_TOKEN }}@github.com/myownradio/myownradio-env.git
           commit_message: "Update services images: ${{ join(github.event.client_payload.services, ',') }}"

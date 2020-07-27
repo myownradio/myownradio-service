@@ -3,7 +3,7 @@ name: 'Mirror to GitLab'
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   repo-sync:
@@ -13,9 +13,9 @@ jobs:
         uses: wei/git-sync@v1
         env:
           SOURCE_REPO: ${{ github.repository }}
-          SOURCE_BRANCH: master
+          SOURCE_BRANCH: main
           DESTINATION_REPO: git@gitlab.com:pldin601/myownradio-service.git
-          DESTINATION_BRANCH: master
+          DESTINATION_BRANCH: main
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         with:
           args: $SOURCE_REPO $SOURCE_BRANCH $DESTINATION_REPO $DESTINATION_BRANCH
