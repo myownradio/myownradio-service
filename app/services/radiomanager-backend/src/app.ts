@@ -4,11 +4,13 @@ import * as knex from "knex"
 import * as Application from "koa"
 import { Logger } from "winston"
 import { Config } from "./config"
+import { validationErrorMiddleware } from "./io"
 import { createRouter } from "./router"
 
 export function createApp(config: Config, knexConnection: knex, logger: Logger): Application {
   const app = new Application()
 
+  app.use(validationErrorMiddleware)
   app.use(requestLogger(logger))
   app.use(cors({ credentials: true, origin: config.allowedOrigin }))
 

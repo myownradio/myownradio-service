@@ -32,6 +32,7 @@
     "@myownradio/shared-server": "link:../../libs/shared-server",
     "@myownradio/shared-types": "link:../../libs/shared-types",
     "fp-ts": "^2.5.3",
+    "inversify": "^5.0.1",
     "io-ts": "^2.1.2",
     "knex": "^0.20.13",
     "koa": "^2.11.0",

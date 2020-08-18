@@ -12,7 +12,7 @@ import getRadioChannelTracks from "./handlers/getRadioChannelTracks"
 
 /*
  GET /channels
- list all user radio channels
+ get all user radio channels
 
  POST /channels {title}
  create new user radio channel

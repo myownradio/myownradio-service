@@ -33,6 +33,7 @@ export default function addTrackToChannel(config: Config, knexConnection: knex) 
 
     const rawMetadata = ctx.request.rawBody
     const signature = ctx.get("signature")
+    const decodedRequest = AddTrackToChannelRequestContract.decode(ctx.request.body)
 
     if (!verifyMetadataSignature(rawMetadata, signature, config.metadataSecret, config.metadataSignatureTtl)) {
       ctx.throw(400)
@@ -49,8 +50,6 @@ export default function addTrackToChannel(config: Config, knexConnection: knex) 
     if (channel.user_id !== userId) {
       ctx.throw(401)
     }
-
-    const decodedRequest = AddTrackToChannelRequestContract.decode(ctx.request.body)
 
     if (decodedRequest._tag === "Left") {
       ctx.throw(400)
