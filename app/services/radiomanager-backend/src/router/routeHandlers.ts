@@ -12,7 +12,8 @@ import { Context, Middleware } from "koa"
 import { Config } from "../config"
 import { ConfigType, KnexType } from "../di/types"
 import { KnexConnection, TypedContext } from "../interfaces"
-import { decodeT, verifyMetadataSignature } from "../utils"
+import { decodeT } from "../io"
+import { verifyMetadataSignature } from "../utils"
 
 function getUserIdFromContext(ctx: Context): number {
   if (typeof ctx.state.user?.uid !== "number") {

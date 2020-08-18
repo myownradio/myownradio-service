@@ -93,7 +93,7 @@ describe("/channels/create", () => {
   })
 })
 
-describe("/channels/:id/tracks/add", () => {
+describe("/channels/:id/tracks", () => {
   const rawMetadata =
     '{"hash":"d021bc63dd8f6dee822baa1b2a69b4e9a4d97a7c","size":32622,"name":"sine.mp3","duration":1.07475,"bitrate":242824,"format":"MP2/3 (MPEG audio layer 2/3)","artist":"Sine Artist","title":"Sine Title","album":"Sine Album","genre":"Sine Genre"}'
 
@@ -102,7 +102,7 @@ describe("/channels/:id/tracks/add", () => {
 
   it("should respond with 200 on successful post request", async () => {
     await request
-      .post("/channels/kOD613/tracks/add")
+      .post("/channels/kOD613/tracks")
       .set("Authorization", `Bearer ${authorizationToken}`)
       .set("Content-Type", "application/json")
       .set("Signature", signature)
@@ -124,14 +124,14 @@ describe("/channels/:id/tracks/add", () => {
 
   it("should respond with 400 on empty request body", async () => {
     await request
-      .post("/channels/kOD613/tracks/add")
+      .post("/channels/kOD613/tracks")
       .set("Authorization", `Bearer ${authorizationToken}`)
       .expect(400)
   })
 
   it("should respond with 400 on invalid signature", async () => {
     await request
-      .post("/channels/kOD613/tracks/add")
+      .post("/channels/kOD613/tracks")
       .set("Authorization", `Bearer ${authorizationToken}`)
       .set("Content-Type", "application/json")
       .set("Signature", "invalid")
@@ -141,7 +141,7 @@ describe("/channels/:id/tracks/add", () => {
 
   it("should respond with 401 if not authorized", async () => {
     await request
-      .post("/channels/kOD613/tracks/add")
+      .post("/channels/kOD613/tracks")
       .set("Content-Type", "application/json")
       .expect(401)
   })
@@ -166,36 +166,6 @@ describe("/channels", () => {
 
   it("should respond with 401 if not authorized", async () => {
     await request.get("/channels").expect(401)
-  })
-})
-
-describe("GET /channels/:id", () => {
-  it("should respond with 200 on successful get request", async () => {
-    await request
-      .get("/channels/kOD613")
-      .set("Authorization", `Bearer ${authorizationToken}`)
-      .expect(200, {
-        id: "kOD613",
-        title: "Foo Radio",
-      })
-  })
-
-  it("should respond with 404 if channel not found", async () => {
-    await request
-      .get("/channels/pOklxN")
-      .set("Authorization", `Bearer ${authorizationToken}`)
-      .expect(404)
-  })
-
-  it("should respond with 401 if channel belongs to other user", async () => {
-    await request
-      .get("/channels/kOD613")
-      .set("Authorization", `Bearer ${otherAuthorizationToken}`)
-      .expect(401)
-  })
-
-  it("should respond with 401 if not authorized", async () => {
-    await request.get("/channels/kOD613").expect(401)
   })
 })
 

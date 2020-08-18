@@ -1,7 +1,4 @@
 import { createHmac } from "crypto"
-import * as E from "fp-ts/lib/Either"
-import * as t from "io-ts"
-import { PathReporter } from "io-ts/lib/PathReporter"
 
 /**
  * Creates hmac digest using sha256 algorithm.
@@ -30,12 +27,6 @@ export function verifyMetadataSignature(rawMetadata: string, signature: string, 
   return Date.now() < +extractedSignedAt + ttl
 }
 
-class IOValidationError extends TypeError {
-  constructor(message: string, readonly validations: t.Errors) {
-    super(message)
-  }
-}
-
 export const tryCatch = <F extends (...args: any) => any, E extends any>(
   fn: F,
   onError: (reason: unknown) => E,
@@ -45,24 +36,4 @@ export const tryCatch = <F extends (...args: any) => any, E extends any>(
   } catch (error) {
     return onError(error)
   }
-}
-
-export const ioValidationsToError = (validations: t.Errors): Error =>
-  new IOValidationError(
-    tryCatch(
-      () => JSON.stringify(PathReporter.report(E.left(validations)), null, 2),
-      () => "Failed to generate report",
-    ),
-    validations,
-  )
-
-/**
- * Makes decoder that throws IOValidationError if decode fails
- */
-export const decodeT = <I, A>(type: t.Decoder<I, A>) => (x: I): A => {
-  const decodeResult = type.decode(x)
-  if (decodeResult._tag === "Left") {
-    throw ioValidationsToError(decodeResult.left)
-  }
-  return decodeResult.right
 }

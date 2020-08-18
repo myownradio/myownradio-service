@@ -3,19 +3,20 @@ import * as t from "io-ts"
 import { PathReporter } from "io-ts/lib/PathReporter"
 import { Context } from "koa"
 
-class IOValidationError extends TypeError {
+class IOValidationError extends Error {
   constructor(message: string, readonly validations: t.Errors) {
     super(message)
   }
 }
 
-export const validationErrorMiddleware = async (ctx: Context, next: () => PromiseLike<any>) => {
+export const validationErrorMiddleware = async (ctx: Context, next: () => PromiseLike<any>): Promise<void> => {
   try {
     await next()
   } catch (error) {
     if (error instanceof IOValidationError) {
       ctx.status = 400
       ctx.body = error.validations
+      return
     }
 
     throw error
