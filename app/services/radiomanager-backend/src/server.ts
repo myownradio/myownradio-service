@@ -1,9 +1,13 @@
+import { Container } from "inversify"
 import * as knex from "knex"
 import { createApp } from "./app"
 import { Config } from "./config"
+import { ConfigType, KnexType, LoggerType } from "./di/types"
 import logger from "./logger"
 
 try {
+  const container = new Container()
+
   const config = new Config(process.env)
 
   const knexConnection = knex({
@@ -12,7 +16,11 @@ try {
     pool: { min: 0, max: 10 },
   })
 
-  const app = createApp(config, knexConnection, logger)
+  container.bind(ConfigType).toConstantValue(config)
+  container.bind(KnexType).toConstantValue(knexConnection)
+  container.bind(LoggerType).toConstantValue(logger)
+
+  const app = createApp(container)
 
   const server = app.listen(config.httpServerPort, () => {
     logger.debug(`Server is listening on port ${config.httpServerPort}`)

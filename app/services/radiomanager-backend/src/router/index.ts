@@ -1,14 +1,10 @@
-import * as knex from "knex"
+import { Container } from "inversify"
 import * as bodyparser from "koa-bodyparser"
 import * as createJwtMiddleware from "koa-jwt"
 import * as Router from "koa-router"
-import { Logger } from "winston"
 import { Config } from "../config"
-import addTrackToChannel from "./handlers/addTrackToChannel"
-import createChannel from "./handlers/createChannel"
-import getChannel from "./handlers/getChannel"
-import getChannels from "./handlers/getChannels"
-import getRadioChannelTracks from "./handlers/getRadioChannelTracks"
+import { ConfigType } from "../di/types"
+import * as routeHandlers from "./routeHandlers"
 
 /*
  GET /channels
@@ -48,18 +44,24 @@ import getRadioChannelTracks from "./handlers/getRadioChannelTracks"
  get what's playing on radio channel
 */
 
-export function createRouter(config: Config, knexConnection: knex, _logger: Logger): Router {
+export function createRouter(container: Container): Router {
+  const config = container.get<Config>(ConfigType)
+
   const router = new Router()
   const jwtMiddleware = createJwtMiddleware({
     secret: config.tokenSecret,
   })
 
   router.get("/healthcheck", ctx => (ctx.status = 200))
-  router.get("/channels", jwtMiddleware, getChannels(config, knexConnection))
-  router.post("/channels/create", bodyparser(), jwtMiddleware, createChannel(config, knexConnection))
-  router.get("/channels/:channelId", jwtMiddleware, getChannel(config, knexConnection))
-  router.get("/channels/:channelId/tracks", jwtMiddleware, getRadioChannelTracks(config, knexConnection))
-  router.post("/channels/:channelId/tracks/add", bodyparser(), jwtMiddleware, addTrackToChannel(config, knexConnection))
+  router.get("/channels", jwtMiddleware, routeHandlers.getRadioChannels(container))
+  router.post("/channels/create", bodyparser(), jwtMiddleware, routeHandlers.createRadioChannel(container))
+  router.get("/channels/:channelId/tracks", jwtMiddleware, routeHandlers.getRadioChannelTracks(container))
+  router.post(
+    "/channels/:channelId/tracks",
+    bodyparser(),
+    jwtMiddleware,
+    routeHandlers.addTrackToRadioChannel(container),
+  )
 
   return router
 }

@@ -1,8 +1,10 @@
+import { Container } from "inversify"
 import * as knex from "knex"
 import * as supertest from "supertest"
 import * as winston from "winston"
 import { createApp } from "../src/app"
 import { Config } from "../src/config"
+import { ConfigType, KnexType, LoggerType } from "../src/di/types"
 
 const authorizationToken =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjEsImlhdCI6MTUxNjIzOTAyMn0.Fknsf_nSFNdqS9JkFJABEEtMVffv9zR1_nrI2mAVx60"
@@ -44,7 +46,13 @@ beforeEach(async () => {
     directory: seedsDir,
   })
 
-  request = supertest(createApp(config, knexConnection, logger).callback())
+  const container = new Container()
+
+  container.bind(ConfigType).toConstantValue(config)
+  container.bind(LoggerType).toConstantValue(logger)
+  container.bind(KnexType).toConstantValue(knexConnection)
+
+  request = supertest(createApp(container).callback())
 })
 
 describe("/healthcheck", () => {

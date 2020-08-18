@@ -8,7 +8,7 @@ import {
 import { AudioTrackResource, RadioChannelResource } from "@myownradio/shared-types"
 import { Container } from "inversify"
 import * as t from "io-ts"
-import { Context } from "koa"
+import { Context, Middleware } from "koa"
 import { Config } from "../config"
 import { ConfigType, KnexType } from "../di/types"
 import { KnexConnection, TypedContext } from "../interfaces"
@@ -21,7 +21,7 @@ function getUserIdFromContext(ctx: Context): number {
   return ctx.state.user.uid
 }
 
-export function getRadioChannels(container: Container) {
+export function getRadioChannels(container: Container): Middleware {
   const knex = container.get<KnexConnection>(KnexType)
 
   return async (ctx: TypedContext<RadioChannelResource[]>): Promise<void> => {
@@ -41,7 +41,7 @@ const CreateChannelRequestContract = t.type({
   title: t.string,
 })
 
-export function createRadioChannel(container: Container) {
+export function createRadioChannel(container: Container): Middleware {
   const knex = container.get<KnexConnection>(KnexType)
 
   return async (ctx: TypedContext<RadioChannelResource>): Promise<void> => {
@@ -71,19 +71,22 @@ export function createRadioChannel(container: Container) {
   }
 }
 
-export async function deleteRadioChannel(ctx: Context): Promise<void> {
-  const userId = getUserIdFromContext(ctx)
-  const { channelId: hashedChannelId } = ctx.params
-  const channelId = hashUtils.decodeId(hashedChannelId)
+export function deleteRadioChannel(container: Container): Middleware {
+  return async (ctx: Context): Promise<void> => {
+    const userId = getUserIdFromContext(ctx)
+    const { channelId: hashedChannelId } = ctx.params
+    const channelId = hashUtils.decodeId(hashedChannelId)
 
-  void userId
-  void channelId
-  // todo stop radio channel if it's playing
-  // todo delete radio channel tracks
-  // todo delete radio channel
+    void userId
+    void channelId
+    void container
+    // todo stop radio channel if it's playing
+    // todo delete radio channel tracks
+    // todo delete radio channel
+  }
 }
 
-export function getRadioChannelTracks(container: Container) {
+export function getRadioChannelTracks(container: Container): Middleware {
   const knex = container.get<KnexConnection>(KnexType)
 
   return async (ctx: TypedContext<AudioTrackResource[]>): Promise<void> => {
@@ -142,7 +145,7 @@ const AddTrackToChannelRequestContract = t.type({
   format: t.string,
 })
 
-export function addTrackToRadioChannel(container: Container) {
+export function addTrackToRadioChannel(container: Container): Middleware {
   const knex = container.get<KnexConnection>(KnexType)
   const config = container.get<Config>(ConfigType)
 
@@ -222,26 +225,44 @@ export function addTrackToRadioChannel(container: Container) {
   }
 }
 
-export function deleteTrackFromRadioChannel(container: Container) {
-  return async (ctx: Context): Promise<void> => {}
+export function deleteTrackFromRadioChannel(container: Container): Middleware {
+  return async (ctx: Context): Promise<void> => {
+    void container
+    void ctx
+  }
 }
 
-export function startRadioChannel(container: Container) {
-  return async (ctx: Context): Promise<void> => {}
+export function startRadioChannel(container: Container): Middleware {
+  return async (ctx: Context): Promise<void> => {
+    void container
+    void ctx
+  }
 }
 
-export function stopRadioChannel(container: Container) {
-  return async (ctx: Context): Promise<void> => {}
+export function stopRadioChannel(container: Container): Middleware {
+  return async (ctx: Context): Promise<void> => {
+    void container
+    void ctx
+  }
 }
 
-export function pauseRadioChannel(container: Container) {
-  return async (ctx: Context): Promise<void> => {}
+export function pauseRadioChannel(container: Container): Middleware {
+  return async (ctx: Context): Promise<void> => {
+    void container
+    void ctx
+  }
 }
 
-export function resumeRadioChannel(container: Container) {
-  return async (ctx: Context): Promise<void> => {}
+export function resumeRadioChannel(container: Container): Middleware {
+  return async (ctx: Context): Promise<void> => {
+    void container
+    void ctx
+  }
 }
 
-export function getNowPlaying(container: Container) {
-  return async (ctx: Context): Promise<void> => {}
+export function getNowPlaying(container: Container): Middleware {
+  return async (ctx: Context): Promise<void> => {
+    void container
+    void ctx
+  }
 }
