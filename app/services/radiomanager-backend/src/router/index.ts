@@ -10,6 +10,44 @@ import getChannel from "./handlers/getChannel"
 import getChannels from "./handlers/getChannels"
 import getRadioChannelTracks from "./handlers/getRadioChannelTracks"
 
+/*
+ GET /channels
+ list all user radio channels
+
+ POST /channels {title}
+ create new user radio channel
+
+ DELETE /channels/:channelId
+ delete user channel
+
+ GET /channels/:channelId/tracks
+ get tracks in radio channel
+
+ POST[signature] /channels/:channelId/tracks {name, hash, size, artist, title, album, genre, bitrate, duration, format}
+ add track to radio channel
+
+ DELETE /channels/:channelId/tracks/:trackId
+ delete track from radio channel
+
+ POST /channels/:channelId/tracks/:trackId/move {index}
+ change track order in radio channel
+
+ POST /channels/:channelId/stop
+ stop radio channel
+
+ POST /channels/:channelId/pause
+ pause radio channel
+
+ RESUME /channels/:channelId/resume
+ resume radio channel
+
+ POST /channels/:channelId/start
+ start radio channel
+
+ GET /channels/:channelId/now
+ get what's playing on radio channel
+*/
+
 export function createRouter(config: Config, knexConnection: knex, _logger: Logger): Router {
   const router = new Router()
   const jwtMiddleware = createJwtMiddleware({
