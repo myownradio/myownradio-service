@@ -1,3 +1,4 @@
+import { createSignature } from "@myownradio/shared-server/lib/signature"
 import { Container } from "inversify"
 import * as knex from "knex"
 import * as supertest from "supertest"
@@ -479,5 +480,68 @@ describe("GET /channels/:channelId/now", () => {
       .get("/channels/wrong/now")
       .set("Authorization", `Bearer ${otherAuthorizationToken}`)
       .expect(404)
+  })
+})
+
+describe("sync playing channel position", () => {
+  it.only("should sync on add new track to playlist", async () => {
+    const newTrackMetadata = {
+      name: "New Track Name",
+      hash: "New Track Hash",
+      size: 1234567,
+      artist: "New Track Artist",
+      title: "New Track Title",
+      album: "New Track Album",
+      genre: "New Track Genre",
+      bitrate: 128000,
+      duration: 3700000,
+      format: "MP2/3 (MPEG audio layer 2/3)",
+    }
+    const rawMetadata = JSON.stringify(newTrackMetadata)
+    const newTrackSignature = createSignature(rawMetadata, config.metadataSecret)
+
+    await request
+      .get("/channels/RB2a1y/now")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(200, {
+        position: 0,
+        current: {
+          id: "RB2a1y",
+          offset: 95136.5,
+          title: "Bob Marley - This Is Love",
+          url: "todo",
+        },
+        next: {
+          id: "RB2a1y",
+          title: "Bob Marley - This Is Love",
+          url: "todo",
+        },
+      })
+
+    await request
+      .post("/channels/RB2a1y/tracks")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .set("Content-Type", "application/json")
+      .set("Signature", newTrackSignature)
+      .send(rawMetadata)
+      .expect(200)
+
+    await request
+      .get("/channels/RB2a1y/now")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(200, {
+        position: 0,
+        current: {
+          id: "RB2a1y",
+          offset: 95137,
+          title: "Bob Marley - This Is Love",
+          url: "todo",
+        },
+        next: {
+          id: "5xGEBm",
+          title: "New Track Artist - New Track Title",
+          url: "todo",
+        },
+      })
   })
 })

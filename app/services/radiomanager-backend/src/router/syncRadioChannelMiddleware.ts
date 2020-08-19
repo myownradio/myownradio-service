@@ -1,4 +1,5 @@
 import { dateUtils, hashUtils } from "@myownradio/shared-server"
+import { convertDateToIso } from "@myownradio/shared-server/lib/dateUtils"
 import {
   AudioTracksProps,
   IAudioTracksEntity as AudioTracksEntity,
@@ -80,7 +81,6 @@ export function syncRadioChannelMiddleware(container: Container): Middleware {
     if (trackIndexAfterHandle === -1) {
       // If there is no other track with same order_id we rewind to the first track in playlist.
       trackIndexAfterHandle = 0
-      resetTrackOffset = true
     }
 
     const newTrackWithOffset = tracksWithOffsetAfterHandle[trackIndexAfterHandle]
@@ -94,7 +94,7 @@ export function syncRadioChannelMiddleware(container: Container): Middleware {
 
     await knex<PlayingChannelsEntity>(TableName.PlayingChannels)
       .where({ id: playingChannel.id })
-      .increment(PlayingChannelsProps.StartedAt, difference)
+      .update(PlayingChannelsProps.StartedAt, convertDateToIso(now - position - difference))
 
     if (resetTrackOffset) {
       // todo Broadcast message that playlist forcibly updated.
