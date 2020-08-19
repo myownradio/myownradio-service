@@ -17,12 +17,7 @@ import { ConfigType, KnexType, TimeServiceType } from "../di/types"
 import { KnexConnection, TypedContext } from "../interfaces"
 import { decodeT } from "../io"
 import { TimeService } from "../time"
-import {
-  calcTrackIndexAndOffset,
-  calcNextTrackIndex,
-  getUserIdFromContext,
-  verifyMetadataSignature,
-} from "../utils"
+import { calcTrackIndexAndOffset, calcNextTrackIndex, getUserIdFromContext, verifyMetadataSignature } from "../utils"
 
 export function getRadioChannels(container: Container): Middleware {
   const knex = container.get<KnexConnection>(KnexType)

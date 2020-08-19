@@ -20,7 +20,7 @@ export function syncRadioChannelMiddleware(container: Container): Middleware {
   const knex = container.get<KnexConnection>(KnexType)
   const timeService = container.get<TimeService>(TimeServiceType)
 
-  return async (ctx: Context, next: () => PromiseLike<any>): Promise<void> => {
+  return async (ctx: Context, next: () => PromiseLike<void>): Promise<void> => {
     const { channelId: hashedChannelId } = ctx.params
     const channelId = hashUtils.decodeId(hashedChannelId)
 
