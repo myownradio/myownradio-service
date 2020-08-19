@@ -209,3 +209,54 @@ describe("GET /channels/:id/tracks", () => {
     await request.get("/channels/kOD613/tracks").expect(401)
   })
 })
+
+describe("DELETE /channels/:channelId/tracks/:trackId", () => {
+  it("should respond with 200 on successful get request", async () => {
+    await request
+      .delete("/channels/kOD613/tracks/kOD613")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(200)
+
+    await request
+      .get("/channels/kOD613/tracks")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(200, [])
+  })
+
+  it("should respond with 404 if channel not found", async () => {
+    await request
+      .delete("/channels/pOklxN/tracks/kOD613")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(404)
+  })
+
+  it("should respond with 404 if track not found", async () => {
+    await request
+      .delete("/channels/kOD613/tracks/pOklxN")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(404)
+  })
+
+  it("should respond with 401 if channel belongs to other user", async () => {
+    await request
+      .delete("/channels/RB2a1y/tracks/pOklxN")
+      .set("Authorization", `Bearer ${otherAuthorizationToken}`)
+      .expect(401)
+  })
+
+  it("should respond with 404 if wrong channel id or wrong track id", async () => {
+    await request
+      .delete("/channels/wrong/tracks/kOD613")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(404)
+
+    await request
+      .delete("/channels/kOD613/tracks/wrong")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(404)
+  })
+
+  it("should respond with 401 if not authorized", async () => {
+    await request.delete("/channels/kOD613/tracks/pOklxN").expect(401)
+  })
+})

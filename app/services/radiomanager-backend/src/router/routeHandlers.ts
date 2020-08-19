@@ -227,9 +227,42 @@ export function addTrackToRadioChannel(container: Container): Middleware {
 }
 
 export function deleteTrackFromRadioChannel(container: Container): Middleware {
+  const knex = container.get<KnexConnection>(KnexType)
+
   return async (ctx: Context): Promise<void> => {
-    void container
-    void ctx
+    const userId = getUserIdFromContext(ctx)
+    const { channelId: encodedChannelId, trackId: encodedTrackId } = ctx.params
+    const channelId = hashUtils.decodeId(encodedChannelId)
+    const trackId = hashUtils.decodeId(encodedTrackId)
+
+    if (!channelId || !trackId) {
+      return
+    }
+
+    const channel = await knex
+      .from(TableName.RadioChannels)
+      .where({ [RadioChannelsProps.Id]: channelId })
+      .first()
+
+    if (!channel) {
+      return
+    }
+
+    if (channel.user_id !== userId) {
+      return ctx.throw(401)
+    }
+
+    const deletedRows = await knex
+      .from(TableName.AudioTracks)
+      .where(AudioTracksProps.ChannelId, channelId)
+      .where(AudioTracksProps.Id, trackId)
+      .delete()
+
+    if (+deletedRows === 0) {
+      return
+    }
+
+    ctx.status = 200
   }
 }
 

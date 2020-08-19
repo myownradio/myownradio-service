@@ -5,6 +5,7 @@ import * as Router from "koa-router"
 import { Config } from "../config"
 import { ConfigType } from "../di/types"
 import * as routeHandlers from "./routeHandlers"
+import { syncRadioChannelMiddleware } from "./syncRadioChannelMiddleware"
 
 /*
  GET /channels
@@ -60,7 +61,14 @@ export function createRouter(container: Container): Router {
     "/channels/:channelId/tracks",
     bodyparser(),
     jwtMiddleware,
+    syncRadioChannelMiddleware(container),
     routeHandlers.addTrackToRadioChannel(container),
+  )
+  router.del(
+    "/channels/:channelId/tracks/:trackId",
+    jwtMiddleware,
+    syncRadioChannelMiddleware(container),
+    routeHandlers.deleteTrackFromRadioChannel(container),
   )
 
   return router
