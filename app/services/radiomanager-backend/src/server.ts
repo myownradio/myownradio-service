@@ -2,8 +2,9 @@ import { Container } from "inversify"
 import * as knex from "knex"
 import { createApp } from "./app"
 import { Config } from "./config"
-import { ConfigType, KnexType, LoggerType } from "./di/types"
+import { ConfigType, KnexType, LoggerType, TimeServiceType } from "./di/types"
 import logger from "./logger"
+import { BaseTimeService } from "./time"
 
 try {
   const container = new Container()
@@ -16,9 +17,12 @@ try {
     pool: { min: 0, max: 10 },
   })
 
+  const timeService = new BaseTimeService()
+
   container.bind(ConfigType).toConstantValue(config)
   container.bind(KnexType).toConstantValue(knexConnection)
   container.bind(LoggerType).toConstantValue(logger)
+  container.bind(TimeServiceType).toConstantValue(timeService)
 
   const app = createApp(container)
 

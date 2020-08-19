@@ -1,18 +1,20 @@
-import { hashUtils } from "@myownradio/shared-server"
+import { dateUtils, hashUtils } from "@myownradio/shared-server"
 import {
   IRadioChannelsEntity,
   TableName,
   RadioChannelsProps,
   AudioTracksProps,
+  IPlayingChannelsEntity,
 } from "@myownradio/shared-server/lib/entities"
 import { AudioTrackResource, RadioChannelResource } from "@myownradio/shared-types"
 import { Container } from "inversify"
 import * as t from "io-ts"
 import { Context, Middleware } from "koa"
 import { Config } from "../config"
-import { ConfigType, KnexType } from "../di/types"
+import { ConfigType, KnexType, TimeServiceType } from "../di/types"
 import { KnexConnection, TypedContext } from "../interfaces"
 import { decodeT } from "../io"
+import { TimeService } from "../time"
 import { verifyMetadataSignature } from "../utils"
 
 function getUserIdFromContext(ctx: Context): number {
@@ -267,9 +269,50 @@ export function deleteTrackFromRadioChannel(container: Container): Middleware {
 }
 
 export function startRadioChannel(container: Container): Middleware {
+  const knex = container.get<KnexConnection>(KnexType)
+  const timeService = container.get<TimeService>(TimeServiceType)
+
   return async (ctx: Context): Promise<void> => {
-    void container
-    void ctx
+    const userId = getUserIdFromContext(ctx)
+    const { channelId: encodedChannelId } = ctx.params
+    const channelId = hashUtils.decodeId(encodedChannelId)
+
+    if (!channelId) {
+      ctx.throw(404)
+    }
+
+    const channel = await knex<IRadioChannelsEntity>(TableName.RadioChannels)
+      .where({ [RadioChannelsProps.Id]: channelId })
+      .first()
+
+    if (!channel) {
+      ctx.throw(404)
+    }
+
+    if (channel.user_id !== userId) {
+      ctx.throw(401)
+    }
+
+    try {
+      const now = timeService.now()
+      const nowDate = dateUtils.convertDateToIso(now)
+      await knex<IPlayingChannelsEntity>(TableName.PlayingChannels).insert({
+        channel_id: channel.id,
+        start_offset: 0,
+        started_at: nowDate,
+        paused_at: null,
+        created_at: nowDate,
+        updated_at: nowDate,
+      })
+      ctx.status = 200
+    } catch (e) {
+      if (e.message.match(/constraint/)) {
+        ctx.status = 409
+        return
+      }
+
+      throw e
+    }
   }
 }
 

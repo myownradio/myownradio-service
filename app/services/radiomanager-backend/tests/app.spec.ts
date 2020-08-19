@@ -4,7 +4,8 @@ import * as supertest from "supertest"
 import * as winston from "winston"
 import { createApp } from "../src/app"
 import { Config } from "../src/config"
-import { ConfigType, KnexType, LoggerType } from "../src/di/types"
+import { ConfigType, KnexType, LoggerType, TimeServiceType } from "../src/di/types"
+import { FixedTimeService, TimeService } from "../src/time"
 
 const authorizationToken =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjEsImlhdCI6MTUxNjIzOTAyMn0.Fknsf_nSFNdqS9JkFJABEEtMVffv9zR1_nrI2mAVx60"
@@ -17,6 +18,7 @@ const seedsDir = `${__dirname}/../../../seeds`
 let config: Config
 let request: supertest.SuperTest<supertest.Test>
 let knexConnection: knex
+let timeService: TimeService
 
 beforeEach(async () => {
   const logger = winston.createLogger({
@@ -38,6 +40,8 @@ beforeEach(async () => {
     useNullAsDefault: true,
   })
 
+  timeService = new FixedTimeService(1586849301429)
+
   await knexConnection.migrate.latest({
     directory: migrationsDir,
   })
@@ -51,6 +55,7 @@ beforeEach(async () => {
   container.bind(ConfigType).toConstantValue(config)
   container.bind(LoggerType).toConstantValue(logger)
   container.bind(KnexType).toConstantValue(knexConnection)
+  container.bind(TimeServiceType).toConstantValue(timeService)
 
   request = supertest(createApp(container).callback())
 })
@@ -258,5 +263,221 @@ describe("DELETE /channels/:channelId/tracks/:trackId", () => {
 
   it("should respond with 401 if not authorized", async () => {
     await request.delete("/channels/kOD613/tracks/pOklxN").expect(401)
+  })
+})
+
+describe("POST /channels/:channelId/start", () => {
+  it("should start the channel and respond with status 200", async () => {
+    await request
+      .post("/channels/kOD613/start")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(200)
+  })
+
+  it("should fail with 409 if channel already started", async () => {
+    await request
+      .post("/channels/RB2a1y/start")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(409)
+  })
+
+  it("should fail with 401 when unauthorized", async () => {
+    await request.post("/channels/kOD613/start").expect(401)
+  })
+
+  it("should fail with 401 if authorized by someone else", async () => {
+    await request
+      .post("/channels/kOD613/start")
+      .set("Authorization", `Bearer ${otherAuthorizationToken}`)
+      .expect(401)
+  })
+
+  it("should fail with 404 if channel does not exist", async () => {
+    await request
+      .post("/channels/Vx7d1E/start")
+      .set("Authorization", `Bearer ${otherAuthorizationToken}`)
+      .expect(404)
+
+    await request
+      .post("/channels/wrong/start")
+      .set("Authorization", `Bearer ${otherAuthorizationToken}`)
+      .expect(404)
+  })
+})
+
+describe("POST /channels/:channelId/stop", () => {
+  it("should stop the channel and respond with status 200", async () => {
+    await request
+      .post("/channels/RB2a1y/stop")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(200)
+  })
+
+  it("should fail with 409 if channel isn't playing", async () => {
+    await request
+      .post("/channels/kOD613/stop")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(409)
+  })
+
+  it("should fail with 401 when unauthorized", async () => {
+    await request.post("/channels/kOD613/stop").expect(401)
+  })
+
+  it("should fail with 401 if authorized by someone else", async () => {
+    await request
+      .post("/channels/kOD613/stop")
+      .set("Authorization", `Bearer ${otherAuthorizationToken}`)
+      .expect(401)
+  })
+
+  it("should fail with 404 if channel does not exist", async () => {
+    await request
+      .post("/channels/Vx7d1E/stop")
+      .set("Authorization", `Bearer ${otherAuthorizationToken}`)
+      .expect(404)
+
+    await request
+      .post("/channels/wrong/stop")
+      .set("Authorization", `Bearer ${otherAuthorizationToken}`)
+      .expect(404)
+  })
+})
+
+describe("POST /channels/:channelId/pause", () => {
+  it("should pause the channel and respond with status 200", async () => {
+    await request
+      .post("/channels/RB2a1y/pause")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(200)
+  })
+
+  it("should fail with 409 if channel isn't playing", async () => {
+    await request
+      .post("/channels/kOD613/pause")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(409)
+  })
+
+  it("should fail with 401 when unauthorized", async () => {
+    await request.post("/channels/kOD613/pause").expect(401)
+  })
+
+  it("should fail with 401 if authorized by someone else", async () => {
+    await request
+      .post("/channels/kOD613/pause")
+      .set("Authorization", `Bearer ${otherAuthorizationToken}`)
+      .expect(401)
+  })
+
+  it("should fail with 404 if channel does not exist", async () => {
+    await request
+      .post("/channels/Vx7d1E/pause")
+      .set("Authorization", `Bearer ${otherAuthorizationToken}`)
+      .expect(404)
+
+    await request
+      .post("/channels/wrong/pause")
+      .set("Authorization", `Bearer ${otherAuthorizationToken}`)
+      .expect(404)
+  })
+})
+
+describe("POST /channels/:channelId/resume", () => {
+  it("should resume the channel and respond with status 200", async () => {
+    await request
+      .post("/channels/RB2a1y/pause")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(200)
+
+    await request
+      .post("/channels/RB2a1y/resume")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(200)
+  })
+
+  it("should fail with 409 if channel isn't playing", async () => {
+    await request
+      .post("/channels/kOD613/resume")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(409)
+  })
+
+  it("should fail with 409 if channel isn't paused", async () => {
+    await request
+      .post("/channels/RB2a1y/resume")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(409)
+  })
+
+  it("should fail with 401 when unauthorized", async () => {
+    await request.post("/channels/kOD613/pause").expect(401)
+  })
+
+  it("should fail with 401 if authorized by someone else", async () => {
+    await request
+      .post("/channels/kOD613/pause")
+      .set("Authorization", `Bearer ${otherAuthorizationToken}`)
+      .expect(401)
+  })
+
+  it("should fail with 404 if channel does not exist", async () => {
+    await request
+      .post("/channels/Vx7d1E/pause")
+      .set("Authorization", `Bearer ${otherAuthorizationToken}`)
+      .expect(404)
+  })
+})
+
+describe("GET /channels/:channelId/now", () => {
+  // todo write test for multiple tracks in playlist
+  it("should get what's playing and respond with 200 on get request", async () => {
+    await request
+      .get("/channels/RB2a1y/now")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(200, {
+        position: 0,
+        current: {
+          id: "RB2a1y",
+          offset: 95136.5,
+          title: "Bob Marley - This Is Love",
+          url: "todo",
+        },
+        next: {
+          id: "RB2a1y",
+          title: "Bob Marley - This Is Love",
+          url: "todo",
+        },
+      })
+  })
+
+  it("should fail with 404 if channel isn't playing", async () => {
+    await request
+      .get("/channels/kOD613/now")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(404)
+  })
+
+  it("should fail with 401 when unauthorized", async () => {
+    await request.get("/channels/kOD613/nowPlaying").expect(401)
+  })
+
+  it("should fail with 401 if authorized by someone else", async () => {
+    await request
+      .get("/channels/kOD613/now")
+      .set("Authorization", `Bearer ${otherAuthorizationToken}`)
+      .expect(401)
+  })
+
+  it("should fail with 404 if channel does not exist", async () => {
+    await request
+      .get("/channels/Vx7d1E/now")
+      .set("Authorization", `Bearer ${otherAuthorizationToken}`)
+      .expect(404)
+
+    await request
+      .get("/channels/wrong/now")
+      .set("Authorization", `Bearer ${otherAuthorizationToken}`)
+      .expect(404)
   })
 })
