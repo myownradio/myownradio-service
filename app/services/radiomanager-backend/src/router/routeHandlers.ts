@@ -17,14 +17,12 @@ import { ConfigType, KnexType, TimeServiceType } from "../di/types"
 import { KnexConnection, TypedContext } from "../interfaces"
 import { decodeT } from "../io"
 import { TimeService } from "../time"
-import { calcCurrentTrackIndexAndOffset, calcNextTrackIndex, verifyMetadataSignature } from "../utils"
-
-function getUserIdFromContext(ctx: Context): number {
-  if (typeof ctx.state.user?.uid !== "number") {
-    throw new TypeError(`Expected user id to be valid number`)
-  }
-  return ctx.state.user.uid
-}
+import {
+  calcTrackIndexAndOffset,
+  calcNextTrackIndex,
+  getUserIdFromContext,
+  verifyMetadataSignature,
+} from "../utils"
 
 export function getRadioChannels(container: Container): Middleware {
   const knex = container.get<KnexConnection>(KnexType)
@@ -491,28 +489,26 @@ export function getNowPlaying(container: Container): Middleware {
       return
     }
 
-    // todo get now playing information from the redis cache. it will be more accurate when streaming is active.
-
-    const channelAudioTracks = await knex<AudioTracksEntity>(TableName.AudioTracks)
+    const tracks = await knex<AudioTracksEntity>(TableName.AudioTracks)
       .where({ channel_id: channel.id })
       .orderBy(AudioTracksProps.OrderId, "asc")
 
     const now = timeService.now()
 
-    const playlistDuration = channelAudioTracks.reduce((acc, t) => acc + +t.duration, 0)
-    const playlistPosition = (now - dateUtils.convertDateToMillis(playingChannel.started_at)) % playlistDuration
+    const duration = tracks.reduce((acc, t) => acc + +t.duration, 0)
+    const position = (now - dateUtils.convertDateToMillis(playingChannel.started_at)) % duration
 
-    const probablyIndexAndOffset = calcCurrentTrackIndexAndOffset(playlistPosition, channelAudioTracks)
+    const probablyIndexAndOffset = calcTrackIndexAndOffset(position, tracks)
 
     if (!probablyIndexAndOffset) {
       ctx.status = 204
       return
     }
 
-    const nextTrackIndex = calcNextTrackIndex(probablyIndexAndOffset.index, channelAudioTracks)
+    const nextTrackIndex = calcNextTrackIndex(probablyIndexAndOffset.index, tracks)
 
-    const currentTrack = channelAudioTracks[probablyIndexAndOffset.index]
-    const nextTrack = channelAudioTracks[nextTrackIndex]
+    const currentTrack = tracks[probablyIndexAndOffset.index]
+    const nextTrack = tracks[nextTrackIndex]
 
     // todo add correct urls
     ctx.body = {

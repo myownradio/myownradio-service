@@ -1,5 +1,6 @@
 import { createHmac } from "crypto"
-import { IAudioTracksEntity as AudioTracksEntity } from "@myownradio/shared-server/lib/entities"
+import { IAudioTracksEntity, IAudioTracksEntity as AudioTracksEntity } from "@myownradio/shared-server/lib/entities"
+import { Context } from "koa"
 
 /**
  * Creates hmac digest using sha256 algorithm.
@@ -28,7 +29,7 @@ export function verifyMetadataSignature(rawMetadata: string, signature: string, 
   return Date.now() < +extractedSignedAt + ttl
 }
 
-export function calcCurrentTrackIndexAndOffset(
+export function calcTrackIndexAndOffset(
   playlistPosition: number,
   channelAudioTracks: AudioTracksEntity[],
 ): null | { offset: number; index: number } {
@@ -49,4 +50,25 @@ export function calcNextTrackIndex(currentTrackIndex: number, channelAudioTracks
   }
 
   return currentTrackIndex + 1
+}
+
+export function getUserIdFromContext(ctx: Context): number {
+  if (typeof ctx.state.user?.uid !== "number") {
+    throw new TypeError(`Expected user id to be valid number`)
+  }
+  return ctx.state.user.uid
+}
+
+export function withOffset(
+  tracks: ReadonlyArray<IAudioTracksEntity>,
+): ReadonlyArray<{ readonly offset: number; track: IAudioTracksEntity }> {
+  let offset = 0
+
+  return tracks.map(track => {
+    const trackWithOffset = { offset, track }
+
+    offset += +track.duration
+
+    return trackWithOffset
+  })
 }
