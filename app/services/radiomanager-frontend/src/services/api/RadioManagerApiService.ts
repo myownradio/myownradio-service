@@ -5,7 +5,6 @@ import { SessionService } from "~/services/session/SessionService"
 export interface RadioManagerApiService {
   getChannels(): Promise<RadioChannelResource[]>
   createChannel(title: string): Promise<RadioChannelResource>
-  getChannel(channelId: string | number): Promise<RadioChannelResource>
   getAudioTracks(channelId: string | number): Promise<AudioTrackResource[]>
   addTrackToChannel(channelId: string | number, signature: string, rawMetadata: string): Promise<AudioTrackResource>
 }
@@ -28,13 +27,6 @@ export class BaseRadioManagerService extends AbstractApiWithSessionService imple
     })
   }
 
-  public async getChannel(channelId: string | number): Promise<RadioChannelResource> {
-    const rawChannelId = encodeURIComponent(channelId)
-    return this.makeRequestWithRefresh<RadioChannelResource>(`channels/${rawChannelId}`, {
-      method: "get",
-    })
-  }
-
   public async getAudioTracks(channelId: string | number): Promise<AudioTrackResource[]> {
     const rawChannelId = encodeURIComponent(channelId)
     return this.makeRequestWithRefresh<AudioTrackResource[]>(`channels/${rawChannelId}/tracks`, {
@@ -48,7 +40,7 @@ export class BaseRadioManagerService extends AbstractApiWithSessionService imple
     rawMetadata: string,
   ): Promise<AudioTrackResource> {
     const rawChannelId = encodeURIComponent(channelId)
-    return this.makeRequestWithRefresh<AudioTrackResource>(`channels/${rawChannelId}/tracks/add`, {
+    return this.makeRequestWithRefresh<AudioTrackResource>(`channels/${rawChannelId}/tracks`, {
       method: "post",
       headers: {
         signature,
