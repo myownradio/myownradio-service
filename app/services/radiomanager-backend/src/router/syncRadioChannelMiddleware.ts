@@ -2,7 +2,6 @@ import { dateUtils, hashUtils } from "@myownradio/shared-server"
 import {
   AudioTracksProps,
   IAudioTracksEntity as AudioTracksEntity,
-  IPlayingChannelsEntity,
   IPlayingChannelsEntity as PlayingChannelsEntity,
   PlayingChannelsProps,
   TableName,
@@ -93,7 +92,7 @@ export function syncRadioChannelMiddleware(container: Container): Middleware {
       difference -= trackIndexAndOffset.offset
     }
 
-    await knex<IPlayingChannelsEntity>(TableName.PlayingChannels)
+    await knex<PlayingChannelsEntity>(TableName.PlayingChannels)
       .where({ id: playingChannel.id })
       .increment(PlayingChannelsProps.StartedAt, difference)
 
