@@ -71,6 +71,7 @@ export function createRouter(container: Container): Router {
     routeHandlers.deleteTrackFromRadioChannel(container),
   )
   router.post("/channels/:channelId/start", jwtMiddleware, routeHandlers.startRadioChannel(container))
+  router.post("/channels/:channelId/stop", jwtMiddleware, routeHandlers.stopRadioChannel(container))
 
   return router
 }

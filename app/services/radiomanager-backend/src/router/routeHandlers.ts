@@ -317,9 +317,39 @@ export function startRadioChannel(container: Container): Middleware {
 }
 
 export function stopRadioChannel(container: Container): Middleware {
+  const knex = container.get<KnexConnection>(KnexType)
+
   return async (ctx: Context): Promise<void> => {
-    void container
-    void ctx
+    const userId = getUserIdFromContext(ctx)
+    const { channelId: encodedChannelId } = ctx.params
+    const channelId = hashUtils.decodeId(encodedChannelId)
+
+    if (!channelId) {
+      return
+    }
+
+    const channel = await knex<IRadioChannelsEntity>(TableName.RadioChannels)
+      .where({ id: channelId })
+      .first()
+
+    if (!channel) {
+      ctx.throw(404)
+    }
+
+    if (channel.user_id !== userId) {
+      ctx.throw(401)
+    }
+
+    const deletedRows = await knex<IPlayingChannelsEntity>(TableName.PlayingChannels)
+      .where({ channel_id: channel.id })
+      .delete()
+      .count()
+
+    if (+deletedRows === 0) {
+      ctx.throw(409)
+    }
+
+    ctx.status = 200
   }
 }
 
