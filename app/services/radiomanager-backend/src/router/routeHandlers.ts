@@ -5,6 +5,8 @@ import {
   RadioChannelsProps,
   AudioTracksProps,
   IPlayingChannelsEntity,
+  IPlayingChannelsEntity as PlayingChannelsEntity,
+  IAudioTracksEntity as AudioTracksEntity,
 } from "@myownradio/shared-server/lib/entities"
 import { AudioTrackResource, RadioChannelResource } from "@myownradio/shared-types"
 import { Container } from "inversify"
@@ -15,7 +17,7 @@ import { ConfigType, KnexType, TimeServiceType } from "../di/types"
 import { KnexConnection, TypedContext } from "../interfaces"
 import { decodeT } from "../io"
 import { TimeService } from "../time"
-import { verifyMetadataSignature } from "../utils"
+import { calcCurrentTrackIndexAndOffset, calcNextTrackIndex, verifyMetadataSignature } from "../utils"
 
 function getUserIdFromContext(ctx: Context): number {
   if (typeof ctx.state.user?.uid !== "number") {
@@ -354,22 +356,178 @@ export function stopRadioChannel(container: Container): Middleware {
 }
 
 export function pauseRadioChannel(container: Container): Middleware {
+  const knex = container.get<KnexConnection>(KnexType)
+  const timeService = container.get<TimeService>(TimeServiceType)
+
   return async (ctx: Context): Promise<void> => {
-    void container
-    void ctx
+    const userId = getUserIdFromContext(ctx)
+    const { channelId: encodedChannelId } = ctx.params
+    const channelId = hashUtils.decodeId(encodedChannelId)
+
+    if (!channelId) {
+      return
+    }
+
+    const channel = await knex<IRadioChannelsEntity>(TableName.RadioChannels)
+      .where({ id: channelId })
+      .first()
+
+    if (!channel) {
+      ctx.throw(404)
+    }
+
+    if (channel.user_id !== userId) {
+      ctx.throw(401)
+    }
+
+    const now = timeService.now()
+    const updatedRows = await knex<IPlayingChannelsEntity>(TableName.PlayingChannels)
+      .where({
+        channel_id: channel.id,
+        paused_at: null,
+      })
+      .update({
+        updated_at: dateUtils.convertDateToIso(now),
+        paused_at: dateUtils.convertDateToIso(now),
+      })
+      .count()
+
+    if (+updatedRows === 0) {
+      ctx.throw(409)
+    }
+
+    ctx.status = 200
   }
 }
 
 export function resumeRadioChannel(container: Container): Middleware {
+  const knex = container.get<KnexConnection>(KnexType)
+  const timeService = container.get<TimeService>(TimeServiceType)
+
   return async (ctx: Context): Promise<void> => {
-    void container
-    void ctx
+    const userId = getUserIdFromContext(ctx)
+    const { channelId: encodedChannelId } = ctx.params
+    const channelId = hashUtils.decodeId(encodedChannelId)
+
+    if (!channelId) {
+      return
+    }
+
+    const channel = await knex<IRadioChannelsEntity>(TableName.RadioChannels)
+      .where({ id: channelId })
+      .first()
+
+    if (!channel) {
+      ctx.throw(404)
+    }
+
+    if (channel.user_id !== userId) {
+      ctx.throw(401)
+    }
+
+    await knex.transaction(async trx => {
+      const playingChannel = await trx<IPlayingChannelsEntity>(TableName.PlayingChannels)
+        .where({ channel_id: channel.id })
+        .first()
+
+      if (!playingChannel || playingChannel.paused_at === null) {
+        ctx.throw(409)
+      }
+
+      const nowMillis = timeService.now()
+      const startedAtMillis = dateUtils.convertDateToMillis(playingChannel.started_at)
+      const pausedAtMillis = dateUtils.convertDateToMillis(playingChannel.paused_at)
+
+      const updatedRows = await trx<IPlayingChannelsEntity>(TableName.PlayingChannels)
+        .where({
+          id: playingChannel.id,
+        })
+        .update({
+          started_at: dateUtils.convertDateToIso(startedAtMillis + (nowMillis - pausedAtMillis)),
+          paused_at: null,
+        })
+        .count()
+
+      if (+updatedRows === 0) {
+        ctx.throw(409)
+      }
+    })
+
+    ctx.status = 200
   }
 }
 
 export function getNowPlaying(container: Container): Middleware {
+  const knex = container.get<KnexConnection>(KnexType)
+  const timeService = container.get<TimeService>(TimeServiceType)
+
   return async (ctx: Context): Promise<void> => {
-    void container
-    void ctx
+    const userId = getUserIdFromContext(ctx)
+    const { channelId: encodedChannelId } = ctx.params
+    const channelId = hashUtils.decodeId(encodedChannelId)
+
+    if (!channelId) {
+      return
+    }
+
+    const channel = await knex<IRadioChannelsEntity>(TableName.RadioChannels)
+      .where({ id: channelId })
+      .first()
+
+    if (!channel) {
+      ctx.throw(404)
+    }
+
+    if (channel.user_id !== userId) {
+      ctx.throw(401)
+    }
+
+    const playingChannel = await knex<PlayingChannelsEntity>(TableName.PlayingChannels)
+      .where({ channel_id: channel.id })
+      .first()
+
+    if (!playingChannel || playingChannel.paused_at !== null) {
+      ctx.throw(404)
+      return
+    }
+
+    // todo get now playing information from the redis cache. it will be more accurate when streaming is active.
+
+    const channelAudioTracks = await knex<AudioTracksEntity>(TableName.AudioTracks)
+      .where({ channel_id: channel.id })
+      .orderBy(AudioTracksProps.OrderId, "asc")
+
+    const now = timeService.now()
+
+    const playlistDuration = channelAudioTracks.reduce((acc, t) => acc + +t.duration, 0)
+    const playlistPosition = (now - dateUtils.convertDateToMillis(playingChannel.started_at)) % playlistDuration
+
+    const probablyIndexAndOffset = calcCurrentTrackIndexAndOffset(playlistPosition, channelAudioTracks)
+
+    if (!probablyIndexAndOffset) {
+      ctx.status = 204
+      return
+    }
+
+    const nextTrackIndex = calcNextTrackIndex(probablyIndexAndOffset.index, channelAudioTracks)
+
+    const currentTrack = channelAudioTracks[probablyIndexAndOffset.index]
+    const nextTrack = channelAudioTracks[nextTrackIndex]
+
+    // todo add correct urls
+    ctx.body = {
+      position: probablyIndexAndOffset.index,
+      current: {
+        id: hashUtils.encodeId(currentTrack.id),
+        offset: probablyIndexAndOffset.offset,
+        title: `${currentTrack.artist} - ${currentTrack.title}`,
+        url: "todo",
+      },
+      next: {
+        id: hashUtils.encodeId(nextTrack.id),
+        title: `${nextTrack.artist} - ${nextTrack.title}`,
+        url: "todo",
+      },
+    }
   }
 }
