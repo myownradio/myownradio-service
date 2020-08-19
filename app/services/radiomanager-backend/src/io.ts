@@ -9,7 +9,7 @@ class IOValidationError extends Error {
   }
 }
 
-export const validationErrorMiddleware = async (ctx: Context, next: () => PromiseLike<any>): Promise<void> => {
+export const validationErrorMiddleware = async (ctx: Context, next: () => PromiseLike<void>): Promise<void> => {
   try {
     await next()
   } catch (error) {
@@ -23,10 +23,10 @@ export const validationErrorMiddleware = async (ctx: Context, next: () => Promis
   }
 }
 
-export const tryCatch = <F extends (...args: any) => any, E extends any>(
+export const tryCatch = <R, F extends (...args: unknown[]) => R, E extends unknown>(
   fn: F,
   onError: (reason: unknown) => E,
-): E | ReturnType<F> => {
+): E | R => {
   try {
     return fn()
   } catch (error) {
