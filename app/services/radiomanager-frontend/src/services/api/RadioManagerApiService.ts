@@ -1,13 +1,17 @@
-import { AudioTrackResource, RadioChannelResource } from "@myownradio/shared-types"
+import { AudioTrackResource, NowPlayingResource, RadioChannelResource } from "@myownradio/shared-types"
 import { AbstractApiWithSessionService } from "~/services/api/AbstractApiWithSessionService"
 import { SessionService } from "~/services/session/SessionService"
 
 export interface RadioManagerApiService {
   getChannels(): Promise<RadioChannelResource[]>
   createChannel(title: string): Promise<RadioChannelResource>
-  getChannel(channelId: string | number): Promise<RadioChannelResource>
   getAudioTracks(channelId: string | number): Promise<AudioTrackResource[]>
   addTrackToChannel(channelId: string | number, signature: string, rawMetadata: string): Promise<AudioTrackResource>
+  startChannel(channelId: string): Promise<void>
+  stopChannel(channelId: string): Promise<void>
+  pauseChannel(channelId: string): Promise<void>
+  resumeChannel(channelId: string): Promise<void>
+  getNowPlaying(channelId: string): Promise<NowPlayingResource>
 }
 
 export class BaseRadioManagerService extends AbstractApiWithSessionService implements RadioManagerApiService {
@@ -28,13 +32,6 @@ export class BaseRadioManagerService extends AbstractApiWithSessionService imple
     })
   }
 
-  public async getChannel(channelId: string | number): Promise<RadioChannelResource> {
-    const rawChannelId = encodeURIComponent(channelId)
-    return this.makeRequestWithRefresh<RadioChannelResource>(`channels/${rawChannelId}`, {
-      method: "get",
-    })
-  }
-
   public async getAudioTracks(channelId: string | number): Promise<AudioTrackResource[]> {
     const rawChannelId = encodeURIComponent(channelId)
     return this.makeRequestWithRefresh<AudioTrackResource[]>(`channels/${rawChannelId}/tracks`, {
@@ -48,7 +45,7 @@ export class BaseRadioManagerService extends AbstractApiWithSessionService imple
     rawMetadata: string,
   ): Promise<AudioTrackResource> {
     const rawChannelId = encodeURIComponent(channelId)
-    return this.makeRequestWithRefresh<AudioTrackResource>(`channels/${rawChannelId}/tracks/add`, {
+    return this.makeRequestWithRefresh<AudioTrackResource>(`channels/${rawChannelId}/tracks`, {
       method: "post",
       headers: {
         signature,
@@ -56,6 +53,34 @@ export class BaseRadioManagerService extends AbstractApiWithSessionService imple
       },
       data: rawMetadata,
     })
+  }
+
+  public startChannel(channelId: string): Promise<void> {
+    return this.makeRequestWithRefresh(`channels/${channelId}/start`, {
+      method: "post",
+    })
+  }
+
+  public stopChannel(channelId: string): Promise<void> {
+    return this.makeRequestWithRefresh(`channels/${channelId}/stop`, {
+      method: "post",
+    })
+  }
+
+  public pauseChannel(channelId: string): Promise<void> {
+    return this.makeRequestWithRefresh(`channels/${channelId}/pause`, {
+      method: "post",
+    })
+  }
+
+  public resumeChannel(channelId: string): Promise<void> {
+    return this.makeRequestWithRefresh(`channels/${channelId}/resume`, {
+      method: "post",
+    })
+  }
+
+  public getNowPlaying(channelId: string): Promise<NowPlayingResource> {
+    return this.makeRequestWithRefresh(`channels/${channelId}/now`, {})
   }
 }
 

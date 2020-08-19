@@ -465,14 +465,12 @@
     vary "^1.1.2"
 
 "@myownradio/shared-server@link:../../libs/shared-server":
-  version "1.0.0"
-  dependencies:
-    fp-ts "^2.6.5"
-    hashids "2.2.1"
-    io-ts "^2.2.4"
+  version "0.0.0"
+  uid ""
 
 "@myownradio/shared-types@link:../../libs/shared-types":
-  version "1.0.0"
+  version "0.0.0"
+  uid ""
 
 "@sindresorhus/is@^0.14.0":
   version "0.14.0"
@@ -2475,6 +2473,11 @@ interpret@^2.0.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/interpret/-/interpret-2.2.0.tgz#1a78a0b5965c40a5416d007ad6f50ad27c417df9"
   integrity sha512-Ju0Bz/cEia55xDwUWEa8+olFpCiQoypjnQySseKtmjNrnps3P+xfpUmGr90T7yjlVJmOtybRvPXhKMbHr+fWnw==
+
+inversify@^5.0.1:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/inversify/-/inversify-5.0.1.tgz#500d709b1434896ce5a0d58915c4a4210e34fb6e"
+  integrity sha512-Ieh06s48WnEYGcqHepdsJUIJUXpwH5o5vodAX+DK2JA/gjy4EbEcQZxw+uFfzysmKjiLXGYwNG3qDZsKVMcINQ==
 
 io-ts@^2.1.2, io-ts@^2.2.4:
   version "2.2.4"

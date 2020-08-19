@@ -1,4 +1,5 @@
 import { createHmac } from "crypto"
+import { IAudioTracksEntity as AudioTracksEntity } from "@myownradio/shared-server/lib/entities"
 
 /**
  * Creates hmac digest using sha256 algorithm.
@@ -25,4 +26,27 @@ export function verifyMetadataSignature(rawMetadata: string, signature: string, 
   }
 
   return Date.now() < +extractedSignedAt + ttl
+}
+
+export function calcCurrentTrackIndexAndOffset(
+  playlistPosition: number,
+  channelAudioTracks: AudioTracksEntity[],
+): null | { offset: number; index: number } {
+  let currentOffset = 0
+  for (const [index, track] of channelAudioTracks.entries()) {
+    if (currentOffset <= playlistPosition && currentOffset + +track.duration > playlistPosition) {
+      return { index, offset: playlistPosition - currentOffset }
+    }
+    currentOffset += +track.duration
+  }
+  return null
+}
+
+export function calcNextTrackIndex(currentTrackIndex: number, channelAudioTracks: AudioTracksEntity[]): number {
+  // if current track is last in playlist
+  if (currentTrackIndex === channelAudioTracks.length - 1) {
+    return 0
+  }
+
+  return currentTrackIndex + 1
 }
