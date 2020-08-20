@@ -1,5 +1,5 @@
 exports.seed = async function seed(knex) {
-  await knex("audio_tracks").del();
+  await knex("audio_tracks").del()
   await knex("audio_tracks").insert([
     {
       id: 1,
@@ -37,5 +37,41 @@ exports.seed = async function seed(knex) {
       format: "MP2/3 (MPEG audio layer 2/3)",
       order_id: 1,
     },
-  ]);
-};
+    {
+      id: 3,
+      user_id: 1,
+      channel_id: 2,
+      created_at: "2020-02-09T11:12:06.585Z",
+      updated_at: "2020-02-09T11:12:06.585Z",
+      name: "other_track.mp3",
+      hash: "other_hash",
+      size: 773803,
+      artist: "Other Artist",
+      title: "Other Title",
+      album: "Other Album",
+      genre: "Other",
+      bitrate: 256000,
+      duration: 20074,
+      format: "MP2/3 (MPEG audio layer 2/3)",
+      order_id: 2,
+    },
+    {
+      id: 4,
+      user_id: 1,
+      channel_id: 2,
+      created_at: "2020-02-09T11:12:06.585Z",
+      updated_at: "2020-02-09T11:12:06.585Z",
+      name: "other_track2.mp3",
+      hash: "other_hash2",
+      size: 343434,
+      artist: "Other Artist 2",
+      title: "Other Title 2",
+      album: "Other Album 2",
+      genre: "Other 2",
+      bitrate: 256000,
+      duration: 192355,
+      format: "MP2/3 (MPEG audio layer 2/3)",
+      order_id: 3,
+    },
+  ])
+}

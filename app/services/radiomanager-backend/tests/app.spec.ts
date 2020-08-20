@@ -114,7 +114,7 @@ describe("/channels/:id/tracks", () => {
       .set("Signature", signature)
       .send(rawMetadata)
       .expect(200, {
-        id: "5xGEBm",
+        id: "g1N61Q",
         name: "sine.mp3",
         title: "Sine Title",
         artist: "Sine Artist",
@@ -437,18 +437,14 @@ describe("GET /channels/:channelId/now", () => {
       .get("/channels/RB2a1y/now")
       .set("Authorization", `Bearer ${authorizationToken}`)
       .expect(200, {
-        position: 0,
+        position: 2,
         current: {
-          id: "RB2a1y",
-          offset: 95136.5,
-          title: "Bob Marley - This Is Love",
+          id: "nxno1y",
+          offset: 133880,
+          title: "Other Artist 2 - Other Title 2",
           url: "todo",
         },
-        next: {
-          id: "RB2a1y",
-          title: "Bob Marley - This Is Love",
-          url: "todo",
-        },
+        next: { id: "RB2a1y", title: "Bob Marley - This Is Love", url: "todo" },
       })
   })
 
@@ -484,7 +480,7 @@ describe("GET /channels/:channelId/now", () => {
 })
 
 describe("sync playing channel position", () => {
-  it.only("should sync on add new track to playlist", async () => {
+  it("should sync on add new track to playlist", async () => {
     const newTrackMetadata = {
       name: "New Track Name",
       hash: "New Track Hash",
@@ -504,18 +500,14 @@ describe("sync playing channel position", () => {
       .get("/channels/RB2a1y/now")
       .set("Authorization", `Bearer ${authorizationToken}`)
       .expect(200, {
-        position: 0,
+        position: 2,
         current: {
-          id: "RB2a1y",
-          offset: 95136.5,
-          title: "Bob Marley - This Is Love",
+          id: "nxno1y",
+          offset: 133880,
+          title: "Other Artist 2 - Other Title 2",
           url: "todo",
         },
-        next: {
-          id: "RB2a1y",
-          title: "Bob Marley - This Is Love",
-          url: "todo",
-        },
+        next: { id: "RB2a1y", title: "Bob Marley - This Is Love", url: "todo" },
       })
 
     await request
@@ -530,15 +522,15 @@ describe("sync playing channel position", () => {
       .get("/channels/RB2a1y/now")
       .set("Authorization", `Bearer ${authorizationToken}`)
       .expect(200, {
-        position: 0,
+        position: 2,
         current: {
-          id: "RB2a1y",
-          offset: 95137,
-          title: "Bob Marley - This Is Love",
+          id: "nxno1y",
+          offset: 133880.25,
+          title: "Other Artist 2 - Other Title 2",
           url: "todo",
         },
         next: {
-          id: "5xGEBm",
+          id: "g1N61Q",
           title: "New Track Artist - New Track Title",
           url: "todo",
         },
