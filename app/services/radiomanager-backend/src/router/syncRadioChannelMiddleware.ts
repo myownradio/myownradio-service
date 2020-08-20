@@ -82,8 +82,9 @@ export function syncRadioChannelMiddleware(container: Container): Middleware {
     if (trackIndexAfterHandle === -1) {
       // Probably, user deleted playing track from playlist. In this case we
       // rewind playlist position to the other track with same order_id.
-      trackIndexAfterHandle =
-        tracksWithOffsetAfterHandle.findIndex(t => t.track.order_id === trackWithOffset.track.order_id) ?? 0
+      trackIndexAfterHandle = tracksWithOffsetAfterHandle.findIndex(
+        t => t.track.order_id === trackWithOffset.track.order_id,
+      )
       resetTrackPosition = true
     }
 
