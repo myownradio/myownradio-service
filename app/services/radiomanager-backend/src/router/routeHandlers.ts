@@ -513,24 +513,24 @@ export function getNowPlaying(container: Container): Middleware {
     const duration = tracks.reduce((acc, t) => acc + +t.duration, 0)
     const position = (now - dateUtils.convertDateToMillis(playingChannel.started_at)) % duration
 
-    const probablyIndexAndOffset = calcTrackIndexAndTrackPosition(position, tracks)
+    const trackIndexAndTrackOffset = calcTrackIndexAndTrackPosition(position, tracks)
 
-    if (!probablyIndexAndOffset) {
+    if (!trackIndexAndTrackOffset) {
       ctx.status = 204
       return
     }
 
-    const nextTrackIndex = calcNextTrackIndex(probablyIndexAndOffset.index, tracks)
+    const nextTrackIndex = calcNextTrackIndex(trackIndexAndTrackOffset.index, tracks)
 
-    const currentTrack = tracks[probablyIndexAndOffset.index]
+    const currentTrack = tracks[trackIndexAndTrackOffset.index]
     const nextTrack = tracks[nextTrackIndex]
 
     // todo add correct urls
     ctx.body = {
-      position: probablyIndexAndOffset.index,
+      position: trackIndexAndTrackOffset.index,
       current: {
         id: hashUtils.encodeId(currentTrack.id),
-        offset: probablyIndexAndOffset.trackPosition,
+        offset: trackIndexAndTrackOffset.trackPosition,
         title: `${currentTrack.artist} - ${currentTrack.title}`,
         url: "todo",
       },
