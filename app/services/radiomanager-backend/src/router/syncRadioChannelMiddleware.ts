@@ -49,15 +49,15 @@ export function syncRadioChannelMiddleware(container: Container): Middleware {
 
     const now = timeService.now()
     const position = (now - dateUtils.convertDateToMillis(playingChannel.started_at)) % duration
-    const trackIndexAndOffset = calcTrackIndexAndTrackPosition(position, tracks)
+    const trackIndexAndTrackPosition = calcTrackIndexAndTrackPosition(position, tracks)
 
-    if (!trackIndexAndOffset) {
+    if (!trackIndexAndTrackPosition) {
       // This will never happen, but if it happened we return control to route handler.
       return next()
     }
 
     // We need to know current track and it's trackPosition in playlist before handling user request.
-    const trackWithOffset = tracksWithOffset[trackIndexAndOffset.index]
+    const trackWithOffset = tracksWithOffset[trackIndexAndTrackPosition.index]
 
     // Handle user request, that could alter current
     await next()
@@ -71,6 +71,7 @@ export function syncRadioChannelMiddleware(container: Container): Middleware {
         .where({ id: playingChannel.id })
         .delete()
       // todo Broadcast message about playlist forcibly updated. In this case we'll stop the radio channel.
+      return
     }
 
     const tracksWithOffsetAfterHandle = withOffset(tracksAfterHandle)
@@ -92,13 +93,13 @@ export function syncRadioChannelMiddleware(container: Container): Middleware {
     }
 
     const newTrackWithOffset = tracksWithOffsetAfterHandle[trackIndexAfterHandle]
-    const newTrackOffset = resetTrackPosition ? 0 : trackIndexAndOffset.trackPosition
+    const newTrackPosition = resetTrackPosition ? 0 : trackIndexAndTrackPosition.trackPosition
 
     // We're computed current playing track in updated playlist, got track position and new time offset.
     // Then we compute and update new value for `started_at` property in current playing radio station.
     await knex<PlayingChannelsEntity>(TableName.PlayingChannels)
       .where({ id: playingChannel.id })
-      .update(PlayingChannelsProps.StartedAt, convertDateToIso(now - newTrackWithOffset.offset - newTrackOffset))
+      .update(PlayingChannelsProps.StartedAt, convertDateToIso(now - newTrackWithOffset.offset - newTrackPosition))
 
     if (resetTrackPosition) {
       // todo Broadcast message about playlist forcibly updated.
