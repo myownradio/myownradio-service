@@ -17,7 +17,12 @@ import { ConfigType, KnexType, TimeServiceType } from "../di/types"
 import { KnexConnection, TypedContext } from "../interfaces"
 import { decodeT } from "../io"
 import { TimeService } from "../time"
-import { calcTrackIndexAndTrackPosition, calcNextTrackIndex, getUserIdFromContext, verifyMetadataSignature } from "../utils"
+import {
+  calcTrackIndexAndTrackPosition,
+  calcNextTrackIndex,
+  getUserIdFromContext,
+  verifyMetadataSignature,
+} from "../utils"
 
 export function getRadioChannels(container: Container): Middleware {
   const knex = container.get<KnexConnection>(KnexType)
@@ -249,17 +254,32 @@ export function deleteTrackFromRadioChannel(container: Container): Middleware {
       return ctx.throw(401)
     }
 
-    const deletedRows = await knex
-      .from(TableName.AudioTracks)
-      .where(AudioTracksProps.ChannelId, channelId)
-      .where(AudioTracksProps.Id, trackId)
-      .delete()
+    await knex.transaction(async trx => {
+      const trackToDelete = await trx
+        .from<AudioTracksEntity>(TableName.AudioTracks)
+        .where(AudioTracksProps.ChannelId, channelId)
+        .where(AudioTracksProps.Id, trackId)
+        .first()
 
-    if (+deletedRows === 0) {
-      return
-    }
+      if (!trackToDelete) {
+        return
+      }
 
-    ctx.status = 200
+      await trx
+        .from<AudioTracksEntity>(TableName.AudioTracks)
+        .where(AudioTracksProps.ChannelId, channelId)
+        .where(AudioTracksProps.Id, trackId)
+        .delete()
+
+      await trx
+        .from<AudioTracksEntity>(TableName.AudioTracks)
+        .where(AudioTracksProps.ChannelId, channelId)
+        .where(AudioTracksProps.OrderId, ">", trackToDelete.order_id)
+        .orderBy(AudioTracksProps.OrderId, "asc")
+        .decrement(AudioTracksProps.OrderId)
+
+      ctx.status = 200
+    })
   }
 }
 

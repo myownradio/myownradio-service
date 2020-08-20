@@ -536,4 +536,109 @@ describe("sync playing channel position", () => {
         },
       })
   })
+
+  it("should sync on remove track from playlist", async () => {
+    await request
+      .get("/channels/RB2a1y/now")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(200, {
+        position: 2,
+        current: {
+          id: "nxno1y",
+          offset: 133880,
+          title: "Other Artist 2 - Other Title 2",
+          url: "todo",
+        },
+        next: { id: "RB2a1y", title: "Bob Marley - This Is Love", url: "todo" },
+      })
+
+    await request
+      .delete("/channels/RB2a1y/tracks/RB2a1y")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(200)
+
+    await request
+      .get("/channels/RB2a1y/now")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(200, {
+        position: 1,
+        current: {
+          id: "nxno1y",
+          offset: 133880,
+          title: "Other Artist 2 - Other Title 2",
+          url: "todo",
+        },
+        next: {
+          id: "5xGEBm",
+          title: "Other Artist - Other Title",
+          url: "todo",
+        },
+      })
+  })
+
+  it("should sync on remove CURRENT track from playlist", async () => {
+    await request
+      .get("/channels/RB2a1y/now")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(200, {
+        position: 2,
+        current: {
+          id: "nxno1y",
+          offset: 133880,
+          title: "Other Artist 2 - Other Title 2",
+          url: "todo",
+        },
+        next: {
+          id: "RB2a1y",
+          title: "Bob Marley - This Is Love",
+          url: "todo",
+        },
+      })
+
+    await request
+      .delete("/channels/RB2a1y/tracks/nxno1y")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(200)
+
+    await request
+      .get("/channels/RB2a1y/now")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(200, {
+        position: 0,
+        current: {
+          id: "RB2a1y",
+          offset: 0,
+          title: "Bob Marley - This Is Love",
+          url: "todo",
+        },
+        next: {
+          id: "5xGEBm",
+          title: "Other Artist - Other Title",
+          url: "todo",
+        },
+      })
+
+    await request
+      .delete("/channels/RB2a1y/tracks/RB2a1y")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(200)
+
+    await request
+      .get("/channels/RB2a1y/now")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(200, {
+        position: 0,
+        current: {
+          id: "5xGEBm",
+          offset: 0,
+          title: "Other Artist - Other Title",
+          url: "todo",
+        },
+        next: {
+          id: "5xGEBm",
+          title: "Other Artist - Other Title",
+          url: "todo",
+        },
+      })
+  })
 })
