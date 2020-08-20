@@ -12,7 +12,7 @@ import { Context, Middleware } from "koa"
 import { KnexType, TimeServiceType } from "../di/types"
 import { KnexConnection } from "../interfaces"
 import { TimeService } from "../time"
-import { calcTrackIndexAndOffset, withOffset } from "../utils"
+import { calcTrackIndexAndTrackPosition, withOffset } from "../utils"
 
 /**
  * This middleware restores radio channel's now playing position after playlist updated.
@@ -49,14 +49,14 @@ export function syncRadioChannelMiddleware(container: Container): Middleware {
 
     const now = timeService.now()
     const position = (now - dateUtils.convertDateToMillis(playingChannel.started_at)) % duration
-    const trackIndexAndOffset = calcTrackIndexAndOffset(position, tracks)
+    const trackIndexAndOffset = calcTrackIndexAndTrackPosition(position, tracks)
 
     if (!trackIndexAndOffset) {
       // This will never happen, but if it happened we return control to route handler.
       return next()
     }
 
-    // We need to know current track and it's offset in playlist before handling user request.
+    // We need to know current track and it's trackPosition in playlist before handling user request.
     const trackWithOffset = tracksWithOffset[trackIndexAndOffset.index]
 
     // Handle user request, that could alter current
@@ -65,9 +65,17 @@ export function syncRadioChannelMiddleware(container: Container): Middleware {
     const tracksAfterHandle = await knex<AudioTracksEntity>(TableName.AudioTracks)
       .where({ channel_id: channelId })
       .orderBy(AudioTracksProps.OrderId, "asc")
+
+    if (tracksAfterHandle.length === 0) {
+      await knex<PlayingChannelsEntity>(TableName.PlayingChannels)
+        .where({ id: playingChannel.id })
+        .delete()
+      // todo Broadcast message about playlist forcibly updated. In this case we'll stop the radio channel.
+    }
+
     const tracksWithOffsetAfterHandle = withOffset(tracksAfterHandle)
 
-    let resetTrackOffset = false
+    let resetTrackPosition = false
     let trackIndexAfterHandle = tracksWithOffsetAfterHandle.findIndex(t => t.track.id === trackWithOffset.track.id)
 
     if (trackIndexAfterHandle === -1) {
@@ -75,7 +83,7 @@ export function syncRadioChannelMiddleware(container: Container): Middleware {
       // rewind playlist position to the other track with same order_id.
       trackIndexAfterHandle =
         tracksWithOffsetAfterHandle.findIndex(t => t.track.order_id === trackWithOffset.track.order_id) ?? 0
-      resetTrackOffset = true
+      resetTrackPosition = true
     }
 
     if (trackIndexAfterHandle === -1) {
@@ -84,20 +92,16 @@ export function syncRadioChannelMiddleware(container: Container): Middleware {
     }
 
     const newTrackWithOffset = tracksWithOffsetAfterHandle[trackIndexAfterHandle]
+    const newTrackOffset = resetTrackPosition ? 0 : trackIndexAndOffset.trackPosition
 
-    let difference = trackWithOffset.offset - newTrackWithOffset.offset
-
-    // This flag means that we want to restart playback from the beginning of the track.
-    if (resetTrackOffset) {
-      difference -= trackIndexAndOffset.offset
-    }
-
+    // We're computed current playing track in updated playlist, got track position and new time offset.
+    // Then we compute and update new value for `started_at` property in current playing radio station.
     await knex<PlayingChannelsEntity>(TableName.PlayingChannels)
       .where({ id: playingChannel.id })
-      .update(PlayingChannelsProps.StartedAt, convertDateToIso(now - position - difference))
+      .update(PlayingChannelsProps.StartedAt, convertDateToIso(now - newTrackWithOffset.offset - newTrackOffset))
 
-    if (resetTrackOffset) {
-      // todo Broadcast message that playlist forcibly updated.
+    if (resetTrackPosition) {
+      // todo Broadcast message about playlist forcibly updated.
     }
   }
 }

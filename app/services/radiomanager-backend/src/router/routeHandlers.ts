@@ -17,7 +17,7 @@ import { ConfigType, KnexType, TimeServiceType } from "../di/types"
 import { KnexConnection, TypedContext } from "../interfaces"
 import { decodeT } from "../io"
 import { TimeService } from "../time"
-import { calcTrackIndexAndOffset, calcNextTrackIndex, getUserIdFromContext, verifyMetadataSignature } from "../utils"
+import { calcTrackIndexAndTrackPosition, calcNextTrackIndex, getUserIdFromContext, verifyMetadataSignature } from "../utils"
 
 export function getRadioChannels(container: Container): Middleware {
   const knex = container.get<KnexConnection>(KnexType)
@@ -493,7 +493,7 @@ export function getNowPlaying(container: Container): Middleware {
     const duration = tracks.reduce((acc, t) => acc + +t.duration, 0)
     const position = (now - dateUtils.convertDateToMillis(playingChannel.started_at)) % duration
 
-    const probablyIndexAndOffset = calcTrackIndexAndOffset(position, tracks)
+    const probablyIndexAndOffset = calcTrackIndexAndTrackPosition(position, tracks)
 
     if (!probablyIndexAndOffset) {
       ctx.status = 204
@@ -510,7 +510,7 @@ export function getNowPlaying(container: Container): Middleware {
       position: probablyIndexAndOffset.index,
       current: {
         id: hashUtils.encodeId(currentTrack.id),
-        offset: probablyIndexAndOffset.offset,
+        offset: probablyIndexAndOffset.trackPosition,
         title: `${currentTrack.artist} - ${currentTrack.title}`,
         url: "todo",
       },
