@@ -2,7 +2,8 @@ import { Container } from "inversify"
 import * as knex from "knex"
 import { createApp } from "./app"
 import { Config } from "./config"
-import { ConfigType, KnexType, LoggerType, TimeServiceType } from "./di/types"
+import { ConfigType, EventEmitterType, KnexType, LoggerType, TimeServiceType } from "./di/types"
+import { VoidEventEmitterService } from "./events"
 import logger from "./logger"
 import { BaseTimeService } from "./time"
 
@@ -18,11 +19,13 @@ try {
   })
 
   const timeService = new BaseTimeService()
+  const eventEmitterService = new VoidEventEmitterService()
 
   container.bind(ConfigType).toConstantValue(config)
   container.bind(KnexType).toConstantValue(knexConnection)
   container.bind(LoggerType).toConstantValue(logger)
   container.bind(TimeServiceType).toConstantValue(timeService)
+  container.bind(EventEmitterType).toConstantValue(eventEmitterService)
 
   const app = createApp(container)
 

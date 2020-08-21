@@ -1,11 +1,13 @@
 import { createSignature } from "@myownradio/shared-server/lib/signature"
+import { EventEmitterService } from "@myownradio/shared-types"
 import { Container } from "inversify"
 import * as knex from "knex"
 import * as supertest from "supertest"
 import * as winston from "winston"
 import { createApp } from "../src/app"
 import { Config } from "../src/config"
-import { ConfigType, KnexType, LoggerType, TimeServiceType } from "../src/di/types"
+import { ConfigType, EventEmitterType, KnexType, LoggerType, TimeServiceType } from "../src/di/types"
+import { VoidEventEmitterService } from "../src/events"
 import { FixedTimeService, TimeService } from "../src/time"
 
 const authorizationToken =
@@ -20,6 +22,7 @@ let config: Config
 let request: supertest.SuperTest<supertest.Test>
 let knexConnection: knex
 let timeService: TimeService
+let eventEmitterService: EventEmitterService
 
 beforeEach(async () => {
   const logger = winston.createLogger({
@@ -42,6 +45,7 @@ beforeEach(async () => {
   })
 
   timeService = new FixedTimeService(1586849301429)
+  eventEmitterService = new VoidEventEmitterService()
 
   await knexConnection.migrate.latest({
     directory: migrationsDir,
@@ -57,6 +61,7 @@ beforeEach(async () => {
   container.bind(LoggerType).toConstantValue(logger)
   container.bind(KnexType).toConstantValue(knexConnection)
   container.bind(TimeServiceType).toConstantValue(timeService)
+  container.bind(EventEmitterType).toConstantValue(eventEmitterService)
 
   request = supertest(createApp(container).callback())
 })

@@ -7,12 +7,13 @@ import {
   PlayingChannelsProps,
   TableName,
 } from "@myownradio/shared-server/lib/entities"
+import { EventEmitterService } from "@myownradio/shared-types"
 import { Container } from "inversify"
 import { Context, Middleware } from "koa"
-import { KnexType, TimeServiceType } from "../di/types"
+import { EventEmitterType, KnexType, TimeServiceType } from "../di/types"
 import { KnexConnection } from "../interfaces"
 import { TimeService } from "../time"
-import { calcTrackIndexAndTrackPosition, withOffset } from "../utils"
+import { calcTrackIndexAndTrackPosition, getUserIdFromContext, withOffset } from "../utils"
 
 /**
  * This middleware restores radio channel's now playing position after playlist updated.
@@ -20,8 +21,10 @@ import { calcTrackIndexAndTrackPosition, withOffset } from "../utils"
 export function syncRadioChannelMiddleware(container: Container): Middleware {
   const knex = container.get<KnexConnection>(KnexType)
   const timeService = container.get<TimeService>(TimeServiceType)
+  const eventEmitter = container.get<EventEmitterService>(EventEmitterType)
 
   return async (ctx: Context, next: () => PromiseLike<void>): Promise<void> => {
+    const userId = getUserIdFromContext(ctx)
     const { channelId: hashedChannelId } = ctx.params
     const channelId = hashUtils.decodeId(hashedChannelId)
 
@@ -67,10 +70,13 @@ export function syncRadioChannelMiddleware(container: Container): Middleware {
       .orderBy(AudioTracksProps.OrderId, "asc")
 
     if (tracksAfterHandle.length === 0) {
+      // After handling user request playlist became empty. It means that there's nothing to play
+      // and we can stop the channel by removing PlayingChannel entity and broadcasting message
+      // about channel state updated.
       await knex<PlayingChannelsEntity>(TableName.PlayingChannels)
         .where({ id: playingChannel.id })
         .delete()
-      // todo Broadcast message about playlist forcibly updated. In this case we'll stop the radio channel.
+      eventEmitter.emitEvent({ type: "CHANNEL_STATE_UPDATED", userId, channelId })
       return
     }
 
@@ -103,7 +109,9 @@ export function syncRadioChannelMiddleware(container: Container): Middleware {
       .update(PlayingChannelsProps.StartedAt, convertDateToIso(now - newTrackWithOffset.offset - newTrackPosition))
 
     if (resetTrackPosition) {
-      // todo Broadcast message about playlist forcibly updated.
+      // We must acknowledge everyone that after handling user request current track in playlist
+      // was removed and we restarted playback with the next track or first track in the playlist.
+      eventEmitter.emitEvent({ type: "CHANNEL_STATE_UPDATED", userId, channelId })
     }
   }
 }
