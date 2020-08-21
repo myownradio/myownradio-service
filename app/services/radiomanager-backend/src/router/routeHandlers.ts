@@ -1,6 +1,6 @@
 import { dateUtils, hashUtils } from "@myownradio/shared-server"
 import {
-  IRadioChannelsEntity,
+  IRadioChannelsEntity as RadioChannelsEntity,
   TableName,
   RadioChannelsProps,
   AudioTracksProps,
@@ -30,7 +30,7 @@ export function getRadioChannels(container: Container): Middleware {
   return async (ctx: TypedContext<RadioChannelResource[]>): Promise<void> => {
     const userId = getUserIdFromContext(ctx)
     const channels = await knex
-      .from<IRadioChannelsEntity>(TableName.RadioChannels)
+      .from<RadioChannelsEntity>(TableName.RadioChannels)
       .where({ [RadioChannelsProps.UserId]: userId })
 
     ctx.body = channels.map(channelEntity => ({
@@ -296,7 +296,7 @@ export function startRadioChannel(container: Container): Middleware {
       ctx.throw(404)
     }
 
-    const channel = await knex<IRadioChannelsEntity>(TableName.RadioChannels)
+    const channel = await knex<RadioChannelsEntity>(TableName.RadioChannels)
       .where({ [RadioChannelsProps.Id]: channelId })
       .first()
 
@@ -343,7 +343,7 @@ export function stopRadioChannel(container: Container): Middleware {
       return
     }
 
-    const channel = await knex<IRadioChannelsEntity>(TableName.RadioChannels)
+    const channel = await knex<RadioChannelsEntity>(TableName.RadioChannels)
       .where({ id: channelId })
       .first()
 
@@ -381,7 +381,7 @@ export function pauseRadioChannel(container: Container): Middleware {
       return
     }
 
-    const channel = await knex<IRadioChannelsEntity>(TableName.RadioChannels)
+    const channel = await knex<RadioChannelsEntity>(TableName.RadioChannels)
       .where({ id: channelId })
       .first()
 
@@ -426,7 +426,7 @@ export function resumeRadioChannel(container: Container): Middleware {
       return
     }
 
-    const channel = await knex<IRadioChannelsEntity>(TableName.RadioChannels)
+    const channel = await knex<RadioChannelsEntity>(TableName.RadioChannels)
       .where({ id: channelId })
       .first()
 
@@ -483,7 +483,7 @@ export function getNowPlaying(container: Container): Middleware {
       return
     }
 
-    const channel = await knex<IRadioChannelsEntity>(TableName.RadioChannels)
+    const channel = await knex<RadioChannelsEntity>(TableName.RadioChannels)
       .where({ id: channelId })
       .first()
 
@@ -540,5 +540,93 @@ export function getNowPlaying(container: Container): Middleware {
         url: "todo",
       },
     }
+  }
+}
+
+const MoveTrackInPlaylistRequestContract = t.type(
+  {
+    index: t.number,
+  },
+  "MoveTrackInPlaylistRequestContract",
+)
+
+export function moveTrackInRadioChannel(container: Container): Middleware {
+  const knex = container.get<KnexConnection>(KnexType)
+
+  return async (ctx: Context) => {
+    const userId = getUserIdFromContext(ctx)
+    const { channelId: encodedChannelId, trackId: encodedTrackId } = ctx.params
+    const channelId = hashUtils.decodeId(encodedChannelId)
+    const trackId = hashUtils.decodeId(encodedTrackId)
+
+    if (!channelId || !trackId) {
+      return
+    }
+
+    const { index } = decodeT(MoveTrackInPlaylistRequestContract)(ctx.request.body)
+    // We assume that track's order_id always equals to track's index + 1.
+    const newOrderId = index + 1
+
+    const channel = await knex<RadioChannelsEntity>(TableName.RadioChannels)
+      .where({ id: channelId })
+      .first()
+
+    if (!channel) {
+      ctx.throw(404)
+    }
+
+    if (channel.user_id !== userId) {
+      ctx.throw(401)
+    }
+
+    await knex.transaction(
+      async (trx): Promise<void> => {
+        const countQueryResult = await trx(TableName.AudioTracks)
+          .where(AudioTracksProps.ChannelId, channelId)
+          .count<[{ count: string }]>("id as count")
+        const count = +countQueryResult[0]["count"]
+
+        if (newOrderId < 1 || newOrderId > count) {
+          return ctx.throw(400)
+        }
+
+        const track = await trx<AudioTracksEntity>(TableName.AudioTracks)
+          .where({ channel_id: channelId, id: trackId })
+          .first()
+
+        if (!track) {
+          return
+        }
+
+        if (newOrderId === track.order_id) {
+          // Track moved to the same position: nothing to do.
+          ctx.status = 200
+          return
+        }
+
+        if (newOrderId > track.order_id) {
+          await trx<AudioTracksEntity>(TableName.AudioTracks)
+            .where(AudioTracksProps.ChannelId, channelId)
+            .where(AudioTracksProps.OrderId, ">", track.order_id)
+            .where(AudioTracksProps.OrderId, "<=", newOrderId)
+            .orderBy(AudioTracksProps.OrderId, "asc")
+            .decrement(AudioTracksProps.OrderId)
+        } else {
+          await trx<AudioTracksEntity>(TableName.AudioTracks)
+            .where(AudioTracksProps.ChannelId, channelId)
+            .where(AudioTracksProps.OrderId, "<", track.order_id)
+            .where(AudioTracksProps.OrderId, ">=", newOrderId)
+            .orderBy(AudioTracksProps.OrderId, "asc")
+            .increment(AudioTracksProps.OrderId)
+        }
+
+        await trx<AudioTracksEntity>(TableName.AudioTracks)
+          .where(AudioTracksProps.ChannelId, channelId)
+          .where(AudioTracksProps.Id, trackId)
+          .update(AudioTracksProps.OrderId, newOrderId)
+
+        ctx.status = 200
+      },
+    )
   }
 }

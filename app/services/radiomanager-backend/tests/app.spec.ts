@@ -272,6 +272,259 @@ describe("DELETE /channels/:channelId/tracks/:trackId", () => {
   })
 })
 
+describe("POST /channels/:channelId/tracks/:trackId/move", () => {
+  it("should respond with 200 on successful request", async () => {
+    await request
+      .get("/channels/RB2a1y/tracks")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(200, [
+        {
+          id: "RB2a1y",
+          name: "bob_marley_this_is_love.txt",
+          artist: "Bob Marley",
+          title: "This Is Love",
+          album: "Legend - The Best Of Bob Marley And The Wailers",
+          bitrate: 242824,
+          duration: 230074.75,
+          order_id: 1,
+          size: 8773803,
+          format: "MP2/3 (MPEG audio layer 2/3)",
+          genre: "Reggae",
+        },
+        {
+          id: "5xGEBm",
+          name: "other_track.mp3",
+          artist: "Other Artist",
+          title: "Other Title",
+          album: "Other Album",
+          bitrate: 256000,
+          duration: 20074,
+          order_id: 2,
+          size: 773803,
+          format: "MP2/3 (MPEG audio layer 2/3)",
+          genre: "Other",
+        },
+        {
+          id: "nxno1y",
+          name: "other_track2.mp3",
+          artist: "Other Artist 2",
+          title: "Other Title 2",
+          album: "Other Album 2",
+          bitrate: 256000,
+          duration: 192355,
+          order_id: 3,
+          size: 343434,
+          format: "MP2/3 (MPEG audio layer 2/3)",
+          genre: "Other 2",
+        },
+      ])
+
+    await request
+      .post("/channels/RB2a1y/tracks/RB2a1y/move")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .send({ index: 2 })
+      .expect(200)
+
+    await request
+      .get("/channels/RB2a1y/tracks")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(200, [
+        {
+          id: "5xGEBm",
+          name: "other_track.mp3",
+          artist: "Other Artist",
+          title: "Other Title",
+          album: "Other Album",
+          bitrate: 256000,
+          duration: 20074,
+          order_id: 1,
+          size: 773803,
+          format: "MP2/3 (MPEG audio layer 2/3)",
+          genre: "Other",
+        },
+        {
+          id: "nxno1y",
+          name: "other_track2.mp3",
+          artist: "Other Artist 2",
+          title: "Other Title 2",
+          album: "Other Album 2",
+          bitrate: 256000,
+          duration: 192355,
+          order_id: 2,
+          size: 343434,
+          format: "MP2/3 (MPEG audio layer 2/3)",
+          genre: "Other 2",
+        },
+        {
+          id: "RB2a1y",
+          name: "bob_marley_this_is_love.txt",
+          artist: "Bob Marley",
+          title: "This Is Love",
+          album: "Legend - The Best Of Bob Marley And The Wailers",
+          bitrate: 242824,
+          duration: 230074.75,
+          order_id: 3,
+          size: 8773803,
+          format: "MP2/3 (MPEG audio layer 2/3)",
+          genre: "Reggae",
+        },
+      ])
+
+    await request
+      .post("/channels/RB2a1y/tracks/nxno1y/move")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .send({ index: 0 })
+      .expect(200)
+
+    await request
+      .get("/channels/RB2a1y/tracks")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(200, [
+        {
+          id: "nxno1y",
+          name: "other_track2.mp3",
+          artist: "Other Artist 2",
+          title: "Other Title 2",
+          album: "Other Album 2",
+          bitrate: 256000,
+          duration: 192355,
+          order_id: 1,
+          size: 343434,
+          format: "MP2/3 (MPEG audio layer 2/3)",
+          genre: "Other 2",
+        },
+        {
+          id: "5xGEBm",
+          name: "other_track.mp3",
+          artist: "Other Artist",
+          title: "Other Title",
+          album: "Other Album",
+          bitrate: 256000,
+          duration: 20074,
+          order_id: 2,
+          size: 773803,
+          format: "MP2/3 (MPEG audio layer 2/3)",
+          genre: "Other",
+        },
+
+        {
+          id: "RB2a1y",
+          name: "bob_marley_this_is_love.txt",
+          artist: "Bob Marley",
+          title: "This Is Love",
+          album: "Legend - The Best Of Bob Marley And The Wailers",
+          bitrate: 242824,
+          duration: 230074.75,
+          order_id: 3,
+          size: 8773803,
+          format: "MP2/3 (MPEG audio layer 2/3)",
+          genre: "Reggae",
+        },
+      ])
+
+    await request
+      .post("/channels/RB2a1y/tracks/nxno1y/move")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .send({ index: 0 })
+      .expect(200)
+
+    await request
+      .get("/channels/RB2a1y/tracks")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(200, [
+        {
+          id: "nxno1y",
+          name: "other_track2.mp3",
+          artist: "Other Artist 2",
+          title: "Other Title 2",
+          album: "Other Album 2",
+          bitrate: 256000,
+          duration: 192355,
+          order_id: 1,
+          size: 343434,
+          format: "MP2/3 (MPEG audio layer 2/3)",
+          genre: "Other 2",
+        },
+        {
+          id: "5xGEBm",
+          name: "other_track.mp3",
+          artist: "Other Artist",
+          title: "Other Title",
+          album: "Other Album",
+          bitrate: 256000,
+          duration: 20074,
+          order_id: 2,
+          size: 773803,
+          format: "MP2/3 (MPEG audio layer 2/3)",
+          genre: "Other",
+        },
+
+        {
+          id: "RB2a1y",
+          name: "bob_marley_this_is_love.txt",
+          artist: "Bob Marley",
+          title: "This Is Love",
+          album: "Legend - The Best Of Bob Marley And The Wailers",
+          bitrate: 242824,
+          duration: 230074.75,
+          order_id: 3,
+          size: 8773803,
+          format: "MP2/3 (MPEG audio layer 2/3)",
+          genre: "Reggae",
+        },
+      ])
+  })
+
+  it("should respond with 400 if specified new track index is not correct", async () => {
+    await request
+      .post("/channels/RB2a1y/tracks/RB2a1y/move")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .send({ index: -1 })
+      .expect(400)
+
+    await request
+      .post("/channels/RB2a1y/tracks/RB2a1y/move")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .send({ index: 10 })
+      .expect(400)
+  })
+
+  it("should respond with 404 if channel or track not found", async () => {
+    await request
+      .post("/channels/RB2a1y/tracks/Vx7d1E/move")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .send({ index: 0 })
+      .expect(404)
+
+    await request
+      .post("/channels/Vx7d1E/tracks/Vx7d1E/move")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .send({ index: 0 })
+      .expect(404)
+
+    await request
+      .post("/channels/badid/tracks/badid/move")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .send({ index: 0 })
+      .expect(404)
+  })
+
+  it("should respond with 401 if channel belongs to other user", async () => {
+    await request
+      .post("/channels/RB2a1y/tracks/RB2a1y/move")
+      .set("Authorization", `Bearer ${otherAuthorizationToken}`)
+      .send({ index: 0 })
+      .expect(401)
+  })
+
+  it("should respond with 401 if not authorized", async () => {
+    await request
+      .post("/channels/RB2a1y/tracks/RB2a1y/move")
+      .send({ index: 0 })
+      .expect(401)
+  })
+})
+
 describe("POST /channels/:channelId/start", () => {
   it("should start the channel and respond with status 200", async () => {
     await request
