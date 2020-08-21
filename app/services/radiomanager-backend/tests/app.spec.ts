@@ -641,4 +641,44 @@ describe("sync playing channel position", () => {
         },
       })
   })
+
+  it("should stop on remove all tracks from playlist", async () => {
+    await request
+      .get("/channels/RB2a1y/now")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(200, {
+        position: 2,
+        current: {
+          id: "nxno1y",
+          offset: 133880,
+          title: "Other Artist 2 - Other Title 2",
+          url: "todo",
+        },
+        next: {
+          id: "RB2a1y",
+          title: "Bob Marley - This Is Love",
+          url: "todo",
+        },
+      })
+
+    await request
+      .delete("/channels/RB2a1y/tracks/nxno1y")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(200)
+
+    await request
+      .delete("/channels/RB2a1y/tracks/RB2a1y")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(200)
+
+    await request
+      .delete("/channels/RB2a1y/tracks/5xGEBm")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(200)
+
+    await request
+      .get("/channels/RB2a1y/now")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(404)
+  })
 })
