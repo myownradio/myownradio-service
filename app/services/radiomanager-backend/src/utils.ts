@@ -29,14 +29,14 @@ export function verifyMetadataSignature(rawMetadata: string, signature: string, 
   return Date.now() < +extractedSignedAt + ttl
 }
 
-export function calcTrackIndexAndOffset(
+export function calcTrackIndexAndTrackPosition(
   playlistPosition: number,
   channelAudioTracks: AudioTracksEntity[],
-): null | { offset: number; index: number } {
+): null | { trackPosition: number; index: number } {
   let currentOffset = 0
   for (const [index, track] of channelAudioTracks.entries()) {
     if (currentOffset <= playlistPosition && currentOffset + +track.duration > playlistPosition) {
-      return { index, offset: playlistPosition - currentOffset }
+      return { index, trackPosition: playlistPosition - currentOffset }
     }
     currentOffset += +track.duration
   }

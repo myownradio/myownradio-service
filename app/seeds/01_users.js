@@ -1,5 +1,5 @@
 exports.seed = async function seed(knex) {
-  await knex("users").del();
+  await knex("users").del()
   await knex("users").insert([
     {
       id: 1,
@@ -15,5 +15,5 @@ exports.seed = async function seed(knex) {
       created_at: "2020-02-09T11:12:06.585Z",
       updated_at: "2020-02-09T11:12:06.585Z",
     },
-  ]);
-};
+  ])
+}

@@ -17,7 +17,12 @@ import { ConfigType, KnexType, TimeServiceType } from "../di/types"
 import { KnexConnection, TypedContext } from "../interfaces"
 import { decodeT } from "../io"
 import { TimeService } from "../time"
-import { calcTrackIndexAndOffset, calcNextTrackIndex, getUserIdFromContext, verifyMetadataSignature } from "../utils"
+import {
+  calcTrackIndexAndTrackPosition,
+  calcNextTrackIndex,
+  getUserIdFromContext,
+  verifyMetadataSignature,
+} from "../utils"
 
 export function getRadioChannels(container: Container): Middleware {
   const knex = container.get<KnexConnection>(KnexType)
@@ -249,17 +254,32 @@ export function deleteTrackFromRadioChannel(container: Container): Middleware {
       return ctx.throw(401)
     }
 
-    const deletedRows = await knex
-      .from(TableName.AudioTracks)
-      .where(AudioTracksProps.ChannelId, channelId)
-      .where(AudioTracksProps.Id, trackId)
-      .delete()
+    await knex.transaction(async trx => {
+      const trackToDelete = await trx
+        .from<AudioTracksEntity>(TableName.AudioTracks)
+        .where(AudioTracksProps.ChannelId, channelId)
+        .where(AudioTracksProps.Id, trackId)
+        .first()
 
-    if (+deletedRows === 0) {
-      return
-    }
+      if (!trackToDelete) {
+        return
+      }
 
-    ctx.status = 200
+      await trx
+        .from<AudioTracksEntity>(TableName.AudioTracks)
+        .where(AudioTracksProps.ChannelId, channelId)
+        .where(AudioTracksProps.Id, trackId)
+        .delete()
+
+      await trx
+        .from<AudioTracksEntity>(TableName.AudioTracks)
+        .where(AudioTracksProps.ChannelId, channelId)
+        .where(AudioTracksProps.OrderId, ">", trackToDelete.order_id)
+        .orderBy(AudioTracksProps.OrderId, "asc")
+        .decrement(AudioTracksProps.OrderId)
+
+      ctx.status = 200
+    })
   }
 }
 
@@ -493,24 +513,24 @@ export function getNowPlaying(container: Container): Middleware {
     const duration = tracks.reduce((acc, t) => acc + +t.duration, 0)
     const position = (now - dateUtils.convertDateToMillis(playingChannel.started_at)) % duration
 
-    const probablyIndexAndOffset = calcTrackIndexAndOffset(position, tracks)
+    const trackIndexAndTrackOffset = calcTrackIndexAndTrackPosition(position, tracks)
 
-    if (!probablyIndexAndOffset) {
+    if (!trackIndexAndTrackOffset) {
       ctx.status = 204
       return
     }
 
-    const nextTrackIndex = calcNextTrackIndex(probablyIndexAndOffset.index, tracks)
+    const nextTrackIndex = calcNextTrackIndex(trackIndexAndTrackOffset.index, tracks)
 
-    const currentTrack = tracks[probablyIndexAndOffset.index]
+    const currentTrack = tracks[trackIndexAndTrackOffset.index]
     const nextTrack = tracks[nextTrackIndex]
 
     // todo add correct urls
     ctx.body = {
-      position: probablyIndexAndOffset.index,
+      position: trackIndexAndTrackOffset.index,
       current: {
         id: hashUtils.encodeId(currentTrack.id),
-        offset: probablyIndexAndOffset.offset,
+        offset: trackIndexAndTrackOffset.trackPosition,
         title: `${currentTrack.artist} - ${currentTrack.title}`,
         url: "todo",
       },

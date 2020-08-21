@@ -1,10 +1,13 @@
+import { createSignature } from "@myownradio/shared-server/lib/signature"
+import { EventEmitterService } from "@myownradio/shared-types"
 import { Container } from "inversify"
 import * as knex from "knex"
 import * as supertest from "supertest"
 import * as winston from "winston"
 import { createApp } from "../src/app"
 import { Config } from "../src/config"
-import { ConfigType, KnexType, LoggerType, TimeServiceType } from "../src/di/types"
+import { ConfigType, EventEmitterType, KnexType, LoggerType, TimeServiceType } from "../src/di/types"
+import { VoidEventEmitterService } from "../src/events"
 import { FixedTimeService, TimeService } from "../src/time"
 
 const authorizationToken =
@@ -19,6 +22,7 @@ let config: Config
 let request: supertest.SuperTest<supertest.Test>
 let knexConnection: knex
 let timeService: TimeService
+let eventEmitterService: EventEmitterService
 
 beforeEach(async () => {
   const logger = winston.createLogger({
@@ -41,6 +45,7 @@ beforeEach(async () => {
   })
 
   timeService = new FixedTimeService(1586849301429)
+  eventEmitterService = new VoidEventEmitterService()
 
   await knexConnection.migrate.latest({
     directory: migrationsDir,
@@ -56,6 +61,7 @@ beforeEach(async () => {
   container.bind(LoggerType).toConstantValue(logger)
   container.bind(KnexType).toConstantValue(knexConnection)
   container.bind(TimeServiceType).toConstantValue(timeService)
+  container.bind(EventEmitterType).toConstantValue(eventEmitterService)
 
   request = supertest(createApp(container).callback())
 })
@@ -113,7 +119,7 @@ describe("/channels/:id/tracks", () => {
       .set("Signature", signature)
       .send(rawMetadata)
       .expect(200, {
-        id: "5xGEBm",
+        id: "g1N61Q",
         name: "sine.mp3",
         title: "Sine Title",
         artist: "Sine Artist",
@@ -436,18 +442,14 @@ describe("GET /channels/:channelId/now", () => {
       .get("/channels/RB2a1y/now")
       .set("Authorization", `Bearer ${authorizationToken}`)
       .expect(200, {
-        position: 0,
+        position: 2,
         current: {
-          id: "RB2a1y",
-          offset: 95136.5,
-          title: "Bob Marley - This Is Love",
+          id: "nxno1y",
+          offset: 133880,
+          title: "Other Artist 2 - Other Title 2",
           url: "todo",
         },
-        next: {
-          id: "RB2a1y",
-          title: "Bob Marley - This Is Love",
-          url: "todo",
-        },
+        next: { id: "RB2a1y", title: "Bob Marley - This Is Love", url: "todo" },
       })
   })
 
@@ -478,6 +480,210 @@ describe("GET /channels/:channelId/now", () => {
     await request
       .get("/channels/wrong/now")
       .set("Authorization", `Bearer ${otherAuthorizationToken}`)
+      .expect(404)
+  })
+})
+
+describe("sync playing channel position", () => {
+  it("should sync on add new track to playlist", async () => {
+    const newTrackMetadata = {
+      name: "New Track Name",
+      hash: "New Track Hash",
+      size: 1234567,
+      artist: "New Track Artist",
+      title: "New Track Title",
+      album: "New Track Album",
+      genre: "New Track Genre",
+      bitrate: 128000,
+      duration: 3700000,
+      format: "MP2/3 (MPEG audio layer 2/3)",
+    }
+    const rawMetadata = JSON.stringify(newTrackMetadata)
+    const newTrackSignature = createSignature(rawMetadata, config.metadataSecret)
+
+    await request
+      .get("/channels/RB2a1y/now")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(200, {
+        position: 2,
+        current: {
+          id: "nxno1y",
+          offset: 133880,
+          title: "Other Artist 2 - Other Title 2",
+          url: "todo",
+        },
+        next: { id: "RB2a1y", title: "Bob Marley - This Is Love", url: "todo" },
+      })
+
+    await request
+      .post("/channels/RB2a1y/tracks")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .set("Content-Type", "application/json")
+      .set("Signature", newTrackSignature)
+      .send(rawMetadata)
+      .expect(200)
+
+    await request
+      .get("/channels/RB2a1y/now")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(200, {
+        position: 2,
+        current: {
+          id: "nxno1y",
+          offset: 133880.25,
+          title: "Other Artist 2 - Other Title 2",
+          url: "todo",
+        },
+        next: {
+          id: "g1N61Q",
+          title: "New Track Artist - New Track Title",
+          url: "todo",
+        },
+      })
+  })
+
+  it("should sync on remove track from playlist", async () => {
+    await request
+      .get("/channels/RB2a1y/now")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(200, {
+        position: 2,
+        current: {
+          id: "nxno1y",
+          offset: 133880,
+          title: "Other Artist 2 - Other Title 2",
+          url: "todo",
+        },
+        next: { id: "RB2a1y", title: "Bob Marley - This Is Love", url: "todo" },
+      })
+
+    await request
+      .delete("/channels/RB2a1y/tracks/RB2a1y")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(200)
+
+    await request
+      .get("/channels/RB2a1y/now")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(200, {
+        position: 1,
+        current: {
+          id: "nxno1y",
+          offset: 133880,
+          title: "Other Artist 2 - Other Title 2",
+          url: "todo",
+        },
+        next: {
+          id: "5xGEBm",
+          title: "Other Artist - Other Title",
+          url: "todo",
+        },
+      })
+  })
+
+  it("should sync on remove CURRENT track from playlist", async () => {
+    await request
+      .get("/channels/RB2a1y/now")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(200, {
+        position: 2,
+        current: {
+          id: "nxno1y",
+          offset: 133880,
+          title: "Other Artist 2 - Other Title 2",
+          url: "todo",
+        },
+        next: {
+          id: "RB2a1y",
+          title: "Bob Marley - This Is Love",
+          url: "todo",
+        },
+      })
+
+    await request
+      .delete("/channels/RB2a1y/tracks/nxno1y")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(200)
+
+    await request
+      .get("/channels/RB2a1y/now")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(200, {
+        position: 0,
+        current: {
+          id: "RB2a1y",
+          offset: 0,
+          title: "Bob Marley - This Is Love",
+          url: "todo",
+        },
+        next: {
+          id: "5xGEBm",
+          title: "Other Artist - Other Title",
+          url: "todo",
+        },
+      })
+
+    await request
+      .delete("/channels/RB2a1y/tracks/RB2a1y")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(200)
+
+    await request
+      .get("/channels/RB2a1y/now")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(200, {
+        position: 0,
+        current: {
+          id: "5xGEBm",
+          offset: 0,
+          title: "Other Artist - Other Title",
+          url: "todo",
+        },
+        next: {
+          id: "5xGEBm",
+          title: "Other Artist - Other Title",
+          url: "todo",
+        },
+      })
+  })
+
+  it("should stop on remove all tracks from playlist", async () => {
+    await request
+      .get("/channels/RB2a1y/now")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(200, {
+        position: 2,
+        current: {
+          id: "nxno1y",
+          offset: 133880,
+          title: "Other Artist 2 - Other Title 2",
+          url: "todo",
+        },
+        next: {
+          id: "RB2a1y",
+          title: "Bob Marley - This Is Love",
+          url: "todo",
+        },
+      })
+
+    await request
+      .delete("/channels/RB2a1y/tracks/nxno1y")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(200)
+
+    await request
+      .delete("/channels/RB2a1y/tracks/RB2a1y")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(200)
+
+    await request
+      .delete("/channels/RB2a1y/tracks/5xGEBm")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(200)
+
+    await request
+      .get("/channels/RB2a1y/now")
+      .set("Authorization", `Bearer ${authorizationToken}`)
       .expect(404)
   })
 })

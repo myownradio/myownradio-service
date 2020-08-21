@@ -1,5 +1,5 @@
 exports.seed = async function seed(knex) {
-  await knex("playing_channels").del();
+  await knex("playing_channels").del()
   await knex("playing_channels").insert([
     {
       id: 1,
@@ -10,5 +10,5 @@ exports.seed = async function seed(knex) {
       created_at: "2020-02-09T11:12:06.585Z",
       updated_at: "2020-02-09T11:12:06.585Z",
     },
-  ]);
-};
+  ])
+}
