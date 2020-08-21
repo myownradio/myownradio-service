@@ -70,6 +70,13 @@ export function createRouter(container: Container): Router {
     syncRadioChannelMiddleware(container),
     routeHandlers.deleteTrackFromRadioChannel(container),
   )
+  router.post(
+    "/channels/:channelId/tracks/:trackId/move",
+    bodyparser(),
+    jwtMiddleware,
+    syncRadioChannelMiddleware(container),
+    routeHandlers.moveTrackInRadioChannel(container),
+  )
   router.post("/channels/:channelId/start", jwtMiddleware, routeHandlers.startRadioChannel(container))
   router.post("/channels/:channelId/stop", jwtMiddleware, routeHandlers.stopRadioChannel(container))
   router.post("/channels/:channelId/pause", jwtMiddleware, routeHandlers.pauseRadioChannel(container))
