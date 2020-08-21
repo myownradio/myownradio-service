@@ -553,7 +553,7 @@ const MoveTrackInPlaylistRequestContract = t.type(
 export function moveTrackInRadioChannel(container: Container): Middleware {
   const knex = container.get<KnexConnection>(KnexType)
 
-  return async (ctx: Context) => {
+  return async (ctx: Context): Promise<void> => {
     const userId = getUserIdFromContext(ctx)
     const { channelId: encodedChannelId, trackId: encodedTrackId } = ctx.params
     const channelId = hashUtils.decodeId(encodedChannelId)
