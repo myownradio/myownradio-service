@@ -82,7 +82,12 @@ export function createRouter(container: Container): Router {
   router.post("/channels/:channelId/pause", jwtMiddleware, routeHandlers.pauseRadioChannel(container))
   router.post("/channels/:channelId/resume", jwtMiddleware, routeHandlers.resumeRadioChannel(container))
   router.get("/channels/:channelId/now", jwtMiddleware, routeHandlers.getNowPlaying(container))
-  router.post("/channels/:channelId/shuffle", jwtMiddleware, routeHandlers.shuffleRadioChannelTracks(container))
+  router.post(
+    "/channels/:channelId/shuffle",
+    jwtMiddleware,
+    syncRadioChannelMiddleware(container),
+    routeHandlers.shuffleRadioChannelTracks(container),
+  )
 
   return router
 }
