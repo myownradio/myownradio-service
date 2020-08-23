@@ -591,7 +591,8 @@ export function moveTrackInRadioChannel(container: Container): Middleware {
         }
 
         const track = await trx<AudioTracksEntity>(TableName.AudioTracks)
-          .where({ channel_id: channelId, id: trackId })
+          .where(AudioTracksProps.ChannelId, channelId)
+          .where(AudioTracksProps.Id, trackId)
           .first()
 
         if (!track) {
@@ -607,15 +608,13 @@ export function moveTrackInRadioChannel(container: Container): Middleware {
         if (newOrderId > track.order_id) {
           await trx<AudioTracksEntity>(TableName.AudioTracks)
             .where(AudioTracksProps.ChannelId, channelId)
-            .where(AudioTracksProps.OrderId, ">", track.order_id)
-            .where(AudioTracksProps.OrderId, "<=", newOrderId)
+            .whereBetween(AudioTracksProps.OrderId, [track.order_id + 1, newOrderId])
             .orderBy(AudioTracksProps.OrderId, "asc")
             .decrement(AudioTracksProps.OrderId)
         } else {
           await trx<AudioTracksEntity>(TableName.AudioTracks)
             .where(AudioTracksProps.ChannelId, channelId)
-            .where(AudioTracksProps.OrderId, "<", track.order_id)
-            .where(AudioTracksProps.OrderId, ">=", newOrderId)
+            .whereBetween(AudioTracksProps.OrderId, [newOrderId, track.order_id - 1])
             .orderBy(AudioTracksProps.OrderId, "asc")
             .increment(AudioTracksProps.OrderId)
         }
