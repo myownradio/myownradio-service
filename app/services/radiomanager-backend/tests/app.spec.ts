@@ -1,5 +1,5 @@
 import { createSignature } from "@myownradio/shared-server/lib/signature"
-import { EventEmitterService } from "@myownradio/shared-types"
+import { AudioTrackResource, EventEmitterService } from "@myownradio/shared-types"
 import { Container } from "inversify"
 import * as knex from "knex"
 import * as supertest from "supertest"
@@ -938,5 +938,107 @@ describe("sync playing channel position", () => {
       .get("/channels/RB2a1y/now")
       .set("Authorization", `Bearer ${authorizationToken}`)
       .expect(404)
+  })
+})
+
+describe("POST /channels/:channelId/shuffle", () => {
+  it("should respond with 200 on successful request", async () => {
+    await request
+      .get("/channels/RB2a1y/tracks")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(200, [
+        {
+          id: "RB2a1y",
+          name: "bob_marley_this_is_love.txt",
+          artist: "Bob Marley",
+          title: "This Is Love",
+          album: "Legend - The Best Of Bob Marley And The Wailers",
+          bitrate: 242824,
+          duration: 230074.75,
+          order_id: 1,
+          size: 8773803,
+          format: "MP2/3 (MPEG audio layer 2/3)",
+          genre: "Reggae",
+        },
+        {
+          id: "5xGEBm",
+          name: "other_track.mp3",
+          artist: "Other Artist",
+          title: "Other Title",
+          album: "Other Album",
+          bitrate: 256000,
+          duration: 20074,
+          order_id: 2,
+          size: 773803,
+          format: "MP2/3 (MPEG audio layer 2/3)",
+          genre: "Other",
+        },
+        {
+          id: "nxno1y",
+          name: "other_track2.mp3",
+          artist: "Other Artist 2",
+          title: "Other Title 2",
+          album: "Other Album 2",
+          bitrate: 256000,
+          duration: 192355,
+          order_id: 3,
+          size: 343434,
+          format: "MP2/3 (MPEG audio layer 2/3)",
+          genre: "Other 2",
+        },
+      ])
+
+    const { body }: { body: ReadonlyArray<AudioTrackResource> } = await request
+      .post("/channels/RB2a1y/shuffle")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(200)
+
+    expect(body).toContainEqual({
+      id: "nxno1y",
+      name: "other_track2.mp3",
+      artist: "Other Artist 2",
+      title: "Other Title 2",
+      album: "Other Album 2",
+      bitrate: 256000,
+      duration: 192355,
+      order_id: expect.any(Number),
+      size: 343434,
+      format: "MP2/3 (MPEG audio layer 2/3)",
+      genre: "Other 2",
+    })
+
+    expect(body).toContainEqual({
+      id: "5xGEBm",
+      name: "other_track.mp3",
+      artist: "Other Artist",
+      title: "Other Title",
+      album: "Other Album",
+      bitrate: 256000,
+      duration: 20074,
+      order_id: expect.any(Number),
+      size: 773803,
+      format: "MP2/3 (MPEG audio layer 2/3)",
+      genre: "Other",
+    })
+
+    expect(body).toContainEqual({
+      id: "RB2a1y",
+      name: "bob_marley_this_is_love.txt",
+      artist: "Bob Marley",
+      title: "This Is Love",
+      album: "Legend - The Best Of Bob Marley And The Wailers",
+      bitrate: 242824,
+      duration: 230074.75,
+      order_id: expect.any(Number),
+      size: 8773803,
+      format: "MP2/3 (MPEG audio layer 2/3)",
+      genre: "Reggae",
+    })
+
+    const ordersIds = body.map(o => o.order_id)
+
+    ordersIds.sort()
+
+    expect(ordersIds).toEqual([1, 2, 3])
   })
 })
