@@ -531,7 +531,7 @@ export function getNowPlaying(container: Container): Middleware {
       position: trackIndexAndTrackOffset.index,
       current: {
         id: hashUtils.encodeId(currentTrack.id),
-        offset: trackIndexAndTrackOffset.trackPosition,
+        offset: Math.floor(trackIndexAndTrackOffset.trackPosition),
         title: `${currentTrack.artist} - ${currentTrack.title}`,
         url: convertFileHashToFileUrl(currentTrack.hash, config.fileServerUrl),
       },

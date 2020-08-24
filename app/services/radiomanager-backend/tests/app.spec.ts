@@ -792,7 +792,7 @@ describe("sync playing channel position", () => {
         position: 2,
         current: {
           id: "nxno1y",
-          offset: 133880.25,
+          offset: 133880,
           title: "Other Artist 2 - Other Title 2",
           url: "http://testserver/o/t/other_hash2",
         },
@@ -946,7 +946,7 @@ describe("sync playing channel position", () => {
       position: expect.any(Number),
       current: {
         id: "nxno1y",
-        offset: expect.any(Number),
+        offset: 133880,
         title: "Other Artist 2 - Other Title 2",
         url: expect.any(String),
       },
@@ -956,8 +956,6 @@ describe("sync playing channel position", () => {
         url: expect.any(String),
       },
     })
-
-    expect(Math.floor(body.current.offset)).toEqual(133880)
   })
 
   it("should stop on remove all tracks from playlist", async () => {
