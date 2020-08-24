@@ -722,12 +722,12 @@ describe("GET /channels/:channelId/now", () => {
     await request.get("/channels/kOD613/now").expect(401)
   })
 
-  it("should fail with 401 if authorized by someone else", async () => {
-    await request
-      .get("/channels/kOD613/now")
-      .set("Authorization", `Bearer ${otherAuthorizationToken}`)
-      .expect(401)
-  })
+  // it("should fail with 401 if authorized by someone else", async () => {
+  //   await request
+  //     .get("/channels/kOD613/now")
+  //     .set("Authorization", `Bearer ${otherAuthorizationToken}`)
+  //     .expect(401)
+  // })
 
   it("should fail with 404 if channel does not exist", async () => {
     await request

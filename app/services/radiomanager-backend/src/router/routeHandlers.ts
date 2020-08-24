@@ -477,7 +477,7 @@ export function getNowPlaying(container: Container): Middleware {
   const config = container.get<Config>(ConfigType)
 
   return async (ctx: Context): Promise<void> => {
-    const userId = getUserIdFromContext(ctx)
+    // const userId = getUserIdFromContext(ctx)
     const { channelId: encodedChannelId } = ctx.params
     const channelId = hashUtils.decodeId(encodedChannelId)
 
@@ -485,20 +485,20 @@ export function getNowPlaying(container: Container): Middleware {
       return
     }
 
-    const channel = await knex<RadioChannelsEntity>(TableName.RadioChannels)
-      .where({ id: channelId })
-      .first()
+    // const channel = await knex<RadioChannelsEntity>(TableName.RadioChannels)
+    //   .where({ id: channelId })
+    //   .first()
+    //
+    // if (!channel) {
+    //   ctx.throw(404)
+    // }
 
-    if (!channel) {
-      ctx.throw(404)
-    }
-
-    if (channel.user_id !== userId) {
-      ctx.throw(401)
-    }
+    // if (channel.user_id !== userId) {
+    //   ctx.throw(401)
+    // }
 
     const playingChannel = await knex<PlayingChannelsEntity>(TableName.PlayingChannels)
-      .where({ channel_id: channel.id })
+      .where({ channel_id: channelId })
       .first()
 
     if (!playingChannel || playingChannel.paused_at !== null) {
@@ -507,7 +507,7 @@ export function getNowPlaying(container: Container): Middleware {
     }
 
     const tracks = await knex<AudioTracksEntity>(TableName.AudioTracks)
-      .where({ channel_id: channel.id })
+      .where({ channel_id: channelId })
       .orderBy(AudioTracksProps.OrderId, "asc")
 
     const now = timeService.now()
