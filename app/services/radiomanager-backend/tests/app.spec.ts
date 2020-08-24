@@ -701,12 +701,12 @@ describe("GET /channels/:channelId/now", () => {
           id: "nxno1y",
           offset: 133880,
           title: "Other Artist 2 - Other Title 2",
-          url: "http://testserver/o/t/other_hash2",
+          url: "http://testserver/o/t/other_hash2.mp3",
         },
         next: {
           id: "RB2a1y",
           title: "Bob Marley - This Is Love",
-          url: "http://testserver/a/a/aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d",
+          url: "http://testserver/a/a/aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d.mp3",
         },
       })
   })
@@ -718,9 +718,9 @@ describe("GET /channels/:channelId/now", () => {
       .expect(404)
   })
 
-  it("should fail with 401 when unauthorized", async () => {
-    await request.get("/channels/kOD613/now").expect(401)
-  })
+  // it("should fail with 401 when unauthorized", async () => {
+  //   await request.get("/channels/kOD613/now").expect(401)
+  // })
 
   // it("should fail with 401 if authorized by someone else", async () => {
   //   await request
@@ -768,12 +768,12 @@ describe("sync playing channel position", () => {
           id: "nxno1y",
           offset: 133880,
           title: "Other Artist 2 - Other Title 2",
-          url: "http://testserver/o/t/other_hash2",
+          url: "http://testserver/o/t/other_hash2.mp3",
         },
         next: {
           id: "RB2a1y",
           title: "Bob Marley - This Is Love",
-          url: "http://testserver/a/a/aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d",
+          url: "http://testserver/a/a/aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d.mp3",
         },
       })
 
@@ -794,12 +794,12 @@ describe("sync playing channel position", () => {
           id: "nxno1y",
           offset: 133880,
           title: "Other Artist 2 - Other Title 2",
-          url: "http://testserver/o/t/other_hash2",
+          url: "http://testserver/o/t/other_hash2.mp3",
         },
         next: {
           id: "g1N61Q",
           title: "New Track Artist - New Track Title",
-          url: "http://testserver/N/e/New Track Hash",
+          url: "http://testserver/N/e/New Track Hash.mp3",
         },
       })
   })
@@ -814,12 +814,12 @@ describe("sync playing channel position", () => {
           id: "nxno1y",
           offset: 133880,
           title: "Other Artist 2 - Other Title 2",
-          url: "http://testserver/o/t/other_hash2",
+          url: "http://testserver/o/t/other_hash2.mp3",
         },
         next: {
           id: "RB2a1y",
           title: "Bob Marley - This Is Love",
-          url: "http://testserver/a/a/aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d",
+          url: "http://testserver/a/a/aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d.mp3",
         },
       })
 
@@ -837,12 +837,12 @@ describe("sync playing channel position", () => {
           id: "nxno1y",
           offset: 133880,
           title: "Other Artist 2 - Other Title 2",
-          url: "http://testserver/o/t/other_hash2",
+          url: "http://testserver/o/t/other_hash2.mp3",
         },
         next: {
           id: "5xGEBm",
           title: "Other Artist - Other Title",
-          url: "http://testserver/o/t/other_hash",
+          url: "http://testserver/o/t/other_hash.mp3",
         },
       })
   })
@@ -857,12 +857,12 @@ describe("sync playing channel position", () => {
           id: "nxno1y",
           offset: 133880,
           title: "Other Artist 2 - Other Title 2",
-          url: "http://testserver/o/t/other_hash2",
+          url: "http://testserver/o/t/other_hash2.mp3",
         },
         next: {
           id: "RB2a1y",
           title: "Bob Marley - This Is Love",
-          url: "http://testserver/a/a/aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d",
+          url: "http://testserver/a/a/aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d.mp3",
         },
       })
 
@@ -880,12 +880,12 @@ describe("sync playing channel position", () => {
           id: "RB2a1y",
           offset: 0,
           title: "Bob Marley - This Is Love",
-          url: "http://testserver/a/a/aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d",
+          url: "http://testserver/a/a/aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d.txt",
         },
         next: {
           id: "5xGEBm",
           title: "Other Artist - Other Title",
-          url: "http://testserver/o/t/other_hash",
+          url: "http://testserver/o/t/other_hash.txt",
         },
       })
 
@@ -903,12 +903,12 @@ describe("sync playing channel position", () => {
           id: "5xGEBm",
           offset: 0,
           title: "Other Artist - Other Title",
-          url: "http://testserver/o/t/other_hash",
+          url: "http://testserver/o/t/other_hash.mp3",
         },
         next: {
           id: "5xGEBm",
           title: "Other Artist - Other Title",
-          url: "http://testserver/o/t/other_hash",
+          url: "http://testserver/o/t/other_hash.mp3",
         },
       })
   })
@@ -923,12 +923,12 @@ describe("sync playing channel position", () => {
           id: "nxno1y",
           offset: 133880,
           title: "Other Artist 2 - Other Title 2",
-          url: "http://testserver/o/t/other_hash2",
+          url: "http://testserver/o/t/other_hash2.mp3",
         },
         next: {
           id: "RB2a1y",
           title: "Bob Marley - This Is Love",
-          url: "http://testserver/a/a/aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d",
+          url: "http://testserver/a/a/aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d.mp3",
         },
       })
 
@@ -968,12 +968,12 @@ describe("sync playing channel position", () => {
           id: "nxno1y",
           offset: 133880,
           title: "Other Artist 2 - Other Title 2",
-          url: "http://testserver/o/t/other_hash2",
+          url: "http://testserver/o/t/other_hash2.mp3",
         },
         next: {
           id: "RB2a1y",
           title: "Bob Marley - This Is Love",
-          url: "http://testserver/a/a/aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d",
+          url: "http://testserver/a/a/aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d.mp3",
         },
       })
 

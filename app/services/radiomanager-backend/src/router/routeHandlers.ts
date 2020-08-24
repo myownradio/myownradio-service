@@ -533,12 +533,12 @@ export function getNowPlaying(container: Container): Middleware {
         id: hashUtils.encodeId(currentTrack.id),
         offset: Math.floor(trackIndexAndTrackOffset.trackPosition),
         title: `${currentTrack.artist} - ${currentTrack.title}`,
-        url: convertFileHashToFileUrl(currentTrack.hash, config.fileServerUrl),
+        url: convertFileHashToFileUrl(currentTrack.hash, currentTrack.name, config.fileServerUrl),
       },
       next: {
         id: hashUtils.encodeId(nextTrack.id),
         title: `${nextTrack.artist} - ${nextTrack.title}`,
-        url: convertFileHashToFileUrl(nextTrack.hash, config.fileServerUrl),
+        url: convertFileHashToFileUrl(nextTrack.hash, currentTrack.name, config.fileServerUrl),
       },
     }
   }
