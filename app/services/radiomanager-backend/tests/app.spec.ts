@@ -1,5 +1,5 @@
 import { createSignature } from "@myownradio/shared-server/lib/signature"
-import { AudioTrackResource, EventEmitterService } from "@myownradio/shared-types"
+import { AudioTrackResource, EventEmitterService, NowPlayingResource } from "@myownradio/shared-types"
 import { Container } from "inversify"
 import * as knex from "knex"
 import * as supertest from "supertest"
@@ -898,6 +898,53 @@ describe("sync playing channel position", () => {
           url: "todo",
         },
       })
+  })
+
+  it("should sync on shuffle playlist", async () => {
+    await request
+      .get("/channels/RB2a1y/now")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(200, {
+        position: 2,
+        current: {
+          id: "nxno1y",
+          offset: 133880,
+          title: "Other Artist 2 - Other Title 2",
+          url: "todo",
+        },
+        next: {
+          id: "RB2a1y",
+          title: "Bob Marley - This Is Love",
+          url: "todo",
+        },
+      })
+
+    await request
+      .post("/channels/RB2a1y/shuffle")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(200)
+
+    const { body }: { body: NowPlayingResource } = await request
+      .get("/channels/RB2a1y/now")
+      .set("Authorization", `Bearer ${authorizationToken}`)
+      .expect(200)
+
+    expect(body).toEqual({
+      position: expect.any(Number),
+      current: {
+        id: "nxno1y",
+        offset: expect.any(Number),
+        title: "Other Artist 2 - Other Title 2",
+        url: expect.any(String),
+      },
+      next: {
+        id: expect.any(String),
+        title: expect.any(String),
+        url: expect.any(String),
+      },
+    })
+
+    expect(Math.floor(body.current.offset)).toEqual(133880)
   })
 
   it("should stop on remove all tracks from playlist", async () => {
