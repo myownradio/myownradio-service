@@ -718,9 +718,9 @@ describe("GET /channels/:channelId/now", () => {
       .expect(404)
   })
 
-  it("should fail with 401 when unauthorized", async () => {
-    await request.get("/channels/kOD613/now").expect(401)
-  })
+  // it("should fail with 401 when unauthorized", async () => {
+  //   await request.get("/channels/kOD613/now").expect(401)
+  // })
 
   // it("should fail with 401 if authorized by someone else", async () => {
   //   await request
