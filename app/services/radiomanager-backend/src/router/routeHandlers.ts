@@ -629,3 +629,70 @@ export function moveTrackInRadioChannel(container: Container): Middleware {
     )
   }
 }
+
+/**
+ * todo Reimplement shuffle using SQL.
+ *
+ *      UPDATE tracks
+ *        SET order_id = c2.seqnum
+ *        FROM (SELECT id, ROW_NUMBER() OVER (ORDER BY RANDOM()) seqnum FROM tracks) c2
+ *      WHERE c2.id = tracks.id;
+ */
+
+export function shuffleRadioChannelTracks(container: Container): Middleware {
+  const knex = container.get<KnexConnection>(KnexType)
+
+  return async (ctx: TypedContext<AudioTrackResource[]>): Promise<void> => {
+    const userId = getUserIdFromContext(ctx)
+    const { channelId: encodedChannelId } = ctx.params
+    const channelId = hashUtils.decodeId(encodedChannelId)
+
+    if (!channelId) {
+      return
+    }
+
+    const channel = await knex<RadioChannelsEntity>(TableName.RadioChannels)
+      .where({ id: channelId })
+      .first()
+
+    if (!channel) {
+      ctx.throw(404)
+    }
+
+    if (channel.user_id !== userId) {
+      ctx.throw(401)
+    }
+
+    await knex.transaction(async trx => {
+      let orderId = 1
+
+      const tracks = await trx(TableName.AudioTracks)
+        .where(AudioTracksProps.ChannelId, channelId)
+        .orderByRaw("RANDOM()")
+
+      const tracksWithUpdatedOrderIds = tracks.map(track => ({ ...track, orderId: orderId++ }))
+
+      await Promise.all(
+        tracksWithUpdatedOrderIds.map(track =>
+          trx(TableName.AudioTracks)
+            .where(AudioTracksProps.Id, track.id)
+            .update(AudioTracksProps.OrderId, track.orderId),
+        ),
+      )
+
+      ctx.body = tracksWithUpdatedOrderIds.map(audioTrack => ({
+        id: hashUtils.encodeId(audioTrack.id),
+        name: audioTrack.name,
+        artist: audioTrack.artist,
+        title: audioTrack.title,
+        album: audioTrack.album,
+        bitrate: audioTrack.bitrate,
+        duration: audioTrack.duration,
+        order_id: audioTrack.order_id,
+        size: audioTrack.size,
+        format: audioTrack.format,
+        genre: audioTrack.genre,
+      }))
+    })
+  }
+}
