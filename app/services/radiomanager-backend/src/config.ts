@@ -6,6 +6,7 @@ export class Config {
   readonly databaseClient: string
   readonly metadataSignatureTtl: number
   readonly allowedOrigin: string
+  readonly fileServerUrl: string
 
   constructor(env: { [name: string]: string | undefined }) {
     if (!env.RADIOMANAGER_BACKEND_TOKEN_SECRET) {
@@ -46,5 +47,11 @@ export class Config {
     }
 
     this.allowedOrigin = env.RADIOMANAGER_BACKEND_ALLOWED_ORIGIN
+
+    if (!env.RADIOMANAGER_BACKEND_FILE_SERVER_URL) {
+      throw new Error("Environment variable RADIOMANAGER_BACKEND_FILE_SERVER_URL is required")
+    }
+
+    this.fileServerUrl = env.RADIOMANAGER_BACKEND_FILE_SERVER_URL
   }
 }

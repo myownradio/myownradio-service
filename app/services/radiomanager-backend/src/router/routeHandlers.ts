@@ -8,6 +8,7 @@ import {
   IPlayingChannelsEntity as PlayingChannelsEntity,
   IAudioTracksEntity as AudioTracksEntity,
 } from "@myownradio/shared-server/lib/entities"
+import { convertFileHashToFileUrl } from "@myownradio/shared-server/lib/pathUtils"
 import { AudioTrackResource, RadioChannelResource } from "@myownradio/shared-types"
 import { Container } from "inversify"
 import * as t from "io-ts"
@@ -473,6 +474,7 @@ export function resumeRadioChannel(container: Container): Middleware {
 export function getNowPlaying(container: Container): Middleware {
   const knex = container.get<KnexConnection>(KnexType)
   const timeService = container.get<TimeService>(TimeServiceType)
+  const config = container.get<Config>(ConfigType)
 
   return async (ctx: Context): Promise<void> => {
     const userId = getUserIdFromContext(ctx)
@@ -525,19 +527,18 @@ export function getNowPlaying(container: Container): Middleware {
     const currentTrack = tracks[trackIndexAndTrackOffset.index]
     const nextTrack = tracks[nextTrackIndex]
 
-    // todo add correct urls
     ctx.body = {
       position: trackIndexAndTrackOffset.index,
       current: {
         id: hashUtils.encodeId(currentTrack.id),
         offset: trackIndexAndTrackOffset.trackPosition,
         title: `${currentTrack.artist} - ${currentTrack.title}`,
-        url: "todo",
+        url: convertFileHashToFileUrl(currentTrack.hash, config.fileServerUrl),
       },
       next: {
         id: hashUtils.encodeId(nextTrack.id),
         title: `${nextTrack.artist} - ${nextTrack.title}`,
-        url: "todo",
+        url: convertFileHashToFileUrl(nextTrack.hash, config.fileServerUrl),
       },
     }
   }
