@@ -630,10 +630,19 @@ export function moveTrackInRadioChannel(container: Container): Middleware {
   }
 }
 
+/**
+ * todo Reimplement shuffle using SQL.
+ *
+ *      UPDATE tracks
+ *        SET order_id = c2.seqnum
+ *        FROM (SELECT id, ROW_NUMBER() OVER (ORDER BY RANDOM()) seqnum FROM tracks) c2
+ *      WHERE c2.id = tracks.id;
+ */
+
 export function shuffleRadioChannelTracks(container: Container): Middleware {
   const knex = container.get<KnexConnection>(KnexType)
 
-  return async (ctx: TypedContext<AudioTrackResource[]>) => {
+  return async (ctx: TypedContext<AudioTrackResource[]>): Promise<void> => {
     const userId = getUserIdFromContext(ctx)
     const { channelId: encodedChannelId } = ctx.params
     const channelId = hashUtils.decodeId(encodedChannelId)
