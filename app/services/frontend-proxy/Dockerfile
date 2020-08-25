@@ -90,7 +90,7 @@ server {\n\
 }\n\
 ' > /etc/nginx/sites-available/default
 
-COPY certs/* /etc/ssl/
+COPY services/certs/* /etc/ssl/
 
 CMD ["nginx", "-g", "daemon off; error_log /dev/stderr;"]
 
