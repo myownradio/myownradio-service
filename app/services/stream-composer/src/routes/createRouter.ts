@@ -2,7 +2,7 @@ import { hashUtils } from "@myownradio/shared-server"
 import { Container } from "inversify"
 import { Context } from "koa"
 import * as Router from "koa-router"
-import { DECODER_CHANNELS, DECODER_CODEC, DECODER_FREQUENCY, DECODER_FORMAT } from "../services/AudioDecoder"
+import { DECODER_CHANNELS, DECODER_FREQUENCY, DECODER_FORMAT, DECODER_CODEC } from "../services/AudioDecoder"
 import { ChannelPlayer } from "../services/ChannelPlayer"
 
 export function createRouter(container: Container): Router {
@@ -17,10 +17,12 @@ export function createRouter(container: Container): Router {
       return
     }
 
-    ctx.set("audio-channels", String(DECODER_CHANNELS))
-    ctx.set("audio-frequency", String(DECODER_FREQUENCY))
-    ctx.set("audio-codec", DECODER_CODEC)
-    ctx.set("audio-format", DECODER_FORMAT)
+    ctx.set("pcm-frequency", String(DECODER_FREQUENCY))
+    ctx.set("pcm-channels", String(DECODER_CHANNELS))
+    ctx.set("pcm-format", DECODER_FORMAT)
+    ctx.set("pcm-codec", DECODER_CODEC)
+
+    ctx.set("content-type", `audio/pcm`)
 
     ctx.body = channelPlayer.play(channelId)
   })
