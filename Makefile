@@ -32,23 +32,16 @@ run-linter:
 	(cd app && yarn lint)
 
 # Build Section
-build-service:
-	@echo "Building image for service: $(SERVICE)..."
-	docker build -t $(LOCAL_PREFIX)$(SERVICE) ./services/$(SERVICE)
-
-build-app:
+build-app-service:
 	@echo "Building image for application service: $(SERVICE)..."
 	docker build -t $(LOCAL_PREFIX)$(SERVICE) --file app/services/$(SERVICE)/Dockerfile app/
 
-build-all-services:
-	$(foreach SERVICE,$(SERVICES),$(MAKE) SERVICE=$(SERVICE) build-service && ) true
-
-build-all-apps:
+build-all-app-services:
 	for service in $(shell ls app/services); do \
 		$(MAKE) SERVICE=$${service} build-app || exit 1; \
 	done
 
-build-all: build-all-services build-all-apps
+build-all: build-all-app-services
 
 push:
 ifeq ($(filter $(SERVICE),$(LATEST_TAG_ONLY)),)
