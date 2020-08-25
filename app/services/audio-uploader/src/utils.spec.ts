@@ -16,6 +16,21 @@ describe("getMediaFileMetadata", () => {
     })
   })
 
+  it("should get metadata in cp1251 encoding", async () => {
+    const filepath = `${__dirname}/../tests/__fixtures__/cp1251.mp3`
+    const metadata = await getMediaFileMetadata(filepath)
+
+    expect(metadata).toEqual({
+      duration: 206811.429,
+      bitrate: 160183,
+      format: "MP2/3 (MPEG audio layer 2/3)",
+      artist: "Виа Гра",
+      title: "Бомба",
+      album: "",
+      genre: "Other",
+    })
+  })
+
   it("should fail if file does not exist", async () => {
     const filepath = "/path/that/does/not/exist.mp3"
     await expect(getMediaFileMetadata(filepath)).rejects.toThrowError(Error)

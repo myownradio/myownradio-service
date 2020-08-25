@@ -1,6 +1,7 @@
 import { path as ffprobePath } from "ffprobe-static"
 import * as fluent from "fluent-ffmpeg"
 import { FfprobeData } from "fluent-ffmpeg"
+import * as iconv from "iconv-lite"
 
 const MILLIS_IN_SECOND = 1000
 
@@ -46,13 +47,18 @@ export async function getMediaFileMetadata(filepath: string): Promise<MediaFileM
     readonly genre?: string
   }
 
+  const artist = iconv.decode(Buffer.from(tags.artist ?? "", "latin1"), "win1251")
+  const title = iconv.decode(Buffer.from(tags.title ?? "", "latin1"), "win1251")
+  const album = iconv.decode(Buffer.from(tags.album ?? "", "latin1"), "win1251")
+  const genre = iconv.decode(Buffer.from(tags.genre ?? "", "latin1"), "win1251")
+
   return {
     duration: probeResult.format.duration * MILLIS_IN_SECOND,
     bitrate: probeResult.format.bit_rate,
     format: probeResult.format.format_long_name ?? "Unknown audio format",
-    artist: tags.artist ?? "",
-    title: tags.title ?? "",
-    album: tags.album ?? "",
-    genre: tags.genre ?? "",
+    artist,
+    title,
+    album,
+    genre,
   }
 }
