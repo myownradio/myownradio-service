@@ -35,7 +35,11 @@ export default function audioPreview(knexConnection: knex, config: Config, logge
     }
 
     const extension = path.extname(result.name)
-    const audioFileUrl = `${pathUtils.convertFileHashToFileUrl(result.hash, config.fileServerUrl)}${extension}`
+    const audioFileUrl = `${pathUtils.convertFileHashToFileUrl(
+      result.hash,
+      result.name,
+      config.fileServerUrl,
+    )}${extension}`
 
     ctx.set("Content-Type", "audio/mpeg")
     ctx.body = makeMp3Preview(audioFileUrl, logger.child({ lib: "ffmpeg" }))
