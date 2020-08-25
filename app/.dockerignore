@@ -18,5 +18,7 @@ libs/*/jest.config.js
 !services/radiomanager-frontend/.env
 !services/radiomanager-frontend/.postcssrc.json
 
+!services/frontend-proxy/certs
+
 !services/migration/knexfile.js
 !migrations/
