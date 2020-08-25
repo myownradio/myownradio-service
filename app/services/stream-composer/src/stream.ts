@@ -8,6 +8,10 @@ export function repeat(provideReadable: () => Promise<Readable>): Readable {
     currentInput && currentInput.destroy(err)
   })
 
+  output.on("close", () => {
+    currentInput && currentInput.destroy()
+  })
+
   const handleError = (err: Error): void => {
     output.destroy(err)
   }

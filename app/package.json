@@ -12,6 +12,7 @@
     "install:radiomanager-frontend": "yarn --cwd services/radiomanager-frontend install",
     "install:radiomanager-backend": "yarn --cwd services/radiomanager-backend install",
     "install:audio-player": "yarn --cwd services/audio-player install",
+    "install:stream-composer": "yarn --cwd services/stream-composer install",
     "postinstall": "run-s install:*",
     "test:shared-server": "yarn  --cwd libs/shared-server test",
     "test:audio-uploader": "yarn --cwd services/audio-uploader test",
