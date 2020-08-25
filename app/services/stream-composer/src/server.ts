@@ -1,11 +1,27 @@
+import axios from "axios"
+import { Container } from "inversify"
 import { createApp } from "./app"
 import { Config } from "./config"
+import { AxiosClientType, ConfigType, LoggerType } from "./di/types"
 import logger from "./logger"
+import { AudioDecoder, AudioDecoderImpl } from "./services/AudioDecoder"
+import { ChannelPlayer, ChannelPlayerImpl } from "./services/ChannelPlayer"
+import { RadioManagerClient, RadioManagerClientImpl } from "./services/RadioManagerClient"
 
 try {
   const config = new Config(process.env)
 
-  const app = createApp(config)
+  const container = new Container()
+
+  container.bind(ConfigType).toConstantValue(config)
+  container.bind(AxiosClientType).toConstantValue(axios.create())
+  container.bind(LoggerType).toConstantValue(logger)
+
+  container.bind(AudioDecoder).to(AudioDecoderImpl)
+  container.bind(ChannelPlayer).to(ChannelPlayerImpl)
+  container.bind(RadioManagerClient).to(RadioManagerClientImpl)
+
+  const app = createApp(container)
 
   const server = app.listen(config.httpServerPort, () => {
     logger.debug(`Server is listening on port ${config.httpServerPort}`)

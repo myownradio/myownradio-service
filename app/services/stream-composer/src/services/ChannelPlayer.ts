@@ -3,7 +3,7 @@ import { injectable } from "inversify"
 import { Logger } from "winston"
 import { repeat } from "../stream"
 import { AudioDecoder } from "./AudioDecoder"
-import { RadiomanagerClient } from "./RadiomanagerClient"
+import { RadioManagerClient } from "./RadioManagerClient"
 
 export abstract class ChannelPlayer {
   public abstract play(channelId: number): Readable
@@ -12,7 +12,7 @@ export abstract class ChannelPlayer {
 @injectable()
 export class ChannelPlayerImpl implements ChannelPlayer {
   constructor(
-    private radiomanagerClient: RadiomanagerClient,
+    private radiomanagerClient: RadioManagerClient,
     private audioDecoder: AudioDecoder,
     private logger: Logger,
   ) {}

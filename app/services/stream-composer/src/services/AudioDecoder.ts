@@ -1,8 +1,8 @@
 import { PassThrough, Readable } from "stream"
 import ffmpegPath = require("ffmpeg-static")
 import ffmpeg = require("fluent-ffmpeg")
+import { injectable } from "inversify"
 import { Logger } from "winston"
-import {injectable} from "inversify";
 
 export const DECODER_CHANNELS = 2
 export const DECODER_FREQUENCY = 44100
