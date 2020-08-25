@@ -28,7 +28,8 @@ jobs:
                 "auth-server",
                 "audio-uploader",
                 "audio-player",
-                "stream-composer"
+                "stream-composer",
+                "frontend-proxy"
               ],
               "tag": "${{ github.sha }}"
             }
