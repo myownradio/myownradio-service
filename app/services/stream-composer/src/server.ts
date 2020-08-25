@@ -1,4 +1,5 @@
 import axios from "axios"
+import "reflect-metadata"
 import { Container } from "inversify"
 import { createApp } from "./app"
 import { Config } from "./config"
