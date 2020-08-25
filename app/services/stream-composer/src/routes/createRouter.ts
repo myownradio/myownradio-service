@@ -9,7 +9,7 @@ export function createRouter(container: Container): Router {
 
   const channelPlayer = container.get(ChannelPlayer)
 
-  router.get("/channel/:channelId", async (ctx: Context) => {
+  router.get("/listen/:channelId", async (ctx: Context) => {
     const channelId = hashUtils.decodeId(ctx.params.channelId)
 
     if (!channelId) {
