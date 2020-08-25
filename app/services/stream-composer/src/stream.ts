@@ -1,8 +1,13 @@
 import { Readable, PassThrough } from "stream"
 
-export function repeat(provideReadable: () => Promise<Readable>): Readable {
+export interface RepeatOptions {
+  readonly repeatTimes?: number
+}
+
+export function repeat(provideReadable: () => Promise<Readable>, options: RepeatOptions = {}): Readable {
   const output = new PassThrough()
   let currentInput: Readable
+  let currentRepeat = 1
 
   output.on("error", err => {
     currentInput && currentInput.destroy(err)
@@ -17,6 +22,13 @@ export function repeat(provideReadable: () => Promise<Readable>): Readable {
   }
 
   const getNext = (): void => {
+    if ((options.repeatTimes ?? Infinity) < currentRepeat) {
+      output.end(null)
+      return
+    }
+
+    currentRepeat += 1
+
     provideReadable().then((input: Readable): void => {
       currentInput = input
 

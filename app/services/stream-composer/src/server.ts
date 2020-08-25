@@ -3,7 +3,8 @@ import "reflect-metadata"
 import { Container } from "inversify"
 import { createApp } from "./app"
 import { Config } from "./config"
-import { AxiosClientType, ConfigType, LoggerType } from "./di/types"
+import { AxiosClientType, ConfigType, EnvType, LoggerType } from "./di/types"
+import { Env } from "./interfaces"
 import logger from "./logger"
 import { AudioDecoder, AudioDecoderImpl } from "./services/AudioDecoder"
 import { ChannelPlayer, ChannelPlayerImpl } from "./services/ChannelPlayer"
@@ -14,6 +15,7 @@ try {
 
   const container = new Container()
 
+  container.bind(EnvType).toConstantValue(Env.Production)
   container.bind(ConfigType).toConstantValue(config)
   container.bind(AxiosClientType).toConstantValue(axios.create())
   container.bind(LoggerType).toConstantValue(logger)
