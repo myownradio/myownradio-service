@@ -28,7 +28,6 @@ jobs:
                 "auth-server",
                 "audio-uploader",
                 "audio-player",
-                "scheduler",
                 "stream-composer"
               ],
               "tag": "${{ github.sha }}"
