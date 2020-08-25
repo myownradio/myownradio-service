@@ -1,8 +1,9 @@
 import { PassThrough, Readable } from "stream"
 import ffmpegPath = require("ffmpeg-static")
 import ffmpeg = require("fluent-ffmpeg")
-import { injectable } from "inversify"
+import { inject, injectable } from "inversify"
 import { Logger } from "winston"
+import { LoggerType } from "../di/types"
 
 export const DECODER_CHANNELS = 2
 export const DECODER_FREQUENCY = 44100
@@ -31,7 +32,7 @@ export abstract class AudioDecoder {
 
 @injectable()
 export class AudioDecoderImpl implements AudioDecoder {
-  constructor(private logger: Logger) {}
+  constructor(@inject(LoggerType) private logger: Logger) {}
 
   public decode(url: string, offset: number, jingleFileUrl?: string): Readable {
     const passThrough = new PassThrough()
