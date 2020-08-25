@@ -26,15 +26,20 @@ export interface DecodingProgress {
   percent: number
 }
 
+export interface AudioDecoderOptions {
+  readonly dJingleFileUrl?: string
+  readonly nativeFramerate?: boolean
+}
+
 export abstract class AudioDecoder {
-  public abstract decode(url: string, offset: number, jingleFileUrl?: string): Readable
+  public abstract decode(url: string, offset: number, options?: AudioDecoderOptions): Readable
 }
 
 @injectable()
 export class AudioDecoderImpl implements AudioDecoder {
   constructor(@inject(LoggerType) private logger: Logger) {}
 
-  public decode(url: string, offset: number, jingleFileUrl?: string): Readable {
+  public decode(url: string, offset: number, options: AudioDecoderOptions = {}): Readable {
     const passThrough = new PassThrough()
     const start = Date.now()
 
@@ -47,10 +52,13 @@ export class AudioDecoderImpl implements AudioDecoder {
       .outputFormat(DECODER_FORMAT)
       .input(url)
       .seekInput(millisToSeconds(offset))
-      .native()
 
-    if (jingleFileUrl) {
-      decoder.input(jingleFileUrl).complexFilter(JINGLE_FILTER, [])
+    if (options.nativeFramerate ?? true) {
+      decoder.native()
+    }
+
+    if (options.dJingleFileUrl) {
+      decoder.input(options.dJingleFileUrl).complexFilter(JINGLE_FILTER, [])
     } else {
       decoder.audioFilter(FADEIN_FILTER)
     }
