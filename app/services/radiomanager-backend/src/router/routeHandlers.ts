@@ -8,6 +8,7 @@ import {
   IPlayingChannelsEntity as PlayingChannelsEntity,
   IAudioTracksEntity as AudioTracksEntity,
 } from "@myownradio/shared-server/lib/entities"
+import { convertFileHashToFileUrl } from "@myownradio/shared-server/lib/pathUtils"
 import { AudioTrackResource, RadioChannelResource } from "@myownradio/shared-types"
 import { Container } from "inversify"
 import * as t from "io-ts"
@@ -473,9 +474,10 @@ export function resumeRadioChannel(container: Container): Middleware {
 export function getNowPlaying(container: Container): Middleware {
   const knex = container.get<KnexConnection>(KnexType)
   const timeService = container.get<TimeService>(TimeServiceType)
+  const config = container.get<Config>(ConfigType)
 
   return async (ctx: Context): Promise<void> => {
-    const userId = getUserIdFromContext(ctx)
+    // const userId = getUserIdFromContext(ctx)
     const { channelId: encodedChannelId } = ctx.params
     const channelId = hashUtils.decodeId(encodedChannelId)
 
@@ -483,20 +485,20 @@ export function getNowPlaying(container: Container): Middleware {
       return
     }
 
-    const channel = await knex<RadioChannelsEntity>(TableName.RadioChannels)
-      .where({ id: channelId })
-      .first()
+    // const channel = await knex<RadioChannelsEntity>(TableName.RadioChannels)
+    //   .where({ id: channelId })
+    //   .first()
+    //
+    // if (!channel) {
+    //   ctx.throw(404)
+    // }
 
-    if (!channel) {
-      ctx.throw(404)
-    }
-
-    if (channel.user_id !== userId) {
-      ctx.throw(401)
-    }
+    // if (channel.user_id !== userId) {
+    //   ctx.throw(401)
+    // }
 
     const playingChannel = await knex<PlayingChannelsEntity>(TableName.PlayingChannels)
-      .where({ channel_id: channel.id })
+      .where({ channel_id: channelId })
       .first()
 
     if (!playingChannel || playingChannel.paused_at !== null) {
@@ -505,7 +507,7 @@ export function getNowPlaying(container: Container): Middleware {
     }
 
     const tracks = await knex<AudioTracksEntity>(TableName.AudioTracks)
-      .where({ channel_id: channel.id })
+      .where({ channel_id: channelId })
       .orderBy(AudioTracksProps.OrderId, "asc")
 
     const now = timeService.now()
@@ -525,19 +527,18 @@ export function getNowPlaying(container: Container): Middleware {
     const currentTrack = tracks[trackIndexAndTrackOffset.index]
     const nextTrack = tracks[nextTrackIndex]
 
-    // todo add correct urls
     ctx.body = {
       position: trackIndexAndTrackOffset.index,
       current: {
         id: hashUtils.encodeId(currentTrack.id),
-        offset: trackIndexAndTrackOffset.trackPosition,
+        offset: Math.floor(trackIndexAndTrackOffset.trackPosition),
         title: `${currentTrack.artist} - ${currentTrack.title}`,
-        url: "todo",
+        url: convertFileHashToFileUrl(currentTrack.hash, currentTrack.name, config.fileServerUrl),
       },
       next: {
         id: hashUtils.encodeId(nextTrack.id),
         title: `${nextTrack.artist} - ${nextTrack.title}`,
-        url: "todo",
+        url: convertFileHashToFileUrl(nextTrack.hash, currentTrack.name, config.fileServerUrl),
       },
     }
   }
