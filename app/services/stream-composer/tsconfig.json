@@ -1,6 +1,7 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
+    "experimentalDecorators": true,
     "target": "es6",
     "module": "commonjs",
     "moduleResolution": "node",
@@ -10,6 +11,8 @@
     ]
   },
   "include": [
-    "src/server.ts"
+    "src/server.ts",
+    "tests/app.spec.ts",
+    "../../libs"
   ]
 }

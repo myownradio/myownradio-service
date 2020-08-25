@@ -1,6 +1,13 @@
+import { Container } from "inversify"
 import * as Application from "koa"
-import { Config } from "./config"
+import { createRouter } from "./routes/createRouter"
 
-export function createApp(_: Config): Application {
-  return new Application()
+export function createApp(container: Container): Application {
+  const app = new Application()
+  const router = createRouter(container)
+
+  app.use(router.routes())
+  app.use(router.allowedMethods())
+
+  return app
 }
