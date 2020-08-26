@@ -4,7 +4,10 @@ export interface RepeatOptions {
   readonly repeatTimes?: number
 }
 
-export function repeat(provideReadable: () => Promise<Readable>, options: RepeatOptions = {}): Readable {
+export function repeat(
+  provideReadable: () => Promise<Readable>,
+  { repeatTimes = Infinity }: RepeatOptions = {},
+): Readable {
   const output = new PassThrough()
   let currentInput: Readable
   let currentRepeat = 1
@@ -22,7 +25,7 @@ export function repeat(provideReadable: () => Promise<Readable>, options: Repeat
   }
 
   const getNext = (): void => {
-    if ((options.repeatTimes ?? Infinity) < currentRepeat) {
+    if (repeatTimes < currentRepeat) {
       output.end(null)
       return
     }
