@@ -30,7 +30,7 @@
     "@myownradio/shared-server": "link:../../libs/shared-server",
     "@myownradio/shared-types": "link:../../libs/shared-types",
     "axios": "^0.20.0",
-    "ffmpeg-static": "^4.2.7",
+    "ffmpeg-static": "^3.0.0",
     "fluent-ffmpeg": "^2.1.2",
     "inversify": "^5.0.1",
     "koa": "^2.11.0",
