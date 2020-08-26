@@ -27,7 +27,7 @@ class TestChannelPlayer extends ChannelPlayerImpl {
   }
 
   public play(channelId: number): Readable {
-    return super.play(channelId, { repeatTimes: 3 })
+    return super.play(channelId, { repeatTimes: 3, nativeFramerate: false })
   }
 }
 
