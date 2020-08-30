@@ -43,6 +43,8 @@ export class AudioDecoderImpl implements AudioDecoder {
     const passThrough = new PassThrough()
     const start = Date.now()
 
+    this.logger.debug("Starting decoder", { url, offset, options })
+
     const decoder = ffmpeg()
       .setFfmpegPath(ffmpegPath)
       .addOption(["-fflags fastseek"])
@@ -54,6 +56,7 @@ export class AudioDecoderImpl implements AudioDecoder {
       .seekInput(millisToSeconds(offset))
 
     if (options.nativeFramerate ?? true) {
+      this.logger.debug("Enabled native framerate")
       decoder.native()
     }
 
@@ -63,17 +66,17 @@ export class AudioDecoderImpl implements AudioDecoder {
       decoder.audioFilter(FADEIN_FILTER)
     }
 
-    decoder.on("error", err => {
-      this.logger.error(`Decoder failed: ${err}`)
+    decoder.on("error", reason => {
+      this.logger.error("Decoder failed", { reason })
       decoder.kill(KILL_SIGNAL)
     })
 
-    decoder.on("start", commandLine => {
-      this.logger.debug(`Decoder started: ${commandLine}`)
+    decoder.on("start", cmd => {
+      this.logger.debug("Decoder started", { cmd })
     })
 
     decoder.on("end", () => {
-      this.logger.debug(`Decoder finished`)
+      this.logger.debug("Decoding finished")
     })
 
     decoder.once("progress", () => {
