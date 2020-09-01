@@ -48,16 +48,15 @@ export class AudioDecoderImpl implements AudioDecoder {
 
     const logger = this.logger.child({ label: "decoder" })
 
-    const decoder = ffmpeg({ logger })
+    const decoder = ffmpeg(url, { logger })
       .setFfmpegPath(ffmpegPath)
       .addInputOption([`-protocol_whitelist ${DECODER_WHITELISTED_PROTOCOLS}`])
+      .seekInput(millisToSeconds(offset))
       .addOption(["-fflags fastseek"])
       .audioCodec(DECODER_CODEC)
       .audioChannels(DECODER_CHANNELS)
       .audioFrequency(DECODER_FREQUENCY)
       .outputFormat(DECODER_FORMAT)
-      .input(url)
-      .seekInput(millisToSeconds(offset))
 
     if (options.nativeFramerate ?? true) {
       this.logger.debug("Enabled native framerate")
