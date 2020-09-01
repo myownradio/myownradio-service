@@ -46,7 +46,9 @@ export class AudioDecoderImpl implements AudioDecoder {
 
     this.logger.debug("Starting decoder", { url, offset, options })
 
-    const decoder = ffmpeg()
+    const logger = this.logger.child({ label: "decoder" })
+
+    const decoder = ffmpeg({ logger })
       .setFfmpegPath(ffmpegPath)
       .addInputOption([`-protocol_whitelist ${DECODER_WHITELISTED_PROTOCOLS}`])
       .addOption(["-fflags fastseek"])
