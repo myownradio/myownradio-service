@@ -9,6 +9,7 @@ export const DECODER_CHANNELS = 2
 export const DECODER_FREQUENCY = 44100
 export const DECODER_FORMAT = "s16le"
 export const DECODER_CODEC = "pcm_s16le"
+const DECODER_WHITELISTED_PROTOCOLS = "https,tls,file,tcp,crypto"
 
 export const FADEIN_FILTER = "afade=t=in:st=0:d=1"
 export const JINGLE_FILTER = "[0:a]afade=t=in:st=1:d=3[a1],[a1]amix=inputs=2:duration=first:dropout_transition=3"
@@ -45,8 +46,11 @@ export class AudioDecoderImpl implements AudioDecoder {
 
     this.logger.debug("Starting decoder", { url, offset, options })
 
-    const decoder = ffmpeg()
+    const logger = this.logger.child({ label: "decoder" })
+
+    const decoder = ffmpeg({ logger })
       .setFfmpegPath(ffmpegPath)
+      .addInputOption([`-protocol_whitelist ${DECODER_WHITELISTED_PROTOCOLS}`])
       .addOption(["-fflags fastseek"])
       .audioCodec(DECODER_CODEC)
       .audioChannels(DECODER_CHANNELS)
