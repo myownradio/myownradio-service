@@ -26,7 +26,7 @@ COPY services/stream-composer services/stream-composer
 RUN yarn --cwd services/stream-composer build
 
 
-FROM node:14-alpine
+FROM node:14
 
 ENV NODE_ENV=production
 
