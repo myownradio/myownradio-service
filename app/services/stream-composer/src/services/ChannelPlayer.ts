@@ -18,22 +18,23 @@ export class ChannelPlayerImpl implements ChannelPlayer {
     private radiomanagerClient: RadioManagerClient,
     private audioDecoder: AudioDecoder,
     @inject(LoggerType) private logger: Logger,
-  ) {}
+  ) {
+    this.logger.debug("Channel player initialized")
+  }
 
   public play(channelId: number, { repeatTimes, nativeFramerate }: ChannelPlayerOptions = {}): Readable {
-    this.logger.debug("Start Channel", { channelId })
+    const repeatOptions = { repeatTimes }
+    this.logger.debug("Starting channel player", { channelId, repeatOptions })
 
-    return repeat(
-      async () => {
-        this.logger.debug("Get Now Playing", { channelId })
+    return repeat(async () => {
+      this.logger.debug("Getting what's playing on the channel", { channelId })
 
-        const nowPlaying = await this.radiomanagerClient.getNowPlaying(channelId)
-        this.logger.debug("Now Playing", { nowPlaying })
+      const nowPlaying = await this.radiomanagerClient.getNowPlaying(channelId)
+      this.logger.debug("Now playing", nowPlaying)
 
-        this.logger.debug("Start Decoder")
-        return this.audioDecoder.decode(nowPlaying.current.url, nowPlaying.current.offset, { nativeFramerate })
-      },
-      { repeatTimes },
-    )
+      const decoderOptions = { nativeFramerate }
+      this.logger.debug("Going to start decoder", { decoderOptions })
+      return this.audioDecoder.decode(nowPlaying.current.url, nowPlaying.current.offset, decoderOptions)
+    }, repeatOptions)
   }
 }

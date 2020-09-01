@@ -10,7 +10,7 @@ import { ConfigType, EnvType, LoggerType } from "../src/di/types"
 import { Env } from "../src/interfaces"
 import { AudioDecoder, AudioDecoderImpl } from "../src/services/AudioDecoder"
 import { ChannelPlayer, ChannelPlayerImpl } from "../src/services/ChannelPlayer"
-import { RadioManagerClient } from "../src/services/RadioManagerClient"
+import { ChannelNotFoundError, RadioManagerClient } from "../src/services/RadioManagerClient"
 
 const fixturesDir = `${__dirname}/__fixtures__`
 
@@ -76,6 +76,20 @@ describe("GET /listen/:channelId", () => {
         },
       })
       .mockResolvedValueOnce({
+        position: 0,
+        current: {
+          id: "id0",
+          offset: 0,
+          title: "Sample 1",
+          url: `file://${fixturesDir}/example1.mp3`,
+        },
+        next: {
+          id: "id1",
+          title: "Sample 2",
+          url: `file://${fixturesDir}/example2.mp3`,
+        },
+      })
+      .mockResolvedValueOnce({
         position: 1,
         current: {
           id: "id1",
@@ -110,5 +124,17 @@ describe("GET /listen/:channelId", () => {
       .expect(200)
 
     expect(response.text.length).toBe(10782422)
+  })
+
+  it("should respond with 404 if radio manager client responded with 404 status", async () => {
+    radioManagerClientMock.getNowPlaying.mockRejectedValueOnce(new ChannelNotFoundError("Channel not found"))
+
+    await request.get("/listen/kOD613").expect(404)
+  })
+
+  it("should respond with 503 if radio manager client responded with any other error status", async () => {
+    radioManagerClientMock.getNowPlaying.mockRejectedValueOnce(new Error("Unknown error"))
+
+    await request.get("/listen/kOD613").expect(503)
   })
 })
