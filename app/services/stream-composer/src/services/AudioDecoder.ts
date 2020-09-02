@@ -42,13 +42,13 @@ export class AudioDecoderImpl implements AudioDecoder {
 
   public decode(url: string, offset: number, options: AudioDecoderOptions = {}): Readable {
     const passThrough = new PassThrough()
-    const start = Date.now()
+    const log = this.logger.child({ url, offset, options })
 
-    this.logger.debug("Starting decoder", { url, offset, options })
+    log.debug("Starting decoder")
 
-    const logger = this.logger.child({ label: "decoder" })
+    const ffmpegLogger = log.child({ source: "ffmpeg" })
 
-    const decoder = ffmpeg(url, { logger })
+    const decoder = ffmpeg(url, { logger: ffmpegLogger })
       .setFfmpegPath(ffmpegPath)
       .addInputOption([`-protocol_whitelist ${DECODER_WHITELISTED_PROTOCOLS}`])
       .seekInput(millisToSeconds(offset))
@@ -59,36 +59,36 @@ export class AudioDecoderImpl implements AudioDecoder {
       .outputFormat(DECODER_FORMAT)
 
     if (options.nativeFramerate ?? true) {
-      this.logger.debug("Enabled native framerate")
+      log.debug("Enable native framerate")
       decoder.native()
     }
 
     if (options.dJingleFileUrl) {
+      log.debug("Mix jingle file", { url: options.dJingleFileUrl })
       decoder.input(options.dJingleFileUrl).complexFilter(JINGLE_FILTER, [])
     } else {
       decoder.audioFilter(FADEIN_FILTER)
     }
 
     decoder.on("error", reason => {
-      this.logger.error("Decoder failed", { reason })
-      decoder.kill(KILL_SIGNAL)
+      log.error("Decoder failed", { reason })
+      passThrough.emit("error", reason)
     })
 
     decoder.on("start", cmd => {
-      this.logger.debug("Decoder started", { cmd })
+      log.debug("Decoding started", { cmd })
     })
 
     decoder.on("end", () => {
-      this.logger.debug("Decoding finished")
-    })
-
-    decoder.once("progress", () => {
-      const real = Date.now()
-      const delay = real - start
-      this.logger.debug(`Decoder started with delay: ${delay}ms`)
+      log.debug("Decoding finished")
     })
 
     decoder.pipe(passThrough)
+
+    passThrough.on("close", () => {
+      log.debug("Stream closed: kill ffmpeg")
+      decoder.kill(KILL_SIGNAL)
+    })
 
     return passThrough
   }
