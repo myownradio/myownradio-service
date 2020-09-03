@@ -9,7 +9,7 @@ export function repeat(
   { repeatTimes = Infinity }: RepeatOptions = {},
 ): Readable {
   const output = new PassThrough()
-  let currentInput: Readable
+  let currentInput: Readable | undefined
   let currentRepeat = 1
 
   output.on("error", err => {
@@ -25,6 +25,8 @@ export function repeat(
   }
 
   const getNext = (): void => {
+    currentInput = undefined
+
     if (repeatTimes < currentRepeat) {
       output.end(null)
       return
