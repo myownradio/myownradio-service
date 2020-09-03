@@ -6,6 +6,7 @@ import { Config } from "./config"
 import { AxiosClientType, ConfigType, EnvType, LoggerType } from "./di/types"
 import { Env } from "./interfaces"
 import logger from "./logger"
+import { Metrics } from "./metrics"
 import { AudioDecoder, AudioDecoderImpl } from "./services/AudioDecoder"
 import { ChannelPlayer, ChannelPlayerImpl } from "./services/ChannelPlayer"
 import { RadioManagerClient, RadioManagerClientImpl } from "./services/RadioManagerClient"
@@ -20,9 +21,23 @@ try {
   container.bind(AxiosClientType).toConstantValue(axios.create())
   container.bind(LoggerType).toConstantValue(logger)
 
-  container.bind(AudioDecoder).to(AudioDecoderImpl)
-  container.bind(ChannelPlayer).to(ChannelPlayerImpl)
-  container.bind(RadioManagerClient).to(RadioManagerClientImpl)
+  container
+    .bind(Metrics)
+    .toSelf()
+    .inSingletonScope()
+
+  container
+    .bind(AudioDecoder)
+    .to(AudioDecoderImpl)
+    .inSingletonScope()
+  container
+    .bind(ChannelPlayer)
+    .to(ChannelPlayerImpl)
+    .inSingletonScope()
+  container
+    .bind(RadioManagerClient)
+    .to(RadioManagerClientImpl)
+    .inSingletonScope()
 
   const app = createApp(container)
 
