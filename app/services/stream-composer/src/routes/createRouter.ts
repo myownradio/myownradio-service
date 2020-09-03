@@ -2,6 +2,7 @@ import { hashUtils } from "@myownradio/shared-server"
 import { Container } from "inversify"
 import { Context } from "koa"
 import * as Router from "koa-router"
+import * as Prometheus from "prom-client"
 import { Logger } from "winston"
 import { LoggerType } from "../di/types"
 import { DECODER_CHANNELS, DECODER_FREQUENCY, DECODER_FORMAT, DECODER_CODEC } from "../services/AudioDecoder"
@@ -41,6 +42,11 @@ export function createRouter(container: Container): Router {
     ctx.set("content-type", `audio/pcm`)
 
     ctx.body = channelPlayer.play(channelId)
+  })
+
+  router.get("/metrics", async ctx => {
+    ctx.set("Content-Type", Prometheus.register.contentType)
+    ctx.body = Prometheus.register.metrics()
   })
 
   return router
