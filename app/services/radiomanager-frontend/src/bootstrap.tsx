@@ -8,6 +8,7 @@ import { AuthenticationModel, AuthenticationModelContext } from "~/modules/Authe
 import { RadioManagerModel, RadioManagerModelContext } from "~/modules/RadioManager"
 import { RadioChannelModel } from "~/modules/RadioManager/RadioChannelModel/RadioChannelModel"
 import { SchedulerModel } from "~/modules/RadioManager/SchedulerModel"
+import { RadioManagerStore } from "~/store/RadioManagerStore"
 import { createServices, ServicesContext } from "./services"
 
 export default function bootstrap(Component: React.ComponentType, rootClass?: string): void {
@@ -19,6 +20,11 @@ export default function bootstrap(Component: React.ComponentType, rootClass?: st
     reactionRequiresObservable: true,
     enforceActions: "always",
   })
+
+  const radioManagerStore = container.get(RadioManagerStore)
+
+  // todo add logging and sentry
+  radioManagerStore.init().catch(console.error)
 
   const services = createServices()
 

@@ -1,5 +1,6 @@
 import { injectable } from "inversify"
 import { runInAction } from "mobx"
+import Debug from "~/utils/debug"
 
 export abstract class RadioManagerStore {
   public abstract initialized: boolean
@@ -10,6 +11,8 @@ export abstract class RadioManagerStore {
 
 @injectable()
 export class RadioManagerStoreImpl implements RadioManagerStore {
+  private debug = Debug.extend("RadioManagerStoreImpl")
+
   public initialized = false
   public initPromise: Promise<void>
 
@@ -26,6 +29,8 @@ export class RadioManagerStoreImpl implements RadioManagerStore {
   }
 
   public async init(): Promise<void> {
+    this.debug("Init")
+
     try {
       await this.initInternal()
 
@@ -34,8 +39,10 @@ export class RadioManagerStoreImpl implements RadioManagerStore {
       })
 
       this.initCallback && this.initCallback()
+      this.debug("Initialized")
     } catch (error) {
       this.initCallback && this.initCallback(error)
+      this.debug("Init failed")
     }
   }
 

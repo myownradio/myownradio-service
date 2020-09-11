@@ -1,5 +1,5 @@
 import createDebug from "debug"
 
-const debug = createDebug("radiomanager")
+export const Debug = createDebug("radiomanager")
 
-export default debug
+export default Debug
