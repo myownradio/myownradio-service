@@ -24,6 +24,8 @@ export function createContainer(): Container {
     .to(RadioChannelsStoreImpl)
     .inSingletonScope()
 
+  container.bind(Container).toConstantValue(container)
+
   return container
 }
 
