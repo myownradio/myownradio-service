@@ -12,7 +12,8 @@ export abstract class RadioChannelsStore {
 
   public abstract init(): Promise<void>
 
-  public abstract createRadioChannel(title: string): Promise<void>
+  public abstract createChannel(title: string): Promise<void>
+  public abstract deleteChannel(channelId: string): Promise<void>
 }
 
 @injectable()
@@ -49,7 +50,7 @@ export class RadioChannelsStoreImpl implements RadioChannelsStore {
     this.debug("Radio channels loaded", { channels })
   }
 
-  public async createRadioChannel(title: string): Promise<void> {
+  public async createChannel(title: string): Promise<void> {
     this.debug("Create radio channel", { title })
 
     const channelResource = await this.radioManagerApiService.createChannel(title)
@@ -59,5 +60,10 @@ export class RadioChannelsStoreImpl implements RadioChannelsStore {
     })
 
     this.debug("Radio channel created", { channelResource })
+  }
+
+  public async deleteChannel(channelId: string): Promise<void> {
+    // todo
+    void channelId
   }
 }
