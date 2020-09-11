@@ -1,6 +1,7 @@
 import { injectable } from "inversify"
 import { runInAction } from "mobx"
 import { AuthenticationStore } from "~/store/AuthenticationStore"
+import { RadioChannelsStore } from "~/store/RadioChannelsStore"
 import Debug from "~/utils/debug"
 
 export abstract class RadioManagerStore {
@@ -23,7 +24,7 @@ export class RadioManagerStoreImpl implements RadioManagerStore {
    */
   private initCallback!: (error?: Error) => void
 
-  constructor(private authenticationStore: AuthenticationStore) {
+  constructor(private authenticationStore: AuthenticationStore, private radioChannelsStore: RadioChannelsStore) {
     this.initPromise = new Promise((resolve, reject) => {
       this.initCallback = (error?: Error): void => (error ? reject(error) : resolve())
     })
@@ -49,5 +50,6 @@ export class RadioManagerStoreImpl implements RadioManagerStore {
 
   private async initInternal(): Promise<void> {
     await this.authenticationStore.init()
+    await this.radioChannelsStore.init()
   }
 }

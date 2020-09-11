@@ -1,6 +1,7 @@
 import { Container } from "inversify"
 import { createContext } from "react"
 import { AuthenticationStore, AuthenticationStoreImpl } from "~/store/AuthenticationStore"
+import { RadioChannelsStore, RadioChannelsStoreImpl } from "~/store/RadioChannelsStore"
 import { RadioManagerStore, RadioManagerStoreImpl } from "~/store/RadioManagerStore"
 import { EnvType } from "./container.types"
 import { env } from "./env"
@@ -17,6 +18,10 @@ export function createContainer(): Container {
   container
     .bind(AuthenticationStore)
     .to(AuthenticationStoreImpl)
+    .inSingletonScope()
+  container
+    .bind(RadioChannelsStore)
+    .to(RadioChannelsStoreImpl)
     .inSingletonScope()
 
   return container

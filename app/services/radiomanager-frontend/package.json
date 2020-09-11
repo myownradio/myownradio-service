@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "@myownradio/shared-types": "link:../../libs/shared-types",
+    "@sentry/browser": "^5.23.0",
     "axios": "^0.19.2",
     "classnames": "^2.2.6",
     "debug": "^4.1.1",
