@@ -15,7 +15,7 @@ export class RadioManagerStoreImpl implements RadioManagerStore {
   private debug = Debug.extend("RadioManagerStoreImpl")
 
   public initialized = false
-  public initPromise: Promise<void>
+  public readonly initPromise: Promise<void>
 
   /**
    * The `initCallback` is initializing synchronously in constructor. But typescript is not
