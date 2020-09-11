@@ -1,6 +1,8 @@
+import { configure as configureMobX } from "mobx"
 import React from "react"
 import { unstable_createRoot } from "react-dom"
 import {} from "react-dom/experimental"
+import { createContainer, ContainerContext } from "~/container"
 import { AudioFileUploaderModel, AudioFileUploaderModelContext } from "~/modules/AudioFileUploader"
 import { AuthenticationModel, AuthenticationModelContext } from "~/modules/Authentication"
 import { RadioManagerModel, RadioManagerModelContext } from "~/modules/RadioManager"
@@ -9,6 +11,15 @@ import { SchedulerModel } from "~/modules/RadioManager/SchedulerModel"
 import { createServices, ServicesContext } from "./services"
 
 export default function bootstrap(Component: React.ComponentType, rootClass?: string): void {
+  const container = createContainer()
+
+  configureMobX({
+    computedRequiresReaction: true,
+    observableRequiresReaction: true,
+    reactionRequiresObservable: true,
+    enforceActions: "always",
+  })
+
   const services = createServices()
 
   const authenticationModel = new AuthenticationModel(services.authApiService, services.sessionService)
@@ -36,14 +47,16 @@ export default function bootstrap(Component: React.ComponentType, rootClass?: st
   rootClass && rootElement.classList.add(rootClass)
 
   unstable_createRoot(rootElement).render(
-    <AuthenticationModelContext.Provider value={authenticationModel}>
-      <AudioFileUploaderModelContext.Provider value={audioFileUploaderModel}>
-        <RadioManagerModelContext.Provider value={radioManagerModel}>
-          <ServicesContext.Provider value={services}>
-            <Component />
-          </ServicesContext.Provider>
-        </RadioManagerModelContext.Provider>
-      </AudioFileUploaderModelContext.Provider>
-    </AuthenticationModelContext.Provider>,
+    <ContainerContext.Provider value={container}>
+      <AuthenticationModelContext.Provider value={authenticationModel}>
+        <AudioFileUploaderModelContext.Provider value={audioFileUploaderModel}>
+          <RadioManagerModelContext.Provider value={radioManagerModel}>
+            <ServicesContext.Provider value={services}>
+              <Component />
+            </ServicesContext.Provider>
+          </RadioManagerModelContext.Provider>
+        </AudioFileUploaderModelContext.Provider>
+      </AuthenticationModelContext.Provider>
+    </ContainerContext.Provider>,
   )
 }
