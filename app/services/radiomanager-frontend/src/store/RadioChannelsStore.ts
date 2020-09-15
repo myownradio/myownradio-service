@@ -51,9 +51,10 @@ export class RadioChannelsStoreImpl implements RadioChannelsStore {
   public async createChannel(title: string): Promise<void> {
     this.debug("Create radio channel", { title })
 
+    const channelResource = await this.radioManagerApiService.createChannel(title)
+
     runInAction(() => {
       this.radioChannels = this.radioChannels.then(async radioChannels => {
-        const channelResource = await this.radioManagerApiService.createChannel(title)
         this.debug("Radio channel created", { channelResource })
         return [...radioChannels, channelResource]
       })
