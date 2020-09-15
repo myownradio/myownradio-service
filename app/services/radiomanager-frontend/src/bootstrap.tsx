@@ -9,6 +9,7 @@ import { RadioManagerModel, RadioManagerModelContext } from "~/modules/RadioMana
 import { RadioChannelModel } from "~/modules/RadioManager/RadioChannelModel/RadioChannelModel"
 import { SchedulerModel } from "~/modules/RadioManager/SchedulerModel"
 import { RadioManagerStore } from "~/store/RadioManagerStore"
+import { shortCircuit } from "~/utils/sentry"
 import { createServices, ServicesContext } from "./services"
 
 export default function bootstrap(Component: React.ComponentType, rootClass?: string): void {
@@ -23,8 +24,7 @@ export default function bootstrap(Component: React.ComponentType, rootClass?: st
 
   const radioManagerStore = container.get(RadioManagerStore)
 
-  // todo add logging and sentry
-  radioManagerStore.init().catch(console.error)
+  shortCircuit(() => radioManagerStore.init())()
 
   const services = createServices()
 

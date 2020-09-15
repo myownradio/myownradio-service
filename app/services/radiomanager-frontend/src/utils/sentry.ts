@@ -12,10 +12,12 @@ export function captureError(error: Error): void {
   captureException(error)
 }
 
-export function shortCircuit<A extends unknown>(cb: (a: A) => Promise<unknown>): (a: A) => void
-export function shortCircuit(cb: () => Promise<unknown>): () => void
-export function shortCircuit(cb: (...args: unknown[]) => Promise<unknown>): (...args: unknown[]) => void {
-  return (...args: unknown[]): void => {
-    cb(...args).catch(captureException)
+export function shortCircuit(cb: () => Promise<void>): () => void
+export function shortCircuit<A extends unknown>(cb: (a: A) => Promise<void>): (a: A) => void
+export function shortCircuit<A extends unknown, B extends unknown>(
+  cb: (a: A, b: B, ...args: unknown[]) => Promise<void>,
+): (a: A, b: B, ...args: unknown[]) => void {
+  return (a, b, ...args: unknown[]): void => {
+    cb(a, b, ...args).catch(captureException)
   }
 }
