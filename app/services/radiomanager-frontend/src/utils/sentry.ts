@@ -11,3 +11,11 @@ export function init(env: Env): void {
 export function captureError(error: Error): void {
   captureException(error)
 }
+
+export function shortCircuit<A extends unknown>(cb: (a: A) => Promise<unknown>): (a: A) => void
+export function shortCircuit(cb: () => Promise<unknown>): () => void
+export function shortCircuit(cb: (...args: unknown[]) => Promise<unknown>): (...args: unknown[]) => void {
+  return (...args: unknown[]): void => {
+    cb(...args).catch(captureException)
+  }
+}
