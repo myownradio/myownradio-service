@@ -1,10 +1,10 @@
-export interface StorageService {
-  get<T>(key: string): T | null
-  put<T>(key: string, value: T): void
-  delete(key: string): void
+export abstract class StorageService {
+  abstract get<T>(key: string): T | null
+  abstract put<T>(key: string, value: T): void
+  abstract delete(key: string): void
 }
 
-class LocalStorageService implements StorageService {
+export class LocalStorageService implements StorageService {
   public get<T>(key: string): T | null {
     const rawValue = window.localStorage.getItem(key)
     if (rawValue !== null) {
@@ -25,7 +25,7 @@ class LocalStorageService implements StorageService {
   }
 }
 
-class MemoryStorageService implements StorageService {
+export class MemoryStorageService implements StorageService {
   private storage = new Map()
 
   public get<T>(key: string): T | null {
