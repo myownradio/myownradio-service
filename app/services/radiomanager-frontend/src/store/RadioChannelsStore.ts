@@ -14,6 +14,11 @@ export abstract class RadioChannelsStore {
 
   public abstract createChannel(title: string): Promise<void>
   public abstract deleteChannel(channelId: string): Promise<void>
+
+  public abstract startChannel(channelId: string): Promise<void>
+  public abstract stopChannel(channelId: string): Promise<void>
+  public abstract pauseChannel(channelId: string): Promise<void>
+  public abstract resumeChannel(channelId: string): Promise<void>
 }
 
 @injectable()
@@ -66,5 +71,25 @@ export class RadioChannelsStoreImpl implements RadioChannelsStore {
     runInAction(() => {
       this.radioChannels = this.radioChannels.then(radioChannels => radioChannels.filter(({ id }) => id !== channelId))
     })
+  }
+
+  public pauseChannel(channelId: string): Promise<void> {
+    void channelId
+    return Promise.resolve(undefined)
+  }
+
+  public resumeChannel(channelId: string): Promise<void> {
+    void channelId
+    return Promise.resolve(undefined)
+  }
+
+  public startChannel(channelId: string): Promise<void> {
+    void channelId
+    return Promise.resolve(undefined)
+  }
+
+  public stopChannel(channelId: string): Promise<void> {
+    void channelId
+    return Promise.resolve(undefined)
   }
 }
