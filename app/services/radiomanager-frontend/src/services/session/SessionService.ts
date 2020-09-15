@@ -1,24 +1,24 @@
+import { injectable } from "inversify"
 import { TokenService } from "~/services/api/TokenService"
-import { LockManager } from "~/services/utils/LockManager"
+import { LockManager, NaiveLockManager } from "~/services/utils/LockManager"
 import { nop } from "~/utils/fn"
 import { StorageService } from "../storage/StorageService"
 
-export interface SessionService {
-  getAccessToken(): string | null
-  refreshToken(): Promise<void>
-  saveTokens(accessToken: string, refreshToken: string): void
-  clearTokens(): void
+export abstract class SessionService {
+  public abstract getAccessToken(): string | null
+  public abstract refreshToken(): Promise<void>
+  public abstract saveTokens(accessToken: string, refreshToken: string): void
+  public abstract clearTokens(): void
 }
 
 const ACCESS_TOKEN_STORAGE_KEY = "access_token"
 const REFRESH_TOKEN_STORAGE_KEY = "refresh_token"
 
+@injectable()
 export class BaseSessionService implements SessionService {
-  constructor(
-    private storageService: StorageService,
-    private tokenService: TokenService,
-    private locksManager: LockManager,
-  ) {}
+  private locksManager: LockManager = new NaiveLockManager()
+
+  constructor(private storageService: StorageService, private tokenService: TokenService) {}
 
   public getAccessToken(): string | null {
     return this.storageService.get(ACCESS_TOKEN_STORAGE_KEY)
@@ -52,10 +52,6 @@ export class BaseSessionService implements SessionService {
   }
 }
 
-export function createSessionService(
-  storageService: StorageService,
-  tokenService: TokenService,
-  locksManager: LockManager,
-): SessionService {
-  return new BaseSessionService(storageService, tokenService, locksManager)
+export function createSessionService(storageService: StorageService, tokenService: TokenService): SessionService {
+  return new BaseSessionService(storageService, tokenService)
 }

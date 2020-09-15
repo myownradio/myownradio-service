@@ -1,8 +1,8 @@
 import { AbstractApiService } from "./AbstractApiService"
 
-export interface TokenService {
-  refreshRefreshToken(refreshToken: string): Promise<SuccessfulRefreshResponse>
-  forgotRefreshToken(refreshToken: string): Promise<void>
+export abstract class TokenService {
+  public abstract refreshRefreshToken(refreshToken: string): Promise<SuccessfulRefreshResponse>
+  public abstract forgotRefreshToken(refreshToken: string): Promise<void>
 }
 
 export interface SuccessfulRefreshResponse {

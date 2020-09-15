@@ -1,11 +1,13 @@
 import { Container } from "inversify"
 import { createContext } from "react"
+import { BaseTokenService, TokenService } from "~/services/api/TokenService"
+import { BaseSessionService, SessionService } from "~/services/session/SessionService"
 import { LocalStorageService, MemoryStorageService, StorageService } from "~/services/storage/StorageService"
 import { AuthenticationStore, AuthenticationStoreImpl } from "~/store/AuthenticationStore"
 import { RadioChannelsStore, RadioChannelsStoreImpl } from "~/store/RadioChannelsStore"
 import { RadioManagerStore, RadioManagerStoreImpl } from "~/store/RadioManagerStore"
 import { EnvType } from "./container.types"
-import { env } from "./env"
+import { Env, env } from "./env"
 
 export function createContainer(): Container {
   const container = new Container()
@@ -27,16 +29,30 @@ export function createContainer(): Container {
 
   container.bind(Container).toConstantValue(container)
 
-  container.bind(StorageService).toDynamicValue(() => {
-    try {
-      const test = "__storage_test__"
-      localStorage.setItem(test, test)
-      localStorage.removeItem(test)
-      return new LocalStorageService()
-    } catch {
-      return new MemoryStorageService()
-    }
-  })
+  container
+    .bind(StorageService)
+    .toDynamicValue(() => {
+      try {
+        const test = "__storage_test__"
+        localStorage.setItem(test, test)
+        localStorage.removeItem(test)
+        return new LocalStorageService()
+      } catch {
+        return new MemoryStorageService()
+      }
+    })
+    .inSingletonScope()
+  container
+    .bind(TokenService)
+    .toDynamicValue(({ container }) => {
+      const env = container.get<Env>(EnvType)
+      return new BaseTokenService(env.REACT_APP_AUTH_API_URL)
+    })
+    .inSingletonScope()
+  container
+    .bind(SessionService)
+    .to(BaseSessionService)
+    .inSingletonScope()
 
   return container
 }
