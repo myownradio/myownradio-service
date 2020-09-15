@@ -12,8 +12,8 @@ enum AuthenticationState {
 }
 
 export abstract class AuthenticationStore {
-  abstract authentication: AuthenticationState
-  abstract user: UserResource | null
+  abstract authentication: Promise<AuthenticationState>
+  abstract user: Promise<UserResource | null>
 
   public abstract init(): Promise<void>
 
@@ -24,8 +24,8 @@ export abstract class AuthenticationStore {
 
 @injectable()
 export class AuthenticationStoreImpl implements AuthenticationStore {
-  @observable public authentication: AuthenticationState = AuthenticationState.UNAUTHENTICATED
-  @observable public user: UserResource | null = null
+  @observable public authentication: Promise<AuthenticationState> = Promise.resolve(AuthenticationState.UNAUTHENTICATED)
+  @observable public user: Promise<UserResource | null> = Promise.resolve(null)
 
   private debug = Debug.extend("AuthenticationStoreImpl")
 
@@ -36,25 +36,25 @@ export class AuthenticationStoreImpl implements AuthenticationStore {
   }
 
   private async tryAuthenticate(): Promise<void> {
-    try {
-      const user = await this.authApiService.me()
-      runInAction(() => {
-        this.authentication = AuthenticationState.AUTHENTICATED
-        this.user = user
-      })
-    } catch (error) {
+    const user = this.authApiService.me()
+
+    runInAction(() => {
+      this.authentication = user.then(
+        () => AuthenticationState.AUTHENTICATED,
+        () => AuthenticationState.UNAUTHENTICATED,
+      )
+      this.user = user.catch(() => null)
+    })
+
+    await user.catch(error => {
       if (!(error instanceof UnauthorizedApiError)) {
         throw error
       }
-      runInAction(() => {
-        this.authentication = AuthenticationState.UNAUTHENTICATED
-        this.user = null
-      })
-    }
+    })
   }
 
   public async login(email: string, password: string): Promise<void> {
-    if (this.authentication === AuthenticationState.AUTHENTICATED) {
+    if ((await this.authentication) === AuthenticationState.AUTHENTICATED) {
       this.debug("Login: already logged in")
       return
     }
@@ -62,12 +62,14 @@ export class AuthenticationStoreImpl implements AuthenticationStore {
     this.debug("Login", { email, password })
 
     const { access_token, refresh_token } = await this.authApiService.login(email, password)
+
     this.sessionService.saveTokens(access_token, refresh_token)
+
     await this.tryAuthenticate()
   }
 
   public async logout(): Promise<void> {
-    if (this.authentication === AuthenticationState.UNAUTHENTICATED) {
+    if ((await this.authentication) === AuthenticationState.UNAUTHENTICATED) {
       this.debug("Logout: already logged out")
       return
     }
@@ -77,8 +79,8 @@ export class AuthenticationStoreImpl implements AuthenticationStore {
     this.sessionService.clearTokens()
 
     runInAction(() => {
-      this.authentication = AuthenticationState.UNAUTHENTICATED
-      this.user = null
+      this.authentication = Promise.resolve(AuthenticationState.UNAUTHENTICATED)
+      this.user = Promise.resolve(null)
     })
   }
 
