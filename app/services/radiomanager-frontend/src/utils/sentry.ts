@@ -3,8 +3,8 @@ import { Env } from "~/env"
 
 export function init(env: Env): void {
   initSentry({
-    enabled: !!env.SENTRY_DSN,
-    dsn: env.SENTRY_DSN,
+    enabled: !!env.REACT_APP_SENTRY_DSN,
+    dsn: env.REACT_APP_SENTRY_DSN,
   })
 }
 
