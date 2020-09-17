@@ -5,7 +5,6 @@ import { AuthenticationState } from "~/modules/Authentication"
 import { RadioManagerApiService } from "~/services/api/RadioManagerApiService"
 import { AuthenticationStore } from "~/store/AuthenticationStore"
 import Debug from "~/utils/debug"
-import { shortCircuit } from "~/utils/sentry"
 
 export abstract class RadioChannelsStore {
   public abstract radioChannels: Promise<RadioChannelResource[]>
@@ -33,13 +32,13 @@ export class RadioChannelsStoreImpl implements RadioChannelsStore {
   ) {
     reaction(
       () => this.authenticationStore.authentication,
-      shortCircuit(async authentication => {
+      async authentication => {
         if ((await authentication) === AuthenticationState.AUTHENTICATED) {
           this.debug("Authentication state changed: calling init() again")
 
           await this.init()
         }
-      }),
+      },
     )
   }
 
